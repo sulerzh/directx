@@ -5,7 +5,6 @@
 #include "CommonUtils.h"
 #include "LibraryLoader.h"
 #include "Direct3D11/D3D11Device.h"
-#include "Direct3D10/D3D10Device.h"
 #include "DXGIFactory.h"
 #include "DXGIAdapter.h"
 #include "DXGISwapChain.h"
@@ -29,24 +28,6 @@ Factory^ Factory::Create()
         (*createFuncPtr)(__uuidof(IDXGIFactory), (void**)(&pNativeIDXGIFactory)));
 
     return gcnew Factory(pNativeIDXGIFactory);
-}
-
-SwapChain^ Factory::CreateSwapChain(Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ device, SwapChainDescription description)
-{
-    Validate::CheckNull(device, "device");
-
-    DXGI_SWAP_CHAIN_DESC nativeDesc = {0};
-    description.CopyTo(&nativeDesc);
-    
-    IDXGISwapChain* tempoutSwapChain = NULL;
-
-    Validate::VerifyResult(
-        CastInterface<IDXGIFactory>()->CreateSwapChain(
-            device->CastInterface<ID3D10Device>(), 
-            &nativeDesc, 
-            &tempoutSwapChain));
-
-    return tempoutSwapChain ? gcnew SwapChain(tempoutSwapChain) : nullptr;
 }
 
 SwapChain^ Factory::CreateSwapChain(Microsoft::Data::Visualization::DirectX::Direct3D11::D3DDevice^ device, SwapChainDescription description)

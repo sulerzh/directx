@@ -57,8 +57,6 @@
 #include "DXGI/DXGIStructs.h"
 #include "Direct3D11/D3D11Enums.h"
 #include "Direct3D11/D3D11Structs.h"
-#include "Direct3D10/D3D10Enums.h"
-#include "Direct3D10/D3D10Structs.h"
 
 // Direct 2D
 #include "Direct2D/D2Dcommon.h"

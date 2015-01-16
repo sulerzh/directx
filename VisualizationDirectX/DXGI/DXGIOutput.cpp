@@ -7,7 +7,6 @@
 #include "DXGISurface.h"
 #include "DXGIDevice.h"
 #include "Direct3D11/D3D11Device.h"
-#include "Direct3D10/D3D10Device.h"
 
 using namespace std;
 using namespace System::Collections::Generic;
@@ -16,20 +15,6 @@ using namespace Microsoft::Data::Visualization::DirectX::Utilities;
 using namespace Microsoft::Data::Visualization::DirectX::Graphics;
 
 using namespace Microsoft::Data::Visualization::DirectX::Direct3D;
-
-ModeDescription Output::FindClosestMatchingMode(ModeDescription modeToMatch, Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ ConcernedDevice)
-{
-    DXGI_MODE_DESC inMode;
-    modeToMatch.CopyTo(&inMode);
-
-    DXGI_MODE_DESC outMode;
-
-    Validate::VerifyResult(CastInterface<IDXGIOutput>()->FindClosestMatchingMode(
-        &inMode, &outMode, 
-        ConcernedDevice == nullptr ? NULL : ConcernedDevice->CastInterface<IUnknown>()));
-
-    return ModeDescription(outMode);
-}
 
 ModeDescription Output::FindClosestMatchingMode(ModeDescription modeToMatch, Microsoft::Data::Visualization::DirectX::Direct3D11::D3DDevice^ ConcernedDevice)
 {
@@ -146,10 +131,6 @@ void Output::SetDisplaySurface(Surface^ surface)
 void Output::ReleaseOwnership()
 {
     CastInterface<IDXGIOutput>()->ReleaseOwnership();
-}
-void Output::TakeOwnership(Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ device, Boolean exclusive)
-{
-    Validate::VerifyResult(CastInterface<IDXGIOutput>()->TakeOwnership(device->CastInterface<IUnknown>(), safe_cast<BOOL>(exclusive)));
 }
 
 void Output::TakeOwnership(Microsoft::Data::Visualization::DirectX::Direct3D11::D3DDevice^ device, Boolean exclusive)

@@ -3,10 +3,6 @@
 #pragma once
 #include "DXGIObject.h"
 
-namespace Microsoft { namespace Data { namespace Visualization { namespace DirectX { namespace Direct3D10 {
-ref class D3DDevice;
-}}}} }
-
 namespace Microsoft { namespace Data { namespace Visualization { namespace DirectX { namespace Direct3D11 {
 ref class D3DDevice;
 }}}} }
@@ -35,15 +31,6 @@ ref class SwapChain;
         public GraphicsObject
     {
     public: 
-
-        /// <summary>
-        /// Creates a swap chain.
-        /// <para>(Also see DirectX SDK: IDXGIFactory::CreateSwapChain)</para>
-        /// </summary>
-        /// <param name="device">The device that will write 2D images to the swap chain.</param>
-        /// <param name="description">The swap-chain description (see <see cref="SwapChainDescription"/>)<seealso cref="SwapChainDescription"/>. This parameter cannot be NULL.</param>
-        /// <return>The swap chain created (see <see cref="SwapChain"/>)<seealso cref="SwapChain"/>.</return>
-        SwapChain^ CreateSwapChain(Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ device, SwapChainDescription description);
 
         /// <summary>
         /// Creates a swap chain.

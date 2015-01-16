@@ -3,10 +3,6 @@
 #pragma once
 #include "DXGIObject.h"
 
-namespace Microsoft { namespace Data { namespace Visualization { namespace DirectX { namespace Direct3D10 {
-ref class D3DDevice;
-}}}} }
-
 namespace Microsoft { namespace Data { namespace Visualization { namespace DirectX { namespace Direct3D11 {
 ref class D3DDevice;
 }}}} }
@@ -27,16 +23,6 @@ ref class Device;
         public GraphicsObject
     {
     public: 
-        /// <summary>
-        /// Find the display mode that most closely matches the requested display mode 
-        /// for a given Direct3D Device.
-        /// <para>(Also see DirectX SDK: IDXGIOutput::FindClosestMatchingMode)</para>
-        /// </summary>
-        /// <param name="modeToMatch">The desired display mode (see <see cref="ModeDescription"/>)<seealso cref="ModeDescription"/>. Members of ModeDescription can be unspecified indicating no preference for that member.  A value of 0 for Width or Height indicates the value is unspecified.  If either Width or Height are 0 both must be 0.  A numerator and denominator of 0 in RefreshRate indicate it is unspecified. Other members of ModeDescription have enumeration values indicating the member is unspecified.  If pConnectedDevice is null, Format cannot be UNKNOWN.</param>
-        /// <param name="concernedDevice">The Direct3D device object. If this parameter is NULL, only modes whose format matches that of pModeToMatch will         be returned; otherwise, only those formats that are supported for scan-out by the device are returned.</param>
-        /// <returns>The mode that most closely matches ModeToMatch.</returns>
-        ModeDescription FindClosestMatchingMode(ModeDescription modeToMatch, Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ concernedDevice);
-
         /// <summary>
         /// Find the display mode that most closely matches the requested display mode 
         /// for a given Direct3D Device.
@@ -136,14 +122,6 @@ ref class Device;
         /// <para>(Also see DirectX SDK: IDXGIOutput::ReleaseOwnership)</para>
         /// </summary>
         void ReleaseOwnership();
-
-        /// <summary>
-        /// Take ownership of an output.
-        /// <para>(Also see DirectX SDK: IDXGIOutput::TakeOwnership)</para>
-        /// </summary>
-        /// <param name="device">A Direct3D 10 Device.</param>
-        /// <param name="exclusive">Set to TRUE to enable other threads or applications to take ownership of the device; otherwise set to FALSE.</param>
-        void TakeOwnership(Microsoft::Data::Visualization::DirectX::Direct3D10::D3DDevice^ device, Boolean exclusive);
 
         /// <summary>
         /// Take ownership of an output.
