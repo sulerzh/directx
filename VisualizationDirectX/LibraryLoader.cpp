@@ -9,8 +9,6 @@ LibraryLoader::LibraryLoader()
 {
     m_libraryNames[D2DLibrary] = L"D2d1.dll";
     m_libraryNames[D3D11Library] = L"D3d11.dll";
-    m_libraryNames[D3D10Library] = L"D3d10.dll";
-    m_libraryNames[D3D10_1Library] = L"D3d10_1.dll";
     m_libraryNames[DXGILibrary] = L"DXGI.dll";
     m_libraryNames[DWriteLibrary] = L"DWrite.dll";
 }

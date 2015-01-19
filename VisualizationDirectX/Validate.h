@@ -17,7 +17,6 @@ private:
     Validate() { }
 
 	static Exception^ GetWinErrorException(HRESULT hr);
-	static Exception^ GetDirect3D10Exception(HRESULT hr);
 	static Exception^ GetDirect3D11Exception(HRESULT hr);
 
 	static Exception^ GetDirectXGraphicsException(HRESULT hr);

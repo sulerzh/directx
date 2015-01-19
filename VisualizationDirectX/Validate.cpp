@@ -38,9 +38,6 @@ Exception^ Validate::GetExceptionForHR(HRESULT hr)
     case 0x0007:
         exception = GetWinErrorException(hr);
 
-    case _FACD3D10:
-        exception = GetDirect3D10Exception(hr);
-
     case _FACD3D11:
         exception = GetDirect3D11Exception(hr);
 
@@ -77,23 +74,6 @@ Exception^ Validate::GetWinErrorException(HRESULT hr)
         // is not expected to succeed. I remain unconvinced that we should throw a system
         // exception here, but for the moment I don't have a better candidate in mind.
         return gcnew InsufficientMemoryException("Could not allocate sufficient memory to complete the call.");
-
-    default:
-        return nullptr;
-    }
-}
-
-Exception^ Validate::GetDirect3D10Exception(HRESULT hr)
-{
-    switch (hr)
-    {
-    // facility: 0x0879 (_FACD3D10)
-    case D3D10_ERROR_FILE_NOT_FOUND: 
-        return gcnew FileNotFoundException();
-
-    // facility: 0x0879
-    case D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS: 
-        return gcnew Direct3DException("Too many unique instances", hr);
 
     default:
         return nullptr;

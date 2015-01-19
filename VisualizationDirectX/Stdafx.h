@@ -28,8 +28,8 @@
 #include <msclr\marshal.h>
 
 // Common DirectX Headers
-#include <D3D10_1.h>
-#include <D3D10.h>
+//#include <D3D10_1.h>
+//#include <D3D10.h>
 #include <D3D11.h>
 #include <DXGI.h>
 #include <DXGIType.h>

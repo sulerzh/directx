@@ -12,8 +12,6 @@ enum DirectXLibrary
 {
     D2DLibrary,
     D3D11Library,
-    D3D10Library,
-    D3D10_1Library,
     DXGILibrary,
     DWriteLibrary,
 };

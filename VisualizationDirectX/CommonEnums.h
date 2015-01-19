@@ -164,18 +164,6 @@ public enum class ErrorCode
     /// </summary>
     Direct3D11ErrorTooManyUniqueInstances =  D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS,
 
-    /// <summary>
-    /// There are too many unique instances of a particular type of state object.
-    /// <para>(Also see DirectX SDK: D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS )</para>
-    /// </summary>
-    Direct3D10ErrorTooManyUniqueInstances =  D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS,
-
-    /// <summary>
-    /// The file was not found. 
-    /// <para>(Also see DirectX SDK: D3D10_ERROR_FILE_NOT_FOUND )</para>
-    /// </summary>
-    Direct3D10ErrorFileNotFound =  D3D10_ERROR_FILE_NOT_FOUND,
-
 
     /// <summary>
     /// The number is invalid
