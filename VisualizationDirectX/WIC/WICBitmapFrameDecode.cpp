@@ -16,12 +16,21 @@ BitmapSource^ BitmapFrameDecode::ToBitmapSource()
     return gcnew BitmapSource( pBitmapSource );
 }
 
-int BitmapFrameDecode::GetSize()
+BitmapSize^ BitmapFrameDecode::GetSize()
 {
-	return 0;
+	UINT width = 0;
+	UINT height = 0;
+	Validate::VerifyResult(
+		CastInterface<IWICBitmapFrameDecode>()->GetSize(&width, &height));
+
+	return gcnew BitmapSize(width, height);
 }
 
 Guid BitmapFrameDecode::GetPixelFormat()
 {
-	return PixelFormats::Alpha8Bpp;
+	GUID guid;
+	Validate::VerifyResult(
+		CastInterface<IWICBitmapFrameDecode>()->GetPixelFormat(&guid));
+
+	return Utilities::Convert::SystemGuidFromGUID(guid);
 }

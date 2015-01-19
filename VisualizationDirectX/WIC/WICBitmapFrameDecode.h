@@ -27,7 +27,7 @@ namespace Microsoft { namespace Data { namespace Visualization { namespace Direc
         BitmapSource^ ToBitmapSource();
 
 		// add by zsl: 2014-11-18
-		int GetSize();
+		BitmapSize^ GetSize();
 		Guid GetPixelFormat();
 
     internal:
