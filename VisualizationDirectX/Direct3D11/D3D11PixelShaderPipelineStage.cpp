@@ -153,19 +153,11 @@ void PixelShaderPipelineStage::SetShaderResources(UInt32 startSlot, IEnumerable<
 
 void PixelShaderPipelineStage::SetShaderResourceOne(UInt32 startSlot, ShaderResourceView^ shaderResourceView)
 {
-	/*if (Object::ReferenceEquals(shaderResourceView, nullptr))
-	{
-		throw gcnew ArgumentNullException("shaderResourceView");
-	}*/
-	ID3D11ShaderResourceView* item;
+	ID3D11ShaderResourceView* item = NULL;
 
 	if (shaderResourceView != nullptr)
 	{
 		item = shaderResourceView->CastInterface<ID3D11ShaderResourceView>();
-	}
-	else
-	{
-		item = NULL;
 	}
 
 	Parent->CastInterface<ID3D11DeviceContext>()->PSSetShaderResources(
