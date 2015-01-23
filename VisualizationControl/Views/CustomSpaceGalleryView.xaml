@@ -1,0 +1,156 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.CustomSpaceGalleryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             MaxWidth="400" Width="360" Background="{DynamicResource MetroBackground}"
+             AutomationProperties.AutomationId="ChangeMapTypeDialog"
+             FocusManager.FocusedElement="{Binding ElementName=InitialButton}"
+             AutomationProperties.Name="{Binding GalleryTitle}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\DialogStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            </Style>
+            <Style x:Key="VideoProgressBarStyle" TargetType="{x:Type ProgressBar}">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ProgressBar}">
+                            <Grid>
+                                <Grid x:Name="PART_Indicator" HorizontalAlignment="Left" Background="Green" OverridesDefaultStyle="true"/>
+                                <Grid x:Name="PART_Track">
+                                    <Border BorderBrush="Green" BorderThickness="1"/>
+                                </Grid>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <UIElement.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </UIElement.InputBindings>
+    <Grid Margin="9,9,9,9" Background="{DynamicResource MetroBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{StaticResource DialogTitleStyle}" Text="{Binding GalleryTitle}"/>
+            <Button x:Name="CancelButton" Grid.Row="0" IsCancel="true" Style="{StaticResource ChromeCloseButton}"
+              AutomationProperties.AutomationId="ChangeMapTypeDialogCloseButton" HorizontalAlignment="Right"
+              VerticalContentAlignment="Center"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+              ToolTip="{x:Static local:Resources.Narrator_Close}" Command="{Binding CancelCommand}"
+              Visibility="{Binding IsADialog, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ScrollViewer x:Name="MapOptionsListScrollViewer" AutomationProperties.AutomationId="MapOptionsListScrollViewer"
+                    Grid.Row="1" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" MaxHeight="550">
+                <ItemsControl x:Name="MapOptionsListItemsControl" KeyboardNavigation.IsTabStop="false"
+                      ItemsSource="{Binding MapOptionsList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Border HorizontalAlignment="Stretch" BorderThickness="0"
+                        Visibility="{Binding IsMoreThanLine, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <FrameworkElement.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Style.Setters>
+                                                <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsInUse}" Value="true">
+                                                    <Setter Property="Border.BorderBrush" Value="{StaticResource MetroBaseGreenText}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=IsInUse}" Value="false">
+                                                    <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </FrameworkElement.Style>
+                                    <Button HorizontalContentAlignment="Stretch" AutomationProperties.AutomationId="MapButton"
+                          BorderBrush="Transparent" Style="{DynamicResource BorderlessButton}"
+                          Command="{Binding MapOptionClickAction}" AutomationProperties.Name="{Binding Name}"
+                          ToolTip="{Binding Desciption}">
+                                        <Grid HorizontalAlignment="Left">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="2"
+                              Height="75" Width="134">
+                                                <FrameworkElement.Style>
+                                                    <Style TargetType="{x:Type Border}">
+                                                        <Style.Setters>
+                                                            <Setter Property="Border.BorderBrush" Value="Gray"/>
+                                                            <Setter Property="Border.BorderThickness" Value="1"/>
+                                                        </Style.Setters>
+                                                    </Style>
+                                                </FrameworkElement.Style>
+                                                <Grid Height="71" Width="130">
+                                                    <Image x:Name="ImageShower" Stretch="UniformToFill" Source="{Binding ImagePathOrSource}"/>
+                                                    <Rectangle Fill="LightBlue"
+                                     Visibility="{Binding IsMissingPicture, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                </Grid>
+                                            </Border>
+                                            <Grid Column="1" VerticalAlignment="Top">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" TextTrimming="CharacterEllipsis"
+                                   HorizontalAlignment="Left" Foreground="{StaticResource MetroBaseGreenText}" Margin="12,3,0,0"
+                                   Text="{Binding Name}"/>
+                                                <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource ToggleBorderlessButton}"
+                                ToolTip="{x:Static local:Resources.CustomSpaceGallery_DeleteMap_Desc}" MinWidth="24" Width="28"
+                                VerticalAlignment="Center" HorizontalAlignment="Right"
+                                AutomationProperties.Name="{x:Static local:Resources.CustomSpaceGallery_DeleteMap_Desc}"
+                                AutomationProperties.AutomationId="DeleteCustomMapButton" Command="{Binding MapOptionRemoveAction}"
+                                Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <Image Source="/VisualizationControl;component/Images/close_normal.png" Height="14" Width="14"/>
+                                                </Button>
+                                                <TextBlock Grid.Column="0" Grid.Row="1" FontWeight="Light" TextWrapping="Wrap" Margin="12,9,0,0"
+                                   HorizontalAlignment="Left" Text="{Binding Desciption}"/>
+                                                <Button Grid.Row="0" Grid.Column="1" Style="{DynamicResource ToggleBorderlessButton}" IsEnabled="true"
+                                ToolTip="{x:Static local:Resources.CustomSpaceGallery_EditMap_Desc}" MinWidth="24" Width="28"
+                                VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                                AutomationProperties.Name="{x:Static local:Resources.CustomSpaceGallery_EditMap_Desc}"
+                                AutomationProperties.AutomationId="EditCustomMapButton" Command="{Binding MapOptionEditAction}"
+                                Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <Image Source="/VisualizationControl;component/Images/SettingsTab.png" Height="14" Width="14"/>
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Button>
+                                </Border>
+                                <Rectangle Fill="{StaticResource SectionSeparator}" Height="2" Margin="0,9,0,9" HorizontalAlignment="Stretch"
+                           Visibility="{Binding IsJustALine, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Button Grid.Row="1" Content="{x:Static local:Resources.Dialog_CancelText}" IsCancel="true" MinWidth="57"
+            Margin="0,12,0,0" HorizontalAlignment="Right" HorizontalContentAlignment="Center"
+            Padding="15,0,15,0" AutomationProperties.AutomationId="ChangeMapTypeDialogCancelButton"
+            AutomationProperties.Name="{x:Static local:Resources.Narrator_Cancel}"
+            Command="{Binding CancelCommand}"
+            Visibility="{Binding IsADialog, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
+</UserControl>

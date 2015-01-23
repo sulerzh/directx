@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONCOMMON.DLL-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6B90F178-FDD7-4C53-8051-BAC67826ABCD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VisualizationCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>16.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Data.Visualization.VisualizationCommon</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BingMapResourceUri.cs" />
+    <Compile Include="UndoItem.cs" />
+    <Compile Include="CollectionUndoItem.cs" />
+    <Compile Include="PropertyChangedNotificationBase.cs" />
+    <Compile Include="INotifyPropertyChanges.cs" />
+    <Compile Include="PropertyChangeNotificationBase.cs" />
+    <Compile Include="IDescendentPropertyChanged.cs" />
+    <Compile Include="IDescendentPropertyChanging.cs" />
+    <Compile Include="ICompositeProperty.cs" />
+    <Compile Include="CompositePropertyChangeNotificationBase.cs" />
+    <Compile Include="ConcurrentValueBase.cs" />
+    <Compile Include="ConcurrentValue.cs" />
+    <Compile Include="DispatcherExtensions.cs" />
+    <Compile Include="InternalErrorEventArgs.cs" />
+    <Compile Include="InternalErrorEventHandler.cs" />
+    <Compile Include="NPCContainer.cs" />
+    <Compile Include="ObservableCollectionEx.cs" />
+    <Compile Include="PropertyInfoEx.cs" />
+    <Compile Include="PropertyUndoItem.cs" />
+    <Compile Include="TaskExtensions.cs" />
+    <Compile Include="ITypeChecker.cs" />
+    <Compile Include="TypeChecker.cs" />
+    <Compile Include="TypeUtility.cs" />
+    <Compile Include="ChangeType.cs" />
+    <Compile Include="IUndoManager.cs" />
+    <Compile Include="UndoManager.cs" />
+    <Compile Include="UndoObservableCollection.cs" />
+    <Compile Include="WeakDelegate.cs" />
+    <Compile Include="WeakEventListener.cs" />
+    <Compile Include="WebRequestHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

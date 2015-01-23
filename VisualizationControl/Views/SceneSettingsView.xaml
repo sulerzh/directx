@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.SceneSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\DialogStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid IsEnabled="{Binding ParentScene.IsLocked, Converter={StaticResource InvertBoolConverter}}">
+        <StackPanel>
+            <TextBlock Text="{x:Static local:Resources.SceneSettings_SceneSectionHeader}"
+                 Style="{StaticResource SectionHeaderTextStyle}"/>
+            <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                  wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemSpacing}">
+                <Grid Margin="0 6.25" wpfEx:GridEx.ColDefs="*,Auto">
+                    <TextBlock x:Name="DurationLabel" Grid.Column="0" VerticalAlignment="Bottom"
+                     Text="{x:Static local:Resources.SceneSettings_Duration}"
+                     Style="{StaticResource SettingsFieldLabelStyle}"/>
+                    <ContentControl x:Name="DurationControl" Grid.Column="1" Margin="0 -6.25" VerticalAlignment="Bottom"
+                          HorizontalAlignment="Right" Content="{Binding Duration}"/>
+                </Grid>
+                <StackPanel Margin="0 4 0 0">
+                    <TextBlock x:Name="SceneNameLabel" HorizontalAlignment="Left"
+                     Text="{x:Static local:Resources.SceneSettings_SceneName}"
+                     Style="{StaticResource SettingsFieldLabelStyle}"/>
+                    <TextBox x:Name="SceneNameTextBox" Margin="0 4 0 0" HorizontalAlignment="Stretch"
+                   MaxLength="{x:Static local:SceneViewModel.NameMaxLength}"
+                   wpfEx:FocusHelper.AdvanceOnEnterKey="true" KeyboardNavigation.IsTabStop="false"
+                   ToolTip="{x:Static local:Resources.SceneSettings_NameTooltip}"
+                   AutomationProperties.Name="{x:Static local:Resources.Narrator_SceneNameTextbox}"
+                   AutomationProperties.AutomationId="SceneNameTextBox" Text="{Binding ParentScene.Scene.Name}"/>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Text="{x:Static local:Resources.SceneSettings_EffectsSectionHeader}"
+                 Style="{StaticResource SectionHeaderTextStyle}"/>
+            <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                  wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemSpacing}">
+                <Grid Margin="0 6.25" wpfEx:GridEx.ColDefs="*,Auto">
+                    <TextBlock x:Name="TransitionDurationLabel" Grid.Column="0" VerticalAlignment="Bottom"
+                     Text="{x:Static local:Resources.SceneSettings_TransitionDuration}"
+                     Style="{StaticResource SettingsFieldLabelStyle}"/>
+                    <ContentControl x:Name="TransitionDurationControl" Grid.Column="1" Margin="0 -6.25" VerticalAlignment="Bottom"
+                          HorizontalAlignment="Right"
+                          ToolTip="{x:Static local:Resources.SceneSettings_TransitionDurationTooltip}"
+                          AutomationProperties.Name="{x:Static local:Resources.Narrator_SceneEffect}"
+                          Content="{Binding TransitionDuration}"/>
+                </Grid>
+                <Grid Margin="0 7" wpfEx:GridEx.ColDefs="*,Auto">
+                    <TextBlock x:Name="SceneEffectLabel" Grid.Column="0" VerticalAlignment="Bottom"
+                     Text="{x:Static local:Resources.SceneSettings_Effect}"
+                     Style="{StaticResource SettingsFieldLabelStyle}"/>
+                    <ComboBox x:Name="SceneEffectComboBox" Height="23" Grid.Column="1" HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom" Width="{StaticResource ExtendedControlWidth}" Margin="0 -7"
+                    ItemsSource="{x:Static local:SceneSettingsViewModel.SceneEffects}" DisplayMemberPath="Value"
+                    SelectedValuePath="Key" ToolTip="{x:Static local:Resources.SceneSettings_EffectTooltip}"
+                    AutomationProperties.Name="{x:Static local:Resources.Narrator_SceneEffect}"
+                    SelectedValue="{Binding ParentScene.Scene.EffectType}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                <Setter Property="FrameworkElement.ToolTip" Value="{Binding Value}"/>
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Value}"/>
+                                <Setter Property="AutomationProperties.AutomationId" Value="{Binding Key}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ComboBox>
+                </Grid>
+                <DockPanel Margin="0 6.25">
+                    <TextBlock x:Name="SceneEffectSpeedLabel" Grid.Row="0" HorizontalAlignment="Left">
+            <FrameworkElement.Style>
+              <Style BasedOn="{StaticResource SettingsFieldLabelStyle}" TargetType="{x:Type TextBlock}">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="Circle">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectSpeed}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="PushIn">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectSpeed}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="RotateGlobe">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectSpeed}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="Dolly">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectDistance}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="Figure8">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectDistance}"/>
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding ParentScene.Scene.EffectType}" Value="FlyOver">
+                    <Setter Property="TextBlock.Text" Value="{x:Static local:Resources.SceneSettings_EffectDistance}"/>
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </FrameworkElement.Style>
+                    </TextBlock>
+                    <Slider x:Name="SceneEffectSpeedSlider" DockPanel.Dock="Right" Margin="0 -6.25" HorizontalAlignment="Right"
+                  Width="{StaticResource ExtendedControlWidth}" Minimum="0" Maximum="1"
+                  ToolTip="{x:Static local:Resources.SceneSettings_EffectSpeedTooltip}" IsMoveToPointEnabled="true"
+                  AutomationProperties.AutomationId="SceneEffectSpeedSlider"
+                  AutomationProperties.Name="{x:Static local:Resources.Narrator_SceneEffectSpeed}"
+                  Value="{Binding ParentScene.Scene.EffectSpeed}"
+                  Visibility="{Binding Path=ParentScene.Scene.EffectType, Converter={StaticResource EnumInequalityToVisibilityConverter}, ConverterParameter=Station}"/>
+                </DockPanel>
+            </StackPanel>
+            <ContentControl KeyboardNavigation.IsTabStop="false" Content="{Binding TimeSettings}"
+                      Visibility="{Binding TimeScrubber.IsTimeDataAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="{x:Static local:Resources.SceneSettings_BackgroundSectionHeader}"
+                 Style="{StaticResource SectionHeaderTextStyle}" TextTrimming="CharacterEllipsis"/>
+            <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                  wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemSpacing}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="0,0,0,6" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top"
+                     HorizontalAlignment="Left" Text="{x:Static local:Resources.SceneSettings_BackgroundHeader_Title}"
+                     FontWeight="Bold" Width="300" TextTrimming="CharacterEllipsis"/>
+                    <Button x:Name="ChangeSceneTypeButton" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top"
+                  HorizontalAlignment="Left" AutomationProperties.AutomationId="ChangeMapTypeButton"
+                  AutomationProperties.Name="{x:Static local:Resources.SceneSettings_BackgroundHeader_Title}"
+                  ToolTip="{x:Static local:Resources.SceneSettings_BackgroundHeader_Text}" Width="45" MinWidth="45"
+                  MaxWidth="45" Style="{DynamicResource BorderlessButton}" Command="{Binding ChangeSceneTypeCommand}">
+                        <Image HorizontalAlignment="Left" Source="/VisualizationControl;component/Images/AddScene.png" Height="32"
+                   Width="32"/>
+                    </Button>
+                    <TextBlock Margin="6,4,0,0" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left"
+                     Text="{x:Static local:Resources.SceneSettings_BackgroundHeader_Text}" TextWrapping="Wrap"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

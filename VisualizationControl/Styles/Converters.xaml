@@ -1,0 +1,80 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+                    xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+  <wpfEx:AndConverter x:Key="AndConverter"/>
+  <wpfEx:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+  <wpfEx:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+  <wpfEx:BoolToOpacityConverter x:Key="InvertedBoolToOpacityConverter"
+                                TrueValue="0.5"
+                                FalseValue="1.0"/>
+  <wpfEx:BoolToVisibilityConverter x:Key="CollapsedIfTrueConverter"
+                                   FalseValue="Visible"
+                                   TrueValue="Collapsed"/>
+  <wpfEx:BoolToVisibilityConverter x:Key="CollapsedIfFalseConverter"
+                                   FalseValue="Collapsed"
+                                   TrueValue="Visible"/>
+  <wpfEx:BoolToVisibilityConverter x:Key="HiddenIfFalseConverter"
+                                   FalseValue="Hidden"
+                                   TrueValue="Visible"/>
+  <wpfEx:BoolToVisibilityConverter x:Key="HiddenIfTrueConverter"
+                                   FalseValue="Visible"
+                                   TrueValue="Hidden"/>
+  <wpfEx:EnumEqualityToBoolConverter x:Key="EnumEqualityToBoolConverter"/>
+  <wpfEx:EnumEqualityToBoolConverter x:Key="EnumInequalityToBoolConverter" ValueForMatch="false" ValueForMismatch="true"/>
+  <wpfEx:StringToIntConverter x:Key="StringToIntConverter"/>
+  <wpfEx:EnumEqualityToBoolConverter x:Key="FalseIfEnumsAreEqualConverter" ValueForMismatch="true" ValueForMatch="false"/>
+  <wpfEx:IntegerEqualityToVisibilityConverter x:Key="VisibleIfIntegersAreEqualConverter" VisibilityForMatch="Visible"
+                                              VisibilityForMismatch="Collapsed"/>
+  <wpfEx:IntegerEqualityToVisibilityConverter x:Key="VisibleIfIntegersAreNotEqualConverter" VisibilityForMatch="Collapsed"
+                                              VisibilityForMismatch="Visible"/>
+  <wpfEx:IntegerEqualityTestConverter x:Key="TrueIfIntegersAreEqualConverter"/>
+  <wpfEx:IntegerEqualityTestConverter x:Key="TrueIfIntegersAreNotEqualConverter" ValueIfEqual="false"/>
+  <wpfEx:EnumEqualityToVisibilityConverter x:Key="EnumEqualityToVisibilityConverter"/>
+  <wpfEx:EnumEqualityToVisibilityConverter x:Key="EnumInequalityToVisibilityConverter" VisibilityForMatch="Collapsed"
+                                           VisibilityForMismatch="Visible"/>
+  <wpfEx:ReferenceNullToVisibilityConverter x:Key="VisibleIfNullConverter"
+                                            NonNullValue="Collapsed"
+                                            NullValue="Visible"/>
+  <wpfEx:ReferenceNullToVisibilityConverter x:Key="VisibleIfNotNullConverter"
+                                            NonNullValue="Visible"
+                                            NullValue="Collapsed"/>
+  <wpfEx:ReferenceNullToVisibilityConverter x:Key="HiddenIfNullConverter"
+                                            NonNullValue="Visible"
+                                            NullValue="Hidden"/>
+  <wpfEx:StringNullOrEmptyToVisibilityConverter x:Key="VisibleIfStringNotNullOrEmptyConverter"
+                                                NonNullValue="Visible"
+                                                NullValue="Collapsed"/>
+  <wpfEx:ReferenceNullToBooleanConverter x:Key="TrueIfNotNullConverter"
+                                         NonNullValue="true"
+                                         NullValue="false"/>
+  <wpfEx:ColorToSolidColorBrushConverter x:Key="ColorToSolidBrushConverter"/>
+  <wpfEx:StringToFontWeightConverter x:Key="StringToFontWeightConverter"/>
+  <wpfEx:StringEqualityConverter x:Key="TrueIfBoldConverter" ReferenceValue="Bold" ConvertBackValueForTrue="Bold"
+                                 ConvertBackValueForFalse="Normal"/>
+  <wpfEx:StringEqualityConverter x:Key="TrueIfItalicConverter" ReferenceValue="Italic" ConvertBackValueForTrue="Italic"
+                                 ConvertBackValueForFalse="Normal"/>
+  <wpfEx:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
+  <wpfEx:InvertBoolConverter x:Key="InvertBoolConverter"/>
+  <wpfEx:DateTimeToDoubleConverter x:Key="DateTimeToDoubleConverter"/>
+  <wpfEx:TimeSpanToPower5DoubleConverter x:Key="TimeSpanToPower5DoubleConverter"/>
+  <wpfEx:DoubleToPercentageConverter x:Key="DoubleToPercentageConverter" MinimumValue="0" MaximumValue="5"/>
+  <wpfEx:DoubleToPercentageConverter x:Key="DoubleToPercentageOpacityConverter" MinimumValue="0" MaximumValue="1"/>
+  <wpfEx:DoubleToPercentageConverter x:Key="DoubleToPercentageScaleConverter" MinimumValue="0" MaximumValue="5" IgorePercentSign="true"/>
+  <wpfEx:DoubleToPercentageConverter x:Key="DoubleToPercentageOffsetConverter" MinimumValue="-1" MaximumValue="1"
+                                     IgorePercentSign="true"/>
+  <wpfEx:DurationConverter x:Key="DurationConverter" Minimum="{x:Static local:TimeSettingsViewModel.MinimumDuration}"
+                           Maximum="{x:Static local:TimeSettingsViewModel.MaximumDuration}"/>
+  <s:Boolean x:Key="True">True</s:Boolean>
+  <s:Boolean x:Key="False">False</s:Boolean>
+  <wpfEx:MultiBooleanToVisibilityConverter x:Key="MultiBooleanToVisibilityAllConverter"/>
+  <wpfEx:MultiBooleanToVisibilityConverter x:Key="HiddenIfFalseMultiBooleanToVisibilityAllConverter" IfFalse="Hidden"/>
+  <wpfEx:MultiBooleanToVisibilityConverter x:Key="CollapsedIfTrueMultiBooleanToVisibilityAllConverter" IfTrue="Collapsed" IfFalse="Visible"/>
+  <wpfEx:MultiBooleanAnyConverter x:Key="MultiBooleanToVisibilityAnyConverter"/>
+  <wpfEx:MultiBooleanAnyConverter x:Key="HiddenIfFalseMultiBooleanToVisibilityAnyConverter" NotVisible="Hidden"/>
+  <wpfEx:FloatCultureConverter x:Key="FloatToCultureConverter"/>
+  <wpfEx:TimeStringConverter x:Key="TimeStringConverter"/>
+  <wpfEx:IfThenElseConverter x:Key="IfThenElseConverter"/>
+  <local:ThemeEnabledConverter x:Key="ThemeEnabledConverter"/>
+</ResourceDictionary>

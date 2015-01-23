@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TaskPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Border Background="{StaticResource MetroBackground}"
+          Visibility="{Binding Path=Visible, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid Margin="0,15,0,0">
+            <TabControl x:Name="TaskPanelTabs" Grid.Row="1" BorderThickness="0,1,0,0" Margin="5,0,5,0"
+                  BorderBrush="{StaticResource SectionSeparator}" SelectedIndex="{Binding SelectedIndex}"
+                  Visibility="{Binding Path=LayersTab.Model.SelectedLayer.FieldListPicker.TableIslandsForGeography.IsEmpty, Converter={StaticResource CollapsedIfTrueConverter}, FallbackValue=Visible}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                        <Setter Property="ContentControl.ContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                        <ContentControl KeyboardNavigation.IsTabStop="false" Content="{Binding}"/>
+                                    </ScrollViewer>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <TabItem x:Name="LayersTab" AutomationProperties.AutomationId="LayersTab"
+                 AutomationProperties.Name="{x:Static local:Resources.TaskPanel_LayersTabTooltip}"
+                 Header="{StaticResource LayersTabHeaderIcon}"
+                 ToolTip="{x:Static local:Resources.TaskPanel_LayersTabTooltip}"
+                 AutomationProperties.HelpText="{x:Static local:Resources.Narrator_LayersTabHelpText}"
+                 Content="{Binding LayersTab}"/>
+                <TabItem x:Name="FieldsTab" AutomationProperties.AutomationId="FieldsTab"
+                 AutomationProperties.Name="{x:Static local:Resources.TaskPanel_FieldsTabTooltip}"
+                 Header="{StaticResource FieldsTabHeaderIcon}"
+                 ToolTip="{x:Static local:Resources.TaskPanel_FieldsTabTooltip}"
+                 AutomationProperties.HelpText="{x:Static local:Resources.Narrator_FieldsTabHelpText}"
+                 Content="{Binding FieldsTab}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ContentControl KeyboardNavigation.IsTabStop="false" MinHeight="270" Content="{Binding}"
+                                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}"/>
+                            </ScrollViewer>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </TabItem>
+                <TabItem x:Name="FiltersTab" AutomationProperties.AutomationId="FiltersTab"
+                 AutomationProperties.Name="{x:Static local:Resources.TaskPanel_FiltersTabTooltip}"
+                 Header="{StaticResource FiltersTabHeaderIcon}"
+                 ToolTip="{x:Static local:Resources.TaskPanel_FiltersTabTooltip}"
+                 AutomationProperties.HelpText="{x:Static local:Resources.Narrator_FiltersTabHelpText}"
+                 Content="{Binding FiltersTab}"/>
+                <TabItem x:Name="SettingsTab" AutomationProperties.AutomationId="SettingsTab"
+                 AutomationProperties.Name="{x:Static local:Resources.TaskPanel_SettingsTabTooltip}"
+                 Header="{StaticResource SettingsTabHeaderIcon}"
+                 ToolTip="{x:Static local:Resources.TaskPanel_SettingsTabTooltip}"
+                 AutomationProperties.HelpText="{x:Static local:Resources.Narrator_SettingsTabHelpText}"
+                 Content="{Binding SettingsTab}"
+                 Visibility="{Binding Path=SettingsTab.Content, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+            </TabControl>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center"
+                  Visibility="{Binding Path=LayersTab.Model.SelectedLayer.FieldListPicker.TableIslandsForGeography.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                <Image Name="Alert_Image" Source="/VisualizationControl;component/Images/AlertWarning32.png"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0" Stretch="None"/>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" Padding="20"
+                   Text="{x:Static local:Resources.TaskPanel_NoDataMessage}" TextWrapping="Wrap"/>
+            </StackPanel>
+            <Grid Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ChromeCloseButton}"
+                AutomationProperties.AutomationId="LayersTab"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+                ToolTip="{x:Static local:Resources.TaskPanel_CloseTooltip}" Command="{Binding CloseCommand}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

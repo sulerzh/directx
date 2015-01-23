@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.SceneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             Loaded="OnLoaded" Unloaded="OnUnloaded">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\ChromeButtonStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:SceneTimeConverter x:Key="SceneTimeConverter"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid x:Name="Scene" Width="212" Height="117">
+        <Grid x:Name="grid" Column="0" Width="212" Height="117">
+            <Rectangle Fill="Black"/>
+            <Image Source="{Binding Path=Scene.Frame.Image}"
+             Visibility="{Binding Path=DataContext.IsDirty, Converter={StaticResource HiddenIfTrueConverter}, RelativeSource={RelativeSource Self}}"/>
+            <Image Name="LiveImage" IsHitTestVisible="false" RenderOptions.BitmapScalingMode="NearestNeighbor"
+             Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center"
+             RenderTransformOrigin="0,1.5"
+             Visibility="{Binding Path=DataContext.IsDirty, Converter={StaticResource HiddenIfFalseConverter}, RelativeSource={RelativeSource Self}}"/>
+            <Image Source="{Binding DecoratorImage}"
+             Visibility="{Binding Path=DataContext.IsDirty, Converter={StaticResource HiddenIfFalseConverter}, RelativeSource={RelativeSource Self}}"
+             FlowDirection="{Binding FlowDirection, ElementName=grid}"/>
+        </Grid>
+        <Grid x:Name="CommandsOverlay" VerticalAlignment="Bottom" Height="32">
+            <Rectangle Opacity="{DynamicResource OverlayOpacity}" Grid.Column="0" Grid.ColumnSpan="2"
+                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{DynamicResource MetroBackground}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="SceneName" Grid.Column="0" HorizontalAlignment="Left" Margin="7,0,0,0"
+                     VerticalAlignment="Center" FontSize="13" TextTrimming="CharacterEllipsis">
+                        <TextBlock.Text>
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <local:SceneTitleConverter/>
+                                </MultiBinding.Converter>
+                                <Binding Path="SceneNumber"/>
+                                <Binding Path="Scene.Name"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock x:Name="SceneDuration" Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,7,0"
+                     VerticalAlignment="Center" FontSize="13" TextTrimming="CharacterEllipsis"
+                     Text="{Binding Scene.Duration, Converter={StaticResource SceneTimeConverter}}"/>
+                </Grid>
+                <StackPanel x:Name="Controls" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"
+                    KeyboardNavigation.IsTabStop="false" KeyboardNavigation.TabNavigation="Continue"
+                    KeyboardNavigation.DirectionalNavigation="Cycle"
+                    FocusManager.FocusedElement="{Binding ElementName=SettingsButton}">
+                    <UIElement.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityAnyConverter}">
+                            <Binding Path="IsKeyboardFocused"
+                       RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}"/>
+                            <Binding Path="IsKeyboardFocusWithin"
+                       RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}"/>
+                            <Binding ElementName="Scene" Path="IsMouseOver"/>
+                        </MultiBinding>
+                    </UIElement.Visibility>
+                    <Button x:Name="SettingsButton" Style="{StaticResource SettingsButtonStyle}" HorizontalAlignment="Right"
+                  Margin="7,0,7,0" ToolTip="{x:Static local:Resources.SettingsTab_SceneOptionsTooltip}"
+                  AutomationProperties.AutomationId="SceneSettingsButton" KeyboardNavigation.IsTabStop="true"
+                  Command="{Binding SettingsCommand}"
+                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SceneView, AncestorLevel=1}, Path=DataContext}">
+                        <AutomationProperties.Name>
+                            <MultiBinding StringFormat="{x:Static local:Resources.Narrator_SceneSettingsStringFormat}">
+                                <MultiBinding.Converter>
+                                    <local:SceneTitleConverter/>
+                                </MultiBinding.Converter>
+                                <Binding Path="SceneNumber"/>
+                                <Binding Path="Scene.Name"/>
+                                <Binding Path="Scene.Duration"/>
+                            </MultiBinding>
+                        </AutomationProperties.Name>
+                    </Button>
+                    <Button x:Name="DeleteButton" Style="{StaticResource ChromeCloseButton}" HorizontalAlignment="Right"
+                  Margin="7,0,7,0" ToolTip="{x:Static local:Resources.SceneView_DeleteTooltip}"
+                  AutomationProperties.AutomationId="DeleteSceneButton" KeyboardNavigation.IsTabStop="true"
+                  Command="{Binding DeleteCommand}"
+                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SceneView, AncestorLevel=1}, Path=DataContext}"
+                  IsEnabled="{Binding IsDeleteEnabled}">
+                        <AutomationProperties.Name>
+                            <MultiBinding StringFormat="{x:Static local:Resources.Narrator_SceneDeleteStringFormat}">
+                                <MultiBinding.Converter>
+                                    <local:SceneTitleConverter/>
+                                </MultiBinding.Converter>
+                                <Binding Path="SceneNumber"/>
+                                <Binding Path="Scene.Name"/>
+                                <Binding Path="Scene.Duration"/>
+                            </MultiBinding>
+                        </AutomationProperties.Name>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

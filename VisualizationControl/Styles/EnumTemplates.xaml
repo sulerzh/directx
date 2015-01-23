@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+  <wpfEx:EnumToStringConverter x:Key="EnumToStringConverter"/>
+  <DataTemplate DataType="{x:Type local:GeoFieldMappingType}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate x:Key="FilterListBoxDataTemplate" DataType="{x:Type local:AggregationFunction}">
+    <TextBlock Focusable="true" Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:AggregationFunction}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:VisualizationChartType}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TimeChunkPeriod}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DateTimeFilterPredicateComparison}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:NumericFilterPredicateComparison}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:StringFilterPredicateComparison}">
+    <TextBlock Text="{Binding Converter={StaticResource EnumToStringConverter}}"/>
+  </DataTemplate>
+</ResourceDictionary>

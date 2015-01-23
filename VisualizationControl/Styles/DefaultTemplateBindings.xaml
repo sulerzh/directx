@@ -1,0 +1,176 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+  <DataTemplate DataType="{x:Type local:FieldListPickerViewModel}">
+    <local:FieldListPickerView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:AddFilterSelectionDialogViewModel}">
+    <local:AddFilterSelectionDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:RangeFilterViewModel}">
+    <local:RangeFilterView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:ExpressionFilterViewModel}">
+    <local:ExpressionFilterView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:ListFilterViewModel}">
+    <local:ListFilterView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:CreateVideoViewModel}">
+    <local:CreateVideo/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:CustomSpaceSettingsViewModel}">
+    <local:CustomSpaceSettingsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:CustomSpaceGalleryViewModel}">
+    <local:CustomSpaceGalleryView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:SettingsDialogViewModel}">
+    <local:SettingsDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TableIslandViewModel}">
+    <local:TableIslandView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TableViewModel}">
+    <local:TableView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:FieldWellGeographyViewModel}">
+    <local:FieldWellGeographyView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:FieldWellVisualizationViewModel}">
+    <local:FieldWellVisualizationView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:StatusBarViewModel}">
+    <local:StatusBarView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:CompletionStatsViewModel}">
+    <local:CompletionStatsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:SelectionStats}">
+    <local:SelectionStatsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TableFieldToolTipViewModel}">
+    <local:TableFieldToolTipView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:AnnotationDialogContentViewModel}">
+    <local:AnnotationDialogContentView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TaskPanelViewModel}">
+    <local:TaskPanelView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TaskPanelFieldsTabViewModel}">
+    <local:TaskPanelFieldsTabView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TaskPanelFiltersTabViewModel}">
+    <local:TaskPanelFiltersTabView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TaskPanelLayersTabViewModel}">
+    <local:TaskPanelLayersTabView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TaskPanelSettingsTabViewModel}">
+    <local:TaskPanelSettingsTabView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:SceneSettingsViewModel}">
+    <local:SceneSettingsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:LayerSettingsViewModel}">
+    <local:LayerSettingsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:FieldWellEntryViewModel}">
+    <local:FieldWellEntryView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:GlobeViewModel}">
+    <local:GlobeView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:GlobeNavigationViewModel}">
+    <local:GlobeNavigationView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TourEditorViewModel}">
+    <local:TourEditorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TourPlayerViewModel}">
+    <local:TourPlayerView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:SceneViewModel}">
+    <local:SceneView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TimeScrubberViewModel}">
+    <local:TimeScrubberView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DurationViewModel}">
+    <local:DurationView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TransitionDurationViewModel}">
+    <local:TransitionDurationView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TimeSettingsViewModel}">
+    <local:TimeSettingsView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DateTimeEditorViewModel}">
+    <local:DateTimeEditorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:ColorPickerViewModel}">
+    <local:ColorPickerView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:ConfirmationDialogViewModel}">
+    <local:ConfirmationDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DecoratorLayerViewModel}">
+    <local:DecoratorLayerView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DecoratorCollectionViewModel}">
+    <local:DecoratorCollectionView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:AddLabelDialogViewModel}">
+    <local:AddLabelDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:EditLabelDialogViewModel}">
+    <local:EditLabelDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:AddChartDialogViewModel}">
+    <local:AddChartDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:EditTimeDecoratorDialogViewModel}">
+    <local:EditTimeDecoratorDialogView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:DecoratorViewModel}">
+    <local:DecoratorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:LabelDecoratorModel}">
+    <local:LabelDecoratorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:LayerLegendDecoratorModel}">
+    <local:LayerLegendDecoratorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:ChartDecoratorModel}">
+    <local:ChartDecoratorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:TimeDecoratorModel}">
+    <local:TimeDecoratorView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:HostControlViewModel}">
+    <local:HostControlView />
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:GeocodingReportViewModel}">
+    <local:GeocodingReportView/>
+  </DataTemplate>
+  <DataTemplate DataType="{x:Type local:GeoFieldMappingViewModel}">
+    <local:GeoFieldMappingView/>
+  </DataTemplate>
+  <DataTemplate x:Key="TableFieldViewModelDragTemplate">
+    <StackPanel>
+      <TextBlock Text="{Binding Name}"/>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="HeightFieldDragTemplate">
+    <StackPanel>
+      <TextBlock Text="{Binding DisplayString}"/>
+    </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="DropErrorTemplate">
+    <StackPanel Orientation="Horizontal" Margin="4">
+      <ContentControl Margin="4,0" FontWeight="Bold" Foreground="Red" Content="{Binding}"/>
+    </StackPanel>
+  </DataTemplate>
+</ResourceDictionary>

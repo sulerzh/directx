@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONGRAPHICS.DLL-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E0825EE8-F343-469E-81C1-29FDCF6129D6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VisualizationGraphics</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>16.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Data.Visualization.Engine</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>1</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Graphics\DisposableResource.cs" />
+    <Compile Include="Graphics\ApplicationRenderParameters.cs" />
+    <Compile Include="Graphics\Color4F.cs" />
+    <Compile Include="Graphics\FrameRenderParameters.cs" />
+    <Compile Include="Graphics\GraphicsResource.cs" />
+    <Compile Include="Graphics\PixelFormat.cs" />
+    <Compile Include="Graphics\Image.cs" />
+    <Compile Include="Graphics\BlendFactor.cs" />
+    <Compile Include="Graphics\BlendOperation.cs" />
+    <Compile Include="Graphics\RenderTargetWriteMask.cs" />
+    <Compile Include="Graphics\BlendStateDescription.cs" />
+    <Compile Include="Graphics\BlendState.cs" />
+    <Compile Include="Graphics\BufferedRenderTarget.cs" />
+    <Compile Include="Graphics\RendererCore.cs" />
+    <Compile Include="Graphics\DeferredRenderer.cs" />
+    <Compile Include="Graphics\ComparisonFunction.cs" />
+    <Compile Include="Graphics\StencilOperation.cs" />
+    <Compile Include="Graphics\StencilDescription.cs" />
+    <Compile Include="Graphics\DepthStencilStateDescription.cs" />
+    <Compile Include="Graphics\DepthStencilState.cs" />
+    <Compile Include="Graphics\EffectDefinition.cs" />
+    <Compile Include="Graphics\Effect.cs" />
+    <Compile Include="Graphics\EffectData.cs" />
+    <Compile Include="Graphics\EffectDebugInfo.cs" />
+    <Compile Include="Graphics\EffectTechnique.cs" />
+    <Compile Include="Graphics\FrameProfiler.cs" />
+    <Compile Include="Graphics\IndexBuffer.cs" />
+    <Compile Include="Graphics\ProfileSection.cs" />
+    <Compile Include="Graphics\ProfileFrameSection.cs" />
+    <Compile Include="Graphics\ProfileResult.cs" />
+    <Compile Include="Graphics\FillMode.cs" />
+    <Compile Include="Graphics\CullMode.cs" />
+    <Compile Include="Graphics\RasterizerStateDescription.cs" />
+    <Compile Include="Graphics\RasterizerState.cs" />
+    <Compile Include="Graphics\ReadableBitmap.cs" />
+    <Compile Include="Graphics\RendererErrorEventArgs.cs" />
+    <Compile Include="Graphics\PrimitiveTopology.cs" />
+    <Compile Include="Graphics\Renderer.cs" />
+    <Compile Include="Graphics\IRenderParameter.cs" />
+    <Compile Include="Graphics\RenderParameterBase.cs" />
+    <Compile Include="Graphics\RenderParameterBool.cs" />
+    <Compile Include="Graphics\RenderParameterInt.cs" />
+    <Compile Include="Graphics\RenderParameterFloat.cs" />
+    <Compile Include="Graphics\RenderParameterVector2F.cs" />
+    <Compile Include="Graphics\RenderParameterVector4F.cs" />
+    <Compile Include="Graphics\RenderParameterColor4F.cs" />
+    <Compile Include="Graphics\RenderParameterMatrix4x4F.cs" />
+    <Compile Include="Graphics\RenderParameters.cs" />
+    <Compile Include="Graphics\Rect.cs" />
+    <Compile Include="Graphics\RenderTargetDepthStencilMode.cs" />
+    <Compile Include="Graphics\RenderTarget.cs" />
+    <Compile Include="Graphics\ResourceManager.cs" />
+    <Compile Include="Graphics\StreamBuffer.cs" />
+    <Compile Include="Graphics\TextureUsage.cs" />
+    <Compile Include="Graphics\Texture.cs" />
+    <Compile Include="Graphics\TextureAddressMode.cs" />
+    <Compile Include="Graphics\TextureFilter.cs" />
+    <Compile Include="Graphics\TextureSampler.cs" />
+    <Compile Include="Graphics\TextureView.cs" />
+    <Compile Include="Graphics\IVertex.cs" />
+    <Compile Include="Graphics\Vertex.cs" />
+    <Compile Include="Graphics\VertexFormats.cs" />
+    <Compile Include="Graphics\VertexBuffer.cs" />
+    <Compile Include="Graphics\VertexSemantic.cs" />
+    <Compile Include="Graphics\VertexComponentDataType.cs" />
+    <Compile Include="Graphics\VertexComponentClassification.cs" />
+    <Compile Include="Graphics\VertexComponent.cs" />
+    <Compile Include="Graphics\VertexFormat.cs" />
+    <Compile Include="Graphics\D3D11BlendState.cs" />
+    <Compile Include="Graphics\D3D11DeferredRenderer.cs" />
+    <Compile Include="Graphics\D3D11DepthStencilState.cs" />
+    <Compile Include="Graphics\D3D11Effect.cs" />
+    <Compile Include="Graphics\D3D11EffectData.cs" />
+    <Compile Include="Graphics\D3D11IndexBuffer.cs" />
+    <Compile Include="Graphics\D3D11ProfileFrameSection.cs" />
+    <Compile Include="Graphics\D3D11ProfileSection.cs" />
+    <Compile Include="Graphics\D3D11RasterizerState.cs" />
+    <Compile Include="Graphics\D3D11ReadableBitmap.cs" />
+    <Compile Include="Graphics\D3D11Renderer.cs" />
+    <Compile Include="Graphics\RendererCoreState.cs" />
+    <Compile Include="Graphics\D3D11RendererCore.cs" />
+    <Compile Include="Graphics\D3D11RenderParameters.cs" />
+    <Compile Include="Graphics\D3D11RenderTarget.cs" />
+    <Compile Include="Graphics\D3D11StreamBuffer.cs" />
+    <Compile Include="Graphics\D3D11StreamEffect.cs" />
+    <Compile Include="Graphics\D3D11Texture.cs" />
+    <Compile Include="Graphics\D3D11TextureSampler.cs" />
+    <Compile Include="Graphics\D3D11TextureView.cs" />
+    <Compile Include="Graphics\D3D11VertexBuffer.cs" />
+    <Compile Include="Graphics\D3D11VertexFormat.cs" />
+    <Compile Include="Graphics\D3DDeviceExtension.cs" />
+    <Compile Include="Graphics\Box2D.cs" />
+    <Compile Include="Graphics\Box3D.cs" />
+    <Compile Include="Graphics\Box3F.cs" />
+    <Compile Include="Graphics\D3DImage11.cs" />
+    <Compile Include="Graphics\DirectX9ForWpfException.cs" />
+    <Compile Include="VectorMath\Coordinates.cs" />
+    <Compile Include="VectorMath\Cap.cs" />
+    <Compile Include="VectorMath\Circle3D.cs" />
+    <Compile Include="VectorMath\Constants.cs" />
+    <Compile Include="VectorMath\FlatCap.cs" />
+    <Compile Include="VectorMath\Matrix4x4D.cs" />
+    <Compile Include="VectorMath\Matrix4x4F.cs" />
+    <Compile Include="VectorMath\PlaneD.cs" />
+    <Compile Include="VectorMath\Ray3D.cs" />
+    <Compile Include="VectorMath\SphereD.cs" />
+    <Compile Include="VectorMath\SphericalCap.cs" />
+    <Compile Include="VectorMath\Vector2D.cs" />
+    <Compile Include="VectorMath\Vector2F.cs" />
+    <Compile Include="VectorMath\Vector3D.cs" />
+    <Compile Include="VectorMath\Vector3F.cs" />
+    <Compile Include="VectorMath\Vector4D.cs" />
+    <Compile Include="VectorMath\Vector4F.cs" />
+    <Compile Include="MathExtensions\DifferentiableScalar.cs" />
+    <Compile Include="MathExtensions\DifferentiableVector.cs" />
+    <Compile Include="MathExtensions\Hermite.cs" />
+    <Compile Include="MathExtensions\MathEx.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
+      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
+      <Name>VisualizationDirectX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

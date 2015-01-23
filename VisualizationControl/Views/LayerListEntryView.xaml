@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.LayerListEntryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ToggleButton Style="{DynamicResource LayerVisibilityToggleButtonStyle}" Margin="6,0"
+                  ToolTip="{x:Static local:Resources.LayersTab_ShowHideTooltip}"
+                  AutomationProperties.AutomationId="LayerHideButton" IsChecked="{Binding Visible}"
+                  AutomationProperties.Name="{Binding Name, StringFormat={x:Static local:Resources.Narrator_LayerHideStringFormat}}"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="6,0"
+               AutomationProperties.AutomationId="LayerNameTextBlock" Text="{Binding Name}"
+               ToolTip="{Binding Name}"/>
+        <Button Grid.Column="2" Style="{DynamicResource SettingsButtonStyle}" Margin="6,0"
+            ToolTip="{x:Static local:Resources.LayersTab_SettingsTooltip}"
+            AutomationProperties.AutomationId="LayerSettingsButton"
+            AutomationProperties.Name="{Binding Name, StringFormat={x:Static local:Resources.Narrator_LayerSettingsStringFormat}}"
+            Command="{Binding LayerSettingsCommand}"
+            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LayerListEntryView, AncestorLevel=1}, Path=DataContext}"/>
+        <Button Grid.Column="3" Style="{DynamicResource ChromeCloseButton}" Margin="6,0"
+            ToolTip="{x:Static local:Resources.LayersTab_DeleteTooltip}"
+            AutomationProperties.AutomationId="LayerDeleteButton"
+            AutomationProperties.Name="{Binding Name, StringFormat={x:Static local:Resources.Narrator_LayerDeleteStringFormat}}"
+            Command="{Binding DeleteLayerCommand}"
+            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LayerListEntryView, AncestorLevel=1}, Path=DataContext}"/>
+    </Grid>
+</UserControl>

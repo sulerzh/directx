@@ -1,0 +1,98 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls;assembly=VisualizationControl">
+  <ResourceDictionary.MergedDictionaries>
+    <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+  </ResourceDictionary.MergedDictionaries>
+  <Style x:Key="ChromeButtonBase" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.Width" Value="28"/>
+    <Setter Property="FrameworkElement.Height" Value="28"/>
+    <Setter Property="FrameworkElement.UseLayoutRounding" Value="true"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style x:Key="FilterSearchButtonBase" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.UseLayoutRounding" Value="true"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+    <Setter Property="Control.BorderThickness" Value="0"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid Name="PART_Backgrid">
+            <Image Name="PART_Image" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Source="/VisualizationControl;component/Images/search.png"/>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="false">
+              <Setter TargetName="PART_Backgrid" Value="{x:Null}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsMouseOver" Value="true">
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroHoverGreen}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="ButtonBase.IsPressed" Value="true">
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroPressedGreen}" Property="Panel.Background"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="FilterClearSearchButtonBase" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.UseLayoutRounding" Value="true"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+    <Setter Property="Control.BorderThickness" Value="0"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid Name="PART_Backgrid">
+            <Image Name="PART_Image" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Source="/VisualizationControl;component/Images/searchclear.png"/>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="false">
+              <Setter TargetName="PART_Backgrid" Value="{x:Null}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsMouseOver" Value="true">
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroHoverGreen}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="ButtonBase.IsPressed" Value="true">
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroPressedGreen}" Property="Panel.Background"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ChromeCloseButton" BasedOn="{StaticResource ChromeButtonBase}" TargetType="{x:Type Button}">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid Name="PART_Backgrid">
+            <Image Name="PART_Image" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Source="/VisualizationControl;component/Images/close_normal.png"/>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsMouseOver" Value="true">
+              <Setter TargetName="PART_Image" Property="Image.Source"
+                      Value="/VisualizationControl;component/Images/close_hover.png"/>
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroHoverGreen}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="ButtonBase.IsPressed" Value="true">
+              <Setter TargetName="PART_Image" Property="Image.Source"
+                      Value="/VisualizationControl;component/Images/close_pressed.png"/>
+              <Setter TargetName="PART_Backgrid" Value="{DynamicResource MetroPressedGreen}" Property="Panel.Background"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled" Value="false">
+              <Setter TargetName="PART_Image" Property="Image.Source"
+                      Value="/VisualizationControl;component/Images/close_disabled.png"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

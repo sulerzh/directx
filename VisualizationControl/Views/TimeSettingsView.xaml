@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TimeSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel IsEnabled="{Binding Path=IsEnabled}">
+        <TextBlock Text="{x:Static local:Resources.TimeSettingsHeading}"
+               Style="{StaticResource SectionHeaderTextStyle}"/>
+        <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemSpacing}">
+            <DockPanel Margin="0 7">
+                <TextBlock Text="{x:Static local:Resources.TimeSettingsStartLabel}" DockPanel.Dock="Left"
+                   VerticalAlignment="Bottom" Style="{StaticResource SettingsFieldLabelStyle}"/>
+                <ContentControl x:Name="StartTimeBox" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Width="150" Margin="0 -7" ToolTip="{x:Static local:Resources.TimeSettings_StartDateTooltip}"
+                        AutomationProperties.AutomationId="StartTimeBox"
+                        AutomationProperties.Name="{x:Static local:Resources.Narrator_TimeStartDate}"
+                        Content="{Binding Path=Start}"/>
+            </DockPanel>
+            <DockPanel Margin="0 7">
+                <TextBlock Text="{x:Static local:Resources.TimeSettingsEndLabel}" DockPanel.Dock="Left"
+                   VerticalAlignment="Bottom" Style="{StaticResource SettingsFieldLabelStyle}"/>
+                <ContentControl x:Name="EndTimeBox" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Width="150" Margin="0 -7" ToolTip="{x:Static local:Resources.TimeSettings_EndDateTooltip}"
+                        AutomationProperties.AutomationId="EndTimeBox"
+                        AutomationProperties.Name="{x:Static local:Resources.Narrator_TimeEndDate}"
+                        Content="{Binding Path=End}"/>
+            </DockPanel>
+            <DockPanel Margin="0 6.25">
+                <TextBlock HorizontalAlignment="Left" Text="{x:Static local:Resources.TimeSettingsSpeedLabel}"
+                   Style="{StaticResource SettingsFieldLabelStyle}"/>
+                <Slider x:Name="SpeedSlider" DockPanel.Dock="Right" Margin="0 -6.25" HorizontalAlignment="Right"
+                Width="{StaticResource ExtendedControlWidth}"
+                Minimum="{x:Static local:TimeSettingsViewModel.MinimumSpeedValue}"
+                Maximum="{x:Static local:TimeSettingsViewModel.MaximumSpeedValue}" IsMoveToPointEnabled="true"
+                ToolTip="{x:Static local:Resources.TimeSettings_SpeedTooltip}"
+                AutomationProperties.AutomationId="TimeSpeedSlider"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_TimeSpeed}"
+                Value="{Binding TimeController.Duration, Converter={StaticResource TimeSpanToPower5DoubleConverter}}"/>
+            </DockPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

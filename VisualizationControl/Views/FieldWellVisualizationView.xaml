@@ -1,0 +1,404 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.FieldWellVisualizationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:engine="clr-namespace:Microsoft.Data.Visualization.Engine;assembly=VisualizationEngine"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+                <ResourceDictionary Source="..\Styles\FieldListStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Thickness x:Key="FieldMargin">0 6 0 9</Thickness>
+            <Style TargetType="{x:Type RibbonMenuButton}">
+                <Style.Resources>
+                    <Thickness x:Key="{ComponentResourceKey ResourceId=LargeImageMargin, TypeInTargetAssembly={x:Type Ribbon}}">1,1,1,2</Thickness>
+                </Style.Resources>
+                <Setter Property="FrameworkElement.Width" Value="40"/>
+                <Setter Property="Control.Background" Value="Transparent"/>
+                <Setter Property="Control.BorderBrush" Value="Transparent"/>
+                <Setter Property="Control.BorderThickness" Value="1"/>
+                <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="RibbonMenuButton.MouseOverBackground" Value="{DynamicResource MetroHoverGreen}"/>
+                <Setter Property="RibbonMenuButton.MouseOverBorderBrush" Value="Transparent"/>
+                <Setter Property="RibbonMenuButton.PressedBorderBrush" Value="Transparent"/>
+                <Setter Property="RibbonMenuButton.PressedBackground" Value="{DynamicResource MetroPressedGreen}"/>
+                <Setter Property="RibbonMenuButton.FocusedBorderBrush" Value="Transparent"/>
+                <Setter Property="RibbonMenuButton.FocusedBackground" Value="{DynamicResource MetroSelectedGreen}"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="900"/>
+                <Setter Property="ToolTipService.ShowDuration" Value="20000"/>
+                <Setter Property="ToolTipService.BetweenShowDelay" Value="0"/>
+            </Style>
+            <Style x:Key="RibbonGalleryItemStyle" TargetType="{x:Type RibbonGalleryItem}">
+                <Setter Property="Control.Background" Value="Transparent"/>
+                <Setter Property="Control.BorderBrush" Value="Transparent"/>
+                <Setter Property="Control.BorderThickness" Value="1"/>
+                <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="RibbonGalleryItem.MouseOverBackground" Value="{DynamicResource MetroHoverGreen}"/>
+                <Setter Property="RibbonGalleryItem.MouseOverBorderBrush" Value="Transparent"/>
+                <Setter Property="RibbonGalleryItem.PressedBorderBrush" Value="Transparent"/>
+                <Setter Property="RibbonGalleryItem.PressedBackground" Value="{DynamicResource MetroPressedGreen}"/>
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RibbonGalleryItem}">
+                            <Grid x:Name="GalleryItemGrid">
+                                <Border x:Name="OuterBorder" BorderBrush="{TemplateBinding Control.BorderBrush}"
+                        BorderThickness="{TemplateBinding Control.BorderThickness}"
+                        Background="{TemplateBinding Control.Background}" SnapsToDevicePixels="true">
+                                    <Border x:Name="InnerBorder" HorizontalAlignment="Center" BorderBrush="Transparent"
+                          BorderThickness="{TemplateBinding Control.BorderThickness}"
+                          Padding="{TemplateBinding Control.Padding}">
+                                        <ContentPresenter x:Name="Content" Margin="0 2 2 2" HorizontalAlignment="Stretch"/>
+                                    </Border>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding MouseOverBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding MouseOverBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.BorderBrush"/>
+                                    <Setter TargetName="InnerBorder" Property="Border.BorderBrush" Value="#80FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="RibbonGalleryItem.IsSelected" Value="true">
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroSelectedGreen}" Property="Border.Background"/>
+                                </Trigger>
+                                <Trigger Property="RibbonGalleryItem.IsPressed" Value="true">
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding PressedBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding PressedBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.BorderBrush"/>
+                                    <Setter TargetName="InnerBorder" Property="Border.BorderBrush" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="UIElement.IsKeyboardFocused" Value="true">
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding MouseOverBackground, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder"
+                          Value="{Binding MouseOverBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                          Property="Border.BorderBrush"/>
+                                    <Setter TargetName="InnerBorder" Property="Border.BorderBrush" Value="#80FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="UIElement.IsEnabled" Value="false">
+                                    <Setter TargetName="Content" Property="UIElement.Opacity" Value="0.5"/>
+                                    <Setter TargetName="OuterBorder" Property="TextElement.Foreground" Value="#FF9E9E9E"/>
+                                </Trigger>
+                                <DataTrigger Value="True" Binding="{Binding HighContrast}">
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"
+                          Property="TextElement.Foreground"/>
+                                    <Setter TargetName="OuterBorder" Property="Border.Background" Value="Transparent"/>
+                                    <Setter TargetName="OuterBorder" Property="Border.BorderBrush" Value="Transparent"/>
+                                </DataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroBackground}" Property="Border.BorderBrush"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True"/>
+                                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                          Property="Border.BorderBrush"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Value="True"/>
+                                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroBackground}" Property="Border.BorderBrush"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroBackground}" Property="Border.BorderBrush"/>
+                                    <Setter TargetName="InnerBorder" Property="Border.BorderBrush" Value="Transparent"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+                          Property="TextElement.Foreground"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroBackground}" Property="Border.BorderBrush"/>
+                                    <Setter TargetName="InnerBorder" Property="Border.BorderBrush" Value="Transparent"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+                          Property="TextElement.Foreground"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsPressed, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                          Property="Border.Background"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"
+                          Property="Border.BorderBrush"/>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+                          Property="TextElement.Foreground"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsInControlGroup, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource MetroBackground}" Property="Border.BorderBrush"/>
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="False"/>
+                                        <Condition Binding="{Binding HighContrast}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter TargetName="OuterBorder" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"
+                          Property="TextElement.Foreground"/>
+                                </MultiDataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ShiftSettings" TargetType="{x:Type ContentControl}">
+                <Setter Property="Control.IsTabStop" Value="false"/>
+                <Setter Property="ContentControl.ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Grid SnapsToDevicePixels="true">
+                                <RibbonMenuButton x:Name="RegionShadingSettingsForCategoryDropdownButton" Margin="0 -5 0 -7" Grid.Column="2"
+                                  VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                                  SmallImageSource="/VisualizationControl;component/Images/Region.png"
+                                  ToolTip="{x:Static local:Resources.FieldsTab_RegionShadingOptionsTooltip}"
+                                  AutomationProperties.Name="{x:Static local:Resources.Narrator_RegionsShadingLabel}"
+                                  AutomationProperties.AutomationId="RegionShadingSettingsForCategoryDropdownButton"
+                                  Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Region}">
+                                    <RibbonGallery x:Name="RegionShadingSettingsGallery" SelectedValuePath="Key"
+                                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                 SelectedValue="{Binding SelectedRegionShadingSetting}">
+                                        <RibbonGalleryCategory ItemsSource="{x:Static local:FieldWellVisualizationViewModel.RegionShadingSettings}">
+                                            <ItemsControl.ItemContainerStyle>
+                                                <Style TargetType="{x:Type RibbonGalleryItem}" BasedOn="{StaticResource RibbonGalleryItemStyle}">
+                                                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
+                                                    <Setter Property="AutomationProperties.Name" Value="{Binding Value}"/>
+                                                </Style>
+                                            </ItemsControl.ItemContainerStyle>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Value}" ToolTip="{Binding Value}"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </RibbonGalleryCategory>
+                                    </RibbonGallery>
+                                </RibbonMenuButton>
+                            </Grid>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="{StaticResource FieldMargin}">
+            <RadioButton GroupName="ChartType" Style="{DynamicResource ChartTypeToggleButtonStyle}"
+                   AutomationProperties.AutomationId="StackedRadioButton"
+                   AutomationProperties.Name="{x:Static local:Resources.FieldWellVisualization_ChartType_StackedColumn}"
+                   ToolTip="{x:Static local:Resources.FieldWellVisualization_ChartType_StackedColumn_ToolTip}"
+                   IsChecked="{Binding ChartType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=StackedColumn}">
+                <Image Source="/VisualizationControl;component/Images/2D_VerticalStack.png"/>
+            </RadioButton>
+            <RadioButton GroupName="ChartType" Style="{DynamicResource ChartTypeToggleButtonStyle}"
+                   AutomationProperties.AutomationId="ClusteredRadioButton"
+                   AutomationProperties.Name="{x:Static local:Resources.FieldWellVisualization_ChartType_ClusteredColumn}"
+                   ToolTip="{x:Static local:Resources.FieldWellVisualization_ChartType_ClusteredColumn_ToolTip}"
+                   IsChecked="{Binding ChartType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=ClusteredColumn}">
+                <Image Source="/VisualizationControl;component/Images/2D_VerticalCluster.png"/>
+            </RadioButton>
+            <RadioButton GroupName="ChartType" Style="{DynamicResource ChartTypeToggleButtonStyle}"
+                   AutomationProperties.AutomationId="BubbleRadioButton"
+                   AutomationProperties.Name="{x:Static local:Resources.FieldWellVisualization_ChartType_Bubble}"
+                   ToolTip="{x:Static local:Resources.FieldWellVisualization_ChartType_Bubble_ToolTip}"
+                   IsChecked="{Binding ChartType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Bubble}">
+                <Image Source="/VisualizationControl;component/Images/BubbleVizType.png"/>
+            </RadioButton>
+            <RadioButton GroupName="ChartType" Style="{DynamicResource ChartTypeToggleButtonStyle}"
+                   AutomationProperties.AutomationId="HeatMapRadioButton"
+                   AutomationProperties.Name="{x:Static local:Resources.FieldWellVisualization_ChartType_HeatMap}"
+                   ToolTip="{x:Static local:Resources.FieldWellVisualization_ChartType_HeatMap_ToolTip}"
+                   IsChecked="{Binding ChartType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=HeatMap}">
+                <Image Source="/VisualizationControl;component/Images/HeatmapVizType.png"/>
+            </RadioButton>
+            <RadioButton GroupName="ChartType" Style="{DynamicResource ChartTypeToggleButtonStyle}"
+                   AutomationProperties.AutomationId="RegionRadioButton"
+                   AutomationProperties.Name="{x:Static local:Resources.FieldWellVisualization_ChartType_Region}"
+                   ToolTip="{x:Static local:Resources.FieldWellVisualization_ChartType_Region_ToolTip}"
+                   IsChecked="{Binding ChartType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Region}">
+                <Image Source="/VisualizationControl;component/Images/RegionVizType.png"/>
+            </RadioButton>
+        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_ValueLabel_Height}"
+                 AutomationProperties.AutomationId="StackedColumnHeaderTextBlock"
+                 Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=StackedColumn}"/>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_ValueLabel_Height}"
+                 AutomationProperties.AutomationId="ClusteredColumnHeaderTextBlock"
+                 Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=ClusteredColumn}"/>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_ValueLabel_Size}"
+                 AutomationProperties.AutomationId="BubbleHeaderTextBlock"
+                 Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Bubble}"/>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_ValueLabel_Value}"
+                 AutomationProperties.AutomationId="HeatMapHeaderTextBlock"
+                 Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=HeatMap}"/>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_ValueLabel_Value}"
+                 AutomationProperties.AutomationId="RegionHeaderTextBlock"
+                 Visibility="{Binding ChartType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Region}"/>
+            <ContentControl Grid.Column="2" Style="{StaticResource ShiftSettings}"
+                      Visibility="{Binding HasMoreThanOneHeightField, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Content="{Binding}"/>
+        </Grid>
+        <Border BorderThickness="1" BorderBrush="{StaticResource MetroGray3}" Margin="{StaticResource FieldMargin}">
+            <ScrollViewer x:Name="HeightScrollViewer" MaxHeight="164" VerticalScrollBarVisibility="Auto">
+                <ItemsControl Background="{DynamicResource MetroBackground}" MinHeight="48" IsTabStop="false"
+                      Style="{StaticResource FieldWellPlaceholderTextItemsControlStyle}"
+                      wpfEx:DragDropHelper.DefaultDragDropEffect="Move"
+                      wpfEx:DragDropHelper.DragDropTemplate="{StaticResource HeightFieldDragTemplate}"
+                      ToolTip="{x:Static local:Resources.FieldsTab_ValueFieldWellTooltip}"
+                      ItemsSource="{Binding HeightFields, UpdateSourceTrigger=PropertyChanged}"
+                      wpfEx:DragDropHelper.DropHandler="{Binding HeightFieldsDropHandler}"
+                      wpfEx:DragDropHelper.DragHandler="{Binding HeightFieldsDragHandler}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:FieldWellEntryView Margin="2"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+        <Grid Visibility="{Binding CategoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_CategoryFieldWell_Title}"/>
+            <ContentControl Grid.Column="2" Style="{StaticResource ShiftSettings}"
+                      Visibility="{Binding CategorySettingsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Content="{Binding}"/>
+        </Grid>
+        <Border Background="{DynamicResource MetroBackground}" Height="Auto"
+            BorderBrush="{DynamicResource MetroGray3}" BorderThickness="1"
+            Margin="{StaticResource FieldMargin}"
+            Visibility="{Binding CategoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid Visibility="{Binding CategoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <wpfEx:DragDropContentControl x:Name="CategoryDragDropContentControl" Background="{DynamicResource MetroBackground}"
+                                      IsTabStop="false" wpfEx:DragDropHelper.DropErrorTemplate="{StaticResource DropErrorTemplate}"
+                                      ToolTip="{x:Static local:Resources.FieldsTab_CategoryFieldWellTooltip}"
+                                      Content="{Binding SelectedCategory.Value}"
+                                      wpfEx:DragDropHelper.DropHandler="{Binding SelectedCategoryDropHandler}"
+                                      wpfEx:DragDropHelper.DragHandler="{Binding SelectedCategoryDragHandler}">
+                    <FrameworkElement.Style>
+                        <Style TargetType="{x:Type wpfEx:DragDropContentControl}">
+                            <Setter Property="FrameworkElement.Height" Value="23"/>
+                            <Style.Triggers>
+                                <Trigger Property="ContentControl.Content" Value="{x:Null}">
+                                    <Setter Property="FrameworkElement.Height" Value="Auto"/>
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock Style="{StaticResource FieldWellPlaceholderTextStyle}"
+                                   Text="{x:Static local:Resources.FieldWellVisualization_Instruction}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding Path=CategoryEnabled}" Value="False">
+                                    <Setter Property="Control.Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <TextBlock Style="{StaticResource FieldWellPlaceholderTextStyle}"
+                                   Text="{x:Static local:Resources.FieldWellVisualization_CategoryUsingHeightsText}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </FrameworkElement.Style>
+                </wpfEx:DragDropContentControl>
+            </Grid>
+        </Border>
+        <Grid SnapsToDevicePixels="true">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource SectionHeaderTextStyle}"
+                 Text="{x:Static local:Resources.FieldWellVisualization_TimeFieldWell_Title}" Grid.Column="0"/>
+            <RibbonMenuButton x:Name="TimeSettingsDropdownButton" Grid.Column="1" Margin="0 -5 0 -7"
+                        VerticalContentAlignment="Center"
+                        ToolTip="{x:Static local:Resources.FieldsTab_TimeSettingsTooltip}"
+                        AutomationProperties.Name="{x:Static local:Resources.Narrator_TimeAnimationOption}"
+                        AutomationProperties.AutomationId="TimeAnimationOptions"
+                        AutomationProperties.HelpText="{x:Static local:Resources.FieldsTab_TimeSettingsTooltip}"
+                        Visibility="{Binding Path=SelectedTimeField.Value, Converter={StaticResource VisibleIfNotNullConverter}}"
+                        SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TimeProperties.png}">
+                <RibbonGallery x:Name="TimeSettingsGallery" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                       SelectedItem="{Binding SelectedTimeSetting}">
+                    <RibbonGalleryCategory ItemsSource="{Binding TimeSettings}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type RibbonGalleryItem}" BasedOn="{StaticResource RibbonGalleryItemStyle}">
+                                <Setter Property="UIElement.IsEnabled" Value="{Binding IsEnabled}"/>
+                                <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
+                                <Setter Property="AutomationProperties.Name" Value="{Binding Content}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Content}" ToolTip="{Binding Content}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </RibbonGalleryCategory>
+                </RibbonGallery>
+            </RibbonMenuButton>
+        </Grid>
+        <Border Background="{DynamicResource MetroBackground}" BorderBrush="{DynamicResource MetroGray3}"
+            BorderThickness="1" Margin="{StaticResource FieldMargin}">
+            <wpfEx:DragDropContentControl x:Name="TimeDragDropControl" Background="{DynamicResource MetroBackground}"
+                                    Style="{StaticResource FieldWellPlaceholderTextContentControlStyle}"
+                                    wpfEx:DragDropHelper.DropErrorTemplate="{StaticResource DropErrorTemplate}"
+                                    ToolTip="{x:Static local:Resources.FieldsTab_TimeFieldWellTooltip}"
+                                    Content="{Binding SelectedTimeField.Value}"
+                                    wpfEx:DragDropHelper.DropHandler="{Binding SelectedTimeFieldDropHandler}"
+                                    wpfEx:DragDropHelper.DragHandler="{Binding SelectedTimeFieldDragHandler}"/>
+        </Border>
+    </StackPanel>
+</UserControl>

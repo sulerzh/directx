@@ -1,0 +1,16 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <ResourceDictionary.MergedDictionaries>
+        <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+        <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+        <ResourceDictionary Source="Constants.xaml"/>
+        <ResourceDictionary Source="ChromeButtonStyles.xaml"/>
+        <ResourceDictionary Source="Converters.xaml"/>
+        <ResourceDictionary Source="DefaultTemplateBindings.xaml"/>
+        <ResourceDictionary Source="EnumTemplates.xaml"/>
+        <ResourceDictionary Source="GeoFlowMetro.xaml"/>
+        <ResourceDictionary Source="MetroRibbon.xaml"/>
+        <ResourceDictionary Source="RangeSlider.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

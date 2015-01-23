@@ -1,0 +1,274 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.ChartDecoratorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dv="clr-namespace:Microsoft.Reporting.Windows.Chart.Internal;assembly=VisualizationChart"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:dvc="clr-namespace:Microsoft.Reporting.Windows.Common.Internal;assembly=VisualizationChartCommon"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave"
+             AutomationProperties.AutomationId="ChartDecortor"
+             AutomationProperties.Name="{x:Static local:Resources.Ribbon_ChartLabel}"
+             Background="{DynamicResource MetroBackground}" Opacity="0.9">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\ChartStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\ControlBaseStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="TransparentButton" TargetType="{x:Type Button}">
+                <Setter Property="Control.Background" Value="Transparent"/>
+                <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+                <Setter Property="Control.BorderThickness" Value="0"/>
+                <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid x:Name="MainGrid">
+                                <Border BorderThickness="0">
+                                    <ContentControl>
+                                        <Control.Foreground>
+                                            <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Source={StaticResource ButtonFrames}, Path=Color}"/>
+                                        </Control.Foreground>
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                      Margin="{TemplateBinding Control.Padding}" RecognizesAccessKey="true"
+                                      SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                      VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                      Content="{TemplateBinding ContentControl.Content}"/>
+                                    </ContentControl>
+                                </Border>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal"/>
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard/>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard/>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard/>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Geometry x:Key="DownArrowGeometry">
+                M 0 0 L 3.5 4 L 7 0 Z
+            </Geometry>
+            <Style x:Key="HorizontalAxisStyle" TargetType="{x:Type dv:Axis}" BasedOn="{StaticResource AxisStyle}"/>
+            <Style x:Key="VerticalAxisStyle" TargetType="{x:Type dv:Axis}" BasedOn="{StaticResource AxisStyle}">
+                <Setter Property="dv:Axis.TitleStyle" Value="{StaticResource YAxisTitleStyle}"/>
+                <Setter Property="dv:Axis.LabelAngle" Value="0"/>
+            </Style>
+            <Color x:Key="ButtonHighlightColor">#217346</Color>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Name="Container" Margin="15,15,15,10"
+        Visibility="{Binding IsVisible, Converter={StaticResource HiddenIfFalseConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <FrameworkElement.Resources>
+            <SolidColorBrush x:Key="HighlightedTextBrush" Color="Black"/>
+        </FrameworkElement.Resources>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualStateGroup.Transitions>
+                    <VisualTransition GeneratedDuration="0:0:0.25"/>
+                </VisualStateGroup.Transitions>
+                <VisualState x:Name="Normal">
+                    <Storyboard/>
+                </VisualState>
+                <VisualState x:Name="MouseOver">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="ChartTypeDropDown" Storyboard.TargetProperty="Opacity" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="TopTextBolded" Storyboard.TargetProperty="Opacity" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="BottomTextBolded" Storyboard.TargetProperty="Opacity" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="TopText" Storyboard.TargetProperty="Opacity" To="0"/>
+                        <DoubleAnimation Storyboard.TargetName="BottomText" Storyboard.TargetProperty="Opacity" To="0"/>
+                        <DoubleAnimation Storyboard.TargetName="SelectedSortTextBolded" Storyboard.TargetProperty="Opacity" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="SelectedSortText" Storyboard.TargetProperty="Opacity" To="0"/>
+                        <DoubleAnimation Storyboard.TargetName="Arrow"
+                             Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(ScaleTransform.ScaleX)" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="Arrow"
+                             Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(ScaleTransform.ScaleY)" To="1"/>
+                        <ColorAnimation Storyboard.TargetName="TopText"
+                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                            To="{StaticResource ButtonHighlightColor}"/>
+                        <ColorAnimation Storyboard.TargetName="BottomText"
+                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                            To="{StaticResource ButtonHighlightColor}"/>
+                        <ColorAnimation Storyboard.TargetName="SelectedSortText"
+                            Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)"
+                            To="{StaticResource ButtonHighlightColor}"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="XAxis" Storyboard.TargetProperty="ScrollZoomBarStyle">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZoomScrollBarDefault}" KeyTime="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="ChartOrientationStates">
+                <VisualState x:Name="ColumnChart"/>
+                <VisualState x:Name="BarChart">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="XAxis" Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame Value="{StaticResource VerticalAxisStyle}" KeyTime="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="XYChartArea1" Storyboard.TargetProperty="Orientation">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <ObjectKeyFrame.Value>
+                                    <Orientation>Vertical</Orientation>
+                                </ObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Style="{StaticResource DialogHeaderLabelStyle}" TextTrimming="CharacterEllipsis"
+                 FontSize="21.33" AutomationProperties.AutomationId="ChartTitleTextBox" Text="{Binding Title}"/>
+            <Border Padding="0,0,12,0" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1"
+              Margin="5,0,0,0">
+                <ComboBox x:Name="ChartTypeDropDown" AutomationProperties.AutomationId="ChartTypeDropDown"
+                  SelectedValuePath="XYChartType" Height="30"
+                  ToolTip="{x:Static local:Resources.ChartDecorator_ChangeTypeTooltip}" Opacity="0"
+                  AutomationProperties.Name="{x:Static local:Resources.NarratorChartDecorator_ChartType}"
+                  ItemsSource="{Binding ChartTypeInfoList}" SelectedValue="{Binding XYChartType, Mode=TwoWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="30" Height="30">
+                                <Image Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center" Source="{Binding ImageUri}"
+                       FlowDirection="{Binding FlowDirection, ElementName=ChartTypeDropDown}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type ComboBoxItem}">
+                            <Setter Property="AutomationProperties.Name" Value="{Binding XYChartType}"/>
+                            <Setter Property="AutomationProperties.AutomationId" Value="{Binding XYChartType}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ComboBox>
+            </Border>
+        </Grid>
+        <Grid Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button MinWidth="0"
+              CommandParameter="ToggleTopBottom" 
+              Style="{StaticResource TransparentButton}"
+              Margin="0,0,-2,0" HorizontalAlignment="Left"
+              ToolTip="{x:Static local:Resources.ChartDecorator_SortByTooltip}"
+              AutomationProperties.AutomationId="ChartTopBottomButton"
+              AutomationProperties.Name="{x:Static local:Resources.NarratorChartDecorator_SortBy}"
+              Grid.Column="{Binding Converter={StaticResource StringToIntConverter}, ConverterParameter={x:Static local:Resources.ChartSubTitle_OrderDDPosition}}"
+              Command="{Binding}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="TopText" 
+                     Text="{x:Static local:Resources.ChartSubTitle_Top100Locations}"
+                     Foreground="{StaticResource HighlightedTextBrush}"
+                     AutomationProperties.Name="{x:Static local:Resources.ChartSubTitle_Top100Locations}"
+                     AutomationProperties.AutomationId="ChartSubTitle_Top100LocationsTextBox"
+                     Visibility="{Binding Type, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Top}"/>
+                    <TextBlock x:Name="BottomText"
+                     Text="{x:Static local:Resources.ChartSubTitle_Bottom100Locations}"
+                     AutomationProperties.Name="{x:Static local:Resources.ChartSubTitle_Bottom100Locations}"
+                     Foreground="{StaticResource HighlightedTextBrush}"
+                     AutomationProperties.AutomationId="ChartSubTitle_Bottom100LocationsTextBox"
+                     Visibility="{Binding Type, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Bottom}"/>
+                    <TextBlock x:Name="TopTextBolded"
+                     Text="{x:Static local:Resources.ChartSubTitle_Top100Locations}"
+                     FontWeight="Bold" Foreground="{StaticResource HighlightedTextBrush}" Opacity="0"
+                     AutomationProperties.Name="{x:Static local:Resources.ChartSubTitle_Top100Locations}"
+                     Visibility="{Binding Type, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Top}"/>
+                    <TextBlock x:Name="BottomTextBolded" 
+                     Text="{x:Static local:Resources.ChartSubTitle_Bottom100Locations}"
+                     AutomationProperties.Name="{x:Static local:Resources.ChartSubTitle_Bottom100Locations}"
+                     FontWeight="Bold" Foreground="{StaticResource HighlightedTextBrush}" Opacity="0"
+                     Visibility="{Binding Type, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Bottom}"/>
+                </Grid>
+            </Button>
+            <TextBlock Text="{x:Static local:Resources.ChartSubTitle_Connector}" VerticalAlignment="Center"
+                 HorizontalAlignment="Left"
+                 Grid.Column="{Binding Converter={StaticResource StringToIntConverter}, ConverterParameter={x:Static local:Resources.ChartSubTitle_ConnectorPosition}}"/>
+            <Canvas ClipToBounds="true" HorizontalAlignment="Left" KeyboardNavigation.IsTabStop="false"
+              Grid.Column="{Binding Converter={StaticResource StringToIntConverter}, ConverterParameter={x:Static local:Resources.ChartSubTitle_SortDDPosition}}">
+                <ComboBox Name="SortValues" AutomationProperties.AutomationId="ChartSortValues" VerticalAlignment="Center"
+                  HorizontalAlignment="Left" DisplayMemberPath="Name" BorderThickness="0" Background="Transparent"
+                  Opacity="0"
+                  AutomationProperties.Name="{x:Static local:Resources.NarratorChartDecorator_SeriesPicker}"
+                  ItemsSource="{Binding SortFields}" SelectedItem="{Binding SelectedSortField}">
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type ComboBoxItem}">
+                            <Setter Property="Control.Background" Value="Transparent"/>
+                            <Setter Property="FrameworkElement.ToolTip" Value="{Binding Name}"/>
+                            <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                            <Setter Property="AutomationProperties.AutomationId" Value="{Binding Name}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ComboBox>
+            </Canvas>
+            <Button Click="dropButton_Click" x:Name="SelectedSortTextContainer" MinWidth="0"
+              Style="{StaticResource TransparentButton}" HorizontalAlignment="Left"
+              Grid.Column="{Binding Converter={StaticResource StringToIntConverter}, ConverterParameter={x:Static local:Resources.ChartSubTitle_SortDDPosition}}"
+              ToolTip="{Binding SelectedSortField.Name}"
+              AutomationProperties.Name="{Binding SelectedSortField.Name}">
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <Grid>
+                        <TextBlock x:Name="SelectedSortText" Foreground="{StaticResource HighlightedTextBrush}" Opacity="1"
+                       Text="{Binding SelectedSortField.Name}"/>
+                        <TextBlock x:Name="SelectedSortTextBolded" FontWeight="Bold"
+                       Foreground="{StaticResource HighlightedTextBrush}" Opacity="0"
+                       Text="{Binding SelectedSortField.Name}"/>
+                    </Grid>
+                    <Path x:Name="Arrow" Data="{StaticResource DownArrowGeometry}" Fill="Black" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Margin="0,2,0,0">
+                        <FrameworkElement.LayoutTransform>
+                            <ScaleTransform ScaleX="0" ScaleY="0"/>
+                        </FrameworkElement.LayoutTransform>
+                    </Path>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <dv:XYChartArea DataPointSelectionChanged="XYChartArea1_DataPointSelectionChanged" x:Name="XYChartArea1"
+                    AutomationProperties.AutomationId="ChartArea" Grid.Row="2"
+                    Style="{StaticResource XYChartAreaStyle}" IsMouseSelectionEnabled="true"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" KeyboardNavigation.IsTabStop="false"
+                    KeyboardNavigation.TabNavigation="None" Width="{Binding ElementName=Container, Path=ActualWidth}">
+            <dv:XYChartArea.Axes>
+                <dv:Axis x:Name="YAxis" AutomationProperties.AutomationId="YAxisName" ShowAxisLine="false" Orientation="Y"
+                 Style="{StaticResource VerticalAxisStyle}" ShowTitles="false" Title="{Binding YAxisName}"
+                 AutomationProperties.Name="{Binding YAxisName}"/>
+                <dv:Axis x:Name="XAxis" AutomationProperties.AutomationId="XAxisName" ShowMajorGridlines="false"
+                 ShowMinorGridlines="False" ShowLabels="false" Orientation="X"
+                 IsScrollZoomBarAllwaysMaximized="false" ShowScrollZoomBar="true"
+                 ScrollZoomBarStyle="{StaticResource HiddenZoomScrollBarDefault}"
+                 Style="{StaticResource HorizontalAxisStyle}" ShowTitles="false" Title="{Binding XAxisName}"
+                 AutomationProperties.Name="{Binding XAxisName}"/>
+            </dv:XYChartArea.Axes>
+        </dv:XYChartArea>
+    </Grid>
+</UserControl>

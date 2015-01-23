@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TimeScrubberView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\ScrubberStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Border Background="{StaticResource MetroBackground}" BorderThickness="2"
+          BorderBrush="{StaticResource MetroGray2}" CornerRadius="6" Margin="150,12">
+        <UIElement.Visibility>
+            <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityAllConverter}">
+                <Binding Path="IsTimeDataAvailable"/>
+                <Binding Path="IsActive"/>
+            </MultiBinding>
+        </UIElement.Visibility>
+        <Grid x:Name="MainGrid">
+            <FrameworkElement.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="false">
+                            <Setter Property="UIElement.Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
+                            <Setter Property="UIElement.Opacity" Value="1.0"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="UIElement.IsMouseOver" Value="true"/>
+                                <Condition Property="UIElement.IsKeyboardFocusWithin" Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="UIElement.Opacity" Value="1.0"/>
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+            </FrameworkElement.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Column="0" FlowDirection="LeftToRight">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button IsVisibleChanged="PlayButton_IsVisibleChanged" x:Name="PlayButton" Grid.Column="0"
+                HorizontalAlignment="Center" Margin="12,4" FlowDirection="LeftToRight"
+                ToolTip="{x:Static local:Resources.TimeScrubber_PlayTooltip}"
+                AutomationProperties.AutomationId="TimePlayButton"
+                AutomationProperties.Name="{x:Static local:Resources.TimeScrubber_PlayTooltip}"
+                AutomationProperties.HelpText="{x:Static local:Resources.Narrator_TimePlayDescription}"
+                Command="{Binding Path=PlayButtonCommand}" IsEnabled="{Binding IsTimeDataAvailable}"
+                Visibility="{Binding Path=TimeController.VisualTimeEnabled, Converter={StaticResource CollapsedIfTrueConverter}}">
+                    <Grid KeyboardNavigation.IsTabStop="false">
+                        <Rectangle x:Name="PlayIcon" Width="16" Height="16">
+                            <Shape.Fill>
+                                <DrawingBrush Stretch="Uniform">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Geometry="F1 M 15.7806,11.4775 L 9.21939,16.4323 9.21939,6.56769 15.7806,11.4775 Z"
+                                         Brush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=1}, Path=Foreground}"/>
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Shape.Fill>
+                        </Rectangle>
+                    </Grid>
+                </Button>
+                <Button x:Name="PauseButton" Grid.Column="0" 
+                        IsVisibleChanged="PauseButton_IsVisibleChanged" 
+                        HorizontalAlignment="Center" Margin="12,4" FlowDirection="LeftToRight"
+                        ToolTip="{x:Static local:Resources.TimeScrubber_PauseTooltip}"
+                        AutomationProperties.AutomationId="TimePauseButton"
+                        AutomationProperties.Name="{x:Static local:Resources.TimeScrubber_PauseTooltip}"
+                        AutomationProperties.HelpText="{x:Static local:Resources.Narrator_TimePauseDescription}"
+                        Command="{Binding Path=PlayButtonCommand}"
+                        IsEnabled="{Binding IsTimeDataAvailable}"
+                        Visibility="{Binding Path=TimeController.VisualTimeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid KeyboardNavigation.IsTabStop="false">
+                        <Rectangle x:Name="PauseIcon" Width="16" Height="16">
+                            <Shape.Fill>
+                                <DrawingBrush Stretch="Uniform">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Geometry="F1 M 8.5,6.5 L 10.5,6.5 10.5,16.5 8.5,16.5 8.5,6.5 Z"
+                                                                 Brush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=1}, Path=Foreground}"/>
+                                                <GeometryDrawing Geometry="F1 M 12.5001,6.49982 L 14.5001,6.49982 14.5001,16.4998 12.5001,16.4998 12.5001,6.49982 Z"
+                                                                 Brush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=1}, Path=Foreground}"/>
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Shape.Fill>
+                        </Rectangle>
+                    </Grid>
+                </Button>
+                <Slider x:Name="TimeScrubberSlider" Grid.Column="1" VerticalAlignment="Center" Margin="0,6"
+                IsSnapToTickEnabled="false" IsMoveToPointEnabled="true"
+                ToolTip="{x:Static local:Resources.TimeScrubber_SliderTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.TimeSettingsHeading}"
+                AutomationProperties.AutomationId="TimeScrubberSlider"
+                Value="{Binding Path=TimeController.CurrentVisualTime, Converter={StaticResource DateTimeToDoubleConverter}}"
+                Minimum="{Binding Path=LayerManager.PlayFromTime, Converter={StaticResource DateTimeToDoubleConverter}}"
+                Maximum="{Binding Path=LayerManager.PlayToTime, Converter={StaticResource DateTimeToDoubleConverter}}"
+                IsEnabled="{Binding Path=IsTimeDataAvailable}" LargeChange="{Binding Path=LargeStep}"
+                SmallChange="{Binding Path=SmallStep}"/>
+                <Button x:Name="LoopButton" Grid.Column="2" Margin="12,4" FlowDirection="LeftToRight"
+                ToolTip="{x:Static local:Resources.TimeScrubber_LoopTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_TimeRepeat}"
+                AutomationProperties.AutomationId="TimeLoopButton" Command="{Binding Path=LoopButtonCommand}">
+                    <Grid>
+                        <Rectangle x:Name="LoopOffIcon" Width="16" Height="16"
+                       Visibility="{Binding Path=TimeController.Looping, Converter={StaticResource CollapsedIfTrueConverter}}">
+                            <Shape.Fill>
+                                <DrawingBrush Stretch="Uniform">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Geometry="F1 M 11.1743,2.07626 L 11.0871,1.9838 9.82999,3.25095 9.75122,3.42056 9.80688,3.48141 C 10.5709,4.3143 10.9957,5.38443 11.0031,6.49716 11.0178,8.99356 8.9982,11.0362 6.47662,11.0509 3.995,11.0509 1.9649,9.03287 1.94916,6.55069 1.94287,5.57407 2.2663,4.62717 2.8844,3.81174 L 3.2782,3.29086 4.58838,4.79111 5.56818,-3.05176E-05 0.706207,0.346039 2.00165,1.82999 1.67139,2.19547 C 0.583893,3.40005 -0.00949097,4.95065 -6.10352E-05,6.56332 0.0209351,10.113 2.92639,13.0001 6.47662,13.0001 L 6.5155,13.0001 C 10.0852,12.9786 12.9733,10.0563 12.9512,6.48453 12.9423,4.84415 12.3106,3.27823 11.1743,2.07626 Z"
+                                         Brush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=1}, Path=Foreground}"/>
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Shape.Fill>
+                        </Rectangle>
+                        <Rectangle x:Name="LoopOnIcon" Width="16" Height="16"
+                       Visibility="{Binding Path=TimeController.Looping, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Shape.Fill>
+                                <DrawingBrush Stretch="Uniform">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <DrawingGroup.Children>
+                                                <GeometryDrawing Brush="{StaticResource MetroBaseGreen}"
+                                         Geometry="F1 M 11.1743,2.07626 L 11.0871,1.9838 9.82999,3.25095 9.75122,3.42056 9.80688,3.48141 C 10.5709,4.3143 10.9957,5.38443 11.0031,6.49716 11.0178,8.99356 8.9982,11.0362 6.47662,11.0509 3.995,11.0509 1.9649,9.03287 1.94916,6.55069 1.94287,5.57407 2.2663,4.62717 2.8844,3.81174 L 3.2782,3.29086 4.58838,4.79111 5.56818,-3.05176E-05 0.706207,0.346039 2.00165,1.82999 1.67139,2.19547 C 0.583893,3.40005 -0.00949097,4.95065 -6.10352E-05,6.56332 0.0209351,10.113 2.92639,13.0001 6.47662,13.0001 L 6.5155,13.0001 C 10.0852,12.9786 12.9733,10.0563 12.9512,6.48453 12.9423,4.84415 12.3106,3.27823 11.1743,2.07626 Z"/>
+                                            </DrawingGroup.Children>
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Shape.Fill>
+                        </Rectangle>
+                    </Grid>
+                </Button>
+            </Grid>
+            <Button x:Name="SettingsButton" Width="16" Height="16" Grid.Column="1"
+              Style="{StaticResource SettingsButtonStyle}"
+              ToolTip="{x:Static local:Resources.TimeScrubber_SettingsTooltip}"
+              AutomationProperties.AutomationId="TimeSettingsButton"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_Settings}"
+              Command="{Binding Path=SettingsCommand}"/>
+            <Button x:Name="CloseButton" Grid.Column="2" Style="{StaticResource ChromeCloseButton}" Margin="12,4"
+              ToolTip="{x:Static local:Resources.TimeScrubber_CloseTooltip}"
+              AutomationProperties.AutomationId="TimeSliderCloseButton"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+              Command="{Binding Path=CloseButtonCommand}"/>
+        </Grid>
+    </Border>
+</UserControl>

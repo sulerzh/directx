@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.SelectionStatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Visibility="{Binding Count, Converter={StaticResource VisibleIfIntegersAreNotEqualConverter}, ConverterParameter=0}">
+        <StackPanel Orientation="Horizontal">
+            <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource StatusBarTextBlockStyle}"/>
+            </FrameworkElement.Resources>
+            <TextBlock AutomationProperties.AutomationId="AverageTextBlock"
+                 Text="{Binding Average, StringFormat={x:Static local:Resources.SelectionStats_Average}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+                 Visibility="{Binding Average, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+            <TextBlock AutomationProperties.AutomationId="CountTextBlock"
+                 Text="{Binding Count, StringFormat={x:Static local:Resources.SelectionStats_Count}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+            <TextBlock AutomationProperties.AutomationId="MinTextBlock"
+                 Text="{Binding Min, StringFormat={x:Static local:Resources.SelectionStats_Min}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+                 Visibility="{Binding Min, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+            <TextBlock AutomationProperties.AutomationId="MaxTextBlock"
+                 Text="{Binding Max, StringFormat={x:Static local:Resources.SelectionStats_Max}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+                 Visibility="{Binding Max, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+            <TextBlock AutomationProperties.AutomationId="SumTextBlock"
+                 Text="{Binding Sum, StringFormat={x:Static local:Resources.SelectionStats_Sum}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+                 Visibility="{Binding Sum, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.DecoratorCollectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ItemsControl IsTabStop="false" ItemsSource="{Binding Decorators}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas ClipToBounds="true"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemContainerStyle>
+            <Style>
+                <Setter Property="Canvas.Top" Value="{Binding Path=Model.Y}"/>
+                <Setter Property="Canvas.Left" Value="{Binding Path=Model.X}"/>
+                <Setter Property="Panel.ZIndex" Value="{Binding Path=Model.ZOrder}"/>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+    </ItemsControl>
+</UserControl>

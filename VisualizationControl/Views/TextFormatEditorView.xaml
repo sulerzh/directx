@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TextFormatEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel Orientation="Horizontal" Height="24">
+        <ComboBox Width="120" Margin="0,0,8,0" TabIndex="0" ToolTip="{x:Static local:Resources.TextBox_FontTooltip}"
+              AutomationProperties.AutomationId="TextFormatFontCombobox"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_TextFormat_Font}"
+              ItemsSource="{Binding Source={x:Static wpfEx:FontUtility.SystemFontStrings}}"
+              SelectedValue="{Binding FontFamily}"/>
+        <ComboBox Width="60" Margin="0,0,8,0" TabIndex="1"
+              ToolTip="{x:Static local:Resources.TextBox_FontSizeTooltip}"
+              AutomationProperties.AutomationId="TextFormatFontSizeCombobox"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_TextFormat_FontSize}"
+              ItemsSource="{Binding Source={x:Static local:RichTextModel.FontSizes}}"
+              SelectedValue="{Binding FontSize}"/>
+        <ToggleButton Width="28" TabIndex="2" ToolTip="{x:Static local:Resources.TextBox_BoldTooltip}"
+                  AutomationProperties.AutomationId="TextFormatBoldButton"
+                  AutomationProperties.Name="{x:Static local:Resources.Narrator_TextFormat_Bold}"
+                  IsChecked="{Binding FontWeight, Converter={StaticResource TrueIfBoldConverter}}">
+            <TextBlock Text="B" FontWeight="Bold"/>
+        </ToggleButton>
+        <ToggleButton Width="28" TabIndex="3" ToolTip="{x:Static local:Resources.TextBox_ItalicTooltip}"
+                  AutomationProperties.AutomationId="TextFormatItalicizeButton"
+                  AutomationProperties.Name="{x:Static local:Resources.Narrator_TextFormat_Italicize}"
+                  IsChecked="{Binding FontStyle, Converter={StaticResource TrueIfItalicConverter}}">
+            <TextBlock Text="I" FontWeight="Bold" FontStyle="Italic"/>
+        </ToggleButton>
+        <ComboBox Width="48" SelectedValuePath="Key" TabIndex="4"
+              ToolTip="{x:Static local:Resources.TextBox_ColorTooltip}"
+              AutomationProperties.AutomationId="TextFormatFontColorCombobox"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_TextFormat_FontColor}"
+              ItemsSource="{Binding Source={x:Static local:RichTextModel.TextColors}}"
+              SelectedValue="{Binding Color}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="Black" Margin="2">
+                        <Grid Width="16" Height="16"
+                  Background="{Binding Key, Converter={StaticResource ColorToSolidBrushConverter}}"/>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="AutomationProperties.Name" Value="{Binding Value}"/>
+                    <Setter Property="FrameworkElement.ToolTip" Value="{Binding Value}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ComboBox>
+    </StackPanel>
+</UserControl>

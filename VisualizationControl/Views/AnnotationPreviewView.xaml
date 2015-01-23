@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.AnnotationPreviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             HorizontalAlignment="Center" MaxWidth="512" MaxHeight="512"
+             AutomationProperties.AutomationId="AnnotationContentPreview"
+             AutomationProperties.Name="{x:Static local:Resources.Annotation_ContentPreview}"
+             AutomationProperties.HelpText="{x:Static local:Resources.AnnotationDialog_ContentPreviewTooltip}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel>
+        <TextBlock Margin="4" TextWrapping="Wrap" TextAlignment="Center" DataContext="{Binding Title}"
+               Text="{Binding Text}" FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}"
+               FontStyle="{Binding FontStyle}"
+               FontWeight="{Binding FontWeight, Converter={StaticResource StringToFontWeightConverter}}"
+               Foreground="{Binding Color, Converter={StaticResource ColorToSolidBrushConverter}}"
+               Background="{x:Null}"
+               Visibility="{Binding Text, Converter={StaticResource VisibleIfStringNotNullOrEmptyConverter}}"/>
+        <Grid Margin="4"
+          Visibility="{Binding DescriptionType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Custom}">
+            <TextBlock TextWrapping="Wrap" DataContext="{Binding Description}" Text="{Binding Text}"
+                 FontFamily="{Binding FontFamily}" FontSize="{Binding FontSize}" FontStyle="{Binding FontStyle}"
+                 FontWeight="{Binding FontWeight, Converter={StaticResource StringToFontWeightConverter}}"
+                 Foreground="{Binding Color, Converter={StaticResource ColorToSolidBrushConverter}}"/>
+        </Grid>
+        <ListBox Margin="4" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+             ToolTip="{x:Static local:Resources.AnnotationDialog_ContentPreviewTooltip}"
+             AutomationProperties.AutomationId="AnnotationContentPreviewListBox"
+             Visibility="{Binding DescriptionType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Bound}"
+             ItemsSource="{Binding FormattedFieldDisplayStrings}" FontSize="{Binding FieldFormat.FontSize}"
+             FontStyle="{Binding FieldFormat.FontStyle}" FontFamily="{Binding FieldFormat.FontFamily}"
+             Foreground="{Binding FieldFormat.Color, Converter={StaticResource ColorToSolidBrushConverter}}"
+             FontWeight="{Binding FieldFormat.FontWeight, Converter={StaticResource StringToFontWeightConverter}}"
+             Background="{x:Null}"/>
+        <Image Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center"
+           Visibility="{Binding DescriptionType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Image}"
+           Source="{Binding Image}"/>
+    </StackPanel>
+</UserControl>

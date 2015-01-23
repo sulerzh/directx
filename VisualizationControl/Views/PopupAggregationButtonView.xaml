@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.PopupAggregationButtonView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <ToggleButton LostKeyboardFocus="FilterFnButton_LostKeyboardFocus" Checked="FilterFnButton_Checked"
+                  Name="FilterFnButton" AutomationProperties.AutomationId="FilterFnButton" Padding="0"
+                  BorderThickness="0" Style="{StaticResource FilterBarToggleButtonStyle}" HorizontalAlignment="Right"
+                  ToolTip="{x:Static local:Resources.FiltersTab_ChangeAggFiltersTooltip}"
+                  AutomationProperties.Name="{x:Static local:Resources.FiltersTab_ChangeAggFiltersTooltip}"
+                  Margin="0,5,0,0"
+                  IsHitTestVisible="{Binding ElementName=FunctionPopup, Path=IsOpen, Mode=OneWay, Converter={StaticResource InvertBoolConverter}}"
+                  Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Image Margin="0" IsHitTestVisible="false">
+                <FrameworkElement.Style>
+                    <Style TargetType="{x:Type Image}" BasedOn="{StaticResource StatusBarIconImageStyle}">
+                        <Style.Triggers>
+                            <Trigger Property="FrameworkElement.FlowDirection" Value="RightToLeft">
+                                <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/RTL/100/filterfn.png"/>
+                            </Trigger>
+                            <Trigger Property="FrameworkElement.FlowDirection" Value="LeftToRight">
+                                <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/FilterFn.png"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </FrameworkElement.Style>
+            </Image>
+        </ToggleButton>
+        <Popup Name="FunctionPopup" StaysOpen="false" Placement="Bottom"
+           IsOpen="{Binding ElementName=FilterFnButton, Path=IsChecked}"
+           PlacementTarget="{Binding ElementName=FilterFnButton}">
+            <ListBox SelectionChanged="Selector_OnSelected" PreviewKeyUp="FunctionPopupListbox_KeyUp"
+               PreviewMouseLeftButtonDown="FunctionPopupListbox_PreviewMouseLeftButtonDown"
+               x:Name="FunctionPopupListbox" SelectionMode="Single" IsTabStop="false"
+               KeyboardNavigation.TabNavigation="Continue"
+               ItemContainerStyle="{StaticResource ListBoxItemPopUpStyle}"
+               ItemTemplate="{StaticResource FilterListBoxDataTemplate}" ItemsSource="{Binding Functions}"
+               SelectedItem="{Binding Function}"/>
+        </Popup>
+    </Grid>
+</UserControl>

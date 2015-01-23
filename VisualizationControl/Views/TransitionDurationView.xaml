@@ -1,0 +1,157 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TransitionDurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             Width="73" Height="21">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary" />
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="/VisualizationControl;component/Styles/MetroRibbon.xaml"/>
+                <ResourceDictionary Source="/VisualizationControl;component/Styles/Converters.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="NormalBrush" Color="{Binding Source={StaticResource MetroGray3}, Path=Color}"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <ContentControl KeyboardNavigation.IsTabStop="false">
+        <Control.Template>
+            <ControlTemplate>
+                <Border x:Name="DurationControlBorder" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="DurationTextBox" Grid.Column="0"
+                     ToolTip="{x:Static local:Resources.SceneSettings_TransitionDurationTooltip}"
+                     AutomationProperties.Name="{x:Static local:Resources.Narrator_TransitionDurationValue}"
+                     AutomationProperties.AutomationId="TransitionDurationControl"
+                     wpfEx:FocusHelper.AdvanceOnEnterKey="true"
+                     Text="{Binding SceneSettings.ParentScene.Scene.TransitionDuration, Converter={StaticResource DurationConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}">
+                            <Control.Template>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <ScrollViewer Name="PART_ContentHost"/>
+                                </ControlTemplate>
+                            </Control.Template>
+                        </TextBox>
+                        <ContentControl Grid.Column="1" KeyboardNavigation.IsTabStop="false">
+                            <Control.Template>
+                                <ControlTemplate>
+                                    <Border x:Name="ButtonAreaDivider" BorderThickness="1,0,0,0">
+                                        <Grid Column="1" wpfEx:GridEx.RowDefs="*,Auto,*">
+                                            <RepeatButton x:Name="UpButton" Grid.Row="0" Height="10" VerticalAlignment="Top"
+                                    KeyboardNavigation.IsTabStop="true" Command="{Binding UpCommand}">
+                                                <FrameworkElement.Style>
+                                                    <Style TargetType="{x:Type RepeatButton}">
+                                                        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+                                                        <Setter Property="UIElement.Focusable" Value="false"/>
+                                                        <Setter Property="Control.IsTabStop" Value="false"/>
+                                                        <Setter Property="FrameworkElement.Width" Value="15"/>
+                                                        <Setter Property="Control.Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                    <Border x:Name="BttnBorder" BorderBrush="Transparent" BorderThickness="0">
+                                                                        <Rectangle x:Name="ArrowGlyph" Fill="{StaticResource ScrollArrowDown}" RenderTransformOrigin="0.5,0.5">
+                                                                            <UIElement.RenderTransform>
+                                                                                <TransformGroup>
+                                                                                    <RotateTransform Angle="45"/>
+                                                                                    <TranslateTransform Y="3.5"/>
+                                                                                    <ScaleTransform ScaleX="0.5" ScaleY="0.57"/>
+                                                                                </TransformGroup>
+                                                                            </UIElement.RenderTransform>
+                                                                        </Rectangle>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                                                            <Setter TargetName="BttnBorder" Value="{DynamicResource MetroHoverGreen}" Property="Border.Background"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="ButtonBase.IsPressed" Value="true">
+                                                                            <Setter TargetName="BttnBorder" Value="{DynamicResource MetroPressedGreen}" Property="Border.Background"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                                                                            <Setter TargetName="ArrowGlyph" Property="UIElement.Opacity" Value="0.4"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </FrameworkElement.Style>
+                                            </RepeatButton>
+                                            <Border x:Name="UpDownSubdivide" Grid.Row="1" BorderThickness="0 1 0 0"/>
+                                            <RepeatButton x:Name="DownButton" Grid.Row="2" Margin="0,-1,0,0" KeyboardNavigation.IsTabStop="true"
+                                    Command="{Binding DownCommand}">
+                                                <FrameworkElement.Style>
+                                                    <Style TargetType="{x:Type RepeatButton}">
+                                                        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+                                                        <Setter Property="UIElement.Focusable" Value="false"/>
+                                                        <Setter Property="Control.IsTabStop" Value="false"/>
+                                                        <Setter Property="FrameworkElement.Width" Value="15"/>
+                                                        <Setter Property="Control.Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                                                    <Border x:Name="BttnBorder" BorderBrush="Transparent" BorderThickness="0">
+                                                                        <Rectangle x:Name="ArrowGlyph" Fill="{StaticResource ScrollArrowDown}" RenderTransformOrigin="0.5,0.5">
+                                                                            <UIElement.RenderTransform>
+                                                                                <TransformGroup>
+                                                                                    <RotateTransform Angle="-135"/>
+                                                                                    <TranslateTransform Y="-2.5"/>
+                                                                                    <ScaleTransform ScaleX="0.5" ScaleY="0.57"/>
+                                                                                </TransformGroup>
+                                                                            </UIElement.RenderTransform>
+                                                                        </Rectangle>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                                                            <Setter TargetName="BttnBorder" Value="{DynamicResource MetroHoverGreen}" Property="Border.Background"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="ButtonBase.IsPressed" Value="true">
+                                                                            <Setter TargetName="BttnBorder" Value="{DynamicResource MetroPressedGreen}" Property="Border.Background"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="UIElement.IsEnabled" Value="false">
+                                                                            <Setter TargetName="ArrowGlyph" Property="UIElement.Opacity" Value="0.4"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </FrameworkElement.Style>
+                                            </RepeatButton>
+                                        </Grid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                                            <Setter TargetName="ButtonAreaDivider" Value="{DynamicResource MetroAppButtonHoverGreen}"
+                              Property="Border.BorderBrush"/>
+                                            <Setter TargetName="UpDownSubdivide" Value="{DynamicResource MetroAppButtonHoverGreen}"
+                              Property="Border.BorderBrush"/>
+                                        </Trigger>
+                                        <Trigger Property="UIElement.IsMouseOver" Value="false">
+                                            <Setter TargetName="ButtonAreaDivider" Property="Border.BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="UpDownSubdivide" Property="Border.BorderBrush" Value="Transparent"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Control.Template>
+                        </ContentControl>
+                    </Grid>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="UIElement.IsMouseOver" Value="true">
+                        <Setter TargetName="DurationControlBorder" Value="{DynamicResource MetroAppButtonHoverGreen}"
+                    Property="Border.BorderBrush"/>
+                    </Trigger>
+                    <Trigger Property="UIElement.IsMouseOver" Value="false">
+                        <Setter TargetName="DurationControlBorder" Value="{DynamicResource CheckBoxFrames}"
+                    Property="Border.BorderBrush"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Control.Template>
+    </ContentControl>
+</UserControl>

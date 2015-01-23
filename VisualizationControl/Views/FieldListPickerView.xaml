@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.FieldListPickerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+                <ResourceDictionary Source="..\Styles\FieldListStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid IsKeyboardFocusWithinChanged="ChooseGeoFieldsView_IsKeyboardFocusWithinChanged"
+          Name="ChooseGeoFieldsView" wpfEx:GridEx.RowDefs="70*,30*"
+          Visibility="{Binding State, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=ChooseGeoFields}">
+            <Grid Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="{StaticResource FieldPanelSpacerGridHeight}"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="{x:Static local:Resources.FieldWellGeography_ChooseGeographyHeader}"
+                   Style="{StaticResource SectionHeaderTextStyle}"/>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,0,0,8"
+                      AutomationProperties.AutomationId="GeographyTableIslandScrollViewer">
+                    <ItemsControl IsTabStop="false" ItemsSource="{Binding TableIslandsForGeography}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Rectangle Name="separator" Height="2" Fill="{StaticResource SectionSeparator}" Margin="8,0,8,8"/>
+                                    <ContentControl KeyboardNavigation.IsTabStop="false" Content="{Binding}"/>
+                                </StackPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                        <Setter TargetName="separator" Property="UIElement.Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <GridSplitter Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="4"
+                    Background="{Binding Source={StaticResource MetroGraySeparator}}"/>
+            <ContentControl KeyboardNavigation.IsTabStop="false" Grid.Row="1" Margin="0,10,0,0" Content="{Binding FieldWell}"/>
+        </Grid>
+        <Grid IsKeyboardFocusWithinChanged="ChooseVisFieldView_IsKeyboardFocusWithinChanged"
+          Name="ChooseVisFieldView" KeyboardNavigation.TabNavigation="Continue"
+          Visibility="{Binding State, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=ChooseVisField}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="{StaticResource PanelSectionCompactSpacerGridHeight}"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <local:FieldWellSummaryView Grid.Row="0" DataContext="{Binding FieldWellSummary}"/>
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,0,0,8"
+                    AutomationProperties.AutomationId="VisualizationTableIslandScrollViewer">
+                <ItemsControl IsTabStop="false" ItemsSource="{Binding TableIslandsForVisualization}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Rectangle Name="separator" Height="2" Fill="{StaticResource SectionSeparator}" Margin="8,0,8,8"/>
+                                <ContentControl IsTabStop="false" Content="{Binding}"/>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                    <Setter TargetName="separator" Property="UIElement.Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="4"
+                    AutomationProperties.AutomationId="GridSplitterThumb"
+                    Background="{Binding Source={StaticResource MetroGraySeparator}}"/>
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Margin="0,8,0,0">
+                <ContentControl KeyboardNavigation.IsTabStop="false" Margin="0,2,0,0" Content="{Binding FieldWell}"/>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

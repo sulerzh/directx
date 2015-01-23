@@ -1,0 +1,372 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+                    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework">
+  <ResourceDictionary.MergedDictionaries>
+    <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+    <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+    <ResourceDictionary Source="Converters.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
+  <ControlTemplate x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+    <Border x:Name="Border" BorderThickness="1" BorderBrush="Transparent" Background="Transparent">
+      <Grid Margin="0 -1 0 1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="32"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+          <Path x:Name="CollapsedArrow" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Data="M 0,1 L 0,9 4,5 Z" Fill="{DynamicResource MetroBackground}"
+                Stroke="{DynamicResource CheckBoxFrames}"/>
+          <Path x:Name="ExpandedArrow" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Visibility="Collapsed" Data="M 0,6 L 5,1 5,6 Z" Fill="{DynamicResource NormalTextColor}"
+                Stroke="{DynamicResource NormalTextColor}"/>
+        </Grid>
+        <ContentPresenter Name="Content" Grid.Column="1" RecognizesAccessKey="true"/>
+      </Grid>
+    </Border>
+    <ControlTemplate.Triggers>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="ToggleButton.IsChecked" Value="True"/>
+          <Condition Property="UIElement.IsMouseOver" Value="true"/>
+        </MultiTrigger.Conditions>
+        <MultiTrigger.Setters>
+          <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.BorderBrush"/>
+        </MultiTrigger.Setters>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="ToggleButton.IsChecked" Value="False"/>
+          <Condition Property="UIElement.IsMouseOver" Value="true"/>
+        </MultiTrigger.Conditions>
+        <MultiTrigger.Setters>
+          <Setter TargetName="Border" Value="{DynamicResource MetroHoverGreen}" Property="Border.BorderBrush"/>
+        </MultiTrigger.Setters>
+      </MultiTrigger>
+      <Trigger Property="UIElement.IsMouseOver" Value="true">
+        <Setter TargetName="Border" Value="{DynamicResource MetroHoverGreen}" Property="Border.Background"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+      </Trigger>
+      <Trigger Property="ToggleButton.IsChecked" Value="True">
+        <Setter TargetName="CollapsedArrow" Property="UIElement.Visibility" Value="Hidden"/>
+        <Setter TargetName="ExpandedArrow" Property="UIElement.Visibility" Value="Visible"/>
+        <Setter TargetName="Content" Value="{DynamicResource MetroBaseGreen}" Property="TextBlock.Foreground"/>
+      </Trigger>
+      <Trigger Property="ToggleButton.IsChecked" Value="False">
+        <Setter TargetName="Content" Value="{DynamicResource NormalTextColor}" Property="TextBlock.Foreground"/>
+      </Trigger>
+      <Trigger Property="ButtonBase.IsPressed" Value="true">
+        <Setter TargetName="Content" Value="{DynamicResource NormalTextColor}" Property="TextBlock.Foreground"/>
+        <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.Background"/>
+        <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.BorderBrush"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+  <ControlTemplate x:Key="FilterExpanderToggleButton" TargetType="{x:Type ToggleButton}">
+    <Border x:Name="Border" BorderThickness="1" BorderBrush="Transparent" Background="Transparent">
+      <Grid Margin="0 -1 0 1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+          <Path x:Name="CollapsedArrow" HorizontalAlignment="Left" VerticalAlignment="Top" Data="M 0,1 L 0,9 4,5 Z"
+                Margin="0,4,0,0" Fill="{DynamicResource MetroBackground}" Stroke="{DynamicResource CheckBoxFrames}"/>
+          <Path x:Name="ExpandedArrow" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"
+                Data="M 0,6 L 5,1 5,6 Z" Margin="0,4,0,0" Fill="{DynamicResource NormalTextColor}"
+                Stroke="{DynamicResource NormalTextColor}"/>
+        </Grid>
+        <ContentPresenter Name="Content" Margin="5,0,0,0" Grid.Column="1" RecognizesAccessKey="true"/>
+      </Grid>
+    </Border>
+    <ControlTemplate.Triggers>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="ToggleButton.IsChecked" Value="True"/>
+          <Condition Property="UIElement.IsMouseOver" Value="true"/>
+        </MultiTrigger.Conditions>
+        <MultiTrigger.Setters>
+          <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.BorderBrush"/>
+        </MultiTrigger.Setters>
+      </MultiTrigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="ToggleButton.IsChecked" Value="False"/>
+          <Condition Property="UIElement.IsMouseOver" Value="true"/>
+        </MultiTrigger.Conditions>
+        <MultiTrigger.Setters>
+          <Setter TargetName="Border" Value="{DynamicResource MetroHoverGreen}" Property="Border.BorderBrush"/>
+        </MultiTrigger.Setters>
+      </MultiTrigger>
+      <Trigger Property="UIElement.IsMouseOver" Value="true">
+        <Setter TargetName="Border" Value="{DynamicResource MetroHoverGreen}" Property="Border.Background"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+      </Trigger>
+      <Trigger Property="ToggleButton.IsChecked" Value="True">
+        <Setter TargetName="CollapsedArrow" Property="UIElement.Visibility" Value="Hidden"/>
+        <Setter TargetName="ExpandedArrow" Property="UIElement.Visibility" Value="Visible"/>
+        <Setter TargetName="Content" Value="{DynamicResource MetroBaseGreen}" Property="TextBlock.Foreground"/>
+      </Trigger>
+      <Trigger Property="ToggleButton.IsChecked" Value="False">
+        <Setter TargetName="Content" Value="{DynamicResource NormalTextColor}" Property="TextBlock.Foreground"/>
+      </Trigger>
+      <Trigger Property="ButtonBase.IsPressed" Value="true">
+        <Setter TargetName="Content" Value="{DynamicResource NormalTextColor}" Property="TextBlock.Foreground"/>
+        <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.Background"/>
+        <Setter TargetName="Border" Value="{DynamicResource MetroPressedGreen}" Property="Border.BorderBrush"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="CollapsedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Stroke"/>
+        <Setter TargetName="ExpandedArrow" Value="{DynamicResource MetroBaseGreen}" Property="Shape.Fill"/>
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+  <Style TargetType="{x:Type Expander}">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Expander}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ToggleButton Grid.Row="0" OverridesDefaultStyle="true" Template="{StaticResource ExpanderToggleButton}"
+                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                          Content="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="Content" Grid.Row="1"
+                              Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="FilterExpander" TargetType="{x:Type Expander}">
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Expander}">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ToggleButton Grid.Row="0" OverridesDefaultStyle="true" Template="{StaticResource FilterExpanderToggleButton}"
+                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                          Content="{Binding Header, RelativeSource={RelativeSource TemplatedParent}}"/>
+            <ContentPresenter x:Name="Content" Grid.Row="1"
+                              Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type Hyperlink}">
+    <Style.Triggers>
+      <Trigger Property="ContentElement.IsMouseOver" Value="true">
+        <Setter Property="TextElement.Foreground" Value="{StaticResource MetroGreenFocused}"/>
+      </Trigger>
+    </Style.Triggers>
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource MetroBaseGreenText}"/>
+    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+  </Style>
+  <Style x:Key="StatusBarHyperlinkStyle" TargetType="{x:Type Hyperlink}">
+    <Style.Triggers>
+      <Trigger Property="ContentElement.IsMouseOver" Value="true">
+        <Setter Property="TextElement.Foreground" Value="White"/>
+      </Trigger>
+    </Style.Triggers>
+    <Setter Property="TextElement.Foreground" Value="White"/>
+    <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+  </Style>
+  <Image x:Key="LayersTabHeaderIcon" Width="16" Height="16"
+         Source="/VisualizationControl;component/Images/LayersTab.png"/>
+  <Image x:Key="FieldsTabHeaderIcon" Width="16" Height="16"
+         Source="/VisualizationControl;component/Images/FieldsTab.png"/>
+  <Image x:Key="SettingsTabHeaderIcon" Width="16" Height="16"
+         Source="/VisualizationControl;component/Images/SettingsTab.png"/>
+  <Image x:Key="FiltersTabHeaderIcon" Width="16" Height="16"
+         Source="/VisualizationControl;component/Images/FiltersTab.png"/>
+  <Rectangle x:Key="DataTableIcon" Width="13" Height="11">
+    <Shape.Fill>
+      <DrawingBrush Stretch="Uniform">
+        <DrawingBrush.Drawing>
+          <DrawingGroup>
+            <DrawingGroup.Children>
+              <GeometryDrawing Geometry="F1 M 9.01942,2.00425 L 9.01942,4.00859 12.0259,4.00859 12.0259,2.00425 9.01942,2.00425 M 9.01942,7.01512 L 12.02,7.01512 12.02,8.01725 9.01942,8.01725 9.01942,10.0216 12.02,10.0216 12.02,11.0237 9.01942,11.0237 8.01726,11.0237 5.01079,11.0237 4.00863,11.0237 1.00216,11.0237 0.751621,11.0237 3.8147E-06,11.0237 3.8147E-06,2.00431 3.8147E-06,1.00218 3.8147E-06,4.05312E-05 13.028,4.05312E-05 13.028,1.00218 13.028,2.00431 13.028,11.0237 12.0259,11.0237 12.0259,5.01078 9.01942,5.01078 9.01942,7.01512 M 8.01724,2.00444 L 5.01077,2.00444 5.01077,4.00865 8.01724,4.00865 8.01724,2.00444 M 5.01077,7.01518 L 8.01724,7.01518 8.01724,5.01078 5.01077,5.01078 5.01077,7.01518 M 5.01077,10.0217 L 8.01724,10.0217 8.01724,8.01731 5.01077,8.01731 5.01077,10.0217 M 4.00862,2.00444 L 1.00214,2.00444 1.00214,4.00865 4.00862,4.00865 4.00862,2.00444 M 1.00214,7.01518 L 4.00862,7.01518 4.00862,5.01078 1.00214,5.01078 1.00214,7.01518 M 1.00214,10.0217 L 4.00862,10.0217 4.00862,8.01731 1.00214,8.01731 1.00214,10.0217 Z"
+                               Brush="{Binding Source={StaticResource MetroGray6}}"/>
+            </DrawingGroup.Children>
+          </DrawingGroup>
+        </DrawingBrush.Drawing>
+      </DrawingBrush>
+    </Shape.Fill>
+  </Rectangle>
+  <Style x:Key="ControlTitleLabelStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontSize" Value="14"/>
+    <Setter Property="TextBlock.FontWeight" Value="Bold"/>
+    <Setter Property="TextBlock.Foreground" Value="#008641"/>
+    <Setter Property="FrameworkElement.Margin" Value="0,10,0,5"/>
+  </Style>
+  <Style x:Key="TaskPanelTitleLabelStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontSize" Value="24"/>
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource MetroTextGreen}"/>
+    <Setter Property="FrameworkElement.Margin" Value="0,10,0,5"/>
+  </Style>
+  <Style x:Key="DialogTitleLabelStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontSize" Value="16px"/>
+    <Setter Property="TextBlock.FontWeight" Value="Light"/>
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource MetroTextGreen}"/>
+    <Setter Property="FrameworkElement.Margin" Value="0"/>
+  </Style>
+  <Style x:Key="DialogDescriptionTextStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontSize" Value="12px"/>
+    <Setter Property="TextBlock.FontWeight" Value="Regular"/>
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource MetroGray6}"/>
+    <Setter Property="FrameworkElement.Margin" Value="0"/>
+    <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style x:Key="DialogHeaderLabelStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontSize" Value="16px"/>
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource MetroBaseGreenText}"/>
+    <Setter Property="FrameworkElement.Margin" Value="0,0,0,8"/>
+  </Style>
+  <Style x:Key="StatusBarTextBlockStyle" TargetType="{x:Type TextBlock}">
+    <Setter Property="TextBlock.FontFamily" Value="Segoe"/>
+    <Setter Property="TextBlock.Foreground" Value="White"/>
+    <Setter Property="FrameworkElement.Margin" Value="0,0,16,0"/>
+    <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+  </Style>
+  <ControlTemplate x:Key="ContextMenuSeparatorTemplate">
+    <Separator/>
+  </ControlTemplate>
+  <Style x:Key="ChromelessWindowStyle" TargetType="{x:Type Window}">
+    <Setter Property="shell:WindowChrome.WindowChrome">
+      <Setter.Value>
+        <shell:WindowChrome CaptionHeight="26" CornerRadius="0" GlassFrameThickness="0,0,0,1" ResizeBorderThickness="4"/>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ComboBoxItemSeparatorStyle" TargetType="{x:Type ComboBoxItem}"
+         BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+    <Style.Triggers>
+      <DataTrigger Value="{x:Static local:ListUtilities.Separator}" Binding="{Binding}">
+        <Setter Property="UIElement.IsEnabled" Value="false"/>
+        <Setter Property="Control.Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+              <Separator HorizontalAlignment="Stretch" Margin="1.5"/>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
+  <Style x:Key="MapOptionsWithoutLinesStyle" TargetType="{x:Type RibbonGalleryCategory}">
+    <Setter Property="ItemsControl.ItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <Grid HorizontalAlignment="Stretch" Width="360">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border HorizontalAlignment="Stretch" BorderThickness="0"
+                    Visibility="{Binding IsMoreThanLine, Converter={StaticResource BooleanToVisibilityConverter}}">
+              <FrameworkElement.Style>
+                <Style TargetType="{x:Type Border}">
+                  <Style.Setters>
+                    <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                  </Style.Setters>
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsInUse}" Value="true">
+                      <Setter Property="Border.BorderBrush" Value="{StaticResource MetroBaseGreenText}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsInUse}" Value="false">
+                      <Setter Property="Border.BorderBrush" Value="Transparent"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </FrameworkElement.Style>
+              <Border BorderBrush="Transparent" ToolTip="{Binding Desciption}">
+                <Grid HorizontalAlignment="Left">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Border Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="2"
+                          Height="75" Width="134">
+                    <FrameworkElement.Style>
+                      <Style TargetType="{x:Type Border}">
+                        <Style.Setters>
+                          <Setter Property="Border.BorderBrush" Value="Gray"/>
+                          <Setter Property="Border.BorderThickness" Value="1"/>
+                        </Style.Setters>
+                      </Style>
+                    </FrameworkElement.Style>
+                    <Grid Height="71" Width="130">
+                      <Image x:Name="ImageShower" Stretch="UniformToFill" Source="{Binding ImagePathOrSource}"/>
+                      <Rectangle Fill="LightBlue"
+                                 Visibility="{Binding IsMissingPicture, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </Grid>
+                  </Border>
+                  <Grid Column="1" VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" FontWeight="Bold" TextTrimming="CharacterEllipsis"
+                               HorizontalAlignment="Left" Foreground="{StaticResource MetroBaseGreenText}" Margin="12,3,0,0"
+                               Text="{Binding Name}"/>
+                    <Button Grid.Row="2" Grid.Column="1" Style="{DynamicResource ToggleBorderlessButton}"
+                            ToolTip="{x:Static local:Resources.CustomSpaceGallery_DeleteMap_Desc}" MinWidth="24" Width="28"
+                            VerticalAlignment="Center" HorizontalAlignment="Right"
+                            AutomationProperties.Name="{x:Static local:Resources.CustomSpaceGallery_DeleteMap_Desc}"
+                            AutomationProperties.AutomationId="DeleteCustomMapButton" Command="{Binding MapOptionRemoveAction}"
+                            Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      <Image Source="/VisualizationControl;component/Images/close_normal.png" Height="14" Width="14"/>
+                    </Button>
+                    <TextBlock Grid.Column="0" Grid.Row="1" FontWeight="Light" TextWrapping="Wrap" Margin="12,9,0,0"
+                               HorizontalAlignment="Left" Text="{Binding Desciption}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Style="{DynamicResource ToggleBorderlessButton}" IsEnabled="true"
+                            ToolTip="{x:Static local:Resources.CustomSpaceGallery_EditMap_Desc}" MinWidth="24" Width="28"
+                            VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                            AutomationProperties.Name="{x:Static local:Resources.CustomSpaceGallery_EditMap_Desc}"
+                            AutomationProperties.AutomationId="EditCustomMapButton" Command="{Binding MapOptionEditAction}"
+                            Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      <Image Source="/VisualizationControl;component/Images/SettingsTab.png" Height="14" Width="14"/>
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Border>
+            </Border>
+            <Rectangle Grid.Row="1" Fill="{StaticResource SectionSeparator}" Height="2" Margin="0,9,0,9"
+                       HorizontalAlignment="Stretch">
+              <FrameworkElement.Style>
+                <Style TargetType="{x:Type Rectangle}">
+                  <Setter Property="UIElement.Visibility"
+                          Value="{Binding IsJustALine, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Style>
+              </FrameworkElement.Style>
+            </Rectangle>
+          </Grid>
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

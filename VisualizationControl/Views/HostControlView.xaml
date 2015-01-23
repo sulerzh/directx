@@ -1,0 +1,462 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.HostControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:engine="clr-namespace:Microsoft.Data.Visualization.Engine;assembly=VisualizationEngine"
+             xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+             MouseRightButtonDown="MouseRightButton" MouseRightButtonUp="MouseRightButton"
+             AutomationProperties.Name="GeoflowMainWindow">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\ChromeButtonStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+                <ResourceDictionary Source="..\Styles\PlaybackControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <UIElement.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding EscapeCommand}"/>
+        <KeyBinding Key="F1" Command="{Binding Globe.ToggleProfileInfoCommand}"/>
+        <KeyBinding Modifiers="Control" Key="Z" Command="{Binding UndoCommand}"/>
+        <KeyBinding Modifiers="Control" Key="Y" Command="{Binding RedoCommand}"/>
+    </UIElement.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Row="0" Background="{DynamicResource MetroBackground}"
+          Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}">
+            <Ribbon x:Name="Ribbon" IsMinimized="{Binding RibbonMinimized}" IsCollapsed="{Binding RibbonCollapsed}">
+                <Ribbon.ApplicationMenu>
+                    <RibbonApplicationMenu Label="{x:Static local:Resources.Ribbon_FILELabel}" AutomationProperties.AutomationId="FileMenu">
+                        <RibbonApplicationMenuItem
+                            Header="{x:Static local:Resources.Ribbon_FileOptions}" 
+                            Foreground="{DynamicResource InvertedText}"
+                            MinWidth="126" Width="Auto" Height="34" 
+                            BorderBrush="Transparent" BorderThickness="7"
+                            MouseOverBackground="#FF0A6332" FontSize="10.67" 
+                            PressedBackground="#FF0A6332"
+                            VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+                            Padding="-21,0,0,0" 
+                            AutomationProperties.AutomationId="FileOptionsMenu" 
+                            AutomationProperties.HelpText="{x:Static local:Resources.Narrator_FileOptionsHelpText}"
+                            Command="{Binding OpenSettingsDialogCommand}" DataContext="{Binding}" />
+                        <RibbonApplicationMenuItem 
+                            Header="{x:Static local:Resources.Ribbon_FileClose}" 
+                            Foreground="{DynamicResource InvertedText}"
+                            MinWidth="126" Width="Auto" Height="34" 
+                            BorderBrush="Transparent" BorderThickness="7"
+                            MouseOverBackground="#FF0A6332" FontSize="10.67" 
+                            PressedBackground="#FF0A6332"
+                            VerticalContentAlignment="Center" HorizontalContentAlignment="Left" HorizontalAlignment="Left"
+                            Padding="-21,0,0,0" 
+                            AutomationProperties.AutomationId="FileCloseMenu"
+                            AutomationProperties.HelpText="{x:Static local:Resources.Narrator_FileCloseHelpText}"
+                            Command="{Binding CloseCommand}" DataContext="{Binding}" />
+                    </RibbonApplicationMenu>
+                </Ribbon.ApplicationMenu>
+                <FrameworkElement.Resources>
+                    <RibbonGroupSizeDefinitionBaseCollection x:Key="TwoControlSizeDef">
+                        <RibbonGroupSizeDefinition>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                        </RibbonGroupSizeDefinition>
+                        <RibbonGroupSizeDefinition IsCollapsed="true"/>
+                    </RibbonGroupSizeDefinitionBaseCollection>
+                    <RibbonGroupSizeDefinitionBaseCollection x:Key="ThreeControlSizeForThreeControlGroupDef">
+                        <RibbonGroupSizeDefinition>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                        </RibbonGroupSizeDefinition>
+                        <RibbonGroupSizeDefinition>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                        </RibbonGroupSizeDefinition>
+                        <RibbonGroupSizeDefinition IsCollapsed="true"/>
+                    </RibbonGroupSizeDefinitionBaseCollection>
+                    <RibbonGroupSizeDefinitionBaseCollection x:Key="ThreeControlSizeForFourControlGroupDef">
+                        <RibbonGroupSizeDefinition>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                        </RibbonGroupSizeDefinition>
+                        <RibbonGroupSizeDefinition>
+                            <RibbonControlSizeDefinition ImageSize="Large" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                            <RibbonControlSizeDefinition ImageSize="Small" IsLabelVisible="true"/>
+                        </RibbonGroupSizeDefinition>
+                        <RibbonGroupSizeDefinition IsCollapsed="true"/>
+                    </RibbonGroupSizeDefinitionBaseCollection>
+                </FrameworkElement.Resources>
+                <RibbonTab Header="{x:Static local:Resources.Ribbon_HOMELabel}" IsSelected="true"
+                   AutomationProperties.AutomationId="HomeTab"
+                   GroupSizeReductionOrder="TourTab, SceneTab, MapTab, LayerTab, InsertTab, ViewTab, TimeTab, InsertTab, LayerTab, MapTab, MapTab, InsertTab">
+                    <RibbonGroup Name="TourTab" Header="{x:Static local:Resources.Ribbon_TourLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource ThreeControlSizeForFourControlGroupDef}"
+                       AutomationProperties.AutomationId="TourGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Tour.png}">
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_PlayTourLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_PlayTourTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_PlayTourTooltip}"
+                          AutomationProperties.AutomationId="PlayTourButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/PlayTour.png}"
+                          Command="{Binding PlayTourCommand}"/>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_CreateVideo}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_CreateVideoTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_CreateVideoTooltip}"
+                          AutomationProperties.AutomationId="CreateVideoButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/CreateVideo.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/CreateVideo_Small.png}"
+                          Command="{Binding CreateVideoCommand}"/>
+                        <RibbonButton Click="CaptureScreen_Click" Label="{x:Static local:Resources.Ribbon_CaptureScreenLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_CaptureScreenTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_CaptureScreenTooltip}"
+                          AutomationProperties.AutomationId="CaptureScreenButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/CaptureScreen.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/CaptureScreen_Small.png}"/>
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_TourEditorLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_TourEditorTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_TourEditorTooltip}"
+                                AutomationProperties.AutomationId="TourEditorButton" IsChecked="{Binding TourEditorVisible}"
+                                IsEnabled="{Binding TourEditor, Converter={StaticResource TrueIfNotNullConverter}}">
+                            <FrameworkElement.Style>
+                                <Style TargetType="{x:Type RibbonToggleButton}" BasedOn="{StaticResource {x:Type RibbonToggleButton}}">
+                                    <Style.Triggers>
+                                        <Trigger Property="FrameworkElement.FlowDirection" Value="RightToLeft">
+                                            <Setter Property="RibbonToggleButton.LargeImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/RTL/TourPane.png}"/>
+                                            <Setter Property="RibbonToggleButton.SmallImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/RTL/TourPane_Small.png}"/>
+                                        </Trigger>
+                                        <Trigger Property="FrameworkElement.FlowDirection" Value="LeftToRight">
+                                            <Setter Property="RibbonToggleButton.LargeImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TourPane.png}"/>
+                                            <Setter Property="RibbonToggleButton.SmallImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TourPane_Small.png}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </FrameworkElement.Style>
+                        </RibbonToggleButton>
+                    </RibbonGroup>
+                    <RibbonGroup Name="SceneTab" Header="{x:Static local:Resources.Ribbon_SceneLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource ThreeControlSizeForFourControlGroupDef}"
+                       AutomationProperties.AutomationId="SceneGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Tour.png}">
+                        <RibbonSplitButton MouseRightButtonUp="OnAddSceneSplitButtonRightMouseUp"
+                               DropDownOpened="MapTypesRibbonMenuButton_DropDownOpened"
+                               DropDownClosed="MapTypesRibbonMenuButton_DropDownClosed" x:Name="AddSceneSplitButton"
+                               Label="{x:Static local:Resources.Ribbon_NewSceneLabel}"
+                               ToolTipTitle="{x:Static local:Resources.Ribbon_NewSceneLabel}"
+                               ToolTipDescription="{x:Static local:Resources.Ribbon_NewSceneToolTipDescription}"
+                               AutomationProperties.AutomationId="AddSceneButton"
+                               LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/AddScene.png}"
+                               SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/AddScene_Small.png}"
+                               Command="{Binding CaptureSceneCommand}">
+                            <RibbonGallery BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="400"
+                             Command="{Binding MapTypesGalleryViewModel.MapGalleryItemCommand}">
+                                <RibbonGalleryCategory Style="{StaticResource MapOptionsWithoutLinesStyle}"
+                                       ItemsSource="{Binding MapTypesGalleryViewModel.MapOptionsWithoutLines}"/>
+                            </RibbonGallery>
+                        </RibbonSplitButton>
+                        <RibbonMenuButton Label="{x:Static local:Resources.Ribbon_ThemesLabel}"
+                              ToolTipTitle="{x:Static local:Resources.Ribbon_ThemesTooltipHeader}"
+                              ToolTipDescription="{x:Static local:Resources.Ribbon_ThemesTooltip}"
+                              AutomationProperties.AutomationId="ThemesButton"
+                              LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Theme.png}"
+                              SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Theme_Small.png}">
+                            <RibbonGallery Name="ThemeGallery" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             AutomationProperties.AutomationId="ThemesGallery" BorderThickness="0"
+                             SelectedItem="{Binding ThemeGallery.SelectedTheme}">
+                                <RibbonGalleryCategory ItemsSource="{x:Static local:Theme.ThemesList}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type RibbonGalleryItem}" BasedOn="{StaticResource RibbonGalleryItemStyle}">
+                                            <Setter Property="UIElement.IsEnabled">
+                                                <Setter.Value>
+                                                    <MultiBinding Converter="{StaticResource ThemeEnabledConverter}">
+                                                        <Binding Path="IsAerial"/>
+                                                        <Binding ElementName="ThemeGallery" Path="DataContext.ThemeGallery.CanUseRoad"/>
+                                                        <Binding ElementName="ThemeGallery" Path="DataContext.ThemeGallery.CanUseAerial"/>
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip}"/>
+                                            <Setter Property="AutomationProperties.AutomationId" Value="{Binding ToolTip}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="364" ItemWidth="91" Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding IconPath}" ToolTip="{Binding ToolTip}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </RibbonGalleryCategory>
+                            </RibbonGallery>
+                        </RibbonMenuButton>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_SceneSettingsButton_Title}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_SceneSettingsButton_Title}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_SceneSettingsButton_Desc}"
+                          AutomationProperties.AutomationId="SceneOptions" Command="{Binding ShowSceneSettings}"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/SceneSettingsRibbon.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/SceneSettingsRibbon_Small.png}"/>
+                    </RibbonGroup>
+                    <RibbonGroup Name="LayerTab" Header="{x:Static local:Resources.Ribbon_LayerLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource ThreeControlSizeForThreeControlGroupDef}"
+                       AutomationProperties.AutomationId="LayerGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Layer.png}">
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_AddLayerLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_AddLayerTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_AddLayerTooltip}"
+                          AutomationProperties.AutomationId="AddLayerButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/AddLayer.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/AddLayer_Small.png}"
+                          Command="{Binding TaskPanel.LayersTab.AddNewLayerCommand}"/>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_RefreshDataLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_RefreshDataTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_RefreshDataTooltip}"
+                          AutomationProperties.AutomationId="RefreshDataButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/RefreshData.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/RefreshData_Small.png}"
+                          Command="{Binding RefreshDataCommand}" IsEnabled="{Binding RefreshDataEnabled}"/>
+                        <RibbonMenuButton Label="{x:Static local:Resources.Ribbon_DataShapesLabel}"
+                              ToolTipTitle="{x:Static local:Resources.Ribbon_DataShapesTooltipHeader}"
+                              ToolTipDescription="{x:Static local:Resources.Ribbon_DataShapesTooltip}"
+                              AutomationProperties.AutomationId="DataShapesButton"
+                              LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/DataShapes.png}"
+                              SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/DataShapes_Small.png}"
+                              IsEnabled="{Binding ShapesGallery.ChartShapeSelectionEnabled}">
+                            <RibbonGallery Background="{DynamicResource MetroBackground}" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             AutomationProperties.AutomationId="DataShapesGallery" BorderThickness="0"
+                             SelectedItem="{Binding ChartShape}">
+                                <RibbonGalleryCategory ItemsSource="{x:Static local:ChartShape.ShapesList}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type RibbonGalleryItem}" BasedOn="{StaticResource RibbonGalleryItemStyle}">
+                                            <Setter Property="AutomationProperties.Name" Value="{Binding Name}"/>
+                                            <Setter Property="AutomationProperties.AutomationId" Value="{Binding Name}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="260" ItemWidth="51" Orientation="Horizontal" IsItemsHost="true"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding IconPath}" ToolTip="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </RibbonGalleryCategory>
+                            </RibbonGallery>
+                        </RibbonMenuButton>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_LayerSettingsButton_Title}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_LayerSettingsButton_Title}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_LayerSettingsButton_Desc}"
+                          AutomationProperties.AutomationId="LayerOptions" Command="{Binding ShowLayerSettings}"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/LayerSettingsRibbon.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/LayerSettingsRibbon_Small.png}"/>
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_TaskPanelLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_TaskPanelTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_TaskPanelTooltip}"
+                                AutomationProperties.AutomationId="LayerPaneButton" IsChecked="{Binding TaskPanel.Visible}">
+                            <FrameworkElement.Style>
+                                <Style TargetType="{x:Type RibbonToggleButton}" BasedOn="{StaticResource {x:Type RibbonToggleButton}}">
+                                    <Style.Triggers>
+                                        <Trigger Property="FrameworkElement.FlowDirection" Value="RightToLeft">
+                                            <Setter Property="RibbonToggleButton.LargeImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/RTL/TaskPanes.png}"/>
+                                        </Trigger>
+                                        <Trigger Property="FrameworkElement.FlowDirection" Value="LeftToRight">
+                                            <Setter Property="RibbonToggleButton.LargeImageSource"
+                              Value="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TaskPanes.png}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </FrameworkElement.Style>
+                        </RibbonToggleButton>
+                    </RibbonGroup>
+                    <RibbonGroup Name="MapTab" Header="{x:Static local:Resources.Ribbon_MapLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource ThreeControlSizeForFourControlGroupDef}"
+                       AutomationProperties.AutomationId="MapGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Map.png}"
+                       IsEnabled="{Binding IsGeoMapsToolsEnabled}">
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_MapLabelsLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_MapLabelsTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_MapLabelsTooltip}"
+                                AutomationProperties.AutomationId="MapLabelsButton"
+                                LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/MapLabels.png}"
+                                SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/MapLabels_Small.png}"
+                                IsChecked="{Binding ThemeGallery.UseLabels}" IsEnabled="{Binding ThemeGallery.LabelsEnabled}"/>
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_FlatMapLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_FlatMapTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_FlatMapTooltip}"
+                                AutomationProperties.AutomationId="FlatMapButton"
+                                LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/FlatMap.png}"
+                                SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/FlatMap_Small.png}"
+                                IsChecked="{Binding FlatMapEnabled}" IsEnabled="{Binding IsGeoMapsToolsEnabled}"/>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_FindLocationLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_FindLocationTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_FindLocationTooltip}"
+                          AutomationProperties.AutomationId="FindLocationButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/FindLocation.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/FindLocation_Small.png}"
+                          Command="{Binding FindLocationCommand}" IsEnabled="{Binding IsGeoMapsToolsEnabled}"/>
+                    </RibbonGroup>
+                    <RibbonGroup Name="InsertTab" Header="{x:Static local:Resources.Ribbon_InsertLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource ThreeControlSizeForThreeControlGroupDef}"
+                       AutomationProperties.AutomationId="InsertGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Insert.png}">
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_ChartLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_ChartTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_ChartTooltip}"
+                          AutomationProperties.AutomationId="TwoDChartButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Chart.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Chart_Small.png}"
+                          Command="{Binding AddChartCommand}"/>
+                        <RibbonButton Label="{x:Static local:Resources.Ribbon_TextboxLabel}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_TextBoxTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_TextBoxTooltip}"
+                          AutomationProperties.AutomationId="TextBoxButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TextBox.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TextBox_Small.png}"
+                          Command="{Binding AddLabelCommand}"/>
+                        <RibbonButton Label="{x:Static local:Resources.Command_ShowAllLegends}"
+                          ToolTipTitle="{x:Static local:Resources.Ribbon_LegendsTooltipHeader}"
+                          ToolTipDescription="{x:Static local:Resources.Ribbon_LegendsTooltip}"
+                          AutomationProperties.AutomationId="LegendButton"
+                          LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Legend.png}"
+                          SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Legend_Small.png}"
+                          Command="{Binding AddLegendCommand}"/>
+                    </RibbonGroup>
+                    <RibbonGroup Name="TimeTab" Header="{x:Static local:Resources.Ribbon_TimeLabel}"
+                       CanAddToQuickAccessToolBarDirectly="false"
+                       GroupSizeDefinitions="{StaticResource TwoControlSizeDef}"
+                       AutomationProperties.AutomationId="TimeGroup"
+                       SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Time.png}">
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_TimeLineLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_TimeLineTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_TimeLineTooltip}"
+                                AutomationProperties.AutomationId="TimeLineButton"
+                                LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Timeline.png}"
+                                SmallImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/Timeline_Small.png}"
+                                IsChecked="{Binding TimePlayer.IsActive}" IsEnabled="{Binding TimePlayer.IsTimeDataAvailable}"/>
+                        <RibbonToggleButton Label="{x:Static local:Resources.Ribbon_TimeDecoratorLabel}"
+                                ToolTipTitle="{x:Static local:Resources.Ribbon_DateAndTimeTooltipHeader}"
+                                ToolTipDescription="{x:Static local:Resources.Ribbon_DateAndTimeTooltip}"
+                                AutomationProperties.AutomationId="DateAndTimeButton"
+                                LargeImageSource="{wpfEx:MultiDpiPngImage /VisualizationControl;component/Images/TimeDecorator.png}"
+                                IsChecked="{Binding LayerManagerViewModel.DecoratorLayer.TimeDecoratorVM.Model.IsVisible}"
+                                IsEnabled="{Binding TimePlayer.IsTimeDataAvailable}" Command="{Binding TimeDecoratorCommand}"/>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+            <Button Name="SendASmile" HorizontalAlignment="Right" VerticalAlignment="Top"
+              Style="{DynamicResource ChromeSendASmileButton}" Margin="0,8,8,0"
+              ToolTip="{x:Static local:Resources.MainWindow_SendASmileTooltip}"
+              Visibility="{Binding RibbonCollapsed, Converter={StaticResource CollapsedIfTrueConverter}}"
+              Command="{Binding SendASmileCommand}"/>
+        </Grid>
+        <Grid Name="ContentGrid" Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Column="0"
+            Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}">
+                <ContentControl x:Name="TourEditorPanel" Content="{Binding TourEditor}"
+                        Visibility="{Binding TourEditorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
+            <Border Grid.Column="1" BorderBrush="{DynamicResource LightBorder}" BorderThickness="1 0">
+                <ScrollViewer Name="VisualizationViewportScrollViewer" HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <ContentControl x:Name="Globe" MinWidth="480" MinHeight="360" Content="{Binding}"
+                              Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualWidth}"
+                              Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ActualHeight}"/>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                    <Grid PreviewMouseMove="OnPreviewMouseMove" TouchDown="BackGrid_Touch" MouseDown="BackGrid_Mouse"
+                PreviewKeyDown="BackGrid_Key" LostFocus="BackGrid_OnLostFocus" MouseLeave="BackGrid_OnLostFocus"
+                Name="BackGrid" RenderOptions.BitmapScalingMode="Linear" Focusable="true">
+                        <ContentControl ContextMenuOpening="OnContextMenuOpening" Name="Globe" VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch" Content="{Binding Globe}"
+                            wpfEx:DragDropHelper.DropHandler="{Binding GlobeDropHandler}">
+                            <FrameworkElement.ContextMenu>
+                                <ContextMenu Name="_contextMenu" ItemsSource="{Binding ContextCommands}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type MenuItem}">
+                                            <Setter Property="MenuItem.Command" Value="{Binding Command}"/>
+                                            <Setter Property="HeaderedItemsControl.Header" Value="{Binding Header}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                </ContextMenu>
+                            </FrameworkElement.ContextMenu>
+                        </ContentControl>
+                        <Popup Opened="Tooltip_Opened" Name="Tooltip" AllowsTransparency="true" Placement="Relative"
+                   PopupAnimation="Fade" PlacementTarget="{Binding ElementName=BackGrid}">
+                            <Popup.IsOpen>
+                                <MultiBinding Mode="OneWay">
+                                    <MultiBinding.Converter>
+                                        <wpfEx:AndConverter/>
+                                    </MultiBinding.Converter>
+                                    <Binding Path="ToolTipVisible"/>
+                                    <Binding ElementName="_contextMenu" Path="IsOpen" Converter="{StaticResource InvertBoolConverter}"/>
+                                </MultiBinding>
+                            </Popup.IsOpen>
+                            <Border Background="{DynamicResource MetroBackground}">
+                                <local:TableFieldToolTipView x:Name="InnerTooltip" DataContext="{Binding ToolTipContent}"/>
+                            </Border>
+                        </Popup>
+                        <ContentControl MouseEnter="OnDecoratorMouseEnter" x:Name="DecoratorLayer"
+                            Content="{Binding LayerManagerViewModel.DecoratorLayer}"/>
+                        <ContentControl Name="TourPlayerControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Focusable="false" Content="{Binding TourPlayer}"
+                            Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Playback}"/>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+            <Grid x:Name="NavigationControls" Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ContentControl x:Name="TimeScrubber" KeyboardNavigation.IsTabStop="false" Grid.Row="1"
+                        Content="{Binding TimePlayer}"
+                        Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}"/>
+                <ContentControl x:Name="Navigation" KeyboardNavigation.IsTabStop="false" Grid.RowSpan="2"
+                        Content="{Binding GlobeNavigation}"
+                        Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}"/>
+            </Grid>
+            <Border Grid.Column="2" Grid.RowSpan="2"
+              Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}">
+                <ContentControl x:Name="LayerPane" Width="320" Content="{Binding TaskPanel}"
+                        Visibility="{Binding TaskPanel.Visible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Border>
+        </Grid>
+        <ContentControl x:Name="StatusBar" Grid.Row="2" Content="{Binding StatusBar}"
+                    Visibility="{Binding Mode, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=Exploration}"/>
+    </Grid>
+</UserControl>

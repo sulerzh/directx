@@ -1,0 +1,120 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <ResourceDictionary.MergedDictionaries>
+        <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+        <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+        <ResourceDictionary Source="ControlBaseStyles.xaml"/>
+        <ResourceDictionary Source="RedlineBase.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <Style x:Key="RangeSliderDefault" TargetType="{x:Type local:RangeSlider}">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:RangeSlider}">
+                    <Grid Height="23" Margin="0,0,0,0">
+                        <FrameworkElement.Resources>
+                            <local:RangeSlider_Resources x:Key="Resources"/>
+                            <Style x:Key="SliderThumbStyleMiddle" TargetType="{x:Type Thumb}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Grid Background="Transparent" Margin="0,-6,0,-6">
+                                                <Rectangle x:Name="ColorBox" Fill="{TemplateBinding Control.Background}" Height="4"
+                                   Stroke="{TemplateBinding Control.Background}" VerticalAlignment="Center"/>
+                                                <Border x:Name="FocusBorder" Visibility="Collapsed" BorderBrush="{TemplateBinding Control.Background}"
+                                BorderThickness="1"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style x:Key="SliderThumbStyleRight" TargetType="{x:Type Thumb}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Grid Background="Transparent" VerticalAlignment="Center" Margin="0,0,-12,0">
+                                                <Rectangle x:Name="SliderThumbPath" HorizontalAlignment="Left" Fill="{TemplateBinding Control.Background}"
+                                   Width="6" Height="12" Stroke="{TemplateBinding Control.Background}"/>
+                                                <Rectangle Width="18" Height="12" Stroke="Transparent"/>
+                                                <Border x:Name="FocusBorder" Visibility="Collapsed" BorderBrush="{TemplateBinding Control.Background}"
+                                BorderThickness="1"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style x:Key="SliderThumbStyleLeft" TargetType="{x:Type Thumb}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Grid Background="Transparent" VerticalAlignment="Center" Margin="-12,0,0,0">
+                                                <Rectangle x:Name="SliderThumbPath" HorizontalAlignment="Right" Fill="{TemplateBinding Control.Background}"
+                                   Width="6" Height="12" Stroke="{TemplateBinding Control.Background}"/>
+                                                <Rectangle Width="18" Height="12" Stroke="Transparent"/>
+                                                <Border x:Name="FocusBorder" Visibility="Collapsed" BorderBrush="{TemplateBinding Control.Background}"
+                                BorderThickness="1"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </FrameworkElement.Resources>
+                        <Border x:Name="PART_SliderTrack" Height="14" CornerRadius="1" BorderThickness="1"
+                    Background="{TemplateBinding Control.Background}"/>
+                        <Rectangle Fill="{DynamicResource MetroInactiveGray}" Width="{TemplateBinding FrameworkElement.Width}"
+                       Height="2" VerticalAlignment="Center" Margin="0,-12,0,-12"/>
+                        <Canvas x:Name="PART_ThumbCanvas" VerticalAlignment="Center">
+                            <Grid x:Name="PART_ThumbGrid" Canvas.Left="0" Canvas.Top="-6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <local:NarratorContextPanel x:Name="LeftThumbContainer" Column="0" AutomationProperties.AutomationId="LeftThumbContainer"
+                                            Focusable="true"
+                                            AutomationProperties.Name="{Binding Source={StaticResource Resources}, Path=LeftThumb_Name}">
+                                    <Thumb x:Name="PART_LeftThumb" Cursor="SizeWE" Style="{StaticResource SliderThumbStyleLeft}"
+                         AutomationProperties.AutomationId="RangeLeftThumb" IsTabStop="true" Focusable="true"/>
+                                </local:NarratorContextPanel>
+                                <local:NarratorContextPanel x:Name="MiddleThumbContainer" Column="1" AutomationProperties.AutomationId="MiddleThumbContainer"
+                                            Focusable="true"
+                                            AutomationProperties.Name="{Binding Source={StaticResource Resources}, Path=MiddleThumb_Name}">
+                                    <Thumb x:Name="PART_MiddleThumb" Cursor="Hand" Style="{StaticResource SliderThumbStyleMiddle}"
+                         AutomationProperties.AutomationId="RangeMiddleThumb" IsTabStop="true" Focusable="true"/>
+                                </local:NarratorContextPanel>
+                                <local:NarratorContextPanel x:Name="RightThumbContainer" Column="2" AutomationProperties.AutomationId="RightThumbContainer"
+                                            Focusable="true"
+                                            AutomationProperties.Name="{Binding Source={StaticResource Resources}, Path=RightThumb_Name}">
+                                    <Thumb x:Name="PART_RightThumb" Cursor="SizeWE" Style="{StaticResource SliderThumbStyleRight}"
+                         AutomationProperties.AutomationId="RangeEndThumb" IsTabStop="true" Focusable="true"/>
+                                </local:NarratorContextPanel>
+                            </Grid>
+                        </Canvas>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsMouseOver" Value="true">
+                            <Setter TargetName="PART_LeftThumb" Value="{DynamicResource MetroTextGreen}" Property="Control.Background"/>
+                            <Setter TargetName="PART_MiddleThumb" Value="{DynamicResource MetroTextGreen}"
+                      Property="Control.Background"/>
+                            <Setter TargetName="PART_RightThumb" Value="{DynamicResource MetroTextGreen}" Property="Control.Background"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsMouseOver" Value="false">
+                            <Setter TargetName="PART_LeftThumb" Value="{DynamicResource MetroInactiveGray}"
+                      Property="Control.Background"/>
+                            <Setter TargetName="PART_MiddleThumb" Value="{DynamicResource MetroInactiveGray}"
+                      Property="Control.Background"/>
+                            <Setter TargetName="PART_RightThumb" Value="{DynamicResource MetroInactiveGray}"
+                      Property="Control.Background"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="true">
+                            <Setter TargetName="PART_LeftThumb" Value="{DynamicResource MetroTextGreen}" Property="Control.Background"/>
+                            <Setter TargetName="PART_MiddleThumb" Value="{DynamicResource MetroTextGreen}"
+                      Property="Control.Background"/>
+                            <Setter TargetName="PART_RightThumb" Value="{DynamicResource MetroTextGreen}" Property="Control.Background"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

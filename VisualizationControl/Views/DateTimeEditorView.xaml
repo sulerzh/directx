@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.DateTimeEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\TimeStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="TimePartStyle" TargetType="{x:Type ComboBox}">
+                <Style.Setters>
+                    <Setter Property="ComboBox.IsEditable" Value="true"/>
+                    <Setter Property="FrameworkElement.Width" Value="45"/>
+                </Style.Setters>
+            </Style>
+            <local:AMPMConverter x:Key="AMPMConverter"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid x:Name="DummyFocus" SnapsToDevicePixels="true" Focusable="true">
+        <Grid>
+            <Popup x:Name="DateEditorDropdownPopup" Placement="Bottom" StaysOpen="false"
+             PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}"
+             IsOpen="{Binding ElementName=SettingsDropArrow, Path=IsChecked, Mode=TwoWay}">
+                <Grid x:Name="DateTimeDropDown" Background="{StaticResource MetroBackground}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Calendar x:Name="MainCalendar" Grid.Row="0" HorizontalAlignment="Right"
+                    SelectedDate="{Binding Path=CalendarDate}" DisplayDate="{Binding Path=CalendarDate}"
+                    DisplayDateStart="{Binding Path=MinimumCalendarDate, Mode=OneWay}"
+                    DisplayDateEnd="{Binding Path=MaximumCalendarDate, Mode=OneWay}"/>
+                    <Grid x:Name="TimePickerGrid" Row="1" HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel x:Name="TwelveHourStackPanel" Orientation="Horizontal" Grid.Column="1"
+                        Visibility="{Binding CurrentCultureUsesTwentyFourHourFormat, Converter={StaticResource CollapsedIfTrueConverter}, Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+                                <ComboBox x:Name="TwelveHoursCBox" ItemsSource="{x:Static local:DateTimeConstants.HoursTwelve}"
+                          SelectedValue="{Binding Path=HourTwelveHour}"/>
+                                <TextBlock Text=":" Padding="0,2,0,8"/>
+                                <ComboBox x:Name="TwelveMinutesCBox" ItemsSource="{x:Static local:DateTimeConstants.Minutes}"
+                          SelectedValue="{Binding Path=Minute, Converter={StaticResource TimeStringConverter}}"/>
+                                <TextBlock Text=":" Padding="0,2,0,8"/>
+                                <ComboBox x:Name="TwelveSecondsCBox" ItemsSource="{x:Static local:DateTimeConstants.Seconds}"
+                          SelectedValue="{Binding Path=Second, Converter={StaticResource TimeStringConverter}}"/>
+                            </StackPanel>
+                            <ComboBox x:Name="TwelveAMPMCBox" Style="{StaticResource TimePartStyle}"
+                        ItemsSource="{x:Static local:DateTimeConstants.AMPMs}" SelectedValue="{Binding Path=AMPM}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource AMPMConverter}}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel x:Name="TwentyFourHourStackPanel" Orientation="Horizontal" Grid.Column="1"
+                        FlowDirection="LeftToRight"
+                        Visibility="{Binding CurrentCultureUsesTwentyFourHourFormat, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                            <ComboBox x:Name="TwentyFourHourCBox" ItemsSource="{x:Static local:DateTimeConstants.HoursTwentyFour}"
+                        SelectedValue="{Binding Path=HourTwentyFourHour}"/>
+                            <TextBlock Text=":" Padding="0,2,0,8"/>
+                            <ComboBox x:Name="TwentyFourMinuteCBox" ItemsSource="{x:Static local:DateTimeConstants.Minutes}"
+                        SelectedValue="{Binding Path=Minute, Converter={StaticResource TimeStringConverter}}"/>
+                            <TextBlock Text=":" Padding="0,2,0,8"/>
+                            <ComboBox x:Name="TwentyFourSecondCBox" ItemsSource="{x:Static local:DateTimeConstants.Seconds}"
+                        SelectedValue="{Binding Path=Second, Converter={StaticResource TimeStringConverter}}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Popup>
+            <Border x:Name="DisplayBox" BorderBrush="{DynamicResource CheckBoxFrames}" BorderThickness="1"
+              Background="Transparent">
+                <Grid Height="19" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="DateDisplayBox" HorizontalAlignment="Right" Margin="4,1,0,3"
+                     AutomationProperties.AutomationId="CalendarDateDisplayTextBox"
+                     Text="{Binding CalendarDate, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"/>
+                    <ToggleButton x:Name="SettingsDropArrow" Width="15" Grid.Column="1" HorizontalAlignment="Right"
+                        AutomationProperties.AutomationId="CalendarControlDropDownButton"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

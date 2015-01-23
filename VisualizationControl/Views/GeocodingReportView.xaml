@@ -1,0 +1,227 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.GeocodingReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             MaxWidth="800" MaxHeight="600" Background="{DynamicResource MetroBackground}" Focusable="true"
+             FocusManager.FocusedElement="{Binding ElementName=GeocodingReportDataGrid}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowDatagrid.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <wpfEx:EnumEqualityToVisibilityConverter x:Key="ResolutionVisibilityConverter"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <UIElement.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </UIElement.InputBindings>
+    <Grid KeyUp="root_KeyUp" Name="root" Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource DialogTitleLabelStyle}" Text="{Binding Title}"/>
+            <Button x:Name="cancelButton" Grid.Column="1" Style="{StaticResource ChromeCloseButton}"
+              HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0"
+              ToolTip="{x:Static local:Resources.NarratorMappingConfidenceDialog_Close}"
+              AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+              AutomationProperties.AutomationId="MappingConfidenceCloseButton" Command="{Binding CancelCommand}"/>
+        </Grid>
+        <TextBlock Grid.Row="1" Style="{StaticResource DialogDescriptionTextStyle}" Margin="0,15,0,20"
+               Visibility="{Binding TotallyConfident, Converter={StaticResource BooleanToVisibilityConverter}}">
+      <Run Text="{Binding SubTitle}" AutomationProperties.HelpText="{Binding SubTitle}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="1" Style="{StaticResource DialogDescriptionTextStyle}" Margin="0,15,0,20"
+               Visibility="{Binding TotallyConfident, Converter={StaticResource CollapsedIfTrueConverter}}">
+      <Run Text="{Binding SubTitle}" AutomationProperties.HelpText="{Binding SubTitle}"/>
+      <LineBreak/>
+      <Run Text="{Binding Description}" AutomationProperties.HelpText="{Binding Description}"/>
+        </TextBlock>
+        <TextBlock Grid.Row="2" Style="{StaticResource DialogDescriptionTextStyle}" TextWrapping="Wrap"
+               Margin="0,0,0,10" Text="{Binding TruncationWarning}"
+               AutomationProperties.HelpText="{Binding TruncationWarning}"
+               Visibility="{Binding TruncationWarning, Converter={StaticResource VisibleIfNotNullConverter}}"/>
+        <DataGrid Name="GeocodingReportDataGrid" Grid.Row="3" Background="{DynamicResource MetroBackground}"
+              Style="{StaticResource GeoflowDataGridStyle}" VerticalScrollBarVisibility="Auto" ColumnWidth="72*"
+              MinColumnWidth="32" AutomationProperties.HelpText="{Binding SubTitle}"
+              Visibility="{Binding TotallyConfident, Converter={StaticResource CollapsedIfTrueConverter}}"
+              ItemsSource="{Binding EntriesViewSource}">
+            <FrameworkElement.Resources>
+                <Style x:Key="FieldHeaderStyle" TargetType="{x:Type DataGridColumnHeader}"
+               BasedOn="{StaticResource GeoflowDataGridColumnHeaderStyle}">
+                    <Setter Property="ContentControl.ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding}"/>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="AutomationProperties.Name" Value="{Binding}"/>
+                    <Setter Property="FrameworkElement.ToolTip"
+                  Value="{Binding Content, StringFormat={x:Static local:Resources.GeocodingAlerts_FieldHeaderTooltip}}"/>
+                </Style>
+                <Style x:Key="ResultHeaderStyle" TargetType="{x:Type DataGridColumnHeader}"
+               BasedOn="{StaticResource GeoflowDataGridColumnHeaderStyle}">
+                    <Setter Property="ContentControl.ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentControl Content="{Binding}"/>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="AutomationProperties.Name" Value="{Binding}"/>
+                    <Setter Property="FrameworkElement.ToolTip"
+                  Value="{Binding Content, StringFormat={x:Static local:Resources.GeocodingAlerts_FieldHeaderTooltip}}"/>
+                </Style>
+            </FrameworkElement.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_Address}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Address}"
+                            Binding="{Binding AddressOrOther}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasAddress, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_Other}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Other}"
+                            Binding="{Binding AddressOrOther}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasOther, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_Country}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Country}"
+                            Binding="{Binding Country}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasCountry, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_State}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_State}"
+                            Binding="{Binding AdminDistrict}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasState, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_County}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_County}"
+                            Binding="{Binding AdminDistrict2}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasCounty, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_City}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_City}"
+                            Binding="{Binding Locality}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasCity, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_Zipcode}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Zipcode}"
+                            Binding="{Binding PostalCode}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasZipcode, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTextColumn Header="{x:Static local:Resources.GeocodingReport_Street}"
+                            HeaderStyle="{StaticResource FieldHeaderStyle}"
+                            AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Street}"
+                            Binding="{Binding AddressLine}"
+                            Visibility="{Binding (FrameworkElement.DataContext).HasStreet, RelativeSource={x:Static RelativeSource.Self}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <DataGridTemplateColumn MinWidth="144" Width="144*" Header="{x:Static local:Resources.GeocodingReport_Result}"
+                                AutomationProperties.HelpText="{x:Static local:Resources.GeocodingReport_Result}"
+                                HeaderStyle="{StaticResource ResultHeaderStyle}" SortMemberPath="ResolutionType"
+                                SortDirection="Ascending">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding ResolutionType, Converter={StaticResource ResolutionVisibilityConverter}, ConverterParameter=NoMatch}">
+                                    <Image Source="/VisualizationControl;component/Images/ErrorIcon.png" Margin="4,0"/>
+                                    <TextBlock Text="{x:Static local:Resources.GeocodingReport_NoResolutionText}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                            Visibility="{Binding ResolutionType, Converter={StaticResource ResolutionVisibilityConverter}, ConverterParameter=NoRegionPolygon}">
+                                    <Image Source="/VisualizationControl;component/Images/ErrorIcon.png" Margin="4,0"/>
+                                    <TextBlock Text="{x:Static local:Resources.GeocodingReport_RegionPolygonCouldNotBeFetchedText}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <UIElement.Visibility>
+                                        <MultiBinding Converter="{StaticResource MultiBooleanToVisibilityAllConverter}">
+                                            <Binding Path="ResolutionType" Converter="{StaticResource EnumInequalityToBoolConverter}"
+                               ConverterParameter="NoMatch"/>
+                                            <Binding Path="ResolutionType" Converter="{StaticResource EnumInequalityToBoolConverter}"
+                               ConverterParameter="NoRegionPolygon"/>
+                                        </MultiBinding>
+                                    </UIElement.Visibility>
+                                    <Image Source="/VisualizationControl;component/Images/AlertIcon.png" Margin="4,0"/>
+                                    <TextBlock Text="{Binding SelectedGeoResolution.FormattedAddress}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBlock Grid.Row="4" Margin="0,15" VerticalAlignment="Center"
+               Text="{x:Static local:Resources.GeocodingReport_HelpText}" TextWrapping="Wrap"
+               Visibility="{Binding TotallyConfident, Converter={StaticResource CollapsedIfTrueConverter}}"/>
+        <Grid Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" DataContext="{Binding EntriesViewSource}"
+                  Visibility="{Binding (FrameworkElement.DataContext).TotallyConfident, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GeocodingReportView}}, Converter={StaticResource CollapsedIfTrueConverter}}">
+                <Button Margin="4,0" Style="{StaticResource FirstPageButtonStyle}"
+                AutomationProperties.AutomationId="FirstPageButton"
+                AutomationProperties.Name="{x:Static local:Resources.NarratorMappingConfidenceDialog_FirstPage}"
+                ToolTip="{x:Static local:Resources.GeocodingAlerts_FirstPageTooltip}"
+                Command="{Binding FirstPageCommand}"/>
+                <Button Margin="4,0" Style="{StaticResource PreviousPageButtonStyle}" Content="&lt;"
+                ToolTip="{x:Static local:Resources.GeocodingAlerts_PreviousPageTooltip}"
+                AutomationProperties.AutomationId="PreviousPageButton"
+                AutomationProperties.Name="{x:Static local:Resources.NarratorMappingConfidenceDialog_PreviousPage}"
+                Command="{Binding PrevPageCommand}"/>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="4">
+                    <TextBlock Text="{x:Static local:Resources.GeocodingReport_PageText}" VerticalAlignment="Center"/>
+                    <TextBox Name="CurrentPageTextBox" Margin="5 0" Width="32" HorizontalContentAlignment="Center"
+                   TextWrapping="Wrap" MaxLength="3"
+                   ToolTip="{x:Static local:Resources.GeocodingAlerts_PageNumberTooltip}"
+                   AutomationProperties.AutomationId="PageNumberTextbox"
+                   AutomationProperties.Name="{x:Static local:Resources.NarratorMappingConfidenceDialog_PageNumber}"
+                   Text="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock VerticalAlignment="Center"
+                     Text="{Binding TotalPages, StringFormat={x:Static local:Resources.GeocodingReport_PageOfText}}"/>
+                </StackPanel>
+                <Button Margin="4,0" Style="{StaticResource NextPageButtonStyle}"
+                ToolTip="{x:Static local:Resources.GeocodingAlerts_NextPageTooltip}"
+                AutomationProperties.AutomationId="NextPageButton"
+                AutomationProperties.Name="{x:Static local:Resources.NarratorMappingConfidenceDialog_NextPage}"
+                Command="{Binding NextPageCommand}"/>
+                <Button Margin="4,0" Style="{StaticResource LastPageButtonStyle}"
+                ToolTip="{x:Static local:Resources.GeocodingAlerts_LastPageTooltip}"
+                AutomationProperties.AutomationId="LastPageButton"
+                AutomationProperties.Name="{x:Static local:Resources.NarratorMappingConfidenceDialog_LastPage}"
+                Command="{Binding LastPageCommand}"/>
+            </StackPanel>
+            <ItemsControl Grid.Column="1" HorizontalAlignment="Left"
+                    AutomationProperties.Name="{x:Static local:Resources.Dialog_OkTooltip}"
+                    KeyboardNavigation.IsTabStop="false" ItemsSource="{Binding Commands}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Height="40" MinWidth="100" Margin="20,0,0,0"
+                    AutomationProperties.HelpText="{x:Static local:Resources.NarratorMappingConfidenceDialog_Close}"
+                    Content="{Binding Name}" Command="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>

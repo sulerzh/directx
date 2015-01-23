@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.CompletionStatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoflowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Height="22" Background="#FF217346">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ProgressBar Grid.Column="0" Width="100" Margin="12,2,12,2"
+                 ToolTip="{x:Static local:Resources.StatusBar_GeocodingProgressTooltip}"
+                 Maximum="{Binding Requested}" Value="{Binding Completed}"
+                 Visibility="{Binding Path=ProgressBarVisible, Converter={StaticResource HiddenIfFalseConverter}}"/>
+        <TextBlock Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource StatusBarTextBlockStyle}"
+               Margin="12,0,12,0" Text="{Binding OperationText}"/>
+    </Grid>
+</UserControl>

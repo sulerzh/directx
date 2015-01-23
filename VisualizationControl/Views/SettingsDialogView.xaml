@@ -1,0 +1,143 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.SettingsDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             Width="580" MinHeight="173" Background="{DynamicResource MetroBackground}"
+             FocusManager.FocusedElement="{Binding ElementName=InitialButton}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\DialogStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            </Style>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Margin="16">
+        <StackPanel Name="GraphicsSettingsPanel" Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{x:Static local:Resources.SettingsDialog_Title}"
+                   Style="{StaticResource DialogTitleStyle}"/>
+                <Button Click="CloseButton_Click" TabIndex="3" Grid.Column="1" Style="{StaticResource DialogCloseButton}"
+                IsCancel="true" AutomationProperties.AutomationId="PowerMapOptionsCloseButton"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+                AutomationProperties.HelpText="{x:Static local:Resources.Narrator_PowerMapOptionsDialog_Close}"/>
+            </Grid>
+            <Label Content="{x:Static local:Resources.SettingsDialog_QualityTitle}" Margin="0,16,0,0"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <RadioButton x:Name="InitialButton" Margin="0,4,0,4" Grid.Row="0" Grid.Column="0" VerticalAlignment="Top"
+                     HorizontalAlignment="Center" Content=""
+                     AutomationProperties.AutomationId="PowerMapOptionsSpeedButton"
+                     AutomationProperties.Name="{x:Static local:Resources.SettingsDialog_Speed}"
+                     AutomationProperties.HelpText="{x:Static local:Resources.SettingsDialog_SpeedDescription}"
+                     IsChecked="{Binding SelectedGraphicsLevel, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Speed}"/>
+                <Grid Row="0" Column="1" Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{x:Static local:Resources.SettingsDialog_Speed}" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="1" Text="{x:Static local:Resources.SettingsDialog_SpeedDescription}"/>
+                </Grid>
+                <RadioButton Margin="0,4,0,4" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center"
+                     Content="" AutomationProperties.AutomationId="PowerMapOptionsBalancedButton"
+                     AutomationProperties.Name="{x:Static local:Resources.SettingsDialog_Balanced}"
+                     AutomationProperties.HelpText="{x:Static local:Resources.SettingsDialog_BalancedDescription}"
+                     IsChecked="{Binding SelectedGraphicsLevel, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Balanced}"/>
+                <Grid Row="1" Column="1" Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{x:Static local:Resources.SettingsDialog_Balanced}" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="1" Text="{x:Static local:Resources.SettingsDialog_BalancedDescription}"/>
+                </Grid>
+                <RadioButton Margin="0,4,0,4" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Center"
+                     Content="" AutomationProperties.AutomationId="PowerMapOptionsHighQualityButton"
+                     AutomationProperties.Name="{x:Static local:Resources.SettingsDialog_Quality}"
+                     AutomationProperties.HelpText="{x:Static local:Resources.SettingsDialog_QualityDescription}"
+                     IsChecked="{Binding SelectedGraphicsLevel, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Quality}"/>
+                <Grid Row="2" Column="1" Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{x:Static local:Resources.SettingsDialog_Quality}" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="1" Text="{x:Static local:Resources.SettingsDialog_QualityDescription}"/>
+                </Grid>
+            </Grid>
+            <Label Content="{x:Static local:Resources.SettingsDialog_CacheManagement}" Margin="0,12,0,0"/>
+            <Grid Margin="8,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{x:Static local:Resources.SettingsDialog_CurrentSize}" Margin="0,4,0,4"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="4">
+                        <TextBlock.Text>
+                            <Binding IsAsync="true">
+                                <!-- constructor argument:
+                     SizeOfCache
+                -->
+
+                            </Binding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+                <Button Click="ShrinkBtn_OnClick" Name="ShrinkBtn" Grid.Row="1" HorizontalAlignment="Left" Margin="0,4,0,0"
+                Content="{x:Static local:Resources.SettingsDialog_Clear}"
+                AutomationProperties.AutomationId="PowerMapOptionsClearButton"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_PowerMapOptionsDialog_ClearCache}"
+                AutomationProperties.HelpText="{x:Static local:Resources.Narrator_PowerMapOptionsDialog_ClearCacheHelpText}"
+                IsEnabled="{Binding IsShrinkEnabled}"/>
+            </Grid>
+            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,12,0,4">
+        <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate" x:Name="Hyl"
+                   AutomationProperties.AutomationId="PowerMapLegalInformationLink"
+                   AutomationProperties.Name="{x:Static local:Resources.SettingsDialog_LegalInfoText}"
+                   NavigateUri="{Binding LegalInfo}">
+          <TextBlock Text="{x:Static local:Resources.SettingsDialog_LegalInfoText}"/>
+        </Hyperlink>
+      </TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Click="CloseButton_Click" Name="OkBtn" Grid.Column="0" HorizontalAlignment="Right"
+                Margin="0,0,16,0" Content="{x:Static local:Resources.Dialog_OkayText}" IsDefault="true"
+                AutomationProperties.AutomationId="PowerMapOptionsOkButton"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_Ok}"
+                AutomationProperties.HelpText="{x:Static local:Resources.Narrator_AcceptChanges}"/>
+                <Button Click="CloseButton_Click" Name="CancelBtn" Grid.Column="1" HorizontalAlignment="Right"
+                Content="{x:Static local:Resources.Dialog_CancelText}"
+                AutomationProperties.AutomationId="PowerMapOptionsCancelButton"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_Cancel}"
+                AutomationProperties.HelpText="{x:Static local:Resources.Narrator_CancelChanges}"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\WPFEXTENSIONS.DLL-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B7DB4CF5-202A-4218-B42A-B7F9AECF7A36}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>WpfExtensions</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>16.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Data.Visualization.WpfExtensions</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AndConverter.cs" />
+    <Compile Include="BoolToValueConverter.cs" />
+    <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="BoolToOpacityConverter.cs" />
+    <Compile Include="DragDrop\DragDropContentControl.xaml.cs">
+      <DependentUpon>DragDropContentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IResourceString.cs" />
+    <Compile Include="ResourceStringAttribute.cs" />
+    <Compile Include="IValidationRule.cs" />
+    <Compile Include="IPropertyValidationAttribute.cs" />
+    <Compile Include="PropertyValidationAttribute.cs" />
+    <Compile Include="ChildValidationElementAttribute.cs" />
+    <Compile Include="ColorToSolidColorBrushConverter.cs" />
+    <Compile Include="IValidationElement.cs" />
+    <Compile Include="ValidationElement.cs" />
+    <Compile Include="IViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="ComboBoxItemViewModel.cs" />
+    <Compile Include="Predicate.cs" />
+    <Compile Include="Getter.cs" />
+    <Compile Include="ContextCommand.cs" />
+    <Compile Include="DateTimeToDoubleConverter.cs" />
+    <Compile Include="DelegatedCommand.cs" />
+    <Compile Include="DispatcherObjectExtensions.cs" />
+    <Compile Include="DisplayStringAttribute.cs" />
+    <Compile Include="DoubleToPercentageConverter.cs" />
+    <Compile Include="DurationConverter.cs" />
+    <Compile Include="DragDropHelper.cs" />
+    <Compile Include="DraggedAdorner.cs" />
+    <Compile Include="CanDragItemDelegate.cs" />
+    <Compile Include="IDragHandler.cs" />
+    <Compile Include="DragHandler.cs" />
+    <Compile Include="ProcessDraggedItemDelegate.cs" />
+    <Compile Include="IDragItemHandler.cs" />
+    <Compile Include="DragItemHandler.cs" />
+    <Compile Include="ProcessDraggedItemFromCollectionDelegate.cs" />
+    <Compile Include="IDragItemsHandler.cs" />
+    <Compile Include="DragItemsHandler.cs" />
+    <Compile Include="DropErrorAdorner.cs" />
+    <Compile Include="ValidateDropItemDelegate.cs" />
+    <Compile Include="IDropHandler.cs" />
+    <Compile Include="DropHandler.cs" />
+    <Compile Include="IDropItemHandler.cs" />
+    <Compile Include="DropItemHandler.cs" />
+    <Compile Include="DropItemIntoCollectionDelegate.cs" />
+    <Compile Include="IDropItemsHandler.cs" />
+    <Compile Include="DropItemsHandler.cs" />
+    <Compile Include="InsertionAdorner.cs" />
+    <Compile Include="MouseUtilities.cs" />
+    <Compile Include="EnumEqualityToBoolConverter.cs" />
+    <Compile Include="EnumEqualityToVisibilityConverter.cs" />
+    <Compile Include="EnumStringConversionTable.cs" />
+    <Compile Include="EnumToBoolConverter.cs" />
+    <Compile Include="EnumToStringConverter.cs" />
+    <Compile Include="ExcludeChildValidationElementAttribute.cs" />
+    <Compile Include="ExcludeEnumAttribute.cs" />
+    <Compile Include="ExcludeStringAttribute.cs" />
+    <Compile Include="FloatCultureConverter.cs" />
+    <Compile Include="FocusHelper.cs" />
+    <Compile Include="TabBranchHandler.cs" />
+    <Compile Include="FontUtility.cs" />
+    <Compile Include="FrameworkElementExtensions.cs" />
+    <Compile Include="GridEx.cs" />
+    <Compile Include="IDataErrorInfoConstants.cs" />
+    <Compile Include="IfThenElseConverter.cs" />
+    <Compile Include="IntegerEqualityTestConverter.cs" />
+    <Compile Include="IntegerEqualityToVisibilityConverter.cs" />
+    <Compile Include="InvertBoolConverter.cs" />
+    <Compile Include="MultiBooleanAnyConverter.cs" />
+    <Compile Include="MultiBooleanToVisibilityConverter.cs" />
+    <Compile Include="MultiDpiPngImageExtension.cs" />
+    <Compile Include="PagingListCollectionView.cs" />
+    <Compile Include="ReferenceNullToValueConverter.cs" />
+    <Compile Include="ReferenceNullToVisibilityConverter.cs" />
+    <Compile Include="ReferenceNullToBooleanConverter.cs" />
+    <Compile Include="ReferenceNullToIntegerConverter.cs" />
+    <Compile Include="SimpleOneWayConverter.cs" />
+    <Compile Include="SizeObserver.cs" />
+    <Compile Include="SpacingHelper.cs" />
+    <Compile Include="StringEqualityConverter.cs" />
+    <Compile Include="StringNullOrEmptyToValueConverter.cs" />
+    <Compile Include="StringNullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="StringNullOrEmptyToBooleanConverter.cs" />
+    <Compile Include="StringToFontWeightConverter.cs" />
+    <Compile Include="StringToIntConverter.cs" />
+    <Compile Include="TextFormattingHelper.cs" />
+    <Compile Include="ThemeResourceDictionary.cs" />
+    <Compile Include="TimeSpanToPower5DoubleConverter.cs" />
+    <Compile Include="TimeStringConverter.cs" />
+    <Compile Include="WebBrowserEx.cs" />
+    <Compile Include="WindowCustomizer.cs" />
+    <Compile Include="WindowsDisplayProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DragDrop\DragDropContentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualizationCommon\VisualizationCommon.csproj">
+      <Project>{6b90f178-fdd7-4c53-8051-bac67826abcd}</Project>
+      <Name>VisualizationCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

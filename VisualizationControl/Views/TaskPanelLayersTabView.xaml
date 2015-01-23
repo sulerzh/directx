@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TaskPanelLayersTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             AutomationProperties.Name="{x:Static local:Resources.NarratorLayerPane_ManageLayersTab}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Row="0" Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Margin="0,0,10,0" TextWrapping="Wrap"
+                 Text="{x:Static local:Resources.TaskPanelLayersTab_ErrorMaximumNumberOfLayers}"
+                 Visibility="{Binding Path=Model.CanAddLayers, Converter={StaticResource CollapsedIfTrueConverter}, FallbackValue=Collapsed}"/>
+            <Button x:Name="AddLayer" Grid.Column="1" Style="{DynamicResource AddNewLayerButtonStyle}"
+              AutomationProperties.Name="{x:Static local:Resources.Ribbon_AddLayerTooltipHeader}"
+              AutomationProperties.AutomationId="LayerPaneAddLayerButton"
+              ToolTip="{x:Static local:Resources.Ribbon_AddLayerTooltip}" Command="{Binding AddNewLayerCommand}"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl Margin="8" IsTabStop="false" ItemsSource="{Binding Layers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:LayerListEntryView Margin="0,2"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

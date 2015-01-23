@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.ExpressionFilterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Expander Margin="0,10,0,10" Padding="0" Style="{StaticResource FilterExpander}"
+            IsExpanded="{Binding IsExpanded}"
+            AutomationProperties.Name="{Binding ElementName=FilterField, Path=Text, StringFormat={x:Static local:Resources.NarratorFilterPane_AdvancedFilterType}}"
+            AutomationProperties.AutomationId="{Binding ElementName=FilterField, Path=Text, StringFormat={x:Static local:Resources.NarratorFilterPane_AdvancedFilterType}}">
+        <HeaderedContentControl.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Name="FilterField" Grid.Column="0" Padding="0,5,5,0" FontWeight="SemiBold"
+                     HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                     Text="{Binding Name}" ToolTip="{Binding Name}"/>
+                    <local:PopupAggregationButtonView Grid.Row="0" Grid.Column="1"/>
+                    <Button AutomationProperties.AutomationId="FilterModeButton" Grid.Column="2" Padding="0"
+                  BorderThickness="0" Style="{StaticResource FilterBarButtonStyle}" HorizontalAlignment="Right"
+                  Margin="2,5,2,0" Command="{Binding ModeCommand}"
+                  Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  ToolTip="{Binding ModeTooltip}" AutomationProperties.Name="{Binding ModeTooltip}">
+                        <Image Margin="0" IsHitTestVisible="false">
+                            <FrameworkElement.Style>
+                                <Style TargetType="{x:Type Image}" BasedOn="{StaticResource StatusBarIconImageStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsDefault}" Value="false">
+                                            <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/filtermode_disabled.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsDefault}" Value="true">
+                                            <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/filtermode.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </FrameworkElement.Style>
+                        </Image>
+                    </Button>
+                    <Button AutomationProperties.AutomationId="FilterResetButton" Grid.Column="3" Padding="0"
+                  BorderThickness="0" Style="{StaticResource FilterBarButtonStyle}" HorizontalAlignment="Right"
+                  Margin="2,5,2,0" ToolTip="{x:Static local:Resources.FiltersTab_ClearFilterTooltip}"
+                  AutomationProperties.Name="{x:Static local:Resources.FiltersTab_ClearFilterTooltip}"
+                  Command="{Binding ClearCommand}">
+                        <Image Margin="0" IsHitTestVisible="false">
+                            <FrameworkElement.Style>
+                                <Style TargetType="{x:Type Image}" BasedOn="{StaticResource StatusBarIconImageStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsDefault}" Value="true">
+                                            <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/filteredit_disabled.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsDefault}" Value="false">
+                                            <Setter Property="Image.Source" Value="/VisualizationControl;component/Images/filteredit.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </FrameworkElement.Style>
+                        </Image>
+                    </Button>
+                    <Button AutomationProperties.AutomationId="FilterDeleteButton" Grid.Column="4" Padding="0"
+                  BorderThickness="0" Style="{StaticResource FilterBarButtonStyle}" HorizontalAlignment="Right"
+                  ToolTip="{x:Static local:Resources.FiltersTab_DeleteFilterTooltip}"
+                  AutomationProperties.Name="{x:Static local:Resources.FiltersTab_DeleteFilterTooltip}"
+                  IsEnabled="true" Margin="0,5,5,0" Command="{Binding DeleteCommand}">
+                        <Image Margin="0" Source="/VisualizationControl;component/Images/filterdelete.png"
+                   Style="{StaticResource StatusBarIconImageStyle}" IsHitTestVisible="false"/>
+                    </Button>
+                </Grid>
+                <TextBlock Name="FilterDescription" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom" Focusable="true" AutomationProperties.AutomationId="FilterDescription"
+                   Text="{Binding Description}"
+                   Visibility="{Binding ElementName=FilterDescription, Path=Text, Converter={StaticResource VisibleIfNotNullConverter}}"
+                   AutomationProperties.Name="{Binding ElementName=FilterDescription, Path=Text}"/>
+            </Grid>
+        </HeaderedContentControl.Header>
+        <Grid Margin="0,8,0,0" IsEnabled="{Binding IsEnabled}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{x:Static local:Resources.FiltersTab_AdvancedFilterPromptText}" Grid.Row="0" Margin="5,5,5,5"
+                 Foreground="Green" TextWrapping="Wrap"/>
+            <ComboBox Name="FirstPredicateOperator" Grid.Row="1" Margin="5,5,5,5"
+                AutomationProperties.AutomationId="AdvFilterFirstPredicate" ItemsSource="{Binding Predicates}"
+                SelectedItem="{Binding FirstPredicateComparison}"
+                AutomationProperties.Name="{Binding FirstPredicateComparison, StringFormat={x:Static local:Resources.NarratorFilterPane_AdvancedFilterPredicate}}"/>
+            <TextBox Name="FirstPredicateValue" Grid.Row="2" Margin="5,5,5,5"
+               Text="{Binding FirstPredicateValue, UpdateSourceTrigger=PropertyChanged}"
+               Visibility="{Binding FirstPredicateDateTime, Converter={StaticResource VisibleIfNullConverter}}"
+               IsEnabled="{Binding FirstPredicateValueEnabled}"/>
+            <ContentControl x:Name="FirstPredicateDateTimeValue" Grid.Row="2" Margin="5,5,5,5"
+                      HorizontalContentAlignment="Left" Content="{Binding Path=FirstPredicateDateTime}"
+                      Visibility="{Binding FirstPredicateDateTime, Converter={StaticResource VisibleIfNotNullConverter}}"
+                      IsEnabled="{Binding FirstPredicateValueEnabled}"/>
+            <Grid Row="3" Margin="5,5,5,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock MouseDown="AndOp_OnMouseDown" Name="AndOp"
+                   Text="{x:Static local:Resources.FiltersTab_FilterPredicateOperator_And}" Margin="5,0,5,0"
+                   Grid.Column="1" HorizontalAlignment="Center" Foreground="Green" Focusable="true"
+                   AutomationProperties.Name="{x:Static local:Resources.FiltersTab_FilterPredicateOperator_And}"
+                   AutomationProperties.AutomationId="AdvancedFilterAndOperator">
+                    <TextBlock.FontWeight>
+                        <MultiBinding Converter="{StaticResource IfThenElseConverter}">
+                            <Binding Path="IsAndConnector"/>
+                            <Binding Source="{x:Static FontWeights.Bold}"/>
+                            <Binding Source="{x:Static FontWeights.Normal}"/>
+                        </MultiBinding>
+                    </TextBlock.FontWeight>
+                </TextBlock>
+                <TextBlock MouseDown="OrOp_OnMouseDown" Name="OrOp"
+                   Text="{x:Static local:Resources.FiltersTab_FilterPredicateOperator_Or}" Margin="5,0,5,0"
+                   Grid.Column="2" HorizontalAlignment="Center" Foreground="Green" Focusable="true"
+                   AutomationProperties.Name="{x:Static local:Resources.FiltersTab_FilterPredicateOperator_Or}"
+                   AutomationProperties.AutomationId="AdvancedFilterOrOperator">
+                    <TextBlock.FontWeight>
+                        <MultiBinding Converter="{StaticResource IfThenElseConverter}">
+                            <Binding Path="IsAndConnector"/>
+                            <Binding Source="{x:Static FontWeights.Normal}"/>
+                            <Binding Source="{x:Static FontWeights.Bold}"/>
+                        </MultiBinding>
+                    </TextBlock.FontWeight>
+                </TextBlock>
+            </Grid>
+            <ComboBox Name="SecondPredicateOperator" Grid.Row="4" Margin="5,5,5,5"
+                AutomationProperties.AutomationId="AdvFilterSecondPredicate" ItemsSource="{Binding Predicates}"
+                SelectedItem="{Binding SecondPredicateComparison}"
+                AutomationProperties.Name="{Binding SecondPredicateComparison, StringFormat={x:Static local:Resources.NarratorFilterPane_AdvancedFilterPredicate}}"/>
+            <TextBox Name="SecondPredicateValue" Grid.Row="5" Margin="5,5,5,10"
+               Text="{Binding SecondPredicateValue, UpdateSourceTrigger=PropertyChanged}"
+               Visibility="{Binding SecondPredicateDateTime, Converter={StaticResource VisibleIfNullConverter}}"
+               IsEnabled="{Binding SecondPredicateValueEnabled}"/>
+            <ContentControl x:Name="SecondPredicateDateTimeValue" Grid.Row="5" Margin="5,5,5,10"
+                      HorizontalContentAlignment="Left" Content="{Binding Path=SecondPredicateDateTime}"
+                      Visibility="{Binding SecondPredicateDateTime, Converter={StaticResource VisibleIfNotNullConverter}}"
+                      IsEnabled="{Binding SecondPredicateValueEnabled}"/>
+            <Button HorizontalAlignment="Center" Content="{x:Static local:Resources.FiltersTab_ApplyAdvancedFilter}"
+              Grid.Row="6" Margin="10,0,10,10" Padding="5,5,5,5"
+              AutomationProperties.AutomationId="AdvancedFilterApplyFilterBtn" Command="{Binding ApplyCommand}"/>
+        </Grid>
+    </Expander>
+</UserControl>

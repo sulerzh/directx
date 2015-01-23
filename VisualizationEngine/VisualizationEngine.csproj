@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONENGINE.DLL-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DEC678B4-BD56-4B70-B7E5-DE225D990DF7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VisualizationEngine</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>16.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Data.Visualization</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Core" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\CameraIdleEventArgs.cs" />
+    <Compile Include="Engine\CameraIdleEventHandler.cs" />
+    <Compile Include="Engine\EngineStep.cs" />
+    <Compile Include="Engine\EntityType.cs" />
+    <Compile Include="Engine\IRegionProvider.cs" />
+    <Compile Include="Engine\RegionData.cs" />
+    <Compile Include="Engine\SceneState.cs" />
+    <Compile Include="Engine\GraphicsLevel.cs" />
+    <Compile Include="Engine\IVisualizationEngineDispatcher.cs" />
+    <Compile Include="Engine\VisualizationEngine.cs" />
+    <Compile Include="Engine\RenderThreadMethod.cs" />
+    <Compile Include="Engine\VisualizationEngineException.cs" />
+    <Compile Include="Engine\UIController.cs" />
+    <Compile Include="Engine\VisualizationEngineUIController.cs" />
+    <Compile Include="Engine\AnnotationCache.cs" />
+    <Compile Include="Engine\IHitTestable.cs" />
+    <Compile Include="Engine\AnnotationStep.cs" />
+    <Compile Include="Engine\AnnotationStyle.cs" />
+    <Compile Include="Engine\IAnnotatable.cs" />
+    <Compile Include="Engine\IAnnotationImageSource.cs" />
+    <Compile Include="Engine\AntialiasingQuality.cs" />
+    <Compile Include="Engine\AntialiasingRenderer.cs" />
+    <Compile Include="Engine\AntialiasingStep.cs" />
+    <Compile Include="Engine\CameraController.cs" />
+    <Compile Include="Engine\CameraRotation.cs" />
+    <Compile Include="Engine\CameraSnapshot.cs" />
+    <Compile Include="Engine\DifferentiableCameraSnapshot.cs" />
+    <Compile Include="Engine\CameraViewportSnapshot.cs" />
+    <Compile Include="Engine\ICameraControllerManager.cs" />
+    <Compile Include="Engine\CameraStep.cs" />
+    <Compile Include="Engine\DefaultCameraController.cs" />
+    <Compile Include="Engine\CameraSnapshotBlender.cs" />
+    <Compile Include="Engine\CameraMover.cs" />
+    <Compile Include="Engine\CameraMoveStyle.cs" />
+    <Compile Include="Engine\CircleCameraMover.cs" />
+    <Compile Include="Engine\EastWestCameraMover.cs" />
+    <Compile Include="Engine\GlobeEastWestCameraMover.cs" />
+    <Compile Include="Engine\FlatMapEastWestCameraMover.cs" />
+    <Compile Include="Engine\LineCameraMover.cs" />
+    <Compile Include="Engine\Figure8CameraMover.cs" />
+    <Compile Include="Engine\FlatLineCameraMover.cs" />
+    <Compile Include="Engine\FlatDollyCameraMover.cs" />
+    <Compile Include="Engine\FlatFlyOverCameraMover.cs" />
+    <Compile Include="Engine\FlatFigure8CameraMover.cs" />
+    <Compile Include="Engine\FlatTransitionCameraMover.cs" />
+    <Compile Include="Engine\GreatCircleArc.cs" />
+    <Compile Include="Engine\DollyCameraMover.cs" />
+    <Compile Include="Engine\FlyOverCameraMover.cs" />
+    <Compile Include="Engine\MercatorLine.cs" />
+    <Compile Include="Engine\MoverCameraController.cs" />
+    <Compile Include="Engine\PushInCameraMover.cs" />
+    <Compile Include="Engine\StillCameraMover.cs" />
+    <Compile Include="Engine\StillEffectCameraMover.cs" />
+    <Compile Include="Engine\DistanceAnimator.cs" />
+    <Compile Include="Engine\TransitionCameraMover.cs" />
+    <Compile Include="Engine\GlobeStep.cs" />
+    <Compile Include="Engine\GlobeUIController.cs" />
+    <Compile Include="Engine\TileProjection.cs" />
+    <Compile Include="Engine\MercatorTileProjection.cs" />
+    <Compile Include="Engine\Tile.cs" />
+    <Compile Include="Engine\TileExtent.cs" />
+    <Compile Include="Engine\TileRenderable.cs" />
+    <Compile Include="Engine\TileRenderer.cs" />
+    <Compile Include="Engine\TileVertex.cs" />
+    <Compile Include="Engine\ColorOperation.cs" />
+    <Compile Include="Engine\ColorTransform.cs" />
+    <Compile Include="Engine\ColorLayerTransform.cs" />
+    <Compile Include="Engine\ColorMap.cs" />
+    <Compile Include="Engine\ColorOperations.cs" />
+    <Compile Include="Engine\ColorReplace.cs" />
+    <Compile Include="Engine\HueTransform.cs" />
+    <Compile Include="Engine\InvertTransform.cs" />
+    <Compile Include="Engine\MultiplyTransform.cs" />
+    <Compile Include="Engine\SaturationTransform.cs" />
+    <Compile Include="Engine\ScreenColorTransform.cs" />
+    <Compile Include="Engine\ProjectionType.cs" />
+    <Compile Include="Engine\ImagerySet.cs" />
+    <Compile Include="Engine\ImageSet.cs" />
+    <Compile Include="Engine\TileCache.cs" />
+    <Compile Include="Engine\TileCacheStatistics.cs" />
+    <Compile Include="Engine\TileTexturePool.cs" />
+    <Compile Include="Engine\IHitTestManager.cs" />
+    <Compile Include="Engine\HitTestStep.cs" />
+    <Compile Include="Engine\DefaultCameraUIController.cs" />
+    <Compile Include="Engine\InputEventType.cs" />
+    <Compile Include="Engine\KeyEventType.cs" />
+    <Compile Include="Engine\MouseEventType.cs" />
+    <Compile Include="Engine\TouchEventType.cs" />
+    <Compile Include="Engine\InputEvent.cs" />
+    <Compile Include="Engine\KeyInputEvent.cs" />
+    <Compile Include="Engine\MouseInputEvent.cs" />
+    <Compile Include="Engine\MouseWheelInputEvent.cs" />
+    <Compile Include="Engine\GestureInputEvent.cs" />
+    <Compile Include="Engine\SingleTouchPoint.cs" />
+    <Compile Include="Engine\GestureEndInputEvent.cs" />
+    <Compile Include="Engine\TapInputEvent.cs" />
+    <Compile Include="Engine\InputHandler.cs" />
+    <Compile Include="Engine\IUIControllerManager.cs" />
+    <Compile Include="Engine\InputStep.cs" />
+    <Compile Include="Engine\WPFInputHandler.cs" />
+    <Compile Include="Engine\LayerType.cs" />
+    <Compile Include="Engine\Layer.cs" />
+    <Compile Include="Engine\LayerColorManager.cs" />
+    <Compile Include="Engine\LayerRenderingParameters.cs" />
+    <Compile Include="Engine\LayerScaling.cs" />
+    <Compile Include="Engine\LayerStep.cs" />
+    <Compile Include="Engine\LayerTimeScaling.cs" />
+    <Compile Include="Engine\SelectionDrawingMode.cs" />
+    <Compile Include="Engine\LayerUIController.cs" />
+    <Compile Include="Engine\TimeSlicer.cs" />
+    <Compile Include="Engine\HitTestableLayer.cs" />
+    <Compile Include="Engine\IShadowCaster.cs" />
+    <Compile Include="Engine\InstanceLayer.cs" />
+    <Compile Include="Engine\ChartLayer.cs" />
+    <Compile Include="Engine\IInstanceParameter.cs" />
+    <Compile Include="Engine\InstanceRenderingTechnique.cs" />
+    <Compile Include="Engine\MaxSum.cs" />
+    <Compile Include="Engine\MaxAbsSumCalculator.cs" />
+    <Compile Include="Engine\MaxSumOfAbsCalculator.cs" />
+    <Compile Include="Engine\ShadowVolumeTechnique.cs" />
+    <Compile Include="Engine\Chart.cs" />
+    <Compile Include="Engine\BubbleChart.cs" />
+    <Compile Include="Engine\Column.cs" />
+    <Compile Include="Engine\Bubble.cs" />
+    <Compile Include="Engine\FlatMarker.cs" />
+    <Compile Include="Engine\ColumnChart.cs" />
+    <Compile Include="Engine\ClusteredColumnChart.cs" />
+    <Compile Include="Engine\PieChart.cs" />
+    <Compile Include="Engine\PointMarkerChart.cs" />
+    <Compile Include="Engine\StackedColumnsChart.cs" />
+    <Compile Include="Engine\InstancedVisual.cs" />
+    <Compile Include="Engine\PolygonalCone.cs" />
+    <Compile Include="Engine\CircularCone.cs" />
+    <Compile Include="Engine\ColumnVisual.cs" />
+    <Compile Include="Engine\PolygonalColumnVisual.cs" />
+    <Compile Include="Engine\PolygonalOutlineColumnVisual.cs" />
+    <Compile Include="Engine\CrossColumnOutline.cs" />
+    <Compile Include="Engine\CrossColumnVisual.cs" />
+    <Compile Include="Engine\CylinderVisual.cs" />
+    <Compile Include="Engine\HollowColumnVisual.cs" />
+    <Compile Include="Engine\HollowCubeVisual.cs" />
+    <Compile Include="Engine\HollowCylinderVisual.cs" />
+    <Compile Include="Engine\InstancedShape.cs" />
+    <Compile Include="Engine\NullMarkerVisual.cs" />
+    <Compile Include="Engine\SquareNullMarkerVisual.cs" />
+    <Compile Include="Engine\RoundNullMarkerVisual.cs" />
+    <Compile Include="Engine\PieSliceVisual.cs" />
+    <Compile Include="Engine\StarColumnVisual.cs" />
+    <Compile Include="Engine\HeatMapScaleEventArgs.cs" />
+    <Compile Include="Engine\HeatMapLayer.cs" />
+    <Compile Include="Engine\HeatMapRenderer.cs" />
+    <Compile Include="Engine\HeatMapBlendMode.cs" />
+    <Compile Include="Engine\HeatMapTechniqueStep.cs" />
+    <Compile Include="Engine\HeatMapTechnique.cs" />
+    <Compile Include="Engine\HeatMapVertex.cs" />
+    <Compile Include="Engine\HeatMapTimeVertex.cs" />
+    <Compile Include="Engine\HeatMapVertexFormat.cs" />
+    <Compile Include="Engine\SelectionStyle.cs" />
+    <Compile Include="Engine\SelectionEventArgs.cs" />
+    <Compile Include="Engine\HoveredElementEventArgs.cs" />
+    <Compile Include="Engine\SelectionMode.cs" />
+    <Compile Include="Engine\SelectionStyleChangedEventArgs.cs" />
+    <Compile Include="Engine\InstanceId.cs" />
+    <Compile Include="Engine\IInstanceIdRelationshipProvider.cs" />
+    <Compile Include="Engine\GatherAccumulateProcessBlock.cs" />
+    <Compile Include="Engine\GatherAccumulateProcessor.cs" />
+    <Compile Include="Engine\DrawMode.cs" />
+    <Compile Include="Engine\DrawStyle.cs" />
+    <Compile Include="Engine\DrawParameters.cs" />
+    <Compile Include="Engine\Cluster.cs" />
+    <Compile Include="Engine\Clusters.cs" />
+    <Compile Include="Engine\AnnotationTechnique.cs" />
+    <Compile Include="Engine\InstanceBlockQueryType.cs" />
+    <Compile Include="Engine\InstanceBlockQueryInstanceSource.cs" />
+    <Compile Include="Engine\InstanceBlockQueryParameters.cs" />
+    <Compile Include="Engine\IInstancePositionProvider.cs" />
+    <Compile Include="Engine\InstanceBlock.cs" />
+    <Compile Include="Engine\InstanceProcessingTechniqueMode.cs" />
+    <Compile Include="Engine\InstanceProcessingTechnique.cs" />
+    <Compile Include="Engine\DrawBufferDelegate.cs" />
+    <Compile Include="Engine\OverrideDimensionAndScalesDelegate.cs" />
+    <Compile Include="Engine\InstanceRenderer.cs" />
+    <Compile Include="Engine\InstanceStreams.cs" />
+    <Compile Include="Engine\InstanceVertex.cs" />
+    <Compile Include="Engine\InstanceData.cs" />
+    <Compile Include="Engine\OffsetVertex.cs" />
+    <Compile Include="Engine\InstanceDataVertex.cs" />
+    <Compile Include="Engine\InstanceBlockVertex.cs" />
+    <Compile Include="Engine\InstanceRenderVertex.cs" />
+    <Compile Include="Engine\InstanceRenderPieVertex.cs" />
+    <Compile Include="Engine\InstanceColor.cs" />
+    <Compile Include="Engine\InstanceTime.cs" />
+    <Compile Include="Engine\HitTestVertex.cs" />
+    <Compile Include="Engine\StreamOutHitVertex.cs" />
+    <Compile Include="Engine\InstanceVertexFormat.cs" />
+    <Compile Include="Engine\OutlineTechnique.cs" />
+    <Compile Include="Engine\RegionBufferToken.cs" />
+    <Compile Include="Engine\RegionBuffer.cs" />
+    <Compile Include="Engine\RegionLayerShadingMode.cs" />
+    <Compile Include="Engine\RegionEventArgs.cs" />
+    <Compile Include="Engine\RegionScaleEventArgs.cs" />
+    <Compile Include="Engine\RegionLayer.cs" />
+    <Compile Include="Engine\RegionLayerStatistics.cs" />
+    <Compile Include="Engine\RegionRenderingTechnique.cs" />
+    <Compile Include="Engine\RegionTriangleList.cs" />
+    <Compile Include="Engine\RegionVertex.cs" />
+    <Compile Include="Engine\RegionWallFacet.cs" />
+    <Compile Include="Engine\InvalidPolygonException.cs" />
+    <Compile Include="Engine\Tesselator.cs" />
+    <Compile Include="Engine\ValueRangeCalculator.cs" />
+    <Compile Include="Engine\DarkGlowRenderer.cs" />
+    <Compile Include="Engine\FullScreenQuadViewer.cs" />
+    <Compile Include="Engine\IShadowManager.cs" />
+    <Compile Include="Engine\ShadowStep.cs" />
+    <Compile Include="Engine\BackgroundStep.cs" />
+    <Compile Include="Engine\BuiltinTheme.cs" />
+    <Compile Include="Engine\BuiltinThemeDescription.cs" />
+    <Compile Include="Engine\BuiltinThemes.cs" />
+    <Compile Include="Engine\LightingRig.cs" />
+    <Compile Include="Engine\LightingStep.cs" />
+    <Compile Include="Engine\VisualizationTheme.cs" />
+    <Compile Include="Engine\ITimeController.cs" />
+    <Compile Include="Engine\ITimeProvider.cs" />
+    <Compile Include="Engine\RealtimeTimeProvider.cs" />
+    <Compile Include="Engine\FixedTimeProvider.cs" />
+    <Compile Include="Engine\TimeStep.cs" />
+    <Compile Include="Engine\Frame.cs" />
+    <Compile Include="Engine\ITourLayerManager.cs" />
+    <Compile Include="Engine\ITourPlayer.cs" />
+    <Compile Include="Engine\Scene.cs" />
+    <Compile Include="Engine\SceneEffect.cs" />
+    <Compile Include="Engine\Tour.cs" />
+    <Compile Include="Engine\TourSceneStateChangeHandler.cs" />
+    <Compile Include="Engine\TourSceneState.cs" />
+    <Compile Include="Engine\TourSceneStateChangedEventArgs.cs" />
+    <Compile Include="Engine\TourStep.cs" />
+    <Compile Include="Engine\Transition.cs" />
+    <Compile Include="Engine\ICustomMapProvider.cs" />
+    <Compile Include="Engine\ICustomMapCollection.cs" />
+    <Compile Include="Engine\CustomMap.cs" />
+    <Compile Include="Engine\RangeOf`1.cs" />
+    <Compile Include="Engine\RangeExtensions.cs" />
+    <Compile Include="Engine\CustomSpaceAxisDefinition.cs" />
+    <Compile Include="Engine\CustomSpaceDefinition.cs" />
+    <Compile Include="Engine\ICustomSpaceTransform.cs" />
+    <Compile Include="Engine\CustomSpaceTransform.cs" />
+    <Compile Include="Engine\NativeMethods.cs" />
+    <Compile Include="Engine\Graphics\IQuery.cs" />
+    <Compile Include="Engine\Graphics\RenderQuery.cs" />
+    <Compile Include="Engine\Graphics\OnFlatMapRenderQuery.cs" />
+    <Compile Include="Engine\Graphics\OnUnitSphereRenderQuery.cs" />
+    <Compile Include="Engine\Graphics\OnWarpSphereRenderQuery.cs" />
+    <Compile Include="Engine\Graphics\SpatialIndex.cs" />
+    <Compile Include="Utilities\VisualizationTraceSource.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Annotation.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Annotation.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Annotation.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\AnnotationHitTest.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\AnnotationHitTest.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\AnnotationHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\BackgroundLinear.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\BackgroundLinear.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\DarkGlow.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\DarkGlowMultisample.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FullScreenQuad.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FullScreenQuad.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Fxaa.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FxaaQ1.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FxaaQ2.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FxaaQ3.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\FxaaQ4.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep0.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep0.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep0.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep0Time.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep1.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep1Horizontal.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep1Vertical.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep2.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HeatMapStep2.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HitTest.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\HitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceAccumulate.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceAccumulate.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceCompProcessing.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceCompProcessing.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceCompProcessingHitTest.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceCompProcessingHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderable.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderable.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableColorOnly.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableHitTest.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableHitTestPie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutline.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutlineDoubleLine.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutlineDoubleLine.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutlineDoubleLineRegion.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutlinePie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableOutlineRegion.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderablePie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableShadow.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstancedRenderableShadowPie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGather.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGather.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGatherHitTest.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGatherHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGatherTime.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceGatherTimeHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessing.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessing.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessingHitTest.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessingHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessingPie.gs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceProcessingPie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceSelect.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\InstanceSelect.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Luma.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Luma.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRendering.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRendering.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingHitTest.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingHitTest.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingOutline.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingOutline.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingPerShiftScale.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingPerShiftScale.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\RegionRenderingPie.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\SimpleResolve.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\SingleColor.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\SingleColor.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Sprite.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\Sprite.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\TileRenderable.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\TileRenderable.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\TileRenderableDepth.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\TileRenderableDepth.vs" />
+    <EmbeddedResource Include="Engine\Shaders\Compiled\TileRenderableWireframe.ps" />
+    <EmbeddedResource Include="Engine\Shaders\Resources\ColorRamp.png" />
+    <EmbeddedResource Include="Engine\Themes\Resources\AERIAL.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\AERIALDESAT.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\BING.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\BINGROADHIGHCONTRAST.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Dark.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Earthy.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Light.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Modern.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Mono.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Organic.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\Radiate.xml" />
+    <EmbeddedResource Include="Engine\Themes\Resources\White.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualizationCommon\VisualizationCommon.csproj">
+      <Project>{6b90f178-fdd7-4c53-8051-bac67826abcd}</Project>
+      <Name>VisualizationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
+      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
+      <Name>VisualizationDirectX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationGraphics\VisualizationGraphics.csproj">
+      <Project>{e0825ee8-f343-469e-81c1-29fdcf6129d6}</Project>
+      <Name>VisualizationGraphics</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

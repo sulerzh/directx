@@ -1,0 +1,1173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Power Map Excel Add-in\Power Map Excel Add-in\visualizationcontrol.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8463EF5C-07DB-40D0-BC81-BA87D9AC5409}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>VisualizationControl</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>16.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Data.Visualization.VisualizationControls</RootNamespace>
+    <ExpressionBlendVersion>12.0.41002.1</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationFramework.Classic" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="VISUALIZATIONCHART, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONCHART.DLL</HintPath>
+    </Reference>
+    <Reference Include="VISUALIZATIONCHARTCOMMON, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONCHARTCOMMON.DLL</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AMPMConverter.cs" />
+    <Compile Include="AnnotationImageSource.cs" />
+    <Compile Include="ILatLonProvider.cs" />
+    <Compile Include="BingLatLonCache.cs" />
+    <Compile Include="BingRegionProvider.cs" />
+    <Compile Include="ChartCategoryBinder.cs" />
+    <Compile Include="DataBinding.cs" />
+    <Compile Include="ChartDataBinding.cs" />
+    <Compile Include="ChartDataPoint.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="TableFieldToolTipViewModel.cs" />
+    <Compile Include="DataPointToolTip.cs" />
+    <Compile Include="ChartDataPointBinder.cs" />
+    <Compile Include="DataView.cs" />
+    <Compile Include="ChartDataView.cs" />
+    <Compile Include="ChartDataVirtualizer.cs" />
+    <Compile Include="FieldWellDefinition.cs" />
+    <Compile Include="ChartFieldWellDefinition.cs" />
+    <Compile Include="ChartScaleVirtualizationHelper.cs" />
+    <Compile Include="Views\AddChartDialogView.xaml.cs">
+      <DependentUpon>AddChartDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddFilterSelectionDialogView.xaml.cs">
+      <DependentUpon>AddFilterSelectionDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddLabelDialogView.xaml.cs">
+      <DependentUpon>AddLabelDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AnnotationPreviewView.xaml.cs">
+      <DependentUpon>AnnotationPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AnnotationDialogContentView.xaml.cs">
+      <DependentUpon>AnnotationDialogContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChartDecoratorView.xaml.cs">
+      <DependentUpon>ChartDecoratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ColorPickerView.xaml.cs">
+      <DependentUpon>ColorPickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CompletionStatsView.xaml.cs">
+      <DependentUpon>CompletionStatsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConfirmationDialogView.xaml.cs">
+      <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateVideo.xaml.cs">
+      <DependentUpon>CreateVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateVideoTaskView.xaml.cs">
+      <DependentUpon>CreateVideoTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomSpaceGalleryView.xaml.cs">
+      <DependentUpon>CustomSpaceGalleryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomSpaceSettingsDialogView.xaml.cs">
+      <DependentUpon>CustomSpaceSettingsDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChromelessWindowBase.xaml.cs">
+      <DependentUpon>ChromelessWindowBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CustomSpaceSettingsView.xaml.cs">
+      <DependentUpon>CustomSpaceSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DateTimeEditorView.xaml.cs">
+      <DependentUpon>DateTimeEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DecoratorCollectionView.xaml.cs">
+      <DependentUpon>DecoratorCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DecoratorLayerView.xaml.cs">
+      <DependentUpon>DecoratorLayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DurationView.xaml.cs">
+      <DependentUpon>DurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DecoratorView.xaml.cs">
+      <DependentUpon>DecoratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditLabelDialogView.xaml.cs">
+      <DependentUpon>EditLabelDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditTimeDecoratorDialogView.xaml.cs">
+      <DependentUpon>EditTimeDecoratorDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExpressionFilterView.xaml.cs">
+      <DependentUpon>ExpressionFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldListPickerView.xaml.cs">
+      <DependentUpon>FieldListPickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldWellEntryView.xaml.cs">
+      <DependentUpon>FieldWellEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldWellGeographyView.xaml.cs">
+      <DependentUpon>FieldWellGeographyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldWellSummaryView.xaml.cs">
+      <DependentUpon>FieldWellSummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FieldWellVisualizationView.xaml.cs">
+      <DependentUpon>FieldWellVisualizationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FindLocationDialogView.xaml.cs">
+      <DependentUpon>FindLocationDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GeoFieldMappingView.xaml.cs">
+      <DependentUpon>GeoFieldMappingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GlobeNavigationView.xaml.cs">
+      <DependentUpon>GlobeNavigationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GlobeView.xaml.cs">
+      <DependentUpon>GlobeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HostControlView.xaml.cs">
+      <DependentUpon>HostControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GeocodingReportView.xaml.cs">
+      <DependentUpon>GeocodingReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LabelDecoratorView.xaml.cs">
+      <DependentUpon>LabelDecoratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LayerChooserRenamer.xaml.cs">
+      <DependentUpon>LayerChooserRenamer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LayerLegendDecoratorView.xaml.cs">
+      <DependentUpon>LayerLegendDecoratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LayerListEntryView.xaml.cs">
+      <DependentUpon>LayerListEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LayerSettingsView.xaml.cs">
+      <DependentUpon>LayerSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ListFilterView.xaml.cs">
+      <DependentUpon>ListFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopupAggregationButtonView.xaml.cs">
+      <DependentUpon>PopupAggregationButtonView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RangeFilterView.xaml.cs">
+      <DependentUpon>RangeFilterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SceneView.xaml.cs">
+      <DependentUpon>SceneView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectionStatsView.xaml.cs">
+      <DependentUpon>SelectionStatsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SceneSettingsView.xaml.cs">
+      <DependentUpon>SceneSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusBarView.xaml.cs">
+      <DependentUpon>StatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsDialogView.xaml.cs">
+      <DependentUpon>SettingsDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TableFieldToolTipView.xaml.cs">
+      <DependentUpon>TableFieldToolTipView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskPanelFieldsTabView.xaml.cs">
+      <DependentUpon>TaskPanelFieldsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskPanelFiltersTabView.xaml.cs">
+      <DependentUpon>TaskPanelFiltersTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TableIslandView.xaml.cs">
+      <DependentUpon>TableIslandView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TableView.xaml.cs">
+      <DependentUpon>TableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransitionDurationView.xaml.cs">
+      <DependentUpon>TransitionDurationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TourEditorView.xaml.cs">
+      <DependentUpon>TourEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TourPlayerView.xaml.cs">
+      <DependentUpon>TourPlayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimeSettingsView.xaml.cs">
+      <DependentUpon>TimeSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimeScrubberView.xaml.cs">
+      <DependentUpon>TimeScrubberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TimeDecoratorView.xaml.cs">
+      <DependentUpon>TimeDecoratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextFormatEditorView.xaml.cs">
+      <DependentUpon>TextFormatEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskPanelView.xaml.cs">
+      <DependentUpon>TaskPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskPanelSettingsTabView.xaml.cs">
+      <DependentUpon>TaskPanelSettingsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TaskPanelLayersTabView.xaml.cs">
+      <DependentUpon>TaskPanelLayersTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Visualization.cs" />
+    <Compile Include="ChartVisualization.cs" />
+    <Compile Include="ClientProxy.cs" />
+    <Compile Include="Color4FToSolidColorBrushConverter.cs" />
+    <Compile Include="ColorExtensions.cs" />
+    <Compile Include="CompletionStats.cs" />
+    <Compile Include="ControlState.cs" />
+    <Compile Include="CopyrightService.cs" />
+    <Compile Include="CopyrightServiceResponse.cs" />
+    <Compile Include="CopyrightServiceResource.cs" />
+    <Compile Include="CopyrightServiceResourceSet.cs" />
+    <Compile Include="CustomMapsList.cs" />
+    <Compile Include="DataChangedEventArgs.cs" />
+    <Compile Include="DataSource.cs" />
+    <Compile Include="IDialog.cs" />
+    <Compile Include="IDialogServiceProvider.cs" />
+    <Compile Include="EndpointServiceResponse.cs" />
+    <Compile Include="EndpointServiceResource.cs" />
+    <Compile Include="EndpointServiceResourceSet.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="ITableFieldViewModel.cs" />
+    <Compile Include="ITableViewModel.cs" />
+    <Compile Include="ITableIslandViewModel.cs" />
+    <Compile Include="IFieldListPickerViewModel.cs" />
+    <Compile Include="AggregationFunction.cs" />
+    <Compile Include="AggregationFunctionExtensions.cs" />
+    <Compile Include="TimeChunkPeriod.cs" />
+    <Compile Include="TimeChunkPeriodExtensions.cs" />
+    <Compile Include="GeoAmbiguity.cs" />
+    <Compile Include="GeoDataSource.cs" />
+    <Compile Include="GeoDataView.cs" />
+    <Compile Include="TableField.cs" />
+    <Compile Include="GeoField.cs" />
+    <Compile Include="GeoEntityField.cs" />
+    <Compile Include="GeoMappingType.cs" />
+    <Compile Include="TimeSetting.cs" />
+    <Compile Include="GeoFieldWellDefinition.cs" />
+    <Compile Include="GeoFullAddressField.cs" />
+    <Compile Include="GeoModelDataId.cs" />
+    <Compile Include="GeoResolution.cs" />
+    <Compile Include="GeoResolutionBorder.cs" />
+    <Compile Include="GeospatialDataProviders.cs" />
+    <Compile Include="GeospatialEndpoint.cs" />
+    <Compile Include="GeoVisualization.cs" />
+    <Compile Include="GeoVisualizationInstanceProperties.cs" />
+    <Compile Include="GlobalConstants.cs" />
+    <Compile Include="IDataSourceFactory.cs" />
+    <Compile Include="IHelpViewer.cs" />
+    <Compile Include="IThemeService.cs" />
+    <Compile Include="IModelWrapper.cs" />
+    <Compile Include="ITourPersist.cs" />
+    <Compile Include="LatLongField.cs" />
+    <Compile Include="XYField.cs" />
+    <Compile Include="LayerDataBinding.cs" />
+    <Compile Include="GeoLevelToEntityTypeConverter.cs" />
+    <Compile Include="LayerDefinition.cs" />
+    <Compile Include="TourDeserializationException.cs" />
+    <Compile Include="LayerManager.cs" />
+    <Compile Include="RangeStringConverter.cs" />
+    <Compile Include="RegionResponse.cs" />
+    <Compile Include="RegionResult.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="Copyright.cs" />
+    <Compile Include="Metadata.cs" />
+    <Compile Include="Primitive.cs" />
+    <Compile Include="Source.cs" />
+    <Compile Include="Name.cs" />
+    <Compile Include="EntityMetadata.cs" />
+    <Compile Include="SampleData.cs" />
+    <Compile Include="SceneTimeConverter.cs" />
+    <Compile Include="SceneTitleConverter.cs" />
+    <Compile Include="SelectionStats.cs" />
+    <Compile Include="ThemeService.cs" />
+    <Compile Include="VideoImageSource.cs" />
+    <Compile Include="Win32Helper.cs" />
+    <Compile Include="RangeAdjustmentType.cs" />
+    <Compile Include="RangeSlider.cs" />
+    <Compile Include="MouseCaptureManager.cs" />
+    <Compile Include="RangeSliderAutomationPeer.cs" />
+    <Compile Include="NarratorContextPanel.cs" />
+    <Compile Include="RangeSlider_Resources.cs" />
+    <Compile Include="FilterPredicateOperator.cs" />
+    <Compile Include="FilterClause.cs" />
+    <Compile Include="AndOrFilterClause.cs" />
+    <Compile Include="CategoryFilterClause.cs" />
+    <Compile Include="DateTimeFilterPredicateComparison.cs" />
+    <Compile Include="FilterPredicate.cs" />
+    <Compile Include="DateTimeFilterPredicate.cs" />
+    <Compile Include="FilterPredicateProperties.cs" />
+    <Compile Include="DateTimeFilterPredicateProperties.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="NumericFilterPredicateComparison.cs" />
+    <Compile Include="NumericFilterPredicate.cs" />
+    <Compile Include="NumericRangeFilterClause.cs" />
+    <Compile Include="StringFilterPredicateComparison.cs" />
+    <Compile Include="StringFilterPredicate.cs" />
+    <Compile Include="ModelMetadata.cs" />
+    <Compile Include="TableMember.cs" />
+    <Compile Include="TableColumn.cs" />
+    <Compile Include="TableIsland.cs" />
+    <Compile Include="TableMeasure.cs" />
+    <Compile Include="TableMemberDataType.cs" />
+    <Compile Include="TableMemberClassification.cs" />
+    <Compile Include="TableMemberClassificationUtil.cs" />
+    <Compile Include="TableMetadata.cs" />
+    <Compile Include="GeoQueryResults.cs" />
+    <Compile Include="KeyColumnDataType.cs" />
+    <Compile Include="ModelQuery.cs" />
+    <Compile Include="ModelQueryColumn.cs" />
+    <Compile Include="ModelQueryKeyColumn.cs" />
+    <Compile Include="ModelQueryIndexedKeyColumn.cs" />
+    <Compile Include="ModelQueryMeasureColumn.cs" />
+    <Compile Include="ModelQueryTimeKeyColumn.cs" />
+    <Compile Include="AnnotationDescriptionType.cs" />
+    <Compile Include="AnnotationImageSize.cs" />
+    <Compile Include="AnnotationTemplateModel.cs" />
+    <Compile Include="ChartShape.cs" />
+    <Compile Include="ColorSelector.cs" />
+    <Compile Include="DataRowModel.cs" />
+    <Compile Include="AMPM.cs" />
+    <Compile Include="DateTimeConstants.cs" />
+    <Compile Include="DecoratorContentBase.cs" />
+    <Compile Include="DecoratorModel.cs" />
+    <Compile Include="LabelDecoratorModel.cs" />
+    <Compile Include="LayerLegendDecoratorModel.cs" />
+    <Compile Include="LayerLegendItemModel.cs" />
+    <Compile Include="RichTextFormatType.cs" />
+    <Compile Include="RichTextModel.cs" />
+    <Compile Include="Theme.cs" />
+    <Compile Include="TimeDecoratorModel.cs" />
+    <Compile Include="VisualizationModel.cs" />
+    <Compile Include="DialogViewModelBase.cs" />
+    <Compile Include="AddChartDialogViewModel.cs" />
+    <Compile Include="AddFilterSelectionDialogViewModel.cs" />
+    <Compile Include="AddLabelDialogViewModel.cs" />
+    <Compile Include="FieldColumnSelectionViewModel.cs" />
+    <Compile Include="AnnotationDialogContentViewModel.cs" />
+    <Compile Include="ChartDecoratorModel.cs" />
+    <Compile Include="ColorPickerViewModel.cs" />
+    <Compile Include="CompletionStatsViewModel.cs" />
+    <Compile Include="ConfirmationDialogViewModel.cs" />
+    <Compile Include="CreateVideoViewModel.cs" />
+    <Compile Include="CustomSpaceSettingsViewModel.cs" />
+    <Compile Include="CustomSpaceGalleryViewModel.cs" />
+    <Compile Include="DateTimeEditorViewModel.cs" />
+    <Compile Include="DecoratorCollectionViewModel.cs" />
+    <Compile Include="DecoratorLayerViewModel.cs" />
+    <Compile Include="DecoratorDock.cs" />
+    <Compile Include="ResizeSource.cs" />
+    <Compile Include="DragDeltaEventHandler.cs" />
+    <Compile Include="ValidateNewSizeHandler.cs" />
+    <Compile Include="DecoratorViewModel.cs" />
+    <Compile Include="DurationViewModel.cs" />
+    <Compile Include="EditLabelDialogViewModel.cs" />
+    <Compile Include="EditTimeDecoratorDialogViewModel.cs" />
+    <Compile Include="FilterViewModelBase.cs" />
+    <Compile Include="ExpressionFilterViewModel.cs" />
+    <Compile Include="FieldListPickerState.cs" />
+    <Compile Include="FieldListPickerViewModel.cs" />
+    <Compile Include="FieldWellEntryViewModel.cs" />
+    <Compile Include="FieldWellCategoryViewModel.cs" />
+    <Compile Include="GeoFieldMappingType.cs" />
+    <Compile Include="GeoFieldMappingTypeUtil.cs" />
+    <Compile Include="FieldWellGeographyViewModel.cs" />
+    <Compile Include="FieldWellHeightViewModel.cs" />
+    <Compile Include="FieldWellTimeViewModel.cs" />
+    <Compile Include="VisualizationChartType.cs" />
+    <Compile Include="FieldWellVisualizationViewModel.cs" />
+    <Compile Include="FindLocationViewModel.cs" />
+    <Compile Include="GeocodingReportViewModel.cs" />
+    <Compile Include="GeoFieldMappingViewModel.cs" />
+    <Compile Include="GlobeNavigationViewModel.cs" />
+    <Compile Include="GlobeViewModel.cs" />
+    <Compile Include="HostWindowMode.cs" />
+    <Compile Include="WindowViewModel.cs" />
+    <Compile Include="HostControlViewModel.cs" />
+    <Compile Include="ILayerManagerViewModel.cs" />
+    <Compile Include="LayerManagerViewModel.cs" />
+    <Compile Include="LayerSettingsViewModel.cs" />
+    <Compile Include="LayerViewModel.cs" />
+    <Compile Include="ListUtilities.cs" />
+    <Compile Include="ListFilterViewModel.cs" />
+    <Compile Include="ListFilterViewModel`1.cs" />
+    <Compile Include="ListFilterItemViewModel`1.cs" />
+    <Compile Include="RangeFilterViewModel.cs" />
+    <Compile Include="RemoveItemPlaceholder.cs" />
+    <Compile Include="SceneSettingsViewModel.cs" />
+    <Compile Include="SceneViewModel.cs" />
+    <Compile Include="SelectedElementHelper.cs" />
+    <Compile Include="SettingsDialogViewModel.cs" />
+    <Compile Include="ShapesGalleryViewModel.cs" />
+    <Compile Include="SortField.cs" />
+    <Compile Include="StatusBarViewModel.cs" />
+    <Compile Include="TableFieldViewModel.cs" />
+    <Compile Include="TableIslandViewModel.cs" />
+    <Compile Include="TableViewModel.cs" />
+    <Compile Include="TaskPanelFieldsTabViewModel.cs" />
+    <Compile Include="TaskPanelFiltersTabViewModel.cs" />
+    <Compile Include="TaskPanelLayersTabViewModel.cs" />
+    <Compile Include="TaskPanelSettingsSubhead.cs" />
+    <Compile Include="TaskPanelSettingsTabViewModel.cs" />
+    <Compile Include="TaskPanelViewModel.cs" />
+    <Compile Include="ThemeEnabledConverter.cs" />
+    <Compile Include="ThemeGalleryViewModel.cs" />
+    <Compile Include="TimeScrubberViewModel.cs" />
+    <Compile Include="TimeSettingsViewModel.cs" />
+    <Compile Include="TimeStringFormat.cs" />
+    <Compile Include="TourEditorViewModel.cs" />
+    <Compile Include="TourPlayerViewModel.cs" />
+    <Compile Include="TransitionDurationViewModel.cs" />
+    <Compile Include="UndoItemViewModel.cs" />
+    <Compile Include="ColorPickerButtonImageConverter.cs" />
+    <Compile Include="Video\VideoDisplayResolution.cs" />
+    <Compile Include="Video\IVideoEncoder.cs" />
+    <Compile Include="Video\AVEncoder.cs" />
+    <Compile Include="Video\ImageConverter.cs" />
+    <Compile Include="Video\EncodingStatus.cs" />
+    <Compile Include="Video\TourVideoSession.cs" />
+    <Compile Include="Interop\CLSID.cs" />
+    <Compile Include="Interop\IID.cs" />
+    <Compile Include="Interop\Consts.cs" />
+    <Compile Include="Interop\Enums.cs" />
+    <Compile Include="Interop\MFHelper.cs" />
+    <Compile Include="Interop\IMFAttributes.cs" />
+    <Compile Include="Interop\IMFClock.cs" />
+    <Compile Include="Interop\IMFCollection.cs" />
+    <Compile Include="Interop\IMFMediaBuffer.cs" />
+    <Compile Include="Interop\IMFMediaEvent.cs" />
+    <Compile Include="Interop\IMFMediaSession.cs" />
+    <Compile Include="Interop\IMFMediaSource.cs" />
+    <Compile Include="Interop\IMFMediaType.cs" />
+    <Compile Include="Interop\IMFReadWriteClassFactory.cs" />
+    <Compile Include="Interop\IMFSample.cs" />
+    <Compile Include="Interop\IMFSinkWriter.cs" />
+    <Compile Include="Interop\IMFSourceReader.cs" />
+    <Compile Include="Interop\IMFSourceResolver.cs" />
+    <Compile Include="Interop\IMFTopology.cs" />
+    <Compile Include="Interop\IMFTopologyNode.cs" />
+    <Compile Include="Interop\IMFTranscodeProfile.cs" />
+    <Compile Include="Interop\IMFAsyncResult.cs" />
+    <Compile Include="Interop\IMFAsyncCallback.cs" />
+    <Compile Include="Interop\IMFPresentationClock.cs" />
+    <Compile Include="Interop\IMFPresentationDescriptor.cs" />
+    <Compile Include="Interop\IMFStreamDescriptor.cs" />
+    <Compile Include="Interop\IMFMediaTypeHandler.cs" />
+    <Compile Include="Interop\IPropertyStore.cs" />
+    <Compile Include="Interop\IMFRemoteAsyncCallback.cs" />
+    <Compile Include="Interop\IMFByteStream.cs" />
+    <Compile Include="Interop\PropVariant.cs" />
+    <Compile Include="Interop\MediaSessionStartPosition.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\100\addlayer.png" />
+    <Resource Include="Images\100\addlayer_small.png" />
+    <Resource Include="Images\100\addscene.png" />
+    <Resource Include="Images\100\addscene_small.png" />
+    <Resource Include="Images\100\capturescreen.png" />
+    <Resource Include="Images\100\capturescreen_small.png" />
+    <Resource Include="Images\100\chart.png" />
+    <Resource Include="Images\100\chart_small.png" />
+    <Resource Include="Images\100\createvideo.png" />
+    <Resource Include="Images\100\createvideo_small.png" />
+    <Resource Include="Images\100\datashapes.png" />
+    <Resource Include="Images\100\datashapes_small.png" />
+    <Resource Include="Images\100\duplicatescene.png" />
+    <Resource Include="Images\100\duplicatescene_small.png" />
+    <Resource Include="Images\100\findlocation.png" />
+    <Resource Include="Images\100\findlocation_small.png" />
+    <Resource Include="Images\100\flatmap.png" />
+    <Resource Include="Images\100\flatmap_small.png" />
+    <Resource Include="Images\100\insert.png" />
+    <Resource Include="Images\100\layer.png" />
+    <Resource Include="Images\100\layersettingsribbon.png" />
+    <Resource Include="Images\100\layersettingsribbon_small.png" />
+    <Resource Include="Images\100\legend.png" />
+    <Resource Include="Images\100\legend_small.png" />
+    <Resource Include="Images\100\map.png" />
+    <Resource Include="Images\100\maplabels.png" />
+    <Resource Include="Images\100\maplabels_small.png" />
+    <Resource Include="Images\100\newscene.png" />
+    <Resource Include="Images\100\newscene_small.png" />
+    <Resource Include="Images\100\playtour.png" />
+    <Resource Include="Images\100\refreshdata.png" />
+    <Resource Include="Images\100\refreshdata_small.png" />
+    <Resource Include="Images\100\scenesettingsribbon.png" />
+    <Resource Include="Images\100\scenesettingsribbon_small.png" />
+    <Resource Include="Images\100\taskpanes.png" />
+    <Resource Include="Images\100\textbox.png" />
+    <Resource Include="Images\100\textbox_small.png" />
+    <Resource Include="Images\100\theme.png" />
+    <Resource Include="Images\100\theme_small.png" />
+    <Resource Include="Images\100\time.png" />
+    <Resource Include="Images\100\timedecorator.png" />
+    <Resource Include="Images\100\timeline.png" />
+    <Resource Include="Images\100\timeline_small.png" />
+    <Resource Include="Images\100\timeproperties.png" />
+    <Resource Include="Images\100\tour.png" />
+    <Resource Include="Images\100\tourpane.png" />
+    <Resource Include="Images\100\tourpane_small.png" />
+    <Resource Include="Images\100\view.png" />
+    <Resource Include="Images\12pt_star.png" />
+    <Resource Include="Images\200\addlayer.png" />
+    <Resource Include="Images\200\addlayer_small.png" />
+    <Resource Include="Images\200\addscene.png" />
+    <Resource Include="Images\200\addscene_small.png" />
+    <Resource Include="Images\200\capturescreen.png" />
+    <Resource Include="Images\200\capturescreen_small.png" />
+    <Resource Include="Images\200\chart.png" />
+    <Resource Include="Images\200\chart_small.png" />
+    <Resource Include="Images\200\createvideo.png" />
+    <Resource Include="Images\200\createvideo_small.png" />
+    <Resource Include="Images\200\datashapes.png" />
+    <Resource Include="Images\200\datashapes_small.png" />
+    <Resource Include="Images\200\duplicatescene.png" />
+    <Resource Include="Images\200\duplicatescene_small.png" />
+    <Resource Include="Images\200\findlocation.png" />
+    <Resource Include="Images\200\findlocation_small.png" />
+    <Resource Include="Images\200\flatmap.png" />
+    <Resource Include="Images\200\flatmap_small.png" />
+    <Resource Include="Images\200\insert.png" />
+    <Resource Include="Images\200\layer.png" />
+    <Resource Include="Images\200\layersettingsribbon.png" />
+    <Resource Include="Images\200\layersettingsribbon_small.png" />
+    <Resource Include="Images\200\legend.png" />
+    <Resource Include="Images\200\legend_small.png" />
+    <Resource Include="Images\200\map.png" />
+    <Resource Include="Images\200\maplabels.png" />
+    <Resource Include="Images\200\maplabels_small.png" />
+    <Resource Include="Images\200\newscene.png" />
+    <Resource Include="Images\200\newscene_small.png" />
+    <Resource Include="Images\200\playtour.png" />
+    <Resource Include="Images\200\refreshdata.png" />
+    <Resource Include="Images\200\refreshdata_small.png" />
+    <Resource Include="Images\200\scenesettingsribbon.png" />
+    <Resource Include="Images\200\scenesettingsribbon_small.png" />
+    <Resource Include="Images\200\taskpanes.png" />
+    <Resource Include="Images\200\textbox.png" />
+    <Resource Include="Images\200\textbox_small.png" />
+    <Resource Include="Images\200\theme.png" />
+    <Resource Include="Images\200\time.png" />
+    <Resource Include="Images\200\timedecorator.png" />
+    <Resource Include="Images\200\timeline.png" />
+    <Resource Include="Images\200\timeline_small.png" />
+    <Resource Include="Images\200\timeproperties.png" />
+    <Resource Include="Images\200\tour.png" />
+    <Resource Include="Images\200\tourpane.png" />
+    <Resource Include="Images\200\view.png" />
+    <Resource Include="Images\2d_verticalcluster.png" />
+    <Resource Include="Images\2d_verticalstack.png" />
+    <Resource Include="Images\5pt_star.png" />
+    <Resource Include="Images\6pt_star.png" />
+    <Resource Include="Images\add_scene.png" />
+    <Resource Include="Images\addlayer.png" />
+    <Resource Include="Images\addscene.png" />
+    <Resource Include="Images\aerial.png" />
+    <Resource Include="Images\aerialgrey.png" />
+    <Resource Include="Images\alerticon.png" />
+    <Resource Include="Images\alerticonred.png" />
+    <Resource Include="Images\alerticonwhite.png" />
+    <Resource Include="Images\alertwarning32.png" />
+    <Resource Include="Images\bars.png" />
+    <Resource Include="Images\bing.png" />
+    <Resource Include="Images\bubbleviztype.png" />
+    <Resource Include="Images\capture.png" />
+    <Resource Include="Images\capturescreen.png" />
+    <Resource Include="Images\chart.png" />
+    <Resource Include="Images\circle.png" />
+    <Resource Include="Images\close_disabled.png" />
+    <Resource Include="Images\close_hover.png" />
+    <Resource Include="Images\close_normal.png" />
+    <Resource Include="Images\close_pressed.png" />
+    <Resource Include="Images\close_white.png" />
+    <Resource Include="Images\columns.png" />
+    <Resource Include="Images\cross.png" />
+    <Resource Include="Images\dark.png" />
+    <Resource Include="Images\data.png" />
+    <Resource Include="Images\datashapes.png" />
+    <Resource Include="Images\duplicatescene.png" />
+    <Resource Include="Images\earthy.png" />
+    <Resource Include="Images\earthy_theme.png" />
+    <Resource Include="Images\edit.png" />
+    <Resource Include="Images\erroricon.png" />
+    <Resource Include="Images\excel_16x16x32.png" />
+    <Resource Include="Images\fieldstab.png" />
+    <Resource Include="Images\filterdelete.png" />
+    <Resource Include="Images\filteredit.png" />
+    <Resource Include="Images\filteredit_disabled.png" />
+    <Resource Include="Images\filterfn.png" />
+    <Resource Include="Images\filtermode.png" />
+    <Resource Include="Images\filtermode_disabled.png" />
+    <Resource Include="Images\filterstab.png" />
+    <Resource Include="Images\find.png" />
+    <Resource Include="Images\findlocation.png" />
+    <Resource Include="Images\flatmap.png" />
+    <Resource Include="Images\fullscreen_disabled.png" />
+    <Resource Include="Images\fullscreen_hover.png" />
+    <Resource Include="Images\fullscreen_normal.png" />
+    <Resource Include="Images\fullscreen_pressed.png" />
+    <Resource Include="Images\greenpager16x16.png" />
+    <Resource Include="Images\greenpagerclick16x16.png" />
+    <Resource Include="Images\greenpagerdisabled16x16.png" />
+    <Resource Include="Images\greenpagerhover16x16.png" />
+    <Resource Include="Images\greenwind16x16.png" />
+    <Resource Include="Images\greenwindclick16x16.png" />
+    <Resource Include="Images\greenwinddisabled16x16.png" />
+    <Resource Include="Images\greenwindhover16x16.png" />
+    <Resource Include="Images\heatmap_gradient.png" />
+    <Resource Include="Images\heatmapviztype.png" />
+    <Resource Include="Images\help_disabled.png" />
+    <Resource Include="Images\help_hover.png" />
+    <Resource Include="Images\help_normal.png" />
+    <Resource Include="Images\help_pressed.png" />
+    <Resource Include="Images\highcontrast.png" />
+    <Resource Include="Images\image.png" />
+    <Resource Include="Images\insert.png" />
+    <Resource Include="Images\layersettingsribbon.png" />
+    <Resource Include="Images\layerstab.png" />
+    <Resource Include="Images\light.png" />
+    <Resource Include="Images\maptype_alt.png" />
+    <Resource Include="Images\maptype_flat.png" />
+    <Resource Include="Images\maptype_globe.png" />
+    <Resource Include="Images\maximize_disabled.png" />
+    <Resource Include="Images\maximize_hover.png" />
+    <Resource Include="Images\maximize_normal.png" />
+    <Resource Include="Images\maximize_pressed.png" />
+    <Resource Include="Images\minimize_disabled.png" />
+    <Resource Include="Images\minimize_hover.png" />
+    <Resource Include="Images\minimize_normal.png" />
+    <Resource Include="Images\minimize_pressed.png" />
+    <Resource Include="Images\modern.png" />
+    <Resource Include="Images\mono.png" />
+    <Resource Include="Images\nav_toggle_icon.png" />
+    <Resource Include="Images\newscene.png" />
+    <Resource Include="Images\organic.png" />
+    <Resource Include="Images\os_nav_up.png" />
+    <Resource Include="Images\os_nav_zoom_in.png" />
+    <Resource Include="Images\os_nav_zoom_out.png" />
+    <Resource Include="Images\pentagon.png" />
+    <Resource Include="Images\radiate.png" />
+    <Resource Include="Images\redo.png" />
+    <Resource Include="Images\redo_disabled.png" />
+    <Resource Include="Images\region.png" />
+    <Resource Include="Images\regionviztype.png" />
+    <Resource Include="Images\reset.png" />
+    <Resource Include="Images\reset_view_icon.png" />
+    <Resource Include="Images\RTL\100\filterfn.png" />
+    <Resource Include="Images\RTL\100\taskpanes.png" />
+    <Resource Include="Images\RTL\100\tourpane.png" />
+    <Resource Include="Images\RTL\200\taskpanes.png" />
+    <Resource Include="Images\RTL\200\tourpane.png" />
+    <Resource Include="Images\scenesettingsribbon.png" />
+    <Resource Include="Images\search.png" />
+    <Resource Include="Images\searchclear.png" />
+    <Resource Include="Images\sendasmile.png" />
+    <Resource Include="Images\settingstab.png" />
+    <Resource Include="Images\square.png" />
+    <Resource Include="Images\stackedbars.png" />
+    <Resource Include="Images\stackedcolumns.png" />
+    <Resource Include="Images\topbottomarrows.png" />
+    <Resource Include="Images\triangle.png" />
+    <Resource Include="Images\undo.png" />
+    <Resource Include="Images\undo_disabled.png" />
+    <Resource Include="Images\view.png" />
+    <Resource Include="Images\whitewash.png" />
+    <Resource Include="Images\zoom_selection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="Styles\ChartStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ChromeButtonBaseStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ChromeButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Constants.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ControlBaseStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DefaultTemplateBindings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\DialogStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\EnumTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\FieldlistStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GeoFlowDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\GeoFlowMetro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Includes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\MetroRibbon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\PlaybackControlStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\RangeSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\RedlineBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ScrubberStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TimeStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\TourEditorStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\HighContrast.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Standard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\StaticallyThemedTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddChartDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddFilterSelectionDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddLabelDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AnnotationPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AnnotationDialogContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChartDecoratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ColorPickerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CompletionStatsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateVideo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateVideoTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomSpaceGalleryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomSpaceSettingsDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChromelessWindowBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomSpaceSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DateTimeEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DecoratorCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DecoratorLayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DecoratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditLabelDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditTimeDecoratorDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExpressionFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldListPickerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldWellEntryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldWellGeographyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldWellSummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FieldWellVisualizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindLocationDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GeoFieldMappingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GlobeNavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GlobeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LabelDecoratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayerChooserRenamer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayerLegendDecoratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayerListEntryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayerSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ListFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopupAggregationButtonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RangeFilterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SceneView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectionStatsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SceneSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TableFieldToolTipView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanelFieldsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanelFiltersTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TableIslandView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HostControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GeocodingReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransitionDurationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TourEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TourPlayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TimeSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TimeScrubberView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TimeDecoratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TextFormatEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanelSettingsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TaskPanelLayersTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualizationCommon\VisualizationCommon.csproj">
+      <Project>{6b90f178-fdd7-4c53-8051-bac67826abcd}</Project>
+      <Name>VisualizationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
+      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
+      <Name>VisualizationDirectX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationEngine\VisualizationEngine.csproj">
+      <Project>{dec678b4-bd56-4b70-b7e5-de225d990df7}</Project>
+      <Name>VisualizationEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationGraphics\VisualizationGraphics.csproj">
+      <Project>{e0825ee8-f343-469e-81c1-29fdcf6129d6}</Project>
+      <Name>VisualizationGraphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfExtensions\WpfExtensions.csproj">
+      <Project>{b7db4cf5-202a-4218-b42a-b7f9aecf7a36}</Project>
+      <Name>WpfExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

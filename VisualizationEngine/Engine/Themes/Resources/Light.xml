@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://microsoft.data.visualization.engine.Theme/1.0">
+
+  <!-- Color Gray -->
+
+  <!-- Default directional light -->
+  <Lighting>
+    <DirectionalLightPosition>
+      <X>-.25</X>
+      <Y>.5</Y>
+      <Z>-1</Z>
+    </DirectionalLightPosition>
+    <PointLightPosition>
+      <X>.25</X>
+      <Y>-.5</Y>
+      <Z>-.5</Z>
+    </PointLightPosition>
+    <PointLightAttenuationFactor>0.001</PointLightAttenuationFactor>
+    <AmbientLightFactor>0.5</AmbientLightFactor>
+    <SecondaryAmbientLightFactor>.5</SecondaryAmbientLightFactor>
+    <DirectionalLightFactor>0.9</DirectionalLightFactor>
+    <PointLightFactor>0.5</PointLightFactor>
+  </Lighting>
+
+  <!-- Background color is a linear gradient (top to bottom): RGB  to RGB  -->
+  <BackgroundTopColor>
+    <R>0.929411765</R>
+    <G>0.929411765</G>
+    <B>0.929411765</B>
+    <A>1</A>
+  </BackgroundTopColor>
+  <BackgroundBottomColor>
+    <R>0.823529412</R>
+    <G>0.823529412</G>
+    <B>0.823529412</B>
+    <A>1</A>
+  </BackgroundBottomColor>
+
+  <GlobeGlowEnabled>false</GlobeGlowEnabled>
+  <GlobeGlowColor>
+    <R>0.2</R>
+    <G>0.2</G>
+    <B>0.2</B>
+    <A>1</A>
+  </GlobeGlowColor>
+  <GlobeGlowReflectanceIndex>0.001</GlobeGlowReflectanceIndex>
+  <GlobeGlowPower>90</GlobeGlowPower>
+  <GlobeGlowFactor>0.9</GlobeGlowFactor>
+
+  <!-- Globe treatment -->
+  <ColorOperations>
+
+    <HueTransform>
+      <HueRotation>180</HueRotation>
+    </HueTransform>
+    <SaturationTransform>
+      <Saturation>0</Saturation>
+    </SaturationTransform>
+
+
+
+  </ColorOperations>
+
+  <!-- Shadow Color -->
+  <ShadowColor>
+    <R>0</R>
+    <G>0</G>
+    <B>0</B>
+    <A>0.2</A>
+  </ShadowColor>
+
+  <!-- Outline parameters -->
+  <LayerParameters>
+    <InnerOutlineColor>
+      <R>1</R>
+      <G>1</G>
+      <B>1</B>
+      <A>1</A>
+    </InnerOutlineColor>
+    <OuterOutlineColor>
+      <R>0</R>
+      <G>0</G>
+      <B>0</B>
+      <A>1</A>
+    </OuterOutlineColor>
+    <OutlineWidth>2</OutlineWidth>
+    <OutlineOffset>0</OutlineOffset>
+  </LayerParameters>
+
+  <!-- Data Color Steps,  -->
+<ColorsForVisuals>
+    <Color>
+      <R>0.133333</R>
+      <G>0.411765</G>
+      <B>0.690196</B>
+      <A>1</A>
+    </Color>
+    <Color>
+      <R>0.960784</R>
+      <G>0.541176</G>
+      <B>0.07451</B>
+      <A>1</A>
+    </Color>
+    <Color>
+      <R>0.478431</R>
+      <G>0.141176</G>
+      <B>0.690196</B>
+      <A>1</A>
+    </Color>
+    <Color>
+      <R>1</R>
+      <G>0.760784</G>
+      <B>0.109804</B>
+      <A>1</A>
+    </Color>
+    <Color>
+      <R>0.113725</R>
+      <G>0.572549</G>
+      <B>0.109804</B>
+      <A>1</A>
+    </Color>
+    <Color>
+      <R>0.992157</R>
+      <G>0.231373</G>
+      <B>0.07451</B>
+      <A>1</A>
+    </Color>
+
+  </ColorsForVisuals>
+  <ColorStepsForVisuals>
+    <Step> 1.0 </Step>
+    <Step> 0.5 </Step>
+    <Step> 1.2 </Step>
+    <Step> 0.65 </Step>
+    <Step> 1.35 </Step>
+    <Step> 0.70 </Step>
+    <Step> 1.30 </Step>
+    <Step> 0.75 </Step>
+    <Step> 1.25 </Step>
+    <Step> 0.80 </Step>
+    <Step> 1.20 </Step>
+    <Step> 0.85 </Step>
+    <Step> 1.15 </Step>
+  </ColorStepsForVisuals>
+
+  <!--Visual Width Factor -->
+
+  <InstanceVisualWidthFactor>
+    0.8
+  </InstanceVisualWidthFactor>
+
+</Theme>

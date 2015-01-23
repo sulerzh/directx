@@ -1,0 +1,2762 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AggregationFunction_Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="AggregationFunction_Count" xml:space="preserve">
+    <value>Count (Not Blank)</value>
+  </data>
+  <data name="AggregationFunction_CountParenthesized" xml:space="preserve">
+    <value>Count - Not Blank</value>
+  </data>
+  <data name="AggregationFunction_DistinctCount" xml:space="preserve">
+    <value>Count (Distinct)</value>
+  </data>
+  <data name="AggregationFunction_DistinctCountParenthesized" xml:space="preserve">
+    <value>Count - Distinct</value>
+  </data>
+  <data name="AggregationFunction_Max" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="AggregationFunction_Min" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="AggregationFunction_None" xml:space="preserve">
+    <value>No Aggregation</value>
+  </data>
+  <data name="AggregationFunction_Sum" xml:space="preserve">
+    <value>Sum</value>
+  </data>
+  <data name="AggregationFunction_UserDefined" xml:space="preserve">
+    <value>User Defined</value>
+  </data>
+  <data name="AnnotationDialog_AddAnnotation" xml:space="preserve">
+    <value>Add Annotation</value>
+  </data>
+  <data name="AnnotationDialog_ContentPreviewTooltip" xml:space="preserve">
+    <value>Preview of the annotation.</value>
+  </data>
+  <data name="AnnotationDialog_CustomDescriptionTooltip" xml:space="preserve">
+    <value>Custom Description</value>
+  </data>
+  <data name="AnnotationDialog_CustomTitleTooltip" xml:space="preserve">
+    <value>Custom Title</value>
+  </data>
+  <data name="AnnotationDialog_Description" xml:space="preserve">
+    <value>DESCRIPTION</value>
+  </data>
+  <data name="AnnotationDialog_DescriptionTooltip" xml:space="preserve">
+    <value>Add a description to the annotation.</value>
+  </data>
+  <data name="AnnotationDialog_DisplayedValue" xml:space="preserve">
+    <value>Displayed Value</value>
+  </data>
+  <data name="AnnotationDialog_EditAnnotation" xml:space="preserve">
+    <value>Edit Annotation</value>
+  </data>
+  <data name="AnnotationDialog_FieldDescriptionTooltip" xml:space="preserve">
+    <value>Pick the fields for the description or click Custom to enter your own text. To use a picture, pick a size, and then click Load Picture.</value>
+  </data>
+  <data name="AnnotationDialog_FieldsTooltip" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="AnnotationDialog_FieldTitleTooltip" xml:space="preserve">
+    <value>Pick a field to use for the title or click custom to enter your own.</value>
+  </data>
+  <data name="AnnotationDialog_InstructionText" xml:space="preserve">
+    <value>Choose data fields you would like to add, or type your own.</value>
+  </data>
+  <data name="AnnotationDialog_PictureTooltip" xml:space="preserve">
+    <value>Add a picture to your annotation.</value>
+  </data>
+  <data name="AnnotationDialog_Title" xml:space="preserve">
+    <value>TITLE</value>
+  </data>
+  <data name="AnnotationDialog_TitleTooltip" xml:space="preserve">
+    <value>Add a title to the annotation.</value>
+  </data>
+  <data name="AnnotationFieldTemplate" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AnnotationImageLoadLabel" xml:space="preserve">
+    <value>Load Image</value>
+  </data>
+  <data name="AnnotationImageSizeLabel" xml:space="preserve">
+    <value>Image Size</value>
+  </data>
+  <data name="AnnotationImageSizeLarge" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="AnnotationImageSizeMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="AnnotationImageSizeSmall" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="AnnotationImageSizeXLarge" xml:space="preserve">
+    <value>Extra Large</value>
+  </data>
+  <data name="AnnotationSelectImageFilterAllSupportedGraphics" xml:space="preserve">
+    <value>All Supported Graphics</value>
+  </data>
+  <data name="AnnotationSelectImageFilterJPEG" xml:space="preserve">
+    <value>JPEG File Interchange Format (*.jpg;*.jpeg)</value>
+  </data>
+  <data name="AnnotationSelectImageFilterPortableNetworkGraphic" xml:space="preserve">
+    <value>Portable Network Graphic (*.png)</value>
+  </data>
+  <data name="AnnotationSelectImageTitle" xml:space="preserve">
+    <value>Select an Image</value>
+  </data>
+  <data name="AnnotationTitleTemplate" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="AnnotationTypeCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="AnnotationTypeFields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="AnnotationTypeImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Annotation_ContentPreview" xml:space="preserve">
+    <value>CONTENT PREVIEW:</value>
+  </data>
+  <data name="AudioSelectionDialog_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="AudioSelectionDialog_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AudioSelectionDialog_ChooseAnotherFileButtonText" xml:space="preserve">
+    <value>Choose Another File</value>
+  </data>
+  <data name="AudioSelectionDialog_Done" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="AudioSelectionDialog_FadeIn" xml:space="preserve">
+    <value>Fade in soundtrack</value>
+  </data>
+  <data name="AudioSelectionDialog_FadeOut" xml:space="preserve">
+    <value>Fade out soundtrack</value>
+  </data>
+  <data name="AudioSelectionDialog_FilePickerTitle" xml:space="preserve">
+    <value>Choose Soundtrack</value>
+  </data>
+  <data name="AudioSelectionDialog_Loop" xml:space="preserve">
+    <value>Loop soundtrack until the video is finished</value>
+  </data>
+  <data name="AudioSelectionDialog_Options" xml:space="preserve">
+    <value>Options:</value>
+  </data>
+  <data name="AudioSelectionDialog_SelectSoundtrack" xml:space="preserve">
+    <value>Choose a soundtrack:</value>
+  </data>
+  <data name="AudioSelectionDialog_SoundtrackLength" xml:space="preserve">
+    <value>Soundtrack length:</value>
+  </data>
+  <data name="AudioSelectionDialog_Subtitle" xml:space="preserve">
+    <value>This will add a soundtrack to your video.</value>
+  </data>
+  <data name="AudioSelectionDialog_Title" xml:space="preserve">
+    <value>Soundtrack Options</value>
+  </data>
+  <data name="AudioSelectionDialog_UnsupportedAudioFormatErrorCaption" xml:space="preserve">
+    <value>Unsupported Soundtrack</value>
+  </data>
+  <data name="AudioSelectionDialog_UnsupportedAudioFormatErrorMessage" xml:space="preserve">
+    <value>Power Map can't use this soundtrack. Make sure the soundtrack doesn't have digital rights management protection and is an .mp3, .mp4, .wma, .wav, or .m4a file.</value>
+  </data>
+  <data name="AudioSelectionDialog_VideoLength" xml:space="preserve">
+    <value>Video length:</value>
+  </data>
+  <data name="ChartDecorator_ChangeTypeTooltip" xml:space="preserve">
+    <value>Change the chart type</value>
+  </data>
+  <data name="ChartDecorator_SortByTooltip" xml:space="preserve">
+    <value>Sort by top or bottom 100 locations.</value>
+  </data>
+  <data name="ChartDialog_Information" xml:space="preserve">
+    <value>The chart will show the layer's locations by value.</value>
+  </data>
+  <data name="ChartDialog_Instruction" xml:space="preserve">
+    <value>Choose the layer you would like to base your chart upon.</value>
+  </data>
+  <data name="ChartDialog_Title" xml:space="preserve">
+    <value>Insert Top/Bottom 100 Chart</value>
+  </data>
+  <data name="ChartGeoDisplayString" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="ChartSubTitle_Bottom100Locations" xml:space="preserve">
+    <value>Bottom 100 Locations</value>
+  </data>
+  <data name="ChartSubTitle_Connector" xml:space="preserve">
+    <value> by </value>
+  </data>
+  <data name="ChartSubTitle_ConnectorPosition" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ChartSubTitle_OrderDDPosition" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ChartSubTitle_SortDDPosition" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ChartSubTitle_Top100Locations" xml:space="preserve">
+    <value>Top 100 Locations</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountFive" xml:space="preserve">
+    <value>{0}, {1}, {2}, {3}, and {4} by {5}</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountFour" xml:space="preserve">
+    <value>{0}, {1}, {2}, and {3} by {4}</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountMoreThanFive" xml:space="preserve">
+    <value>{0}, {1}, {2}, {3}, {4} ... by {5}</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountOne" xml:space="preserve">
+    <value>{0} by {1}</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountThree" xml:space="preserve">
+    <value>{0}, {1}, and {2} by {3}</value>
+  </data>
+  <data name="ChartTitle_FormatValueCountTwo" xml:space="preserve">
+    <value>{0} and {1} by {2}</value>
+  </data>
+  <data name="ChartTitle_WithExplicitHeight" xml:space="preserve">
+    <value>{0} by {1} and {2}</value>
+  </data>
+  <data name="ChartTitle_WithImplicitHeight" xml:space="preserve">
+    <value>{0} by {1}</value>
+  </data>
+  <data name="ColorPicker_MoreColorsLabel" xml:space="preserve">
+    <value>More Colors...</value>
+  </data>
+  <data name="ColorPicker_ResetSelectedColorLabel" xml:space="preserve">
+    <value>Reset Color</value>
+  </data>
+  <data name="ColorPicker_StandardColorsHeaderLabel" xml:space="preserve">
+    <value>Standard Colors</value>
+  </data>
+  <data name="ColorPicker_ThemeColorsHeaderLabel" xml:space="preserve">
+    <value>Theme Colors</value>
+  </data>
+  <data name="Color_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="Color_Blue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="Color_DarkerFormat" xml:space="preserve">
+    <value>{0}, Darker {1}%</value>
+  </data>
+  <data name="Color_DarkRed" xml:space="preserve">
+    <value>Dark Red</value>
+  </data>
+  <data name="Color_DeepRed" xml:space="preserve">
+    <value>Deep Red</value>
+  </data>
+  <data name="Color_Green" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="Color_LightBlue" xml:space="preserve">
+    <value>Light Blue</value>
+  </data>
+  <data name="Color_LighterFormat" xml:space="preserve">
+    <value>{0}, Lighter {1}%</value>
+  </data>
+  <data name="Color_Navy" xml:space="preserve">
+    <value>Navy</value>
+  </data>
+  <data name="Color_Orange" xml:space="preserve">
+    <value>Orange</value>
+  </data>
+  <data name="Color_OrangeRed" xml:space="preserve">
+    <value>Orange Red</value>
+  </data>
+  <data name="Color_Purple" xml:space="preserve">
+    <value>Purple</value>
+  </data>
+  <data name="Color_Red" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Color_Teal" xml:space="preserve">
+    <value>Teal</value>
+  </data>
+  <data name="Color_Violet" xml:space="preserve">
+    <value>Violet</value>
+  </data>
+  <data name="Color_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="Color_Yellow" xml:space="preserve">
+    <value>Yellow</value>
+  </data>
+  <data name="Color_YellowGreen" xml:space="preserve">
+    <value>Yellow Green</value>
+  </data>
+  <data name="Command_ShowAllLegends" xml:space="preserve">
+    <value>Legend</value>
+  </data>
+  <data name="Context_AddAnnotation" xml:space="preserve">
+    <value>Add Annotation</value>
+  </data>
+  <data name="Context_AddChart" xml:space="preserve">
+    <value>Add Chart</value>
+  </data>
+  <data name="Context_AddLabel" xml:space="preserve">
+    <value>Add Label</value>
+  </data>
+  <data name="Context_AddLegend" xml:space="preserve">
+    <value>Add Legend</value>
+  </data>
+  <data name="Context_AddLegendForCurrentLayer" xml:space="preserve">
+    <value>Add Legend for Current Layer</value>
+  </data>
+  <data name="Context_AddTextBox" xml:space="preserve">
+    <value>Add Text Box</value>
+  </data>
+  <data name="Context_EditAnnotation" xml:space="preserve">
+    <value>Edit Annotation</value>
+  </data>
+  <data name="Context_RemoveAnnotation" xml:space="preserve">
+    <value>Remove Annotation</value>
+  </data>
+  <data name="CreateVideo_1080p" xml:space="preserve">
+    <value>Presentations &amp; HD Displays</value>
+  </data>
+  <data name="CreateVideo_360p" xml:space="preserve">
+    <value>Quick Export &amp; Mobile</value>
+  </data>
+  <data name="CreateVideo_720p" xml:space="preserve">
+    <value>Computers &amp; Tablets</value>
+  </data>
+  <data name="CreateVideo_AudioEncodingErrorCaption" xml:space="preserve">
+    <value>Can't use this soundtrack</value>
+  </data>
+  <data name="CreateVideo_AudioEncodingErrorMessage" xml:space="preserve">
+    <value>Sorry, we can't use this soundtrack. This may be because the soundtrack is corrupted or has been moved or deleted.</value>
+  </data>
+  <data name="CreateVideo_CancelDialogCaption" xml:space="preserve">
+    <value>Cancel Video Creation</value>
+  </data>
+  <data name="CreateVideo_CancelDialogText" xml:space="preserve">
+    <value>Are you sure you want to cancel video creation?</value>
+  </data>
+  <data name="CreateVideo_ConfigureSoundtrackButtonText" xml:space="preserve">
+    <value>Soundtrack Options</value>
+  </data>
+  <data name="CreateVideo_Description1080p" xml:space="preserve">
+    <value>For best viewing on high definition displays and presentations.
+1080p</value>
+  </data>
+  <data name="CreateVideo_Description360p" xml:space="preserve">
+    <value>A smaller video for quick exporting and sharing on mobile devices.
+360p</value>
+  </data>
+  <data name="CreateVideo_Description720p" xml:space="preserve">
+    <value>For best viewing on computer monitors and tablets.
+720p</value>
+  </data>
+  <data name="CreateVideo_DialogDescription" xml:space="preserve">
+    <value>This will create a video from your tour, allowing you to easily share it with others.</value>
+  </data>
+  <data name="CreateVideo_DialogInstruction" xml:space="preserve">
+    <value>Please choose a quality for your video:</value>
+  </data>
+  <data name="CreateVideo_DialogTitle" xml:space="preserve">
+    <value>Create Video</value>
+  </data>
+  <data name="CreateVideo_FilePickerTitle" xml:space="preserve">
+    <value>Save Movie</value>
+  </data>
+  <data name="CreateVideo_FileTypes" xml:space="preserve">
+    <value>Video Files (*.MP4)|*.mp4</value>
+  </data>
+  <data name="CreateVideo_MediaFoundationMissingDialogCaption" xml:space="preserve">
+    <value>Can't Create Video</value>
+  </data>
+  <data name="CreateVideo_MediaFoundationMissingDialogText" xml:space="preserve">
+    <value>Make sure Microsoft Media Foundation is installed.</value>
+  </data>
+  <data name="CreateVideo_MinSecFormat" xml:space="preserve">
+    <value>{0} min, {1} sec</value>
+  </data>
+  <data name="CreateVideo_NoAudioSelected" xml:space="preserve">
+    <value>None selected</value>
+  </data>
+  <data name="CreateVideo_OpenFailedCaption" xml:space="preserve">
+    <value>Failed to open the video file</value>
+  </data>
+  <data name="CreateVideo_OpenFailedDialogText" xml:space="preserve">
+    <value>Looks like the video file that you tried to open was moved or deleted from this folder.</value>
+  </data>
+  <data name="CreateVideo_ProgressTitle" xml:space="preserve">
+    <value>Creating Video</value>
+  </data>
+  <data name="CreateVideo_RemoveSoundtrackButtonText" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="CreateVideo_SelectedSoundtrack" xml:space="preserve">
+    <value>Soundtrack:</value>
+  </data>
+  <data name="CreateVideo_StatusCancelling" xml:space="preserve">
+    <value>Cancelling video creation process...</value>
+  </data>
+  <data name="CreateVideo_StatusCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="CreateVideo_StatusFailed" xml:space="preserve">
+    <value>An error occurred while creating the video.</value>
+  </data>
+  <data name="CreateVideo_StatusInProgress" xml:space="preserve">
+    <value>Creating your video. This could take a few minutes...</value>
+  </data>
+  <data name="CreateVideo_SupportedAudioFormatFilter" xml:space="preserve">
+    <value>|*.MP4;*.MP3;*.WMA;*.WAV;*.M4A</value>
+  </data>
+  <data name="CreateVideo_SupportedAudioFormats" xml:space="preserve">
+    <value>Audio Files (*.MP4;*.MP3;*.WMA;*.WAV;*.M4A)</value>
+  </data>
+  <data name="CreateVideo_VideoFileMissingError" xml:space="preserve">
+    <value>An error occurred while creating the video. The video file may have been deleted or moved.</value>
+  </data>
+  <data name="CustomSpaceGallery_CreateNewMap" xml:space="preserve">
+    <value>Scene Background</value>
+  </data>
+  <data name="CustomSpaceGallery_DeleteMapText" xml:space="preserve">
+    <value>If you delete this, it can't be undone and may affect other scenes and tours. Continue?</value>
+  </data>
+  <data name="CustomSpaceGallery_DeleteMap_Desc" xml:space="preserve">
+    <value>Delete Custom Map</value>
+  </data>
+  <data name="CustomSpaceGallery_DialogTitle" xml:space="preserve">
+    <value>Change Map Type</value>
+  </data>
+  <data name="CustomSpaceGallery_DialogTitleNewScene" xml:space="preserve">
+    <value>New Scene</value>
+  </data>
+  <data name="CustomSpaceGallery_DuplicateScene" xml:space="preserve">
+    <value>Copy Scene {0}</value>
+  </data>
+  <data name="CustomSpaceGallery_DuplicateSceneDesc" xml:space="preserve">
+    <value>Make a copy of the active scene.</value>
+  </data>
+  <data name="CustomSpaceGallery_EarthMapName" xml:space="preserve">
+    <value>World Map</value>
+  </data>
+  <data name="CustomSpaceGallery_EarthMapName_CreateDesc" xml:space="preserve">
+    <value>Make a new scene with a world background.</value>
+  </data>
+  <data name="CustomSpaceGallery_EarthMapName_SelectDesc" xml:space="preserve">
+    <value>Change the active scene background to world.</value>
+  </data>
+  <data name="CustomSpaceGallery_EditMap_Desc" xml:space="preserve">
+    <value>Edit custom map</value>
+  </data>
+  <data name="CustomSpaceGallery_NewCustomMap" xml:space="preserve">
+    <value>New Custom Map</value>
+  </data>
+  <data name="CustomSpaceGallery_NewCustomMap_CreateDesc" xml:space="preserve">
+    <value>Make a new scene with a new picture background.</value>
+  </data>
+  <data name="CustomSpaceGallery_NewCustomMap_SelectDesc" xml:space="preserve">
+    <value>Change the active scene background to a picture.</value>
+  </data>
+  <data name="CustomSpaceGallery_SelectCustomMap_CreateDesc" xml:space="preserve">
+    <value>Make a new scene using {0}</value>
+  </data>
+  <data name="CustomSpaceGallery_SelectCustomMap_SelectDesc" xml:space="preserve">
+    <value>Change the active scene background to {0}.</value>
+  </data>
+  <data name="CustomSpaceSettings_AxisX_Title" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="CustomSpaceSettings_AxisX_Tooltip" xml:space="preserve">
+    <value>X coordinate</value>
+  </data>
+  <data name="CustomSpaceSettings_AxisY_Title" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="CustomSpaceSettings_AxisY_Tooltip" xml:space="preserve">
+    <value>Y coordinate</value>
+  </data>
+  <data name="CustomSpaceSettings_BackgroundName_Tooltip" xml:space="preserve">
+    <value>Give the custom map a name.</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnFlip_Title" xml:space="preserve">
+    <value>Flip Axis</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnFlip_Tooltip" xml:space="preserve">
+    <value>Flips the order of data in the axis, changing the location of 0,0 on the map.</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnMax_Title" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnMax_Tooltip" xml:space="preserve">
+    <value>Enter the maximum values for the coordinates.</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnMin_Title" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnMin_Tooltip" xml:space="preserve">
+    <value>Enter the minimum values for the coordinates.</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnOffset_Title" xml:space="preserve">
+    <value>Offset %</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnOffset_Tooltip" xml:space="preserve">
+    <value>Shifts the data left, right, up, or down by a percentage of its length. Enter a positive number to move the data in a positive direction.</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnScale_Title" xml:space="preserve">
+    <value>Scale %</value>
+  </data>
+  <data name="CustomSpaceSettings_ColumnScale_Tooltip" xml:space="preserve">
+    <value>Stretches or shrinks the data displayed over the map. Values between 0% and 100% shrink the height, thickness, or intensity; values larger than 100% stretch them.</value>
+  </data>
+  <data name="CustomSpaceSettings_DialogIntroText" xml:space="preserve">
+    <value>Adjust the coordinates to better fit your data to the map.</value>
+  </data>
+  <data name="CustomSpaceSettings_DialogTitle" xml:space="preserve">
+    <value>Custom Map Options</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_AutoFitButton" xml:space="preserve">
+    <value>Auto Fit</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_FlipXCheckBox" xml:space="preserve">
+    <value>Flip X Axis</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_FlipYCheckBox" xml:space="preserve">
+    <value>Flip Y Axis</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_IsLockedCheckBox" xml:space="preserve">
+    <value>Is Locked</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_MapNameTextBox" xml:space="preserve">
+    <value>Custom Map name Textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_MaxXTextBox" xml:space="preserve">
+    <value>X Axis Maximum value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_MaxYTextBox" xml:space="preserve">
+    <value>Y Axis Maximum value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_MinXTextBox" xml:space="preserve">
+    <value>X Axis Minimum value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_MinYTextBox" xml:space="preserve">
+    <value>Y Axis Minimum value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_OffsetXTextBox" xml:space="preserve">
+    <value>X Axis Offset value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_OffsetYTextBox" xml:space="preserve">
+    <value>Y Axis Offset value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_ScaleXTextBox" xml:space="preserve">
+    <value>X Axis Scale value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_Narrator_ScaleYTextBox" xml:space="preserve">
+    <value>Y Axis Scale value textbox</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionAutoDetect_Title" xml:space="preserve">
+    <value>Auto detect X and Y values from my data</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionAutoDetect_Tooltip" xml:space="preserve">
+    <value>Automatically detects the minimum and maximum values for the X and Y axis from your data.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionAutoFit_Desc" xml:space="preserve">
+    <value>Get the best fit based on your current data.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionAutoFit_Title" xml:space="preserve">
+    <value>Auto Fit</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionAutoFit_Tooltip" xml:space="preserve">
+    <value>Automatically detects the minimum and maximum values for the X and Y axis from your data.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionImage_Desc" xml:space="preserve">
+    <value>Browse for the background picture.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionImage_Header" xml:space="preserve">
+    <value>Picture Name</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionImage_Tooltip" xml:space="preserve">
+    <value>Import a picture as a background map for your data.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionIsLocked_Title" xml:space="preserve">
+    <value>Lock current coordinate values.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionIsLocked_Tooltip" xml:space="preserve">
+    <value>Locks the values of the current coordinates.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionPixelSpaceButton_Title" xml:space="preserve">
+    <value>Pixel Space</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionPixelSpace_Title" xml:space="preserve">
+    <value>Pixel space of picture</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionPixelSpace_Tooltip" xml:space="preserve">
+    <value>Aligns the coordinates to the pixels’ positions on the map.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionSwapXY_Title" xml:space="preserve">
+    <value>Swap the X and Y axis.</value>
+  </data>
+  <data name="CustomSpaceSettings_OptionSwapXY_Tooltip" xml:space="preserve">
+    <value>Swaps the data over the axis. Data being mapped on the X axis moves to the Y axis and vice versa.</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageErrorCouldntLoad" xml:space="preserve">
+    <value>Power Map can't use this picture. It may be damaged, or might have been moved or deleted.</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageErrorTitle" xml:space="preserve">
+    <value>Picture cannot be used</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageErrorTooBig" xml:space="preserve">
+    <value>Power Map can't use this picture because it's too big. Make sure it's no larger than 4096 pixels on any side.</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageFilter" xml:space="preserve">
+    <value>Common Picture Types ({0})|{0}|All Files (*.*)|*.*</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageTitle" xml:space="preserve">
+    <value>Choose picture</value>
+  </data>
+  <data name="CustomSpaceSettings_SelectImageTypes" xml:space="preserve">
+    <value>*.JPG;*.PNG;*.GIF;*.JPEG;*.BMP;*.JFIF;*.JPE;*.DIB;*.RLE;*.GIF;*.TIF;*.TIFF</value>
+  </data>
+  <data name="CustomSpace_DefaultImageTitle" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="CustomSpace_DefaultMapTitle" xml:space="preserve">
+    <value>Custom Map {0}</value>
+  </data>
+  <data name="CustomSpace_DefaultMapTitle_Generic" xml:space="preserve">
+    <value>Custom Map</value>
+  </data>
+  <data name="DecoratorCommand_BringForward" xml:space="preserve">
+    <value>Bring Forward</value>
+  </data>
+  <data name="DecoratorCommand_BringToFront" xml:space="preserve">
+    <value>Bring To Front</value>
+  </data>
+  <data name="DecoratorCommand_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DecoratorCommand_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="DecoratorCommand_SendBack" xml:space="preserve">
+    <value>Send Backward</value>
+  </data>
+  <data name="DecoratorCommand_SendToBack" xml:space="preserve">
+    <value>Send To Back</value>
+  </data>
+  <data name="Decorator_CloseTooltip" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="DefaultTourDescription" xml:space="preserve">
+    <value>Some description for the tour goes here</value>
+  </data>
+  <data name="DeleteLayerDialog_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteLayerDialog_Description" xml:space="preserve">
+    <value>Are you sure you want to delete this layer?  This operation cannot be undone.  </value>
+  </data>
+  <data name="DeleteLayerDialog_Title" xml:space="preserve">
+    <value>Delete Layer</value>
+  </data>
+  <data name="Dialog_AcceptTooltip" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Dialog_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Dialog_Apply_Tooltip" xml:space="preserve">
+    <value>Apply changes.</value>
+  </data>
+  <data name="Dialog_CancelText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog_CancelTooltip" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog_CloseText" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Dialog_CloseTooltip" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Dialog_CreateText" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Dialog_CreateTooltip" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Dialog_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Dialog_Done_Tooltip" xml:space="preserve">
+    <value>Apply changes and close this dialog.</value>
+  </data>
+  <data name="Dialog_OkayText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dialog_OkTooltip" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dialog_OpenText" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Dialog_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="EditLabelDialog_Title" xml:space="preserve">
+    <value>Edit Text Box</value>
+  </data>
+  <data name="EditTimeDecoratorDialog_ContentPreviewTooltip" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="EditTimeDecoratorDialog_Format" xml:space="preserve">
+    <value>Time Format</value>
+  </data>
+  <data name="EditTimeDecoratorDialog_TimeFormatTooltip" xml:space="preserve">
+    <value>Change the time format.</value>
+  </data>
+  <data name="EditTimeDecoratorDialog_Title" xml:space="preserve">
+    <value>Edit Time Decorator</value>
+  </data>
+  <data name="FieldListPicker_ChooseGeographyHeader" xml:space="preserve">
+    <value>Geography</value>
+  </data>
+  <data name="FieldListPicker_City_Duplicate" xml:space="preserve">
+    <value>The City geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_Country_Duplicate" xml:space="preserve">
+    <value>The Country/Region geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_County_Duplicate" xml:space="preserve">
+    <value>The County geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_FieldListErrorHeader" xml:space="preserve">
+    <value>Field list error</value>
+  </data>
+  <data name="FieldListPicker_FullAddress_Duplicate" xml:space="preserve">
+    <value>The Full Address geography type should be selected only once.</value>
+  </data>
+  <data name="FieldListPicker_FullAddress_Other" xml:space="preserve">
+    <value>The Full Address geography type has been selected with other geography types. Only Full Address will be used to map the data.</value>
+  </data>
+  <data name="FieldListPicker_GeographyTypeTooltip" xml:space="preserve">
+    <value>Pick a geographical type for each field that's shown on the map.</value>
+  </data>
+  <data name="FieldListPicker_GeoMustBeInSameTableIsland" xml:space="preserve">
+    <value>All the fields selected for the geography must be in the same table island.</value>
+  </data>
+  <data name="FieldListPicker_Instruction_ChooseGeographyField" xml:space="preserve">
+    <value>Choose the field(s) that make up the geography you would like to visualize.</value>
+  </data>
+  <data name="FieldListPicker_Instruction_ChooseVisualizationField" xml:space="preserve">
+    <value>Choose which fields you would like to visualize.</value>
+  </data>
+  <data name="FieldListPicker_Latitude_Duplicate" xml:space="preserve">
+    <value>The Latitude geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_Latitude_Needed" xml:space="preserve">
+    <value>The Longitude geography type has been selected. The Latitude geography type must also be selected.</value>
+  </data>
+  <data name="FieldListPicker_Lat_Lon_Other" xml:space="preserve">
+    <value>The Latitude, Longitude and other geography types have been selected. Only Latitude and Longitude will be used to map the data.</value>
+  </data>
+  <data name="FieldListPicker_Longitude_Duplicate" xml:space="preserve">
+    <value>The Longitude geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_Longitude_Needed" xml:space="preserve">
+    <value>The Latitude geography type has been selected. The Longitude geography type must also be selected.</value>
+  </data>
+  <data name="FieldListPicker_NextTooltip" xml:space="preserve">
+    <value>Map the selected field values.</value>
+  </data>
+  <data name="FieldListPicker_OtherLocationDescription_Duplicate" xml:space="preserve">
+    <value>The Other geography type should be selected only once.</value>
+  </data>
+  <data name="FieldListPicker_OtherLocationDescription_Other" xml:space="preserve">
+    <value>The Other geography type has been selected with other geography types.  The Other geography type will be used to map the data.</value>
+  </data>
+  <data name="FieldListPicker_Select_Geography" xml:space="preserve">
+    <value>Select a column with geography data.</value>
+  </data>
+  <data name="FieldListPicker_Set_Geography_Type" xml:space="preserve">
+    <value>A geography type has not been selected for a column.</value>
+  </data>
+  <data name="FieldListPicker_State_Duplicate" xml:space="preserve">
+    <value>The State geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_Street_Duplicate" xml:space="preserve">
+    <value>The Street geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_TableField_AddCategory" xml:space="preserve">
+    <value>Set as Category</value>
+  </data>
+  <data name="FieldListPicker_TableField_AddHeight" xml:space="preserve">
+    <value>Add to {0}</value>
+  </data>
+  <data name="FieldListPicker_TableField_AddTime" xml:space="preserve">
+    <value>Set as Time</value>
+  </data>
+  <data name="FieldListPicker_X_Duplicate" xml:space="preserve">
+    <value>The X geography type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_X_Needed" xml:space="preserve">
+    <value>The Y geography type has been selected. The X geography type must also be selected.</value>
+  </data>
+  <data name="FieldListPicker_X_Y_Other" xml:space="preserve">
+    <value>The X, Y and other geography types have been selected. Only X and Y will be used to map the data.</value>
+  </data>
+  <data name="FieldListPicker_Y_Duplicate" xml:space="preserve">
+    <value>The Y type should be selected only once</value>
+  </data>
+  <data name="FieldListPicker_Y_Needed" xml:space="preserve">
+    <value>The X type has been selected. The Y type must also be selected.</value>
+  </data>
+  <data name="FieldListPicker_Zip_Duplicate" xml:space="preserve">
+    <value>The Zip geography type should be selected only once</value>
+  </data>
+  <data name="FieldsTab_CategoryFieldWellTooltip" xml:space="preserve">
+    <value>Drag data fields you want to visualize as categories here.</value>
+  </data>
+  <data name="FieldsTab_EditTooltip" xml:space="preserve">
+    <value>Pick the geographical fields for this layer.</value>
+  </data>
+  <data name="FieldsTab_RegionShadingOptionsTooltip" xml:space="preserve">
+    <value>Change how regions are shaded for this layer.</value>
+  </data>
+  <data name="FieldsTab_TimeFieldWellTooltip" xml:space="preserve">
+    <value>Drag date and time fields here to animate your data over time.</value>
+  </data>
+  <data name="FieldsTab_TimeSettingsTooltip" xml:space="preserve">
+    <value>Change how the time animation is shown for this layer.</value>
+  </data>
+  <data name="FieldsTab_TypeTooltip" xml:space="preserve">
+    <value>Change the visualization type for this layer.</value>
+  </data>
+  <data name="FieldsTab_ValueFieldWellTooltip" xml:space="preserve">
+    <value>Drag data values you want to visualize here.</value>
+  </data>
+  <data name="FieldWellEntry_RemoveOption" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="FieldWellGeography_Background_Header" xml:space="preserve">
+    <value>Change Map Type</value>
+  </data>
+  <data name="FieldWellGeography_Background_Tooltip" xml:space="preserve">
+    <value>Change the scene's map type and insert an image as a background for your data.</value>
+  </data>
+  <data name="FieldWellGeography_ChooseGeographyHeader" xml:space="preserve">
+    <value>Choose Geography</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_Header" xml:space="preserve">
+    <value>Custom Map</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_NoTooltip" xml:space="preserve">
+    <value>Hide this option</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_Tooltip" xml:space="preserve">
+    <value>Change to a custom map?</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="FieldWellGeography_CustomMap_YesTooltip" xml:space="preserve">
+    <value>Change active scene's background</value>
+  </data>
+  <data name="FieldWellGeography_DuplicateFieldExists" xml:space="preserve">
+    <value>That field has already been added as a geography field.</value>
+  </data>
+  <data name="FieldWellGeography_MultipleCategoryResolutionNotSupported" xml:space="preserve">
+    <value>We cannot resolve for multiple categories. Please choose only one.</value>
+  </data>
+  <data name="FieldWellGeography_NextButtonText" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="FieldWellGeography_RegionChart_IncompatibleMappingType" xml:space="preserve">
+    <value>Region charts work with Country/Region, State/Province, County, or Zip/Postal Code data.</value>
+  </data>
+  <data name="FieldWellGeography_RegionChart_IncompatibleMappingType_Changed" xml:space="preserve">
+    <value>Region charts work with Country/Region, State/Province, County, or Zip/Postal Code data. The Chart Type has been changed to Column.</value>
+  </data>
+  <data name="FieldWellGeography_TitleText" xml:space="preserve">
+    <value>Geography and Map Level</value>
+  </data>
+  <data name="FieldWellHeightAggregatedNameFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="FieldWellSummary_EditButtonText" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="FieldWellSummary_MapByDisplayString" xml:space="preserve">
+    <value>Map by {0} </value>
+  </data>
+  <data name="FieldWellTimeDisplayStringFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="FieldWellVisualization_CategoryFieldWell_Title" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="FieldWellVisualization_CategoryUsingHeightsText" xml:space="preserve">
+    <value>&lt;Heights&gt;</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Bubble" xml:space="preserve">
+    <value>Bubble</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Bubble_ToolTip" xml:space="preserve">
+    <value>Change the visualization to Bubble</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_ClusteredColumn" xml:space="preserve">
+    <value>Clustered Column</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_ClusteredColumn_ToolTip" xml:space="preserve">
+    <value>Change the visualization to Clustered Column</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_HeatMap" xml:space="preserve">
+    <value>HeatMap</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_HeatMap_ToolTip" xml:space="preserve">
+    <value>Change the visualization to Heat Map</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Region_ToolTip" xml:space="preserve">
+    <value>Change the visualization to Region</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_StackedColumn" xml:space="preserve">
+    <value>Stacked Column</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_StackedColumn_ToolTip" xml:space="preserve">
+    <value>Change the visualization to Stacked Column</value>
+  </data>
+  <data name="FieldWellVisualization_ChartType_Title" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="FieldWellVisualization_Error_BubbleChart_CategorytInUse_OneHeight" xml:space="preserve">
+    <value>The Category and Size field wells are in use. Please clear one of them before adding another field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropCategoryIntoHeatMapChart" xml:space="preserve">
+    <value>Cannot add a field to the Category field well for heat map charts.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropCategoryWhenThereAreTwoOrMoreHeights" xml:space="preserve">
+    <value>Cannot add a Category field with two or more Height fields.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropCategoryWhenThereAreTwoOrMoreSizes" xml:space="preserve">
+    <value>Cannot visualize a Category field with two or more Size fields.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropCategoryWhenThereAreTwoOrMoreValues" xml:space="preserve">
+    <value>Cannot visualize a Category field with two or more Value fields.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropSecondHeightInHeatMap" xml:space="preserve">
+    <value>Cannot visualize more than one Value field in a heat map chart.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropSecondHeightWhenCategoryIsSelected" xml:space="preserve">
+    <value>Cannot visualize more than one Height field with a Category field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropSecondSizeWhenCategoryIsSelected" xml:space="preserve">
+    <value>Cannot visualize more than one Size field with a Category field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_CannotDropSecondValueWhenCategoryIsSelected" xml:space="preserve">
+    <value>Cannot visualize more than one Value field with a Category field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_ColumnChart_CategorytInUse_OneHeight" xml:space="preserve">
+    <value>The Category and Height field wells are in use. Please clear one of them before adding another field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_HeatMapChart_OneHeight" xml:space="preserve">
+    <value>The Value field well is in use. Please clear the Value field well before adding another field.</value>
+  </data>
+  <data name="FieldWellVisualization_Error_RegionChart_CategorytInUse_OneHeight" xml:space="preserve">
+    <value>The Category and Value field wells are in use. Please clear one of them before adding another field.</value>
+  </data>
+  <data name="FieldWellVisualization_HeightFieldWell_Title" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="FieldWellVisualization_Instruction" xml:space="preserve">
+    <value>Check or drag fields from above</value>
+  </data>
+  <data name="FieldWellVisualization_InvalidCategoryField" xml:space="preserve">
+    <value>Cannot use this field in the Category field well.</value>
+  </data>
+  <data name="FieldWellVisualization_InvalidTimeField" xml:space="preserve">
+    <value>Cannot use this field in the Time field well</value>
+  </data>
+  <data name="FieldWellVisualization_Temporal_Accumulation_No_Aggregation_Function" xml:space="preserve">
+    <value>Temporal Accumulation cannot be selected when the Height fields are not aggregated.</value>
+  </data>
+  <data name="FieldWellVisualization_TimeFieldWell_Title" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="FieldWellVisualization_ValueLabel_Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="FieldWellVisualization_ValueLabel_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="FieldWellVisualization_ValueLabel_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="FiltersTab_AddFiltersText" xml:space="preserve">
+    <value>Add Filters</value>
+  </data>
+  <data name="FiltersTab_AddSelectedFiltersText" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="FiltersTab_AdvancedFilterModeTooltip" xml:space="preserve">
+    <value>Set an advanced filter</value>
+  </data>
+  <data name="FiltersTab_AdvancedFilterPromptText" xml:space="preserve">
+    <value>Show items for which the value:</value>
+  </data>
+  <data name="FiltersTab_ApplyAdvancedFilter" xml:space="preserve">
+    <value>Apply Filter</value>
+  </data>
+  <data name="FiltersTab_ChangeAggFiltersTooltip" xml:space="preserve">
+    <value>Change aggregation</value>
+  </data>
+  <data name="FiltersTab_ClearFilterTooltip" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+  <data name="FiltersTab_ClearSearchButtonTooltip" xml:space="preserve">
+    <value>Clear Search</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_Is" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsAfter" xml:space="preserve">
+    <value>Is after</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsBefore" xml:space="preserve">
+    <value>Is before</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsBlank" xml:space="preserve">
+    <value>Is blank</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsNot" xml:space="preserve">
+    <value>Is not</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsNotBlank" xml:space="preserve">
+    <value>Is not blank</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsOnOrAfter" xml:space="preserve">
+    <value>Is on or after</value>
+  </data>
+  <data name="FiltersTab_DateTimeFilterOperator_IsOnOrBefore" xml:space="preserve">
+    <value>Is on or before</value>
+  </data>
+  <data name="FiltersTab_DeleteFilterTooltip" xml:space="preserve">
+    <value>Delete filter</value>
+  </data>
+  <data name="FiltersTab_FieldAvgName" xml:space="preserve">
+    <value>Average of {0}</value>
+  </data>
+  <data name="FiltersTab_FieldCountName" xml:space="preserve">
+    <value>Count of {0}</value>
+  </data>
+  <data name="FiltersTab_FieldMaxName" xml:space="preserve">
+    <value>Max of {0}</value>
+  </data>
+  <data name="FiltersTab_FieldMinName" xml:space="preserve">
+    <value>Min of {0}</value>
+  </data>
+  <data name="FiltersTab_FieldSumName" xml:space="preserve">
+    <value>Sum of {0}</value>
+  </data>
+  <data name="FiltersTab_FilterAll" xml:space="preserve">
+    <value>(All)</value>
+  </data>
+  <data name="FiltersTab_FilterBlank" xml:space="preserve">
+    <value>(Blank)</value>
+  </data>
+  <data name="FiltersTab_FilterPredicateOperator_And" xml:space="preserve">
+    <value>And</value>
+  </data>
+  <data name="FiltersTab_FilterPredicateOperator_Or" xml:space="preserve">
+    <value>Or</value>
+  </data>
+  <data name="FiltersTab_FilterSearchText" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="FiltersTab_FiltersListText" xml:space="preserve">
+    <value>Filters List</value>
+  </data>
+  <data name="FiltersTab_ListFilterModeTooltip" xml:space="preserve">
+    <value>Set a list filter</value>
+  </data>
+  <data name="FiltersTab_NotAllShowingText" xml:space="preserve">
+    <value>(Not all items showing)</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_Is" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsBlank" xml:space="preserve">
+    <value>Is blank</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsGreaterThan" xml:space="preserve">
+    <value>Is greater than</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsGreaterThanOrEqualTo" xml:space="preserve">
+    <value>Is greater than or equal to</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsLessThan" xml:space="preserve">
+    <value>Is less than</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsLessThanOrEqualTo" xml:space="preserve">
+    <value>Is less than or equal to</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsNot" xml:space="preserve">
+    <value>Is not</value>
+  </data>
+  <data name="FiltersTab_NumericFilterOperator_IsNotBlank" xml:space="preserve">
+    <value>Is not blank</value>
+  </data>
+  <data name="FiltersTab_RangeFilterModeTooltip" xml:space="preserve">
+    <value>Set a range filter</value>
+  </data>
+  <data name="FiltersTab_RangeFilter_ExactString" xml:space="preserve">
+    <value>Equals {0}</value>
+  </data>
+  <data name="FiltersTab_RangeFilter_RangeString" xml:space="preserve">
+    <value>Between {0} and {1}</value>
+  </data>
+  <data name="FiltersTab_SearchButtonTooltip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="FiltersTab_StatusAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="FiltersTab_StatusFiltered" xml:space="preserve">
+    <value>Filtered</value>
+  </data>
+  <data name="FiltersTab_StatusInvalidRange" xml:space="preserve">
+    <value>No available values</value>
+  </data>
+  <data name="FiltersTab_StatusProcessing" xml:space="preserve">
+    <value>Processing ...</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_Contains" xml:space="preserve">
+    <value>Contains</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_DoesNotContain" xml:space="preserve">
+    <value>Does not contain</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_DoesNotStartWith" xml:space="preserve">
+    <value>Does not start with</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_Is" xml:space="preserve">
+    <value>Is</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_IsBlank" xml:space="preserve">
+    <value>Is blank</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_IsNot" xml:space="preserve">
+    <value>Is not</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_IsNotBlank" xml:space="preserve">
+    <value>Is not blank</value>
+  </data>
+  <data name="FiltersTab_StringFilterOperator_StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="FiltersTab_UnknownPredicate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="FindLocationDialog_Examples" xml:space="preserve">
+    <value>ex. 98110, Brooklyn, 3214 Maple St.</value>
+  </data>
+  <data name="FindLocationDialog_Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="FindLocationDialog_NoResultsFound" xml:space="preserve">
+    <value>No Results Found</value>
+  </data>
+  <data name="FindLocationDialog_Subheader" xml:space="preserve">
+    <value>Type the name of the location you would like to find</value>
+  </data>
+  <data name="FindLocationDialog_Title" xml:space="preserve">
+    <value>Find Location</value>
+  </data>
+  <data name="GeneralString_Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="GeneralString_Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="GeneralString_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GeneralString_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="GeocodingAlerts_FieldHeaderTooltip" xml:space="preserve">
+    <value>'Sort by {0}'</value>
+  </data>
+  <data name="GeocodingAlerts_FirstPageTooltip" xml:space="preserve">
+    <value>Go to first page of results.</value>
+  </data>
+  <data name="GeocodingAlerts_LastPageTooltip" xml:space="preserve">
+    <value>Go to last page of results.</value>
+  </data>
+  <data name="GeocodingAlerts_NextPageTooltip" xml:space="preserve">
+    <value>Go to next page of results.</value>
+  </data>
+  <data name="GeocodingAlerts_PageNumberTooltip" xml:space="preserve">
+    <value>Page Number</value>
+  </data>
+  <data name="GeocodingAlerts_PreviousPageTooltip" xml:space="preserve">
+    <value>Go to previous page of results.</value>
+  </data>
+  <data name="GeocodingAlerts_ResultTooltip" xml:space="preserve">
+    <value>Sort by error.</value>
+  </data>
+  <data name="GeocodingAlerts_Tooltip" xml:space="preserve">
+    <value>Open the Mapping Confidence report.</value>
+  </data>
+  <data name="GeocodingConfidencePercentageFormat" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="GeocodingReport_Address" xml:space="preserve">
+    <value>Full Address</value>
+  </data>
+  <data name="GeocodingReport_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="GeocodingReport_Country" xml:space="preserve">
+    <value>Country/Region</value>
+  </data>
+  <data name="GeocodingReport_County" xml:space="preserve">
+    <value>County</value>
+  </data>
+  <data name="GeocodingReport_Description" xml:space="preserve">
+    <value>Below is the list of locations we weren't sure about.</value>
+  </data>
+  <data name="GeocodingReport_HelpText" xml:space="preserve">
+    <value>Include more geography columns in your data to improve accuracy.</value>
+  </data>
+  <data name="GeocodingReport_NoResolutionText" xml:space="preserve">
+    <value>No resolution for this address</value>
+  </data>
+  <data name="GeocodingReport_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="GeocodingReport_PageOfText" xml:space="preserve">
+    <value>of {0}</value>
+  </data>
+  <data name="GeocodingReport_PageText" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="GeocodingReport_RegionPolygonCouldNotBeFetchedText" xml:space="preserve">
+    <value>Unable to fetch the region polygon for this address</value>
+  </data>
+  <data name="GeocodingReport_Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="GeocodingReport_State" xml:space="preserve">
+    <value>State/Province</value>
+  </data>
+  <data name="GeocodingReport_Street" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="GeocodingReport_SubTitle" xml:space="preserve">
+    <value>We plotted {0} of locations on {1} with high confidence.</value>
+  </data>
+  <data name="GeocodingReport_Title" xml:space="preserve">
+    <value>Mapping Confidence</value>
+  </data>
+  <data name="GeocodingReport_TotallyConfidentSubTitle" xml:space="preserve">
+    <value>We plotted all locations on {0} with high confidence.</value>
+  </data>
+  <data name="GeocodingReport_TruncationWarning" xml:space="preserve">
+    <value>Displaying {0} of {1} ambiguous geocoding results.</value>
+  </data>
+  <data name="GeocodingReport_Zipcode" xml:space="preserve">
+    <value>Zipcode</value>
+  </data>
+  <data name="GeoFieldMappingType_Address" xml:space="preserve">
+    <value>Full Address</value>
+  </data>
+  <data name="GeoFieldMappingType_City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="GeoFieldMappingType_Country" xml:space="preserve">
+    <value>Country/Region</value>
+  </data>
+  <data name="GeoFieldMappingType_County" xml:space="preserve">
+    <value>County</value>
+  </data>
+  <data name="GeoFieldMappingType_Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="GeoFieldMappingType_Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="GeoFieldMappingType_None" xml:space="preserve">
+    <value>Select One...</value>
+  </data>
+  <data name="GeoFieldMappingType_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="GeoFieldMappingType_State" xml:space="preserve">
+    <value>State/Province</value>
+  </data>
+  <data name="GeoFieldMappingType_Street" xml:space="preserve">
+    <value>Street</value>
+  </data>
+  <data name="GeoFieldMappingType_XCoord" xml:space="preserve">
+    <value>X Coordinate</value>
+  </data>
+  <data name="GeoFieldMappingType_YCoord" xml:space="preserve">
+    <value>Y Coordinate</value>
+  </data>
+  <data name="GeoFieldMappingType_Zip" xml:space="preserve">
+    <value>Zip</value>
+  </data>
+  <data name="GeoFieldMappingViewModel_DisplayStringFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="GeoFieldMappingViewModel_LatLong" xml:space="preserve">
+    <value>{0}/{1} (Latitude/Longitude)</value>
+  </data>
+  <data name="GeoFieldMappingViewModel_XY" xml:space="preserve">
+    <value>{0}/{1} (X/Y)</value>
+  </data>
+  <data name="GlobeNavigation_RotateLeftTooltip" xml:space="preserve">
+    <value>Rotate Left (Alt + Left arrow)</value>
+  </data>
+  <data name="GlobeNavigation_RotateRightTooltip" xml:space="preserve">
+    <value>Rotate Right (Alt + Right arrow)</value>
+  </data>
+  <data name="GlobeNavigation_TiltDownTooltip" xml:space="preserve">
+    <value>Tilt down (Alt + Down arrow)</value>
+  </data>
+  <data name="GlobeNavigation_TiltUpTooltip" xml:space="preserve">
+    <value>Tilt up (Alt + Up arrow) </value>
+  </data>
+  <data name="GlobeNavigation_ZoomInTooltip" xml:space="preserve">
+    <value>Zoom in (Alt + +)</value>
+  </data>
+  <data name="GlobeNavigation_ZoomOutTooltip" xml:space="preserve">
+    <value>Zoom out (Alt + -)</value>
+  </data>
+  <data name="HeatMap_Legend_OrLess" xml:space="preserve">
+    <value>or Less</value>
+  </data>
+  <data name="HeatMap_Legend_OrMore" xml:space="preserve">
+    <value>or More</value>
+  </data>
+  <data name="HelpDialogTitle" xml:space="preserve">
+    <value>Getting Started with Power Map</value>
+  </data>
+  <data name="HelpIcon_ScaleX" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="HostControl_Close" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LayerChooserRenamer_ChooserTooltip" xml:space="preserve">
+    <value>Select a different layer and change its settings.</value>
+  </data>
+  <data name="LayerChooserRenamer_RenameTooltip" xml:space="preserve">
+    <value>Rename this layer.</value>
+  </data>
+  <data name="LayerDefaultName" xml:space="preserve">
+    <value>Layer {0}</value>
+  </data>
+  <data name="LayerSettingsColorDisplayLabel" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="LayerSettingsColorScaleLabel" xml:space="preserve">
+    <value>Color Scale</value>
+  </data>
+  <data name="LayerSettingsDataDisplayLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LayerSettingsHeading" xml:space="preserve">
+    <value>Layer Properties</value>
+  </data>
+  <data name="LayerSettingsHeightLabel" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="LayerSettingsLockScalesLabel" xml:space="preserve">
+    <value>Lock current scale</value>
+  </data>
+  <data name="LayerSettingsRadiusOfInfluenceLabel" xml:space="preserve">
+    <value>Radius of Influence</value>
+  </data>
+  <data name="LayerSettingsScaleLabel" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="LayerSettingsShowNegativesLabel" xml:space="preserve">
+    <value>Show Negatives</value>
+  </data>
+  <data name="LayerSettingsShowNullsLabel" xml:space="preserve">
+    <value>Show Nulls</value>
+  </data>
+  <data name="LayerSettingsShowZeroesLabel" xml:space="preserve">
+    <value>Show Zeroes</value>
+  </data>
+  <data name="LayerSettingsSizeHeaderLabel" xml:space="preserve">
+    <value>Formatting</value>
+  </data>
+  <data name="LayerSettingsSizeLabel" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="LayerSettingsSubhead" xml:space="preserve">
+    <value>Layer Options</value>
+  </data>
+  <data name="LayerSettingsThicknessLabel" xml:space="preserve">
+    <value>Thickness</value>
+  </data>
+  <data name="LayerSettings_ColorPickerTooltip" xml:space="preserve">
+    <value>Change the color of the data layer or series.</value>
+  </data>
+  <data name="LayerSettings_LockCurrentScaleTooltip" xml:space="preserve">
+    <value>Lock the present scale of data visuals in all zoom levels.</value>
+  </data>
+  <data name="LayerSettings_OpacityFactorLabel" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="LayerSettings_OpacitySliderTooltip" xml:space="preserve">
+    <value>Change the opacity of the layer.</value>
+  </data>
+  <data name="LayerSettings_ResetAllColorsLabel" xml:space="preserve">
+    <value>Reset layer colors</value>
+  </data>
+  <data name="LayerSettings_ScaleSliderTooltip" xml:space="preserve">
+    <value>Change the scale of the layer.</value>
+  </data>
+  <data name="LayerSettings_SelectSeriesTooltip" xml:space="preserve">
+    <value>Select a series so that you can change its color.</value>
+  </data>
+  <data name="LayerSettings_ShowNegativesTooltip" xml:space="preserve">
+    <value>Show visuals for all locations where data values are negative.</value>
+  </data>
+  <data name="LayerSettings_ShowNullsTooltip" xml:space="preserve">
+    <value>Show visuals for all locations where data values are null.</value>
+  </data>
+  <data name="LayerSettings_ShowZeroesTooltip" xml:space="preserve">
+    <value>Show visuals for all locations where data values are equal to zero.</value>
+  </data>
+  <data name="LayerSettings_VisualSizeSliderTooltip" xml:space="preserve">
+    <value>Change the visual size of the layer.</value>
+  </data>
+  <data name="LayersTab_DeleteTooltip" xml:space="preserve">
+    <value>Delete this layer.</value>
+  </data>
+  <data name="LayersTab_LayersTooltip" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="LayersTab_NewLayerTooltip" xml:space="preserve">
+    <value>Add a new layer.</value>
+  </data>
+  <data name="LayersTab_SettingsTooltip" xml:space="preserve">
+    <value>Change layer options.</value>
+  </data>
+  <data name="LayersTab_ShowHideTooltip" xml:space="preserve">
+    <value>Show or hide the layer in this scene.</value>
+  </data>
+  <data name="Legend_MaxItems" xml:space="preserve">
+    <value>Additional legend items are not being displayed because there are too many.  </value>
+  </data>
+  <data name="MainWindow_CloseTooltip" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="MainWindow_HelpTooltip" xml:space="preserve">
+    <value>Power Map Help</value>
+  </data>
+  <data name="MainWindow_MaximizeTooltip" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="MainWindow_MinimizeTooltip" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="MainWindow_RedoTooltip" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MainWindow_RestoreDownTooltip" xml:space="preserve">
+    <value>Restore Down</value>
+  </data>
+  <data name="MainWindow_RibbonOptionsTooltip" xml:space="preserve">
+    <value>Collapse or Expand the Ribbon</value>
+  </data>
+  <data name="MainWindow_SendASmileTooltip" xml:space="preserve">
+    <value>Send Power Map feedback. Tell us what you liked or didn't like. If you didn't like something, how can we improve it? Good news or bad news, we really appreciate you taking the time to let us know what you think.</value>
+  </data>
+  <data name="MainWindow_UndoTooltip" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MapByNotFoundAfterDataRefresh" xml:space="preserve">
+    <value>The geography field has changed. Please reselect a geography.</value>
+  </data>
+  <data name="NarratorAddChartDialog_Close" xml:space="preserve">
+    <value>Close the add chart dialog.</value>
+  </data>
+  <data name="NarratorAddChartDialog_Insert" xml:space="preserve">
+    <value>Insert the Chart</value>
+  </data>
+  <data name="NarratorChartDecorator_ChartType" xml:space="preserve">
+    <value>Chart type</value>
+  </data>
+  <data name="NarratorChartDecorator_Delete" xml:space="preserve">
+    <value>Delete the 2D Chart</value>
+  </data>
+  <data name="NarratorChartDecorator_SeriesPicker" xml:space="preserve">
+    <value>Chart series picker</value>
+  </data>
+  <data name="NarratorChartDecorator_SortBy" xml:space="preserve">
+    <value>Sort by toggle</value>
+  </data>
+  <data name="NarratorDateTimeDecorator_Close" xml:space="preserve">
+    <value>Hide the Date and Time.</value>
+  </data>
+  <data name="NarratorFieldListError" xml:space="preserve">
+    <value>Geography error</value>
+  </data>
+  <data name="NarratorFieldListError_Close" xml:space="preserve">
+    <value>Close the field list error message.</value>
+  </data>
+  <data name="NarratorFilterPane_AdvancedFilterPredicate" xml:space="preserve">
+    <value>Show items for which the value {0}</value>
+  </data>
+  <data name="NarratorFilterPane_AdvancedFilterType" xml:space="preserve">
+    <value>Advanced Filter {0}</value>
+  </data>
+  <data name="NarratorFilterPane_ListFilterSearch" xml:space="preserve">
+    <value>Search list filter</value>
+  </data>
+  <data name="NarratorFilterPane_ListFilterType" xml:space="preserve">
+    <value>List Filter {0}</value>
+  </data>
+  <data name="NarratorFilterPane_RangeFilterType" xml:space="preserve">
+    <value>Range Filter {0}</value>
+  </data>
+  <data name="NarratorFindLocation_Close" xml:space="preserve">
+    <value>Close the find location textbox.</value>
+  </data>
+  <data name="NarratorFindLocation_Find" xml:space="preserve">
+    <value>Find the location</value>
+  </data>
+  <data name="NarratorFindLocation_TextBox" xml:space="preserve">
+    <value>Find location textbox</value>
+  </data>
+  <data name="NarratorGlobeNavigation_RotateLeft" xml:space="preserve">
+    <value>Rotate Left</value>
+  </data>
+  <data name="NarratorGlobeNavigation_RotateLeftHelpText" xml:space="preserve">
+    <value>Alt and Left arrow key</value>
+  </data>
+  <data name="NarratorGlobeNavigation_RotateRight" xml:space="preserve">
+    <value>Rotate Right</value>
+  </data>
+  <data name="NarratorGlobeNavigation_RotateRightHelpText" xml:space="preserve">
+    <value>Alt and Right arrow key</value>
+  </data>
+  <data name="NarratorGlobeNavigation_TiltDown" xml:space="preserve">
+    <value>Tilt down</value>
+  </data>
+  <data name="NarratorGlobeNavigation_TiltDownHelpText" xml:space="preserve">
+    <value>Alt and Down arrow key</value>
+  </data>
+  <data name="NarratorGlobeNavigation_TiltUp" xml:space="preserve">
+    <value>Tilt up</value>
+  </data>
+  <data name="NarratorGlobeNavigation_TiltUpHelpText" xml:space="preserve">
+    <value>Alt and Up arrow key</value>
+  </data>
+  <data name="NarratorGlobeNavigation_ZoomIn" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="NarratorGlobeNavigation_ZoomInHelpText" xml:space="preserve">
+    <value>Alt and plus key</value>
+  </data>
+  <data name="NarratorGlobeNavigation_ZoomOut" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="NarratorGlobeNavigation_ZoomOutHelpText" xml:space="preserve">
+    <value>Alt and minus key</value>
+  </data>
+  <data name="NarratorLayerPane_FieldListTab" xml:space="preserve">
+    <value>Layer pane field list tab</value>
+  </data>
+  <data name="NarratorLayerPane_FiltersTab" xml:space="preserve">
+    <value>Layer pane filters tab</value>
+  </data>
+  <data name="NarratorLayerPane_ManageLayersTab" xml:space="preserve">
+    <value>Layer pane manage layers tab</value>
+  </data>
+  <data name="NarratorLayerPane_SettingsTab" xml:space="preserve">
+    <value>Layer pane manage layers tab</value>
+  </data>
+  <data name="NarratorLegendDecorator_Close" xml:space="preserve">
+    <value>Hide this legend.</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_Close" xml:space="preserve">
+    <value>Close the Mapping Confidence Dialog</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_FirstPage" xml:space="preserve">
+    <value>First page</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_LastPage" xml:space="preserve">
+    <value>Last page</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_NextPage" xml:space="preserve">
+    <value>Next page</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_PageNumber" xml:space="preserve">
+    <value>Current page number</value>
+  </data>
+  <data name="NarratorMappingConfidenceDialog_PreviousPage" xml:space="preserve">
+    <value>Previous page</value>
+  </data>
+  <data name="NarratorPowerMapWindow_CloseHelpText" xml:space="preserve">
+    <value>Close the Power Map window</value>
+  </data>
+  <data name="NarratorPowerMapWindow_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="NarratorPowerMapWindow_MaximizeHelpText" xml:space="preserve">
+    <value>Maximize the Power Map window</value>
+  </data>
+  <data name="NarratorPowerMapWindow_MinimizeHelpText" xml:space="preserve">
+    <value>Minimize the Power Map Window</value>
+  </data>
+  <data name="NarratorPowerMapWindow_RedoHelpText" xml:space="preserve">
+    <value>Redo the last action</value>
+  </data>
+  <data name="NarratorPowerMapWindow_RestoreHelpText" xml:space="preserve">
+    <value>Restore down the Power Map window</value>
+  </data>
+  <data name="NarratorPowerMapWindow_RibbonDisplay" xml:space="preserve">
+    <value>Ribbon Display Option</value>
+  </data>
+  <data name="NarratorPowerMapWindow_UndoHelpText" xml:space="preserve">
+    <value>Undo the last action</value>
+  </data>
+  <data name="Narrator_Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Narrator_AcceptChanges" xml:space="preserve">
+    <value>Accept changes</value>
+  </data>
+  <data name="Narrator_AnnotationDialog" xml:space="preserve">
+    <value>Annotation dialog</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_Close" xml:space="preserve">
+    <value>Close the Annotation dialog.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_CustomDescriptionHelpText" xml:space="preserve">
+    <value>Add a custom description to the annotation.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_CustomTitleHelpText" xml:space="preserve">
+    <value>Add a custom title to the annotation.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_DescriptionFieldImage" xml:space="preserve">
+    <value>Pick a predefined field or select image.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_DescriptionTextBox" xml:space="preserve">
+    <value>Description textbox</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_LoadImageHelpText" xml:space="preserve">
+    <value>Browse and insert an image.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_Picture" xml:space="preserve">
+    <value>Picture Annotation</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PictureExtraLarge" xml:space="preserve">
+    <value>Extra large image size</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PictureLarge" xml:space="preserve">
+    <value>Large image size</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PictureMedium" xml:space="preserve">
+    <value>Medium image size</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PictureSmall" xml:space="preserve">
+    <value>Small image size</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PreDefinedDescription" xml:space="preserve">
+    <value>Predefined description</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PredefinedDescriptionHelpText" xml:space="preserve">
+    <value>Add a predefined description to the annotation.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PreDefinedList" xml:space="preserve">
+    <value>Annotation predefined list</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PreDefinedTitle" xml:space="preserve">
+    <value>Predefined title</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_PredefinedTitleHelpText" xml:space="preserve">
+    <value>Add a predefined title to the annotation.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_TitleCombobox" xml:space="preserve">
+    <value>Annotation Title</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_TitleComboBoxHelpText" xml:space="preserve">
+    <value>Pick a predefined title field for the annotation.</value>
+  </data>
+  <data name="Narrator_AnnotationDialog_TitleTextBox" xml:space="preserve">
+    <value>Annotation title textbox</value>
+  </data>
+  <data name="Narrator_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Narrator_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Narrator_CancelChanges" xml:space="preserve">
+    <value>Cancel changes</value>
+  </data>
+  <data name="Narrator_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Narrator_ColorPicker" xml:space="preserve">
+    <value>Color picker</value>
+  </data>
+  <data name="Narrator_ColorSeries" xml:space="preserve">
+    <value>Color Series</value>
+  </data>
+  <data name="Narrator_Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Narrator_CreateVideoDialog_Cancel" xml:space="preserve">
+    <value>Cancel and close the create video dialog.</value>
+  </data>
+  <data name="Narrator_CreateVideoDialog_Close" xml:space="preserve">
+    <value>Close the create video dialog.</value>
+  </data>
+  <data name="Narrator_CreateVideoDialog_Create" xml:space="preserve">
+    <value>Create the video.</value>
+  </data>
+  <data name="Narrator_CreateVideoProgress_CancelHelpText" xml:space="preserve">
+    <value>Cancel video creation.</value>
+  </data>
+  <data name="Narrator_CreateVideoProgress_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Narrator_CreateVideoProgress_OpenHelpText" xml:space="preserve">
+    <value>Open the video</value>
+  </data>
+  <data name="Narrator_CustomSpaceSettingsDialog_Cancel" xml:space="preserve">
+    <value>Cancel Scene Background Options</value>
+  </data>
+  <data name="Narrator_CustomSpaceSettingsDialog_Create" xml:space="preserve">
+    <value>Create a new Scene Background</value>
+  </data>
+  <data name="Narrator_DataValue" xml:space="preserve">
+    <value>'{0} value'</value>
+  </data>
+  <data name="Narrator_DateAndTimeFormatDialog_Close" xml:space="preserve">
+    <value>Close the date and time format dialog.</value>
+  </data>
+  <data name="Narrator_DateAndTimeFormatDialog_format" xml:space="preserve">
+    <value>Date and time format</value>
+  </data>
+  <data name="Narrator_DateAndTimeFormatDialog_formatHelpText" xml:space="preserve">
+    <value>Change the date and time format</value>
+  </data>
+  <data name="Narrator_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Narrator_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Narrator_FieldsTabHelpText" xml:space="preserve">
+    <value>Manage the data that appears on the map.</value>
+  </data>
+  <data name="Narrator_FileCloseHelpText" xml:space="preserve">
+    <value>Close Power Map.</value>
+  </data>
+  <data name="Narrator_FileOptionsHelpText" xml:space="preserve">
+    <value>Change Power Map options.</value>
+  </data>
+  <data name="Narrator_FiltersTabHelpText" xml:space="preserve">
+    <value>Manager layer filters</value>
+  </data>
+  <data name="Narrator_Insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="Narrator_LayerDeleteStringFormat" xml:space="preserve">
+    <value>'{0} delete'</value>
+  </data>
+  <data name="Narrator_LayerHideStringFormat" xml:space="preserve">
+    <value>'{0} hide'</value>
+  </data>
+  <data name="Narrator_LayerNameTextBox" xml:space="preserve">
+    <value>Layer name textbox</value>
+  </data>
+  <data name="Narrator_LayerRenameButton" xml:space="preserve">
+    <value>Layer rename</value>
+  </data>
+  <data name="Narrator_LayerSettingsStringFormat" xml:space="preserve">
+    <value>'{0} settings'</value>
+  </data>
+  <data name="Narrator_LayersTabHelpText" xml:space="preserve">
+    <value>Manage your layers.</value>
+  </data>
+  <data name="Narrator_NavigationControls" xml:space="preserve">
+    <value>Navigation controls</value>
+  </data>
+  <data name="Narrator_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Narrator_OpacityValue" xml:space="preserve">
+    <value>Opacity value</value>
+  </data>
+  <data name="Narrator_PowerMapOptionsDialog_ClearCache" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Narrator_PowerMapOptionsDialog_ClearCacheHelpText" xml:space="preserve">
+    <value>Clear the cache.</value>
+  </data>
+  <data name="Narrator_PowerMapOptionsDialog_Close" xml:space="preserve">
+    <value>Close the Power Map options dialog.</value>
+  </data>
+  <data name="Narrator_RegionsShadingLabel" xml:space="preserve">
+    <value>Regions shading</value>
+  </data>
+  <data name="Narrator_ResetColor" xml:space="preserve">
+    <value>Go back to the default layer color</value>
+  </data>
+  <data name="Narrator_SceneDeleteStringFormat" xml:space="preserve">
+    <value>'{0} delete'</value>
+  </data>
+  <data name="Narrator_SceneDurationValue" xml:space="preserve">
+    <value>Scene duration value</value>
+  </data>
+  <data name="Narrator_SceneEffect" xml:space="preserve">
+    <value>Scene effect</value>
+  </data>
+  <data name="Narrator_SceneEffectSpeed" xml:space="preserve">
+    <value>Scene effect speed</value>
+  </data>
+  <data name="Narrator_SceneNameTextbox" xml:space="preserve">
+    <value>Scene name textbox</value>
+  </data>
+  <data name="Narrator_SceneSettingsStringFormat" xml:space="preserve">
+    <value>'{0} settings'</value>
+  </data>
+  <data name="Narrator_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Narrator_SettingsTabHelpText" xml:space="preserve">
+    <value>Manage layer and scene settings.</value>
+  </data>
+  <data name="Narrator_TextBoxDialog_Close" xml:space="preserve">
+    <value>Close the textbox dialog.</value>
+  </data>
+  <data name="Narrator_TextBoxDialog_CreateHelpText" xml:space="preserve">
+    <value>Create the textbox</value>
+  </data>
+  <data name="Narrator_TextBoxDialog_DescriptionTextBox" xml:space="preserve">
+    <value>Description textbox</value>
+  </data>
+  <data name="Narrator_TextBoxDialog_TitleTextBox" xml:space="preserve">
+    <value>Title textbox</value>
+  </data>
+  <data name="Narrator_TextFormat_Bold" xml:space="preserve">
+    <value>Bold</value>
+  </data>
+  <data name="Narrator_TextFormat_Font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="Narrator_TextFormat_FontColor" xml:space="preserve">
+    <value>Font color</value>
+  </data>
+  <data name="Narrator_TextFormat_FontSize" xml:space="preserve">
+    <value>Font size</value>
+  </data>
+  <data name="Narrator_TextFormat_Italicize" xml:space="preserve">
+    <value>Italicize</value>
+  </data>
+  <data name="Narrator_TimeAnimationOption" xml:space="preserve">
+    <value>Time animation option</value>
+  </data>
+  <data name="Narrator_TimeEndDate" xml:space="preserve">
+    <value>Time end date</value>
+  </data>
+  <data name="Narrator_TimePauseDescription" xml:space="preserve">
+    <value>Pause the time animation.</value>
+  </data>
+  <data name="Narrator_TimePlayDescription" xml:space="preserve">
+    <value>Play time animation.</value>
+  </data>
+  <data name="Narrator_TimeRepeat" xml:space="preserve">
+    <value>Repeat</value>
+  </data>
+  <data name="Narrator_TimeSpeed" xml:space="preserve">
+    <value>Time speed</value>
+  </data>
+  <data name="Narrator_TimeStartDate" xml:space="preserve">
+    <value>Time start date</value>
+  </data>
+  <data name="Narrator_TourNameTextbox" xml:space="preserve">
+    <value>Tour name textbox</value>
+  </data>
+  <data name="Narrator_TransitionDurationValue" xml:space="preserve">
+    <value>Transition duration value</value>
+  </data>
+  <data name="NoTourName" xml:space="preserve">
+    <value>Enter Tour Name</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Power Map</value>
+  </data>
+  <data name="QueryExecutionError" xml:space="preserve">
+    <value>Power Map encountered an error and could not complete the last action.</value>
+  </data>
+  <data name="RangeSlider_End" xml:space="preserve">
+    <value>Range Slider End</value>
+  </data>
+  <data name="RangeSlider_Middle" xml:space="preserve">
+    <value>Range Slider Middle</value>
+  </data>
+  <data name="RangeSlider_Start" xml:space="preserve">
+    <value>Range Slider Start</value>
+  </data>
+  <data name="Refresh_Error_ConnectionsDisabled" xml:space="preserve">
+    <value>The refresh data operation cannot be performed when connections are disabled in the Excel workbook.</value>
+  </data>
+  <data name="Refresh_Error_Retry" xml:space="preserve">
+    <value>Power Map encountered an error when refreshing data. Please retry later.
+
+Error details: 
+  {0}.</value>
+  </data>
+  <data name="Refresh_Error_RetryAfterCloseExcelDialog" xml:space="preserve">
+    <value>Power Map encountered an error when refreshing data. If a dialog box is open in Excel, close it and then click Refresh Data again.</value>
+  </data>
+  <data name="RegionShadingModeDisplayString_FullBleed" xml:space="preserve">
+    <value>No shading</value>
+  </data>
+  <data name="RegionShadingModeDisplayString_Global" xml:space="preserve">
+    <value>Shade based on category value compared to all other values</value>
+  </data>
+  <data name="RegionShadingModeDisplayString_Local" xml:space="preserve">
+    <value>Shade based on category value within location</value>
+  </data>
+  <data name="RegionShadingModeDisplayString_ShiftGlobal" xml:space="preserve">
+    <value>Shade based on category value compared to other values in the category</value>
+  </data>
+  <data name="Ribbon_AddLayerLabel" xml:space="preserve">
+    <value>Add Layer</value>
+  </data>
+  <data name="Ribbon_AddLayerTooltip" xml:space="preserve">
+    <value>Add another data layer to the selected scene.</value>
+  </data>
+  <data name="Ribbon_AddLayerTooltipHeader" xml:space="preserve">
+    <value>Add Layer</value>
+  </data>
+  <data name="Ribbon_AddSceneCustomTooltipDesc" xml:space="preserve">
+    <value>Make a new scene with a map or a custom background</value>
+  </data>
+  <data name="Ribbon_AddSceneCustomTooltipHeader" xml:space="preserve">
+    <value>New Scene</value>
+  </data>
+  <data name="Ribbon_AddSceneLabel" xml:space="preserve">
+    <value>Add Scene</value>
+  </data>
+  <data name="Ribbon_AddSceneTooltip" xml:space="preserve">
+    <value>Add a new scene to the list of existing scenes in your tour.</value>
+  </data>
+  <data name="Ribbon_AddSceneToolTipDescription" xml:space="preserve">
+    <value>Adds a new scene to your tour. Several scenes make a tour.</value>
+  </data>
+  <data name="Ribbon_AddSceneTooltipHeader" xml:space="preserve">
+    <value>Add Scene</value>
+  </data>
+  <data name="Ribbon_CaptureScreenLabel" xml:space="preserve">
+    <value>Capture Screen</value>
+  </data>
+  <data name="Ribbon_CaptureScreenTooltip" xml:space="preserve">
+    <value>Take a static picture of your current map to put it on the clipboard so you can paste it into another application.</value>
+  </data>
+  <data name="Ribbon_CaptureScreenTooltipHeader" xml:space="preserve">
+    <value>Capture Screen</value>
+  </data>
+  <data name="Ribbon_ChartLabel" xml:space="preserve">
+    <value>2D Chart</value>
+  </data>
+  <data name="Ribbon_ChartTooltip" xml:space="preserve">
+    <value>Show the top or bottom 100 locations by value for any data layer on a 2D chart, and quickly navigate to each location.</value>
+  </data>
+  <data name="Ribbon_ChartTooltipHeader" xml:space="preserve">
+    <value>Chart</value>
+  </data>
+  <data name="Ribbon_CreateVideo" xml:space="preserve">
+    <value>Create Video</value>
+  </data>
+  <data name="Ribbon_CreateVideoTooltip" xml:space="preserve">
+    <value>Turn your tour into video so you can share it.</value>
+  </data>
+  <data name="Ribbon_CreateVideoTooltipHeader" xml:space="preserve">
+    <value>Create Video</value>
+  </data>
+  <data name="Ribbon_DataShapesLabel" xml:space="preserve">
+    <value>Shapes</value>
+  </data>
+  <data name="Ribbon_DataShapesTooltip" xml:space="preserve">
+    <value>Change the shape of the columns on the map.</value>
+  </data>
+  <data name="Ribbon_DataShapesTooltipHeader" xml:space="preserve">
+    <value>Data Shapes</value>
+  </data>
+  <data name="Ribbon_DateAndTimeTooltip" xml:space="preserve">
+    <value>Show or hide the date and time you've added to the Time box in the scene. This option is available when a time field is added to a scene's Time box.</value>
+  </data>
+  <data name="Ribbon_DateAndTimeTooltipHeader" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="Ribbon_FileClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Ribbon_FILELabel" xml:space="preserve">
+    <value>FILE</value>
+  </data>
+  <data name="Ribbon_FileOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Ribbon_FindLabel" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="Ribbon_FindLocationLabel" xml:space="preserve">
+    <value>Find Location</value>
+  </data>
+  <data name="Ribbon_FindLocationTooltip" xml:space="preserve">
+    <value>Go to any city, address, state, or other geographical location on the map. Just enter the one you want.</value>
+  </data>
+  <data name="Ribbon_FindLocationTooltipHeader" xml:space="preserve">
+    <value>Find Location</value>
+  </data>
+  <data name="Ribbon_FlatMapLabel" xml:space="preserve">
+    <value>Flat Map</value>
+  </data>
+  <data name="Ribbon_FlatMapTooltip" xml:space="preserve">
+    <value>Switch between globe and flat map format.</value>
+  </data>
+  <data name="Ribbon_FlatMapTooltipHeader" xml:space="preserve">
+    <value>Flat Map</value>
+  </data>
+  <data name="Ribbon_HOMELabel" xml:space="preserve">
+    <value>HOME</value>
+  </data>
+  <data name="Ribbon_InsertLabel" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="Ribbon_LayerLabel" xml:space="preserve">
+    <value>Layer</value>
+  </data>
+  <data name="Ribbon_LayerSettingsButton_Desc" xml:space="preserve">
+    <value>Change layer options such as data bars colors.</value>
+  </data>
+  <data name="Ribbon_LayerSettingsButton_Title" xml:space="preserve">
+    <value>Layer Options</value>
+  </data>
+  <data name="Ribbon_LegendsTooltip" xml:space="preserve">
+    <value>Show the legends for all data layers in the scene. You can turn individual legends on or off afterwards.</value>
+  </data>
+  <data name="Ribbon_LegendsTooltipHeader" xml:space="preserve">
+    <value>Legends</value>
+  </data>
+  <data name="Ribbon_MapLabel" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="Ribbon_MapLabelsLabel" xml:space="preserve">
+    <value>Map Labels</value>
+  </data>
+  <data name="Ribbon_MapLabelsTooltip" xml:space="preserve">
+    <value>Show or hide the labels on the map.</value>
+  </data>
+  <data name="Ribbon_MapLabelsTooltipHeader" xml:space="preserve">
+    <value>Map Labels</value>
+  </data>
+  <data name="Ribbon_NewSceneLabel" xml:space="preserve">
+    <value>New Scene</value>
+  </data>
+  <data name="Ribbon_NewSceneToolTipDescription" xml:space="preserve">
+    <value>Make a copy of the active scene or create a new scene with a world map or a custom background.</value>
+  </data>
+  <data name="Ribbon_NewTourToolTipDescription" xml:space="preserve">
+    <value>Create a new animated tour of your data over geography and time.</value>
+  </data>
+  <data name="Ribbon_PlayTourFromBeginning" xml:space="preserve">
+    <value>Play Tour from Beginning...</value>
+  </data>
+  <data name="Ribbon_PlayTourFromCurrentScene" xml:space="preserve">
+    <value>Play Tour from Current Scene...</value>
+  </data>
+  <data name="Ribbon_PlayTourLabel" xml:space="preserve">
+    <value>Play Tour</value>
+  </data>
+  <data name="Ribbon_PlayTourTooltip" xml:space="preserve">
+    <value>Switch to tour view and watch it play.</value>
+  </data>
+  <data name="Ribbon_PlayTourToolTipDescription" xml:space="preserve">
+    <value>Play a tour after you have captured scenes.</value>
+  </data>
+  <data name="Ribbon_PlayTourTooltipHeader" xml:space="preserve">
+    <value>Play Tour</value>
+  </data>
+  <data name="Ribbon_RefreshDataLabel" xml:space="preserve">
+    <value>Refresh Data</value>
+  </data>
+  <data name="Ribbon_RefreshDataTooltip" xml:space="preserve">
+    <value>Update all layers of all scenes to show the most current data.</value>
+  </data>
+  <data name="Ribbon_RefreshDataTooltipHeader" xml:space="preserve">
+    <value>Refresh Data</value>
+  </data>
+  <data name="Ribbon_RefreshSceneToolTipDescription" xml:space="preserve">
+    <value>Locks the scene after changing its contents.</value>
+  </data>
+  <data name="Ribbon_SceneLabel" xml:space="preserve">
+    <value>Scene</value>
+  </data>
+  <data name="Ribbon_SceneSettingsButton_Desc" xml:space="preserve">
+    <value>Change scene options such as duration or scene type, or add effects.</value>
+  </data>
+  <data name="Ribbon_SceneSettingsButton_Title" xml:space="preserve">
+    <value>Scene Options</value>
+  </data>
+  <data name="Ribbon_TaskPanelLabel" xml:space="preserve">
+    <value>Layer Pane</value>
+  </data>
+  <data name="Ribbon_TaskPanelTooltip" xml:space="preserve">
+    <value>Show or hide the Layer Pane. Use the Layer Pane to manage layers, add data to layers, and change settings.</value>
+  </data>
+  <data name="Ribbon_TaskPanelTooltipHeader" xml:space="preserve">
+    <value>Layer Pane</value>
+  </data>
+  <data name="Ribbon_TextboxLabel" xml:space="preserve">
+    <value>Text Box</value>
+  </data>
+  <data name="Ribbon_TextBoxTooltip" xml:space="preserve">
+    <value>Add text to a scene that stays on screen when playing your tour. Resize or move it to the place you want.</value>
+  </data>
+  <data name="Ribbon_TextBoxTooltipHeader" xml:space="preserve">
+    <value>Text Box</value>
+  </data>
+  <data name="Ribbon_ThemesLabel" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="Ribbon_ThemesTooltip" xml:space="preserve">
+    <value>Pick a theme to give your tour instant personality or a more professional look. Each scene can have a different theme, and a theme can use different colors. Some themes even have satellite images for the globe.</value>
+  </data>
+  <data name="Ribbon_ThemesTooltipHeader" xml:space="preserve">
+    <value>Themes</value>
+  </data>
+  <data name="Ribbon_TimeDecoratorLabel" xml:space="preserve">
+    <value>Date &amp; Time</value>
+  </data>
+  <data name="Ribbon_TimeLabel" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Ribbon_TimeLineLabel" xml:space="preserve">
+    <value>Time Line</value>
+  </data>
+  <data name="Ribbon_TimeLineTooltip" xml:space="preserve">
+    <value>Show or hide the Time Line control. Use this control to play a tour over time. This option is available when a time field is added to a scene's Time box.</value>
+  </data>
+  <data name="Ribbon_TimeLineTooltipHeader" xml:space="preserve">
+    <value>Time Line</value>
+  </data>
+  <data name="Ribbon_TourEditorLabel" xml:space="preserve">
+    <value>Tour Editor</value>
+  </data>
+  <data name="Ribbon_TourEditorTooltip" xml:space="preserve">
+    <value>Show or hide the Tour Editor. Use the Tour Editor to view all scenes in your tour and to rename your tour.</value>
+  </data>
+  <data name="Ribbon_TourEditorTooltipHeader" xml:space="preserve">
+    <value>Tour Editor</value>
+  </data>
+  <data name="Ribbon_TourLabel" xml:space="preserve">
+    <value>Tour</value>
+  </data>
+  <data name="Ribbon_UnLockSceneLabel" xml:space="preserve">
+    <value>Unlock Scene</value>
+  </data>
+  <data name="Ribbon_ViewLabel" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="SceneEffectSpeedFastLabel" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="SceneEffectSpeedSlowLabel" xml:space="preserve">
+    <value>Slow</value>
+  </data>
+  <data name="SceneEffect_Circle" xml:space="preserve">
+    <value>Circle</value>
+  </data>
+  <data name="SceneEffect_Dolly" xml:space="preserve">
+    <value>Dolly</value>
+  </data>
+  <data name="SceneEffect_Figure8" xml:space="preserve">
+    <value>Figure 8</value>
+  </data>
+  <data name="SceneEffect_FlyOver" xml:space="preserve">
+    <value>Fly Over</value>
+  </data>
+  <data name="SceneEffect_PushIn" xml:space="preserve">
+    <value>Push In</value>
+  </data>
+  <data name="SceneEffect_RotateGlobe" xml:space="preserve">
+    <value>Rotate Globe</value>
+  </data>
+  <data name="SceneEffect_Station" xml:space="preserve">
+    <value>No Effect</value>
+  </data>
+  <data name="SceneNamePlaceholder" xml:space="preserve">
+    <value>Scene Name</value>
+  </data>
+  <data name="SceneSettingsSubhead" xml:space="preserve">
+    <value>Scene Options</value>
+  </data>
+  <data name="SceneSettings_BackgroundHeader_Text" xml:space="preserve">
+    <value>Change the scene type and insert a picture as background for the data.</value>
+  </data>
+  <data name="SceneSettings_BackgroundHeader_Title" xml:space="preserve">
+    <value>Change Map Type</value>
+  </data>
+  <data name="SceneSettings_BackgroundOptions_Text" xml:space="preserve">
+    <value>Change background options for the active scene.</value>
+  </data>
+  <data name="SceneSettings_BackgroundOptions_Title" xml:space="preserve">
+    <value>Change {0}</value>
+  </data>
+  <data name="SceneSettings_BackgroundSectionHeader" xml:space="preserve">
+    <value>MAP TYPE AND BACKGROUND</value>
+  </data>
+  <data name="SceneSettings_ContextMenu_ChangeBackground" xml:space="preserve">
+    <value>Change Map Type</value>
+  </data>
+  <data name="SceneSettings_Duration" xml:space="preserve">
+    <value>Scene duration (sec)</value>
+  </data>
+  <data name="SceneSettings_DurationTooltip" xml:space="preserve">
+    <value>Change the duration of scenes in seconds.</value>
+  </data>
+  <data name="SceneSettings_Effect" xml:space="preserve">
+    <value>Effect</value>
+  </data>
+  <data name="SceneSettings_EffectDistance" xml:space="preserve">
+    <value>Effect Distance</value>
+  </data>
+  <data name="SceneSettings_EffectSpeed" xml:space="preserve">
+    <value>Effect Speed</value>
+  </data>
+  <data name="SceneSettings_EffectSpeedTooltip" xml:space="preserve">
+    <value>Change the magnitude or speed of the scene effect.</value>
+  </data>
+  <data name="SceneSettings_EffectsSectionHeader" xml:space="preserve">
+    <value>Effects</value>
+  </data>
+  <data name="SceneSettings_EffectTooltip" xml:space="preserve">
+    <value>Change the motion effect for this scene.</value>
+  </data>
+  <data name="SceneSettings_NameTooltip" xml:space="preserve">
+    <value>Change the name of the scene.</value>
+  </data>
+  <data name="SceneSettings_SceneJustTime" xml:space="preserve">
+    <value>({0} sec)</value>
+  </data>
+  <data name="SceneSettings_SceneName" xml:space="preserve">
+    <value>Scene Name</value>
+  </data>
+  <data name="SceneSettings_SceneSectionHeader" xml:space="preserve">
+    <value>Scene</value>
+  </data>
+  <data name="SceneSettings_SceneTitle" xml:space="preserve">
+    <value>Scene {0}</value>
+  </data>
+  <data name="SceneSettings_SceneWithTime" xml:space="preserve">
+    <value>({0} sec)</value>
+  </data>
+  <data name="SceneSettings_Transition" xml:space="preserve">
+    <value>Transition</value>
+  </data>
+  <data name="SceneSettings_TransitionDuration" xml:space="preserve">
+    <value>Transition duration (sec)</value>
+  </data>
+  <data name="SceneSettings_TransitionDurationTooltip" xml:space="preserve">
+    <value>Change the time it takes to move to this scene from the previous scene.</value>
+  </data>
+  <data name="SceneView_DeleteTooltip" xml:space="preserve">
+    <value>Delete the selected scene. This action can be undone by clicking Undo on the Quick Access toolbar.</value>
+  </data>
+  <data name="SelectionStats_Average" xml:space="preserve">
+    <value>AVERAGE: {0:0.#########}</value>
+  </data>
+  <data name="SelectionStats_Count" xml:space="preserve">
+    <value>COUNT: {0:0.#########}</value>
+  </data>
+  <data name="SelectionStats_Max" xml:space="preserve">
+    <value>MAX: {0:0.#########}</value>
+  </data>
+  <data name="SelectionStats_Min" xml:space="preserve">
+    <value>MIN: {0:0.#########}</value>
+  </data>
+  <data name="SelectionStats_Sum" xml:space="preserve">
+    <value>SUM: {0:0.#########}</value>
+  </data>
+  <data name="SendFeedbackText" xml:space="preserve">
+    <value>Send a Smile</value>
+  </data>
+  <data name="SettingsDialog_Balanced" xml:space="preserve">
+    <value>Balanced</value>
+  </data>
+  <data name="SettingsDialog_BalancedDescription" xml:space="preserve">
+    <value>Balances graphics quality with smoothness on capable hardware.</value>
+  </data>
+  <data name="SettingsDialog_CacheManagement" xml:space="preserve">
+    <value>Cache Management</value>
+  </data>
+  <data name="SettingsDialog_CancelWarningCaption" xml:space="preserve">
+    <value>Cancel Cache Shrink Operation</value>
+  </data>
+  <data name="SettingsDialog_CancelWarningMessage" xml:space="preserve">
+    <value>Closing the Options window will cancel the currently running shrink operation.</value>
+  </data>
+  <data name="SettingsDialog_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="SettingsDialog_CurrentSize" xml:space="preserve">
+    <value>Current Size (in KB):</value>
+  </data>
+  <data name="SettingsDialog_LegalInfoText" xml:space="preserve">
+    <value>Microsoft Legal Information</value>
+  </data>
+  <data name="SettingsDialog_LegalInfoValue" xml:space="preserve">
+    <value>http://windows.microsoft.com/{0}/windows-live/microsoft-services-agreement</value>
+  </data>
+  <data name="SettingsDialog_Quality" xml:space="preserve">
+    <value>High Quality</value>
+  </data>
+  <data name="SettingsDialog_QualityDescription" xml:space="preserve">
+    <value>Favors high quality graphics, but may be slower on large data sets or slower machines.</value>
+  </data>
+  <data name="SettingsDialog_QualityTitle" xml:space="preserve">
+    <value>Power Map Graphics Quality</value>
+  </data>
+  <data name="SettingsDialog_Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="SettingsDialog_SpeedDescription" xml:space="preserve">
+    <value>Favors speed, but graphics quality may not be as sharp.</value>
+  </data>
+  <data name="SettingsDialog_Title" xml:space="preserve">
+    <value>Power Map Options</value>
+  </data>
+  <data name="SettingsTab_LayerOptionsTooltip" xml:space="preserve">
+    <value>Change layer options.</value>
+  </data>
+  <data name="SettingsTab_SceneOptionsTooltip" xml:space="preserve">
+    <value>Change scene options.</value>
+  </data>
+  <data name="ShapesGallery_Circle" xml:space="preserve">
+    <value>Circle</value>
+  </data>
+  <data name="ShapesGallery_Pentagon" xml:space="preserve">
+    <value>Pentagon</value>
+  </data>
+  <data name="ShapesGallery_Square" xml:space="preserve">
+    <value>Square</value>
+  </data>
+  <data name="ShapesGallery_Star" xml:space="preserve">
+    <value>Star</value>
+  </data>
+  <data name="ShapesGallery_Triangle" xml:space="preserve">
+    <value>Triangle</value>
+  </data>
+  <data name="StatusBar_DoneResolving" xml:space="preserve">
+    <value>FINISHED</value>
+  </data>
+  <data name="StatusBar_GeocodingProgressTooltip" xml:space="preserve">
+    <value>Number of geocoded locations.</value>
+  </data>
+  <data name="StatusBar_ModeTooltip" xml:space="preserve">
+    <value>In {0} view</value>
+  </data>
+  <data name="StatusBar_Offline" xml:space="preserve">
+    <value>OFFLINE</value>
+  </data>
+  <data name="StatusBar_Ready" xml:space="preserve">
+    <value>READY</value>
+  </data>
+  <data name="StatusBar_ResetTooltip" xml:space="preserve">
+    <value>Return the view to its default zoom and pitch levels.</value>
+  </data>
+  <data name="StatusBar_ResolveCancelled" xml:space="preserve">
+    <value>CANCELLED</value>
+  </data>
+  <data name="StatusBar_ResolveFailed" xml:space="preserve">
+    <value>FAILED</value>
+  </data>
+  <data name="StatusBar_ResolvePending" xml:space="preserve">
+    <value>PROCESSING ...</value>
+  </data>
+  <data name="StatusBar_Resolving" xml:space="preserve">
+    <value>PROCESSING {0} OF {1} VALUES</value>
+  </data>
+  <data name="StatusBar_TooltipOnscreenNavigations" xml:space="preserve">
+    <value>Show/hide navigation buttons.</value>
+  </data>
+  <data name="StatusBar_TooltipResetView" xml:space="preserve">
+    <value>Reset view</value>
+  </data>
+  <data name="StatusBar_TooltipZoomToSelection" xml:space="preserve">
+    <value>Zoom to selection</value>
+  </data>
+  <data name="StatusBar_ZoomTooltip" xml:space="preserve">
+    <value>Zoom to the selection on the map.</value>
+  </data>
+  <data name="TaskPanelLayersTab_ErrorMaximumNumberOfLayers" xml:space="preserve">
+    <value>You have reached the maximum number of layers.</value>
+  </data>
+  <data name="TaskPanel_CloseTooltip" xml:space="preserve">
+    <value>Close the Layer Pane. You can open it later by clicking the Layer Pane button.</value>
+  </data>
+  <data name="TaskPanel_FieldsTabTooltip" xml:space="preserve">
+    <value>Field List</value>
+  </data>
+  <data name="TaskPanel_FiltersTabTooltip" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="TaskPanel_LayersTabTooltip" xml:space="preserve">
+    <value>Layer Manager</value>
+  </data>
+  <data name="TaskPanel_NoDataMessage" xml:space="preserve">
+    <value>Power Map needs data to work with.
+
+Select a table or a range in Excel and click on "Add Selected Data to Power Map" under the Map button in the Insert tab of the ribbon.</value>
+  </data>
+  <data name="TaskPanel_SettingsTabTooltip" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="TextBox_BoldTooltip" xml:space="preserve">
+    <value>Make your text bold.</value>
+  </data>
+  <data name="TextBox_ColorTooltip" xml:space="preserve">
+    <value>Change the color of your text.</value>
+  </data>
+  <data name="TextBox_ContentPreviewTooltip" xml:space="preserve">
+    <value>Preview of the text box.</value>
+  </data>
+  <data name="TextBox_DescriptionTooltip" xml:space="preserve">
+    <value>Add a description to the text box.</value>
+  </data>
+  <data name="TextBox_FontSizeTooltip" xml:space="preserve">
+    <value>Change the size of your text.</value>
+  </data>
+  <data name="TextBox_FontTooltip" xml:space="preserve">
+    <value>Pick a new font for your text.</value>
+  </data>
+  <data name="TextBox_ItalicTooltip" xml:space="preserve">
+    <value>Italicize your text.</value>
+  </data>
+  <data name="TextBox_TitleTooltip" xml:space="preserve">
+    <value>Add a title to the text box.</value>
+  </data>
+  <data name="Theme_Aerial" xml:space="preserve">
+    <value>Aerial Color</value>
+  </data>
+  <data name="Theme_AerialGrey" xml:space="preserve">
+    <value>Aerial Dark</value>
+  </data>
+  <data name="Theme_Bing" xml:space="preserve">
+    <value>Power Map</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Color Black</value>
+  </data>
+  <data name="Theme_Earthy" xml:space="preserve">
+    <value>Earthy</value>
+  </data>
+  <data name="Theme_HighContrast" xml:space="preserve">
+    <value>High Contrast</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Color Gray</value>
+  </data>
+  <data name="Theme_Modern" xml:space="preserve">
+    <value>Modern</value>
+  </data>
+  <data name="Theme_Mono" xml:space="preserve">
+    <value>Mono White</value>
+  </data>
+  <data name="Theme_Organic" xml:space="preserve">
+    <value>Organic</value>
+  </data>
+  <data name="Theme_Radiate" xml:space="preserve">
+    <value>Radiate</value>
+  </data>
+  <data name="Theme_Whitewash" xml:space="preserve">
+    <value>Color White</value>
+  </data>
+  <data name="TimeChunking_Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="TimeChunking_Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="TimeChunking_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="TimeChunking_Quarter" xml:space="preserve">
+    <value>Quarter</value>
+  </data>
+  <data name="TimeChunking_Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="TimeDecoratorEditor_AcceptText" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="TimeDecorator_Tooltip" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="TimeScrubber_CloseTooltip" xml:space="preserve">
+    <value>Close the Time Line control. You can open it later by clicking the Time Line button.</value>
+  </data>
+  <data name="TimeScrubber_LoopTooltip" xml:space="preserve">
+    <value>Replay the time animation.</value>
+  </data>
+  <data name="TimeScrubber_PauseTooltip" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="TimeScrubber_PlayTooltip" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="TimeScrubber_SettingsTooltip" xml:space="preserve">
+    <value>Set time options for the current scene.</value>
+  </data>
+  <data name="TimeScrubber_SliderTooltip" xml:space="preserve">
+    <value>Go to a specific time in the current scene.</value>
+  </data>
+  <data name="TimeSettingsEndLabel" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="TimeSettingsHeading" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="TimeSettingsSpeedLabel" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="TimeSettingsStartLabel" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="TimeSettings_EndDateTooltip" xml:space="preserve">
+    <value>Change the end time for data animation in this scene.</value>
+  </data>
+  <data name="TimeSettings_Instant" xml:space="preserve">
+    <value>Data shows for an instant</value>
+  </data>
+  <data name="TimeSettings_PersistLast" xml:space="preserve">
+    <value>Data stays until it is replaced</value>
+  </data>
+  <data name="TimeSettings_SpeedBoundToSceneLength" xml:space="preserve">
+    <value>Speed bound to scene length</value>
+  </data>
+  <data name="TimeSettings_SpeedTooltip" xml:space="preserve">
+    <value>Speed time playback up or slow it down.</value>
+  </data>
+  <data name="TimeSettings_StartDateTooltip" xml:space="preserve">
+    <value>Change the start time for data animation in this scene.</value>
+  </data>
+  <data name="TimeSettings_TimeAccumulation" xml:space="preserve">
+    <value>Data accumulates over time</value>
+  </data>
+  <data name="Tooltip_FieldFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="TourDefaultName" xml:space="preserve">
+    <value>Tour {0}</value>
+  </data>
+  <data name="TourEditor_CloseTooltip" xml:space="preserve">
+    <value>Close the Tour Editor. You can open it later by clicking the Tour Editor button.</value>
+  </data>
+  <data name="TourEditor_EnterTourNameTooltip" xml:space="preserve">
+    <value>Enter a descriptive name for your tour.</value>
+  </data>
+  <data name="TourEditor_PlaySceneTooltip" xml:space="preserve">
+    <value>Play Tour from this scene</value>
+  </data>
+  <data name="TourPlayer_BackTooltip" xml:space="preserve">
+    <value>Go back to Edit view.</value>
+  </data>
+  <data name="TourPlayer_LoopRepeatOffTooltip" xml:space="preserve">
+    <value>Turn repeat off.</value>
+  </data>
+  <data name="TourPlayer_LoopRepeatOnTooltip" xml:space="preserve">
+    <value>Turn repeat on.</value>
+  </data>
+  <data name="TourPlayer_NextSceneTooltip" xml:space="preserve">
+    <value>Go to the next scene.</value>
+  </data>
+  <data name="TourPlayer_PauseTooltip" xml:space="preserve">
+    <value>Pause the tour.</value>
+  </data>
+  <data name="TourPlayer_PlaybackOptionsTooltip" xml:space="preserve">
+    <value>Tour playback options.</value>
+  </data>
+  <data name="TourPlayer_PlayTooltip" xml:space="preserve">
+    <value>Play the tour.</value>
+  </data>
+  <data name="TourPlayer_PreviousSceneTooltip" xml:space="preserve">
+    <value>Go to the previous scene.</value>
+  </data>
+  <data name="TourPlayer_RefreshOff" xml:space="preserve">
+    <value>Automatic refresh: off</value>
+  </data>
+  <data name="TourPlayer_RefreshOn" xml:space="preserve">
+    <value>Automatic refresh: on</value>
+  </data>
+  <data name="TourPlayer_RefreshTooltip" xml:space="preserve">
+    <value>Refresh data every 10 minutes when Repeat is turned on.</value>
+  </data>
+  <data name="Undo_ChangeTheme" xml:space="preserve">
+    <value>Change Theme</value>
+  </data>
+  <data name="Undo_DeleteScene" xml:space="preserve">
+    <value>Delete Scene</value>
+  </data>
+  <data name="Undo_EditScene" xml:space="preserve">
+    <value>Edit Scene</value>
+  </data>
+  <data name="Undo_MoveScene" xml:space="preserve">
+    <value>Move Scene</value>
+  </data>
+  <data name="Undo_NewScene" xml:space="preserve">
+    <value>New Scene</value>
+  </data>
+  <data name="Undo_SelectScene" xml:space="preserve">
+    <value>Select Scene</value>
+  </data>
+</root>

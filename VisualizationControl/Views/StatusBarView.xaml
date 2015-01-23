@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.StatusBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             Background="#FF217346" UseLayoutRounding="true">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\DefaultTemplateBindings.xaml"/>
+                <x:Static Member="local:ChromelessWindowBase.StaticallyThemedTemplatesDictionary"/>
+                <ResourceDictionary Source="..\Styles\MetroRibbon.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\ChromeButtonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <Grid Height="32" Margin="20,0,5,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Style="{StaticResource StatusBarTextBlockStyle}" Margin="0,9,16,9"
+                 Text="{Binding Status}"/>
+            <ContentControl Margin="6,0,0,0" Content="{Binding CompletionStats}"/>
+        </StackPanel>
+        <ContentControl Grid.Column="1" Content="{Binding SelectionStats}"/>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" DataContext="{Binding GlobeNavigation}">
+            <Button Style="{StaticResource StatusBarButtonStyle}" AutomationProperties.AutomationId="ResetViewButton"
+              AutomationProperties.Name="{x:Static local:Resources.StatusBar_TooltipResetView}"
+              ToolTip="{x:Static local:Resources.StatusBar_ResetTooltip}" Command="{Binding ResetViewCommand}">
+                <Image Style="{StaticResource StatusBarIconImageStyle}" SnapsToDevicePixels="true"
+               Source="/VisualizationControl;component/Images/reset_view_icon.png"/>
+            </Button>
+            <Button Style="{StaticResource StatusBarButtonStyle}"
+              AutomationProperties.AutomationId="ZoomToSelectionButton"
+              AutomationProperties.Name="{x:Static local:Resources.StatusBar_TooltipZoomToSelection}"
+              ToolTip="{x:Static local:Resources.StatusBar_ZoomTooltip}"
+              Command="{Binding ZoomToSelectionCommand}" IsEnabled="{Binding CanExecuteZoomToSelectionCommand}">
+                <Image Style="{StaticResource StatusBarIconImageStyle}" SnapsToDevicePixels="true"
+               Source="/VisualizationControl;component/Images/zoom_selection.png"/>
+            </Button>
+            <ToggleButton Style="{StaticResource StatusBarToggleButtonStyle}"
+                    AutomationProperties.AutomationId="ToggleOnscreenNavigationButton"
+                    AutomationProperties.Name="{x:Static local:Resources.Narrator_NavigationControls}"
+                    ToolTip="{x:Static local:Resources.StatusBar_TooltipOnscreenNavigations}"
+                    IsChecked="{Binding OnScreenNavigationVisible}">
+                <Image Style="{StaticResource StatusBarIconImageStyle}" SnapsToDevicePixels="true"
+               Source="/VisualizationControl;component/Images/nav_toggle_icon.png"/>
+            </ToggleButton>
+        </StackPanel>
+    </Grid>
+</UserControl>

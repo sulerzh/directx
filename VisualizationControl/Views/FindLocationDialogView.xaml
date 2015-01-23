@@ -1,0 +1,77 @@
+﻿<Window x:Class="Microsoft.Data.Visualization.VisualizationControls.FindLocationDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+        xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        Loaded="OnLoaded" wpfEx:SizeObserver.Observe="true" Width="337" MinHeight="173"
+        ResizeMode="NoResize" SizeToContent="Height" WindowStartupLocation="CenterScreen"
+        Style="{DynamicResource ChromelessWindowStyle}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\ChromeButtonBaseStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\Converters.xaml"/>
+                <ResourceDictionary Source="..\Styles\DialogStyles.xaml"/>
+                <ResourceDictionary Source="..\Styles\GeoFlowMetro.xaml"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="42" CornerRadius="0" GlassFrameThickness="0,0,0,1"/>
+    </shell:WindowChrome.WindowChrome>
+    <Border Name="MaximizeBorder" Margin="0" BorderBrush="#FF838383" BorderThickness="1">
+        <Grid Margin="{StaticResource DialogWindowMargin}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource DialogTitleStyle}" Grid.Column="0"
+                   Text="{x:Static local:Resources.FindLocationDialog_Title}"/>
+                <Button Click="CloseButton_Click" TabIndex="3" IsCancel="true"
+                shell:WindowChrome.IsHitTestVisibleInChrome="true" Grid.Column="1"
+                Style="{StaticResource DialogCloseButton}"
+                AutomationProperties.AutomationId="FindLocationCloseButton"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_Close}"
+                AutomationProperties.HelpText="{x:Static local:Resources.NarratorFindLocation_Close}"/>
+            </Grid>
+            <Rectangle Height="{StaticResource NormalSpacerHeight}" Grid.Row="1"/>
+            <StackPanel Grid.Row="2">
+                <TextBlock Style="{StaticResource DialogStandardLabelStyle}"
+                   Text="{x:Static local:Resources.FindLocationDialog_Subheader}"/>
+                <Rectangle Height="{StaticResource HeadToBodySpacerHeight}"/>
+                <TextBox TextChanged="LocationTextBox_TextChanged" x:Name="LocationTextBox" Height="25"
+                 VerticalContentAlignment="Center" Margin="0,0,0,5" MaxLength="250" TabIndex="1"
+                 AutomationProperties.AutomationId="FindLocationTextBox"
+                 AutomationProperties.Name="{x:Static local:Resources.NarratorFindLocation_TextBox}"
+                 AutomationProperties.HelpText="{x:Static local:Resources.FindLocationDialog_Subheader}"
+                 Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Style="{StaticResource DialogMiniLabelStyle}"
+                   Text="{x:Static local:Resources.FindLocationDialog_Examples}"/>
+                <Rectangle Height="{StaticResource NormalSpacerHeight}"/>
+            </StackPanel>
+            <Grid Row="3">
+                <TextBlock x:Name="FindLocationStatusMessage" VerticalAlignment="Center"
+                   Style="{StaticResource DialogFailureNotificationStyle}" HorizontalAlignment="Left"
+                   AutomationProperties.AutomationId="FindLocationStatusMessage"
+                   Text="{Binding StatusMessage, Mode=OneWay}"/>
+                <Button x:Name="FindLocationFindButton" TabIndex="2" Style="{StaticResource DialogActionButton}"
+                IsDefault="true" Content="{x:Static local:Resources.FindLocationDialog_Find}"
+                HorizontalAlignment="Right" AutomationProperties.AutomationId="FindLocationFindButton"
+                AutomationProperties.Name="{x:Static local:Resources.FindLocationDialog_Find}"
+                AutomationProperties.HelpText="{x:Static local:Resources.NarratorFindLocation_Find}"
+                Command="{Binding FindCommand}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

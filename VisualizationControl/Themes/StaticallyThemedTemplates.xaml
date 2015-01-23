@@ -1,0 +1,974 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls">
+  <ResourceDictionary.MergedDictionaries>
+    <x:Static Member="local:ChromelessWindowBase.MainThemeDictionary"/>
+  </ResourceDictionary.MergedDictionaries>
+  <Style x:Key="ChromeTitleButtonBase" TargetType="{x:Type Button}">
+    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+  </Style>
+  <Style x:Key="ChromeButtonImageStyle" TargetType="{x:Type Image}">
+    <Setter Property="FrameworkElement.Width" Value="16"/>
+    <Setter Property="FrameworkElement.Height" Value="16"/>
+    <Setter Property="FrameworkElement.Margin" Value="4,0"/>
+    <Setter Property="UIElement.SnapsToDevicePixels" Value="true"/>
+  </Style>
+  <Style TargetType="{x:Type Button}">
+    <Setter Property="Control.Background" Value="{StaticResource MetroBackground}"/>
+    <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+    <Setter Property="Control.BorderThickness" Value="0"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="72"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid x:Name="MainGrid">
+            <Border BorderThickness="1">
+              <Border.Background>
+                <SolidColorBrush x:Name="BackgroundBrush" Color="{Binding Source={StaticResource MetroBackground}, Path=Color}"/>
+              </Border.Background>
+              <Border.BorderBrush>
+                <SolidColorBrush x:Name="BorderBrush" Color="{Binding Source={StaticResource CheckBoxFrames}, Path=Color}"/>
+              </Border.BorderBrush>
+              <ContentControl IsTabStop="false">
+                <Control.Foreground>
+                  <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Source={StaticResource MetroText}, Path=Color}"/>
+                </Control.Foreground>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Margin="5"
+                                  RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                  Content="{TemplateBinding ContentControl.Content}"/>
+              </ContentControl>
+            </Border>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroHoverGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HighlightText}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroAppButtonHoverGreen}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroInactiveGray}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ChartTypeToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="FrameworkElement.Margin" Value="6,0"/>
+    <Setter Property="FrameworkElement.Width" Value="32"/>
+    <Setter Property="FrameworkElement.Height" Value="32"/>
+    <Setter Property="Control.Background" Value="Transparent"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="KeyboardNavigation.AcceptsReturn" Value="true"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="HoverPressState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="HoverPressState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroPressedGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled"/>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="CheckStates">
+                <VisualState x:Name="Checked">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="CheckState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroSelectedGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Unchecked"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid>
+              <Panel.Background>
+                <SolidColorBrush x:Name="HoverPressState" Color="Transparent"/>
+              </Panel.Background>
+              <Border>
+                <Border.Background>
+                  <SolidColorBrush x:Name="CheckState" Color="Transparent"/>
+                </Border.Background>
+                <ContentPresenter Width="20" Height="20"/>
+              </Border>
+            </Grid>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="LayerRenameButtonStyle" TargetType="{x:Type ToggleButton}"
+         BasedOn="{StaticResource {x:Type ToggleButton}}">
+    <Setter Property="Control.Background" Value="Transparent"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="HoverPressState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="HoverPressState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroPressedGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled"/>
+              </VisualStateGroup>
+              <VisualStateGroup x:Name="CheckStates">
+                <VisualState x:Name="Checked">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="CheckState" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroSelectedGreen}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Unchecked"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid>
+              <Panel.Background>
+                <SolidColorBrush x:Name="HoverPressState" Color="Transparent"/>
+              </Panel.Background>
+              <Border>
+                <Border.Background>
+                  <SolidColorBrush x:Name="CheckState" Color="Transparent"/>
+                </Border.Background>
+                <ContentPresenter/>
+              </Border>
+            </Grid>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <ControlTemplate x:Key="ChromeUndoButtonTemplate" TargetType="{x:Type Button}">
+    <Grid>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroPressedGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Disabled">
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetName="img_normal" Storyboard.TargetProperty="Opacity" Duration="0" To="0"/>
+              <DoubleAnimation Storyboard.TargetName="img_disabled" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Panel.Background>
+        <SolidColorBrush x:Name="bgBrush" Color="Transparent"/>
+      </Panel.Background>
+      <Image Name="img_normal" Source="/VisualizationControl;component/Images/Undo.png" Opacity="1"
+             Style="{StaticResource ChromeButtonImageStyle}"/>
+      <Image Name="img_disabled" Source="/VisualizationControl;component/Images/Undo_disabled.png" Opacity="0"
+             Style="{StaticResource ChromeButtonImageStyle}"/>
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="ChromeRedoButtonTemplate" TargetType="{x:Type Button}">
+    <Grid>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroPressedGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Disabled">
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetName="img_normal" Storyboard.TargetProperty="Opacity" Duration="0" To="0"/>
+              <DoubleAnimation Storyboard.TargetName="img_disabled" Storyboard.TargetProperty="Opacity" Duration="0" To="1"/>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Panel.Background>
+        <SolidColorBrush x:Name="bgBrush" Color="Transparent"/>
+      </Panel.Background>
+      <Image Name="img_normal" Source="/VisualizationControl;component/Images/Redo.png" Opacity="1"
+             Style="{StaticResource ChromeButtonImageStyle}"/>
+      <Image Name="img_disabled" Source="/VisualizationControl;component/Images/Redo_disabled.png" Opacity="0"
+             Style="{StaticResource ChromeButtonImageStyle}"/>
+    </Grid>
+  </ControlTemplate>
+  <ControlTemplate x:Key="ChromeSendASmileButtonTemplate" TargetType="{x:Type Button}">
+    <Grid>
+      <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+          <VisualState x:Name="Normal"/>
+          <VisualState x:Name="MouseOver">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+          <VisualState x:Name="Pressed">
+            <Storyboard>
+              <ColorAnimation Storyboard.TargetName="bgBrush" Storyboard.TargetProperty="Color" Duration="0"
+                              To="{Binding Source={StaticResource MetroHoverGreen}, Path=Color}"/>
+            </Storyboard>
+          </VisualState>
+        </VisualStateGroup>
+      </VisualStateManager.VisualStateGroups>
+      <Panel.Background>
+        <SolidColorBrush x:Name="bgBrush" Color="Transparent"/>
+      </Panel.Background>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="{x:Static local:Resources.SendFeedbackText}" VerticalAlignment="Center"
+                   Margin="0,0,6,0"/>
+        <Image Grid.Column="1" Source="/VisualizationControl;component/Images/SendASmile.png" Height="16"/>
+      </Grid>
+    </Grid>
+  </ControlTemplate>
+  <Style x:Key="ChromeUndoButton" BasedOn="{StaticResource ChromeTitleButtonBase}"
+         TargetType="{x:Type Button}">
+    <Setter Property="Control.Template" Value="{StaticResource ChromeUndoButtonTemplate}"/>
+  </Style>
+  <Style x:Key="ChromeRedoButton" BasedOn="{StaticResource ChromeTitleButtonBase}"
+         TargetType="{x:Type Button}">
+    <Setter Property="Control.Template" Value="{StaticResource ChromeRedoButtonTemplate}"/>
+  </Style>
+  <Style x:Key="ChromeSendASmileButton" BasedOn="{StaticResource ChromeTitleButtonBase}"
+         TargetType="{x:Type Button}">
+    <Setter Property="Control.Template" Value="{StaticResource ChromeSendASmileButtonTemplate}"/>
+  </Style>
+  <Style x:Key="BorderlessButton" TargetType="{x:Type Button}">
+    <Setter Property="Control.Background" Value="{StaticResource MetroBackground}"/>
+    <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+    <Setter Property="Control.BorderThickness" Value="0"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="72"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid x:Name="MainGrid">
+            <Border BorderThickness="1">
+              <Border.Background>
+                <SolidColorBrush x:Name="BackgroundBrush" Color="{Binding Source={StaticResource MetroBackground}, Path=Color}"/>
+              </Border.Background>
+              <Border.BorderBrush>
+                <SolidColorBrush x:Name="BorderBrush" Color="Transparent"/>
+              </Border.BorderBrush>
+              <ContentControl IsTabStop="false">
+                <Control.Foreground>
+                  <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Source={StaticResource MetroText}, Path=Color}"/>
+                </Control.Foreground>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Margin="5"
+                                  RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                  Content="{TemplateBinding ContentControl.Content}"/>
+              </ContentControl>
+            </Border>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroHoverGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroAppButtonHoverGreen}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroInactiveGray}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="ToggleBorderlessButton" TargetType="{x:Type Button}">
+    <Setter Property="Control.Background" Value="Transparent"/>
+    <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+    <Setter Property="Control.BorderThickness" Value="0"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="72"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid x:Name="MainGrid">
+            <Border BorderThickness="1">
+              <Border.BorderBrush>
+                <SolidColorBrush x:Name="BorderBrush" Color="Transparent"/>
+              </Border.BorderBrush>
+              <ContentControl IsTabStop="false">
+                <Control.Foreground>
+                  <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Source={StaticResource MetroText}, Path=Color}"/>
+                </Control.Foreground>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Margin="5"
+                                  RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                  Content="{TemplateBinding ContentControl.Content}"/>
+              </ContentControl>
+            </Border>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroAppButtonHoverGreen}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Source={StaticResource MetroInactiveGray}, Path=Color}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type CheckBox}">
+    <Setter Property="FrameworkElement.MinHeight" Value="13"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="13"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type CheckBox}">
+          <BulletDecorator x:Name="BDec" Background="Transparent" SnapsToDevicePixels="true">
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroHoverGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HighlightCheckMarks}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroText}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroInactiveGray}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroInactiveGray}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroBackgroundInactiveGray}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource MetroInactiveGray}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Normal"/>
+              </VisualStateGroup>
+              <VisualStateGroup Name="CheckStates">
+                <VisualState Name="Unchecked">
+                  <Storyboard>
+                    <DoubleAnimation To="0.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState Name="Checked">
+                  <Storyboard>
+                    <DoubleAnimation To="1.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState Name="Indeterminate">
+                  <Storyboard>
+                    <DoubleAnimation To="0.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <BulletDecorator.Bullet>
+              <Border BorderThickness="1" FlowDirection="LeftToRight"
+                      Height="{Binding ElementName=BDec, Path=ActualHeight}"
+                      Width="{Binding ElementName=BDec, Path=ActualHeight}">
+                <Border.BorderBrush>
+                  <SolidColorBrush x:Name="BulletBorderBrush" Color="{Binding Path=Color, Source={StaticResource CheckBoxFrames}}"/>
+                </Border.BorderBrush>
+                <Border.Background>
+                  <SolidColorBrush x:Name="BulletBackgroundBrush"
+                                   Color="{Binding Path=Color, Source={StaticResource MetroBackground}}"/>
+                </Border.Background>
+                <Grid x:Name="DotEllipse" Margin="1">
+                  <Panel.Background>
+                    <DrawingBrush Stretch="Uniform">
+                      <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                          <DrawingGroup.Children>
+                            <GeometryDrawing Geometry="F1 M 1,5 L 3,7 8,1 ">
+                              <GeometryDrawing.Pen>
+                                <Pen Thickness="2" LineJoin="Round">
+                                  <Pen.Brush>
+                                    <SolidColorBrush x:Name="DotBrush" Color="{Binding Path=Color, Source={StaticResource CheckMarks}}"/>
+                                  </Pen.Brush>
+                                </Pen>
+                              </GeometryDrawing.Pen>
+                            </GeometryDrawing>
+                          </DrawingGroup.Children>
+                        </DrawingGroup>
+                      </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                  </Panel.Background>
+                </Grid>
+              </Border>
+            </BulletDecorator.Bullet>
+            <ContentControl Margin="5,0,0,0" KeyboardNavigation.IsTabStop="false">
+              <Control.Foreground>
+                <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Path=Color, Source={StaticResource MetroText}}"/>
+              </Control.Foreground>
+              <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Control.Padding}" RecognizesAccessKey="true"
+                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                KeyboardNavigation.IsTabStop="false"/>
+            </ContentControl>
+          </BulletDecorator>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="FilterCheckBoxStyle" TargetType="{x:Type CheckBox}">
+    <Setter Property="Control.Background" Value="{StaticResource MetroBackground}"/>
+    <Setter Property="Control.BorderBrush" Value="{StaticResource CheckBoxFrames}"/>
+    <Setter Property="Control.BorderThickness" Value="1"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+    <Setter Property="FrameworkElement.MinHeight" Value="16"/>
+    <Setter Property="FrameworkElement.MinWidth" Value="16"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type CheckBox}">
+          <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="true">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding Control.BorderBrush}"
+                    BorderThickness="{TemplateBinding Control.BorderThickness}"
+                    Background="{TemplateBinding Control.Background}"
+                    HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" Margin="1"
+                    VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" FlowDirection="LeftToRight">
+              <Grid x:Name="markGrid">
+                <Path x:Name="optionMark"
+                      Data="F1 M 9.97498,1.22334 L 4.6983,9.09834 4.52164,9.09834 0,5.19331 1.27664,3.52165 4.255,6.08833 8.33331,1.52588E-05 9.97498,1.22334 Z"
+                      Fill="{StaticResource MetroText}" Margin="1" Opacity="0" Stretch="None"/>
+                <Rectangle x:Name="indeterminateMark" Fill="{StaticResource MetroText}" Margin="2" Opacity="0"/>
+              </Grid>
+            </Border>
+            <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="false"
+                              HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                              Margin="{TemplateBinding Control.Padding}" RecognizesAccessKey="true"
+                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                              VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"/>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ContentControl.HasContent" Value="true">
+              <Setter Property="Control.Padding" Value="4,-1,0,0"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsMouseOver" Value="true">
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroHoverGreen}" Property="Border.Background"/>
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroPressedGreen}"
+                      Property="Border.BorderBrush"/>
+              <Setter TargetName="optionMark" Value="{StaticResource HighlightCheckMarks}" Property="Shape.Fill"/>
+              <Setter TargetName="indeterminateMark" Value="{StaticResource HighlightCheckMarks}" Property="Shape.Fill"/>
+            </Trigger>
+            <Trigger Property="UIElement.IsEnabled" Value="false">
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroBackgroundInactiveGray}"
+                      Property="Border.Background"/>
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroInactiveGray}"
+                      Property="Border.BorderBrush"/>
+              <Setter TargetName="optionMark" Value="{StaticResource MetroInactiveGray}" Property="Shape.Fill"/>
+              <Setter TargetName="indeterminateMark" Value="{StaticResource MetroInactiveGray}" Property="Shape.Fill"/>
+            </Trigger>
+            <Trigger Property="ButtonBase.IsPressed" Value="true">
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroPressedGreen}" Property="Border.Background"/>
+              <Setter TargetName="checkBoxBorder" Value="{StaticResource MetroPressedGreen}"
+                      Property="Border.BorderBrush"/>
+              <Setter TargetName="optionMark" Value="{StaticResource MetroText}" Property="Shape.Fill"/>
+              <Setter TargetName="indeterminateMark" Value="{StaticResource MetroText}" Property="Shape.Fill"/>
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+              <Setter TargetName="optionMark" Property="UIElement.Opacity" Value="1"/>
+              <Setter TargetName="indeterminateMark" Property="UIElement.Opacity" Value="0"/>
+            </Trigger>
+            <Trigger Value="{x:Null}" Property="ToggleButton.IsChecked">
+              <Setter TargetName="optionMark" Property="UIElement.Opacity" Value="0"/>
+              <Setter TargetName="indeterminateMark" Property="UIElement.Opacity" Value="1"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type RadioButton}">
+    <Setter Property="FrameworkElement.Margin" Value="0,2,0,2"/>
+    <Setter Property="FrameworkElement.Height" Value="16"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type RadioButton}">
+          <BulletDecorator x:Name="BDec" Background="Transparent" SnapsToDevicePixels="true" VerticalAlignment="Center">
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroHoverGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HighlightCheckMarks}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroPressedGreen}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroText}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="ForegroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroInactiveGray}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBorderBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroInactiveGray}}"/>
+                    <ColorAnimation Storyboard.TargetName="BulletBackgroundBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroBackground}}"/>
+                    <ColorAnimation Storyboard.TargetName="DotBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Path=Color, Source={StaticResource MetroInactiveGray}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Normal"/>
+              </VisualStateGroup>
+              <VisualStateGroup Name="CheckStates">
+                <VisualState Name="Unchecked">
+                  <Storyboard>
+                    <DoubleAnimation To="0.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState Name="Checked">
+                  <Storyboard>
+                    <DoubleAnimation To="1.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState Name="Indeterminate">
+                  <Storyboard>
+                    <DoubleAnimation To="0.0" Storyboard.TargetName="DotEllipse" Storyboard.TargetProperty="Opacity" Duration="0"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <BulletDecorator.Bullet>
+              <Border BorderThickness="0" BorderBrush="Transparent"
+                      Height="{Binding ElementName=BDec, Path=ActualHeight}"
+                      Width="{Binding ElementName=BDec, Path=ActualHeight}"
+                      CornerRadius="{Binding ElementName=BDec, Path=ActualHeight}">
+                <Border Margin="2" BorderThickness="1" CornerRadius="{Binding ElementName=BDec, Path=ActualHeight}">
+                  <Border.BorderBrush>
+                    <SolidColorBrush x:Name="BulletBorderBrush" Color="{Binding Path=Color, Source={StaticResource CheckBoxFrames}}"/>
+                  </Border.BorderBrush>
+                  <Border.Background>
+                    <SolidColorBrush x:Name="BulletBackgroundBrush"
+                                     Color="{Binding Path=Color, Source={StaticResource MetroBackground}}"/>
+                  </Border.Background>
+                  <Ellipse Name="DotEllipse" Margin="2">
+                    <Shape.Fill>
+                      <SolidColorBrush x:Name="DotBrush" Color="{Binding Path=Color, Source={StaticResource CheckMarks}}"/>
+                    </Shape.Fill>
+                  </Ellipse>
+                </Border>
+              </Border>
+            </BulletDecorator.Bullet>
+            <ContentControl KeyboardNavigation.IsTabStop="false" Margin="5,0,0,0">
+              <Control.Foreground>
+                <SolidColorBrush x:Name="ForegroundBrush" Color="{Binding Path=Color, Source={StaticResource MetroText}}"/>
+              </Control.Foreground>
+              <ContentPresenter HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                Margin="{TemplateBinding Control.Padding}" RecognizesAccessKey="true"
+                                SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"/>
+            </ContentControl>
+          </BulletDecorator>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type Label}">
+    <Setter Property="Control.FontSize" Value="11"/>
+    <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="true"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Label}">
+          <Border BorderBrush="{TemplateBinding Control.BorderBrush}"
+                  BorderThickness="{TemplateBinding Control.BorderThickness}"
+                  Background="{TemplateBinding Control.Background}" Padding="{TemplateBinding Control.Padding}"
+                  SnapsToDevicePixels="true">
+            <ContentControl FontFamily="Segoe UI" FontWeight="Bold" FontSize="{TemplateBinding Control.FontSize}">
+              <Control.Foreground>
+                <SolidColorBrush x:Name="FontColor" Color="{Binding Path=Color, Source={StaticResource MetroTextGreen}}"/>
+              </Control.Foreground>
+              <ContentPresenter ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                Content="{TemplateBinding ContentControl.Content}"
+                                ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"/>
+            </ContentControl>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type TextBox}">
+    <Setter Property="Control.Foreground" Value="{StaticResource MetroText}"/>
+    <Setter Property="Control.Padding" Value="1"/>
+    <Setter Property="UIElement.AllowDrop" Value="true"/>
+    <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+    <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type TextBox}">
+          <Border BorderThickness="1">
+            <Border.Background>
+              <SolidColorBrush x:Name="BorderBackground" Color="{Binding Source={StaticResource MetroBackground}, Path=Color}"/>
+            </Border.Background>
+            <Border.BorderBrush>
+              <SolidColorBrush x:Name="BorderBrush" Color="{Binding Source={StaticResource MetroGray3}, Path=Color}"/>
+            </Border.BorderBrush>
+            <ScrollViewer x:Name="PART_ContentHost" Padding="0 -2 0 1"
+                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="UIElement.IsEnabled" Value="false">
+              <Setter Value="{StaticResource MetroInactiveGray}" Property="Control.Foreground"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="LayerVisibilityToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="FrameworkElement.Width" Value="16"/>
+    <Setter Property="FrameworkElement.Height" Value="16"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CheckStates">
+                <VisualState x:Name="Checked">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="FillBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Unchecked">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="FillBrush" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Rectangle>
+              <Shape.Fill>
+                <DrawingBrush Stretch="Uniform">
+                  <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                      <DrawingGroup.Children>
+                        <GeometryDrawing Geometry="F1 M 10.4168,5.66617 C 10.4168,7.00107 9.33301,8.08292 7.9987,8.08292 6.66309,8.08292 5.58122,7.00107 5.58122,5.66617 5.58122,4.32999 6.66309,3.24747 7.9987,3.24747 9.33301,3.24747 10.4168,4.32999 10.4168,5.66617 M 0,5.66626 C 0,5.66626 2.91146,0 7.99804,0 13.0885,0 16,5.66626 16,5.66626 16,5.66626 13.0885,11.3301 7.99804,11.3301 2.91146,11.3301 0,5.66626 0,5.66626 M 12.0594,5.66635 C 12.0594,3.42325 10.2419,1.6062 7.99869,1.6062 5.75683,1.6062 3.94043,3.42325 3.94043,5.66635 3.94043,7.90698 5.75683,9.72647 7.99869,9.72647 10.2419,9.72647 12.0594,7.90698 12.0594,5.66635 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="FillBrush" Color="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                      </DrawingGroup.Children>
+                    </DrawingGroup>
+                  </DrawingBrush.Drawing>
+                </DrawingBrush>
+              </Shape.Fill>
+            </Rectangle>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="AddNewLayerButtonStyle" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.Width" Value="16"/>
+    <Setter Property="FrameworkElement.Height" Value="16"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush3" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush4" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush5" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush6" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush7" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush3" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush4" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush5" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush6" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush7" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush3" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush4" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush5" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush6" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush7" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Rectangle>
+              <Shape.Fill>
+                <DrawingBrush Stretch="Uniform">
+                  <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                      <DrawingGroup.Children>
+                        <GeometryDrawing Geometry="F1 M 2,16 L 2,3.00006 0,3.00006 0,16 2,16 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush1" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 7.62939E-05,16 L 15.0001,16 15.0001,14 7.62939E-05,14 7.62939E-05,16 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush2" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 0.999969,5.00003 L 8,5.00003 8,3.00003 0.999969,3.00003 0.999969,5.00003 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush3" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 14.0001,6.00006 L 14.0001,6.10352E-05 12.0001,6.10352E-05 12.0001,6.00006 14.0001,6.00006 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush4" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 16,4.00003 L 16,2.00003 9.99995,2.00003 9.99995,4.00003 16,4.00003 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush5" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 16.0001,16 L 16.0001,8.00006 14.0001,8.00006 14.0001,16 16.0001,16 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush6" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 1.00014,1.99997 L 9.00008,1.99997 9.00008,-3.05176E-05 1.00014,-3.05176E-05 1.00014,1.99997 Z">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush7" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                      </DrawingGroup.Children>
+                    </DrawingGroup>
+                  </DrawingBrush.Drawing>
+                </DrawingBrush>
+              </Shape.Fill>
+            </Rectangle>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="SettingsButtonStyle" TargetType="{x:Type Button}">
+    <Setter Property="FrameworkElement.Width" Value="16"/>
+    <Setter Property="FrameworkElement.Height" Value="16"/>
+    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Control.Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type Button}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="MouseOver">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource HoverControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Pressed">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource ActiveControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                  <Storyboard>
+                    <ColorAnimation Storyboard.TargetName="Brush1" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                    <ColorAnimation Storyboard.TargetName="Brush2" Storyboard.TargetProperty="Color" Duration="0"
+                                    To="{Binding Color, Source={StaticResource DisabledControlColor}}"/>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Rectangle>
+              <Shape.Fill>
+                <DrawingBrush Stretch="Uniform">
+                  <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                      <DrawingGroup.Children>
+                        <GeometryDrawing Geometry="F1 M 7.0556,11.6004 C 5.74077,11.2677 4.65388,10.2279 4.33215,8.81337 3.87138,6.79936 5.12621,4.795 7.13487,4.32948 7.73109,4.1924 8.32649,4.20662 8.8817,4.34709 10.1973,4.67995 11.2847,5.72151 11.6073,7.13551 12.0684,9.1479 10.8167,11.153 8.80498,11.6177 8.20781,11.7551 7.61153,11.741 7.0556,11.6004 M 9.01442,1.52588E-05 L 6.34108,0.0392609 6.0968,2.2394 C 5.69591,2.36598 5.31715,2.5298 4.96681,2.72585 L 3.26312,1.46077 1.34615,3.3243 2.64783,5.06166 C 2.41356,5.48174 2.22655,5.93214 2.09804,6.40059 L 0.036026,6.70277 0,9.38005 2.13507,9.68221 C 2.26991,10.1607 2.45677,10.6108 2.69733,11.0261 L 1.46307,12.6928 3.32251,14.6096 5.05882,13.303 C 5.48045,13.5278 5.92372,13.7066 6.38945,13.8294 L 6.69208,15.9166 9.36603,15.954 9.68071,13.7517 C 10.1297,13.6123 10.5562,13.4306 10.946,13.203 L 12.6747,14.4876 14.5921,12.6226 13.2313,10.8103 C 13.4408,10.4156 13.6078,9.99846 13.7257,9.56551 L 15.8975,9.24294 15.9359,6.56966 13.6727,6.24834 C 13.5444,5.81636 13.375,5.40901 13.1636,5.02934 L 14.4779,3.25639 12.6173,1.33769 10.8069,2.70045 C 10.3624,2.45476 9.88782,2.26814 9.39203,2.13936 L 9.01442,1.52588E-05 ">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush1" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                        <GeometryDrawing Geometry="F1 M 8.30144,6.65651 C 8.09691,6.60475 7.87733,6.59914 7.65796,6.64885 6.92284,6.82243 6.46367,7.55348 6.63208,8.29341 6.75108,8.8112 7.1496,9.19289 7.63222,9.31499 7.83592,9.36653 8.05562,9.37178 8.2744,9.32149 9.0067,9.15227 9.46745,8.41496 9.29832,7.67805 9.18279,7.1595 8.78474,6.77876 8.30144,6.65651 ">
+                          <GeometryDrawing.Brush>
+                            <SolidColorBrush x:Name="Brush2" Color="{Binding Color, Source={StaticResource DefaultControlColor}}"/>
+                          </GeometryDrawing.Brush>
+                        </GeometryDrawing>
+                      </DrawingGroup.Children>
+                    </DrawingGroup>
+                  </DrawingBrush.Drawing>
+                </DrawingBrush>
+              </Shape.Fill>
+            </Rectangle>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.LayerSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+                <ResourceDictionary Source="..\Styles\RedlineBase.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <wpfEx:ReferenceNullToIntegerConverter x:Key="ColorPickerGridRowConverter"
+                                             NonNullValue="2"
+                                             NullValue="0"/>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <StackPanel IsEnabled="{Binding SettingsEnabled}">
+        <local:LayerChooserRenamer x:Name="LayerChooserRenamer" Grid.Row="0" Margin="0,4,0,0" DataContext="{Binding Model}"/>
+        <Rectangle Height="{StaticResource PanelSectionSpacerHeight}"/>
+        <TextBlock Text="{x:Static local:Resources.LayerSettingsSizeHeaderLabel}"
+               Style="{StaticResource SectionHeaderTextStyle}"/>
+        <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemSpacing}">
+            <FrameworkElement.Resources>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="FrameworkElement.Margin" Value="0 6.25"/>
+                    <Setter Property="wpfEx:GridEx.ColDefs" Value="*,90,6,60"/>
+                </Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource SettingsFieldLabelStyle}">
+                    <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left"/>
+                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Bottom"/>
+                </Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Bottom"/>
+                    <Setter Property="FrameworkElement.Height" Value="21"/>
+                    <Setter Property="FrameworkElement.Margin" Value="0 -6.25"/>
+                </Style>
+                <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
+                    <Setter Property="FrameworkElement.VerticalAlignment" Value="Bottom"/>
+                    <Setter Property="FrameworkElement.Margin" Value="0 -6.25"/>
+                </Style>
+            </FrameworkElement.Resources>
+            <Grid>
+                <TextBlock Grid.Column="0" Text="{x:Static local:Resources.LayerSettings_OpacityFactorLabel}"
+                   TextWrapping="Wrap"/>
+                <Slider x:Name="OpacityFactorSlider" Grid.Column="1" Minimum="0" Maximum="1"
+                ToolTip="{x:Static local:Resources.LayerSettings_OpacitySliderTooltip}" IsMoveToPointEnabled="true"
+                AutomationProperties.Name="{x:Static local:Resources.LayerSettings_OpacityFactorLabel}"
+                AutomationProperties.AutomationId="OpacityFactorSlider" Value="{Binding OpacityFactor}"/>
+                <TextBox x:Name="OpacityFactorTextBox" Grid.Column="3" wpfEx:FocusHelper.AdvanceOnEnterKey="true"
+                 AutomationProperties.Name="{x:Static local:Resources.Narrator_OpacityValue}"
+                 AutomationProperties.AutomationId="OpacityFactorTextBox"
+                 Text="{Binding OpacityFactor, Converter={StaticResource DoubleToPercentageOpacityConverter}}"/>
+            </Grid>
+            <Grid Visibility="{Binding DataDimensionScaleVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            IsEnabled="{Binding ScalesEnabled}">
+                <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding DataDimensionScaleLabel}"/>
+                <Slider x:Name="HeightFactorSlider" Grid.Column="1" Minimum="0"
+                ToolTip="{x:Static local:Resources.LayerSettings_ScaleSliderTooltip}" IsMoveToPointEnabled="true"
+                AutomationProperties.AutomationId="HeightFactorSlider" Maximum="{Binding DataDimensionMaxScale}"
+                Value="{Binding DataDimensionScale}" AutomationProperties.Name="{Binding DataDimensionScaleLabel}"/>
+                <TextBox x:Name="HeightFactorTextBox" Grid.Column="3" wpfEx:FocusHelper.AdvanceOnEnterKey="true"
+                 AutomationProperties.AutomationId="HeightFactorTextBox"
+                 Text="{Binding DataDimensionScale, Converter={StaticResource DoubleToPercentageConverter}}"
+                 AutomationProperties.Name="{Binding DataDimensionScaleLabel, StringFormat={x:Static local:Resources.Narrator_DataValue}}"/>
+            </Grid>
+            <Grid Visibility="{Binding FixedDimensionScaleVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            IsEnabled="{Binding ScalesEnabled}">
+                <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="{Binding FixedDimensionScaleLabel}"/>
+                <Slider x:Name="SizeFactorSlider" Grid.Column="1" Minimum="0" Maximum="5"
+                ToolTip="{x:Static local:Resources.LayerSettings_VisualSizeSliderTooltip}"
+                IsMoveToPointEnabled="true" AutomationProperties.AutomationId="SizeFactorSlider"
+                Value="{Binding FixedDimensionScale}"
+                AutomationProperties.Name="{Binding FixedDimensionScaleLabel}"/>
+                <TextBox x:Name="SizeFactorTextBox" Grid.Column="3" wpfEx:FocusHelper.AdvanceOnEnterKey="true"
+                 AutomationProperties.AutomationId="SizeFactorTextBox"
+                 Text="{Binding FixedDimensionScale, Converter={StaticResource DoubleToPercentageConverter}}"
+                 AutomationProperties.Name="{Binding FixedDimensionScaleLabel, StringFormat={x:Static local:Resources.Narrator_DataValue}}"/>
+            </Grid>
+            <CheckBox x:Name="LockScalesCheckBox" Margin="0 6.25"
+                Content="{x:Static local:Resources.LayerSettingsLockScalesLabel}"
+                ToolTip="{x:Static local:Resources.LayerSettings_LockCurrentScaleTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.LayerSettingsLockScalesLabel}"
+                AutomationProperties.AutomationId="LockScalesCheckBox"
+                Visibility="{Binding LockScalesVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsEnabled="{Binding LockScalesEnabled}" IsChecked="{Binding LockScales}"/>
+        </StackPanel>
+        <Rectangle Margin="0 -7 -4 -7" Height="2 px" Fill="{DynamicResource MetroGraySeparator}"
+               Visibility="{Binding SeparatorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Grid Margin="{StaticResource PanelSectionContentMargin}"
+          Visibility="{Binding ColorPickerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="{StaticResource PanelItemCloseSpacerGridHeight}"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="{StaticResource PanelItemSpacerGridHeight}"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource SettingsFieldLabelStyle}"
+                 Text="{x:Static local:Resources.LayerSettingsColorDisplayLabel}"/>
+            <ComboBox AutomationProperties.AutomationId="ColorCategoryChooser" Grid.Row="2" Grid.Column="0"
+                ToolTip="{x:Static local:Resources.LayerSettings_SelectSeriesTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.Narrator_ColorSeries}"
+                ItemsSource="{Binding ColorScopeDisplayStrings}"
+                SelectedIndex="{Binding SelectedColorScopeIndex, Mode=TwoWay}"
+                Visibility="{Binding ColorScopeDisplayStrings, Converter={StaticResource VisibleIfNotNullConverter}}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                        <Setter Property="AutomationProperties.Name" Value="{Binding}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ComboBox>
+            <ContentControl KeyboardNavigation.IsTabStop="false" Margin="4,-1,0,0" Height="22" VerticalAlignment="Center"
+                      Grid.Column="1" ToolTip="{x:Static local:Resources.LayerSettings_ColorPickerTooltip}"
+                      Content="{Binding ColorPickerViewModel}"
+                      Grid.Row="{Binding ColorScopeDisplayStrings, Converter={StaticResource ColorPickerGridRowConverter}}"/>
+            <Button Grid.Row="4" MinWidth="120" Width="Auto" HorizontalAlignment="Left"
+              Content="{x:Static local:Resources.LayerSettings_ResetAllColorsLabel}"
+              AutomationProperties.AutomationId="ResetLayerColorsButton"
+              AutomationProperties.Name="{x:Static local:Resources.LayerSettings_ResetAllColorsLabel}"
+              AutomationProperties.HelpText="{x:Static local:Resources.Narrator_ResetColor}"
+              Command="{Binding ResetAllColorsCommand}"
+              Visibility="{Binding AnyColorsOverridden, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </Grid>
+        <Rectangle Height="{StaticResource PanelItemSpacerHeight}"/>
+        <TextBlock Text="{x:Static local:Resources.LayerSettingsDataDisplayLabel}"
+               Style="{StaticResource SectionHeaderTextStyle}"/>
+        <StackPanel Margin="{StaticResource PanelSectionContentMargin}"
+                wpfEx:SpacingHelper.ChildSpacing="{StaticResource PanelItemCloseSpacing}">
+            <CheckBox x:Name="ShowZeroesCheckBox" Content="{x:Static local:Resources.LayerSettingsShowZeroesLabel}"
+                ToolTip="{x:Static local:Resources.LayerSettings_ShowZeroesTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.LayerSettingsShowZeroesLabel}"
+                AutomationProperties.AutomationId="ShowZeroesCheckBox" IsChecked="{Binding DisplayZeroValues}"/>
+            <CheckBox x:Name="ShowNegativesCheckBox" Content="{x:Static local:Resources.LayerSettingsShowNegativesLabel}"
+                ToolTip="{x:Static local:Resources.LayerSettings_ShowNegativesTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.LayerSettingsShowNegativesLabel}"
+                AutomationProperties.AutomationId="ShowNegativesCheckBox"
+                IsChecked="{Binding DisplayNegativeValues}"/>
+            <CheckBox x:Name="ShowNullsCheckBox" Content="{x:Static local:Resources.LayerSettingsShowNullsLabel}"
+                ToolTip="{x:Static local:Resources.LayerSettings_ShowNullsTooltip}"
+                AutomationProperties.Name="{x:Static local:Resources.LayerSettingsShowNullsLabel}"
+                AutomationProperties.AutomationId="ShowNullsCheckBox" IsChecked="{Binding DisplayNullValues}"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

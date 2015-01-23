@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="Microsoft.Data.Visualization.VisualizationControls.TaskPanelSettingsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Microsoft.Data.Visualization.VisualizationControls"
+             xmlns:wpfEx="clr-namespace:Microsoft.Data.Visualization.WpfExtensions;assembly=WpfExtensions"
+             AutomationProperties.Name="{x:Static local:Resources.NarratorLayerPane_SettingsTab}">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles\Includes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <TabControl x:Name="TaskPanelSettingsSubheads" SelectedIndex="{Binding SelectedSubheadIndex}">
+        <ItemsControl.ItemContainerStyle>
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="Control.Background" Value="{DynamicResource MetroBackground}"/>
+                <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <Grid SnapsToDevicePixels="true" Margin="-1 0 0 0">
+                                <Border x:Name="border" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1,0,0,0"
+                        Padding="{TemplateBinding Control.Padding}">
+                                    <DockPanel>
+                                        <Polyline x:Name="TabChevron" Stroke="{TemplateBinding Control.BorderBrush}" StrokeThickness="1"
+                              DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Bottom" Visibility="Hidden"
+                              RenderTransformOrigin="0.5,0.5"/>
+                                        <ContentControl x:Name="content" KeyboardNavigation.IsTabStop="false"
+                                    Foreground="{TemplateBinding Control.Foreground}" HorizontalAlignment="Center" Background="Green">
+                                            <TextBlock x:Name="HeaderText" Text="{TemplateBinding HeaderedContentControl.Header}" MaxWidth="140"
+                                 TextWrapping="Wrap" wpfEx:TextFormattingHelper.AllCaps="true"
+                                 SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                 HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                 VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                                        </ContentControl>
+                                    </DockPanel>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="TabItem.IsSelected" Value="true">
+                                    <Setter TargetName="HeaderText" Property="TextBlock.FontWeight" Value="Bold"/>
+                                    <Setter TargetName="HeaderText" Value="{DynamicResource MetroBaseGreen}" Property="TextBlock.Foreground"/>
+                                </Trigger>
+                                <Trigger Property="TabItem.IsSelected" Value="false">
+                                    <Setter TargetName="HeaderText" Property="TextBlock.FontWeight" Value="Normal"/>
+                                    <Setter TargetName="HeaderText" Value="{DynamicResource NormalTextColor}" Property="TextBlock.Foreground"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="TabItem.IsSelected" Value="false"/>
+                                        <Condition Property="UIElement.IsMouseOver" Value="true"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="content" Value="{DynamicResource MetroPressedGreen}" Property="Control.Foreground"/>
+                                    <Setter TargetName="border" Value="{DynamicResource MetroHoverGreen}" Property="Border.Background"/>
+                                </MultiTrigger>
+                                <Trigger Property="UIElement.IsEnabled" Value="false">
+                                    <Setter TargetName="content" Value="{DynamicResource MetroInactiveGray}" Property="Control.Foreground"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ContentControl.ContentTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <StackPanel>
+                                <ContentControl KeyboardNavigation.IsTabStop="false" Margin="0 12 0 0" Content="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="TabItem.IsSelected" Value="true"/>
+                </Style.Triggers>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+        <TabItem x:Name="LayerSettingsSubhead" Header="{x:Static local:Resources.LayerSettingsSubhead}"
+             ToolTip="{x:Static local:Resources.SettingsTab_LayerOptionsTooltip}"
+             Content="{Binding LayerSettings}" IsEnabled="{Binding LayerSettings.LayerExists}"/>
+        <TabItem x:Name="SceneSettingsSubhead" Header="{x:Static local:Resources.SceneSettingsSubhead}"
+             ToolTip="{x:Static local:Resources.SettingsTab_SceneOptionsTooltip}"
+             Content="{Binding SceneSettings}"
+             IsEnabled="{Binding SceneSettings.ParentLayer, Converter={StaticResource TrueIfNotNullConverter}}"/>
+    </TabControl>
+</UserControl>

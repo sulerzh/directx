@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <SolidColorBrush x:Key="MetroBackground" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="InvertedText" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="InsetBackground" Color="#f2f2f2"/>
+  <SolidColorBrush x:Key="SectionSeparator" Color="#D0D0D0"/>
+  <SolidColorBrush x:Key="MetroGray1" Color="#E2E2E2"/>
+  <SolidColorBrush x:Key="MetroGray2" Color="#B1B1B1"/>
+  <SolidColorBrush x:Key="MetroGray3" Color="#ABABAB"/>
+  <SolidColorBrush x:Key="MetroGray4" Color="#666666"/>
+  <SolidColorBrush x:Key="MetroGray5" Color="#777777"/>
+  <SolidColorBrush x:Key="MetroGray6" Color="#444444"/>
+  <SolidColorBrush x:Key="MetroGraySeparator" Color="#E2E2E2"/>
+  <SolidColorBrush x:Key="LightBorder" Color="#d4d4d4"/>
+  <SolidColorBrush x:Key="NormalTextColor" Color="#454545"/>
+  <SolidColorBrush x:Key="HighlightText" Color="#454545"/>
+  <SolidColorBrush x:Key="RibbonTextBrush" Color="#FF444444"/>
+  <SolidColorBrush x:Key="MouseOverBorder" Color="Transparent"/>
+  <SolidColorBrush x:Key="SelectedMouseOverBorder" Color="#9FD5B7"/>
+  <SolidColorBrush x:Key="MetroHoverGreen" Color="#D3F0E0"/>
+  <SolidColorBrush x:Key="MetroSelectedGreen" Color="#9FD5B7"/>
+  <SolidColorBrush x:Key="MetroPressedGreen" Color="#86BFA0"/>
+  <SolidColorBrush x:Key="MetroAppButtonHoverGreen" Color="#439467"/>
+  <SolidColorBrush x:Key="MetroBaseGreen" Color="#217346"/>
+  <SolidColorBrush x:Key="MetroBaseGreenText" Color="#217346"/>
+  <SolidColorBrush x:Key="MetroTextGreen" Color="#008641"/>
+  <SolidColorBrush x:Key="MetroGreenFocused" Color="#006432"/>
+  <SolidColorBrush x:Key="MetroFailureNotificationRed" Color="#C21F32"/>
+  <SolidColorBrush x:Key="DisabledControlColor" Color="#FFCCCCCC"/>
+  <SolidColorBrush x:Key="DefaultControlColor" Color="#FF666666"/>
+  <SolidColorBrush x:Key="ActiveControlColor" Color="#FF008641"/>
+  <SolidColorBrush x:Key="HoverControlColor" Color="#FF4D4F50"/>
+  <SolidColorBrush x:Key="ScrollBarElements" Color="{Binding Source={StaticResource MetroGray1}, Path=Color}"/>
+  <SolidColorBrush x:Key="ScrollBarFill" Color="{Binding Source={StaticResource MetroGray1}, Path=Color}"/>
+  <SolidColorBrush x:Key="MetroBackgroundInactiveGray"
+                   Color="{Binding Source={StaticResource MetroGray1}, Path=Color}"/>
+  <SolidColorBrush x:Key="MetroInactiveGray" Color="{Binding Source={StaticResource MetroGray2}, Path=Color}"/>
+  <SolidColorBrush x:Key="CheckBoxFrames" Color="{Binding Source={StaticResource MetroGray3}, Path=Color}"/>
+  <SolidColorBrush x:Key="ComboBoxElements" Color="{Binding Source={StaticResource MetroGray3}, Path=Color}"/>
+  <SolidColorBrush x:Key="ScrollBarFrames" Color="{Binding Source={StaticResource MetroGray3}, Path=Color}"/>
+  <SolidColorBrush x:Key="TabsOutline" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="HighlightTabsOutline"
+                   Color="{Binding Source={StaticResource MetroPressedGreen}, Path=Color}"/>
+  <SolidColorBrush x:Key="CheckMarks" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="HighlightCheckMarks" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="SliderHandle" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="ScrollBarOnPress" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="ButtonFrames" Color="{Binding Source={StaticResource MetroGray4}, Path=Color}"/>
+  <SolidColorBrush x:Key="ComboBoxArrows" Color="{Binding Source={StaticResource MetroGray5}, Path=Color}"/>
+  <SolidColorBrush x:Key="MetroText" Color="{Binding Source={StaticResource MetroGray6}, Path=Color}"/>
+  <sys:Double x:Key="OverlayOpacity">0.5</sys:Double>
+</ResourceDictionary>
