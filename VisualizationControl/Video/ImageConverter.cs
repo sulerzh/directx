@@ -4,109 +4,160 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Data.Visualization.VisualizationControls.Video
 {
-  public static class ImageConverter
-  {
-    public static unsafe void RGB32ToYV12(byte[] destination, int destStride, IntPtr pSrc, int srcStride, int widthInPixels, int heightInPixels)
+    /// <summary>
+    /// Image Stride
+    /// https://msdn.microsoft.com/en-us/library/windows/desktop/aa473780(v=vs.85).aspx
+    /// </summary>
+    public static class ImageConverter
     {
-        fixed (byte* dest = destination)
+        public static unsafe void RGB32ToYV12(byte[] destination, int destStride, IntPtr pSrc, int srcStride, int widthInPixels, int heightInPixels)
         {
-            byte* srcBuffer = (byte*)pSrc.ToPointer();
-            byte* destBuffer = dest;
-            byte* numPtr4 = dest + destStride * heightInPixels;
-            byte* numPtr5 = dest + 5 * destStride * heightInPixels / 4;
-            for (int i = 0; i < heightInPixels; ++i)
+            fixed (byte* pDest = destination)
             {
-                RGBQUAD* quad = (RGBQUAD*)srcBuffer;
-                for (int j = 0; j < widthInPixels; ++j)
-                    destBuffer[j] = RGBtoY(quad[j]);
-                destBuffer += destStride;
-                srcBuffer += srcStride;
-            }
-            byte* src = (byte*)pSrc.ToPointer();
-            for (int j = 0;j < heightInPixels;j += 2)
-            {
-                RGBQUAD* rgbquadPtr1 = (RGBQUAD*)src;
-                RGBQUAD* rgbquadPtr2 = (RGBQUAD*)(src + srcStride);
-                byte* numPtr7 = numPtr4;
-                byte* numPtr8 = numPtr5;
-                for (int k = 0; k < widthInPixels; k += 2)
+                byte* pSrcRow = (byte*)pSrc.ToPointer();
+                byte* pDestY = pDest;
+
+                // Calculate the offsets for the V and U planes.
+
+                // In YV12, each chroma plane has half the stride and half the height  
+                // as the Y plane.
+                byte* pDestV = pDest + (destStride * heightInPixels);
+                byte* pDestU = pDest + 
+                    (destStride * heightInPixels) + 
+                    (destStride * heightInPixels) / 4;
+
+                // Convert the Y plane.
+                for (int y = 0; y < heightInPixels; ++y)
                 {
-                    *numPtr7++ = (byte)((RGBtoV(rgbquadPtr1[k]) + RGBtoV(rgbquadPtr1[k + 1]) + RGBtoV(rgbquadPtr2[k]) + RGBtoV(rgbquadPtr2[k + 1])) / 4);
-                    *numPtr8++ = (byte)((RGBtoU(rgbquadPtr1[k]) + RGBtoU(rgbquadPtr1[k + 1]) + RGBtoU(rgbquadPtr2[k]) + RGBtoU(rgbquadPtr2[k + 1])) / 4);
+                    RGBQUAD* pSrcPixel = (RGBQUAD*)pSrcRow;
+                    for (int x = 0; x < widthInPixels; ++x)
+                        pDestY[x] = RGBtoY(pSrcPixel[x]); // Y0
+                    pDestY += destStride;
+                    pSrcRow += srcStride;
                 }
-                numPtr4 += destStride / 2;
-                numPtr5 += destStride / 2;
-                src += srcStride * 2;
+
+                // Convert the V and U planes.
+
+                // YV12 is a 4:2:0 format, so each chroma sample is derived from four 
+                // RGB pixels.
+                byte* pSrcRow1 = (byte*)pSrc.ToPointer();
+                for (int y = 0; y < heightInPixels; y += 2)
+                {
+                    RGBQUAD* pSrcPixel = (RGBQUAD*)pSrcRow1;
+                    RGBQUAD* pNextSrcRow = (RGBQUAD*)(pSrcRow1 + srcStride);
+                    byte* pbV = pDestV;
+                    byte* pbU = pDestU;
+                    for (int x = 0; x < widthInPixels; x += 2)
+                    {
+                        // Use a simple average to downsample the chroma.
+                        *pbV++ = (byte)((
+                            RGBtoV(pSrcPixel[x]) + 
+                            RGBtoV(pSrcPixel[x + 1]) +
+                            RGBtoV(pNextSrcRow[x]) + 
+                            RGBtoV(pNextSrcRow[x + 1])) / 4);
+                        *pbU++ = (byte)((
+                            RGBtoU(pSrcPixel[x]) + 
+                            RGBtoU(pSrcPixel[x + 1]) + 
+                            RGBtoU(pNextSrcRow[x]) + 
+                            RGBtoU(pNextSrcRow[x + 1])) / 4);
+                    }
+                    pDestV += destStride / 2;
+                    pDestU += destStride / 2;
+
+                    // Skip two lines on the source image.
+                    pSrcRow1 += srcStride * 2;
+                }
             }
         }
-    }
 
-    public static unsafe void ParallelRGB32ToYV12(byte[] destination, int destStride, IntPtr pSrc, int srcStride, int widthInPixels, int heightInPixels)
-    {
-        fixed (byte* numPtr1 = destination)
+        public static unsafe void ParallelRGB32ToYV12(byte[] destination, int destStride, IntPtr pSrc, int srcStride, int widthInPixels, int heightInPixels)
         {
-            byte* pSrcRow = (byte*)pSrc.ToPointer();
-            byte* pDestY = numPtr1;
-            Task[] taskArray = new Task[3];
-            taskArray[0] = Task.Factory.StartNew((Action)(() => Parallel.For(0, heightInPixels, (Action<int>)(y =>
+            fixed (byte* pDest = destination)
             {
-                RGBQUAD* quad = (RGBQUAD*)(pSrcRow + y * srcStride);
-                byte* cursor = pDestY + y * destStride;
-                for (int i = 0; i < widthInPixels; ++i)
-                    cursor[i] = RGBtoY(quad[i]);
-            }))));
-            byte* pDestV = numPtr1 + destStride * heightInPixels;
-            byte* pDestU = numPtr1 + 5 * destStride * heightInPixels / 4;
-            taskArray[1] = Task.Factory.StartNew((Action)(() => ConvertChromaParallel(true, pDestV, destStride, pSrcRow, srcStride, heightInPixels, widthInPixels)));
-            taskArray[2] = Task.Factory.StartNew((Action)(() => ConvertChromaParallel(false, pDestU, destStride, pSrcRow, srcStride, heightInPixels, widthInPixels)));
-            Task.WaitAll(taskArray);
+                byte* pSrcRow = (byte*)pSrc.ToPointer();
+                byte* pDestY = pDest;
+                // YUV planes Convert Tasks
+                Task[] taskArray = new Task[3];
+                taskArray[0] = Task.Factory.StartNew(
+                    (Action)(() => Parallel.For(0, heightInPixels, 
+                        (y =>
+                        {
+                            RGBQUAD* pSrcPixel = (RGBQUAD*)(pSrcRow + y * srcStride);
+                            byte* pDestPixel = pDestY + y*destStride;
+                            for (int x = 0; x < widthInPixels; ++x)
+                                pDestPixel[x] = RGBtoY(pSrcPixel[x]);
+                        }))));
+                byte* pDestV = pDest + (destStride * heightInPixels);
+                byte* pDestU = pDest + 
+                    (destStride * heightInPixels) +
+                    (destStride * heightInPixels) / 4;
+                taskArray[1] = Task.Factory.StartNew(
+                    (() => ConvertChromaParallel(true, pDestV, destStride, pSrcRow, srcStride, heightInPixels, widthInPixels)));
+                taskArray[2] = Task.Factory.StartNew(
+                    (() => ConvertChromaParallel(false, pDestU, destStride, pSrcRow, srcStride, heightInPixels, widthInPixels)));
+                Task.WaitAll(taskArray);
+            }
+        }
+
+        private static unsafe void ConvertChromaParallel(bool isV, byte* pDest, int destStride, byte* pSrcRow, int srcStride, int heightInPixels, int widthInPixels)
+        {
+            Parallel.For(0, heightInPixels/2,
+                (y =>
+                {
+                    RGBQUAD* pSrcPixel = (RGBQUAD*) (pSrcRow + 2*y*srcStride);
+                    RGBQUAD* pNextSrcRow = (RGBQUAD*) (pSrcRow + (2*y + 1)*srcStride);
+                    byte* pbDestPlane = pDest + destStride*y/2;
+                    int index = 0;
+                    while (index < widthInPixels)
+                    {
+                        *pbDestPlane++ = !isV
+                            ? (byte)
+                                ((RGBtoU(pSrcPixel[index]) + RGBtoU(pSrcPixel[index + 1]) + RGBtoU(pNextSrcRow[index]) +
+                                  RGBtoU(pNextSrcRow[index + 1]))/4)
+                            : (byte)
+                                ((RGBtoV(pSrcPixel[index]) + RGBtoV(pSrcPixel[index + 1]) + RGBtoV(pNextSrcRow[index]) +
+                                  RGBtoV(pNextSrcRow[index + 1]))/4);
+                        index += 2;
+                    }
+                }));
+        }
+
+        /// <summary>
+        /// https://msdn.microsoft.com/en-us/library/aa917087.aspx
+        /// </summary>
+        #region Converting Between YUV and RGB
+
+        private static byte RGBtoY(RGBQUAD q)
+        {
+            return (byte)((66 * q.R + 129 * q.G + 25 * q.B + 128 >> 8) + 16);
+        }
+
+        private static byte RGBtoU(RGBQUAD q)
+        {
+            return (byte)((-38 * q.R - 74 * q.G + 112 * q.B + 128 >> 8) + 128);
+        }
+
+        private static byte RGBtoV(RGBQUAD q)
+        {
+            return (byte)((112 * q.R - 94 * q.G - 18 * q.B + 128 >> 8) + 128);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// https://msdn.microsoft.com/en-us/library/dd162938(v=vs.85).aspx
+        /// </summary>
+        [StructLayout(LayoutKind.Explicit, Pack = 1)]
+        private struct RGBQUAD
+        {
+            [FieldOffset(0)]
+            public byte B;
+            [FieldOffset(1)]
+            public byte G;
+            [FieldOffset(2)]
+            public byte R;
+            [FieldOffset(3)]
+            public byte A;
         }
     }
-
-    private static unsafe void ConvertChromaParallel(bool isV, byte* pDest, int destStride, byte* pSrcRow, int srcStride, int heightInPixels, int widthInPixels)
-    {
-        Parallel.For(0, heightInPixels / 2, (Action<int>)(y =>
-        {
-            RGBQUAD* evenRow = (RGBQUAD*)(pSrcRow + 2 * y * srcStride);
-            RGBQUAD* oddRow = (RGBQUAD*)(pSrcRow + (2 * y + 1) * srcStride);
-            byte* cussor = pDest + destStride * y / 2;
-            int index = 0;
-            while (index < widthInPixels)
-            {
-                *cussor++ = !isV ? 
-                    (byte)((RGBtoU(evenRow[index]) + RGBtoU(evenRow[index + 1]) + RGBtoU(oddRow[index]) + RGBtoU(oddRow[index + 1])) / 4) : 
-                    (byte)((RGBtoV(evenRow[index]) + RGBtoV(evenRow[index + 1]) + RGBtoV(oddRow[index]) + RGBtoV(oddRow[index + 1])) / 4);
-                index += 2;
-            }
-        }));
-    }
-
-    private static byte RGBtoY(ImageConverter.RGBQUAD q)
-    {
-      return (byte) ((66 * q.R + 129 * q.G + 25 * q.B + 128 >> 8) + 16);
-    }
-
-    private static byte RGBtoU(ImageConverter.RGBQUAD q)
-    {
-      return (byte) ((-38 * q.R - 74 * q.G + 112 * q.B + 128 >> 8) + 128);
-    }
-
-    private static byte RGBtoV(ImageConverter.RGBQUAD q)
-    {
-      return (byte) ((112 * q.R - 94 * q.G - 18 * q.B + 128 >> 8) + 128);
-    }
-
-    [StructLayout(LayoutKind.Explicit, Pack = 1)]
-    private struct RGBQUAD
-    {
-      [FieldOffset(0)]
-      public byte B;
-      [FieldOffset(1)]
-      public byte G;
-      [FieldOffset(2)]
-      public byte R;
-      [FieldOffset(3)]
-      public byte A;
-    }
-  }
 }

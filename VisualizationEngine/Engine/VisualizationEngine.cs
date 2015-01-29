@@ -387,7 +387,9 @@ namespace Microsoft.Data.Visualization.Engine
             this.renderer = Renderer.Create();
             this.renderer.OnInformation += new RendererInfoEventHander(this.renderer_OnInformation);
             this.renderer.OnInternalError += new RendererErrorEventHandler(this.renderer_OnInternalError);
-            if (!(!(this.windowHandle == IntPtr.Zero) ? this.renderer.Initialize(this.windowHandle, this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.useSwapChain) : this.renderer.Initialize(this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.IsOfflineModeEnabled)))
+            if (!(!(this.windowHandle == IntPtr.Zero) ? 
+                this.renderer.Initialize(this.windowHandle, this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.useSwapChain) : 
+                this.renderer.Initialize(this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.IsOfflineModeEnabled)))
             {
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Critical, 0, "Renderer initialization failed. Render target width: {0} height: {1}. A driver update may be required.", (object)this.screenWidth, (object)this.screenHeight);
                 return false;

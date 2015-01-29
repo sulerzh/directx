@@ -67,7 +67,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
             this.data = bmpData;
             this.fileName = outputFileName;
             this.displayRectangle = new Rectangle(0, 0, (int)DisplayResolutionMap[displayResolution].Item1, (int)DisplayResolutionMap[displayResolution].Item2);
-            this.buffer = new byte[(int)Math.Ceiling(1.5 * (double)this.displayRectangle.Width * (double)this.displayRectangle.Height)];
+            this.buffer = new byte[(int)Math.Ceiling(1.5 * this.displayRectangle.Width * this.displayRectangle.Height)];
             MFHelper.MFFrameRateToAverageTimePerFrame(fps, 1U, out this.perFrameDuration);
             return this.encoder.Initialize(this.fileName, (uint)this.displayRectangle.Width, (uint)this.displayRectangle.Height, fps);
         }
@@ -98,9 +98,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
 
         public static VideoDisplayResolution GetSupportedResolution(int w, int h)
         {
-            foreach (VideoDisplayResolution index in TourVideoSession.DisplayResolutionMap.Keys)
+            foreach (VideoDisplayResolution index in DisplayResolutionMap.Keys)
             {
-                if ((long)TourVideoSession.DisplayResolutionMap[index].Item1 == (long)w && (long)TourVideoSession.DisplayResolutionMap[index].Item2 == (long)h)
+                if (DisplayResolutionMap[index].Item1 == w && DisplayResolutionMap[index].Item2 == h)
                     return index;
             }
             throw new NotSupportedException("Invalid display resolution.");

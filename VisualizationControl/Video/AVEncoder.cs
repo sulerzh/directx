@@ -139,6 +139,20 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
             }
         }
 
+        /// <summary>
+        /// 写入关键帧
+        /// </summary>
+        /// <param name="buffer">YV12缓冲区</param>
+        /// <param name="lines">帧高像素数</param>
+        /// <param name="stride">
+        /// The stride is the number of bytes 
+        /// from one row of pixels in memory 
+        /// to the next row of pixels in memory. 
+        /// Stride is also called pitch
+        /// </param>
+        /// <param name="start">帧位置</param>
+        /// <param name="duration">帧持续时间</param>
+        /// <returns></returns>
         public EncodingStatus WriteFrame(byte[] buffer, uint lines, uint stride, ulong start, ulong duration)
         {
             IMFSample sample = null;
