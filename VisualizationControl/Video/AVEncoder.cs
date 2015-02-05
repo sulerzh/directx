@@ -104,25 +104,38 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
                 if (string.IsNullOrEmpty(inputAudioFileUrl))
                     return EncodingStatus.Success;
                 this.targetDuration = videoDuration;
+
+                // Create the source reader to read the input file.
                 MFHelper.MFCreateSourceReaderFromURL(inputAudioFileUrl, null, out this.sourceReader);
                 this.selectedAudioSamplingRate = DefaultAudioSamplingRate;
                 object pvarAttribute;
+                // use Presentation Descriptor to get Duration
                 this.sourceReader.GetPresentationAttribute(uint.MaxValue, new Guid(Consts.MF_PD_DURATION), out pvarAttribute);
                 this.audioLength = audioDuration = (ulong)pvarAttribute;
                 this.audioLength = 0;
-                this.numOfAudioSamples = audioDuration * NumOfAudioChannels * (ulong)this.selectedAudioSamplingRate / HundredNanoSecondsPerSec;
-                this.averageSampleDuration = this.numOfAudioSamples * HundredNanoSecondsPerSec / (ulong)(this.selectedAudioSamplingRate * NumOfAudioChannels);
-                this.sourceReader.SetStreamSelection(4294967294U, false);
-                this.sourceReader.SetStreamSelection(4294967293U, true);
-                IMFMediaType pcmAudioType;
-                MFHelper.MFCreateMediaType(out pcmAudioType);
-                pcmAudioType.SetGUID(new Guid(Consts.MF_MT_MAJOR_TYPE), new Guid(Consts.MFMediaType_Audio));
-                pcmAudioType.SetGUID(new Guid(Consts.MF_MT_SUBTYPE), new Guid(Consts.MFAudioFormat_PCM));
-                pcmAudioType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_BITS_PER_SAMPLE), BitsPerSample);
-                pcmAudioType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_SAMPLES_PER_SECOND), this.selectedAudioSamplingRate);
-                pcmAudioType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_NUM_CHANNELS), NumOfAudioChannels);
-                this.sourceReader.SetCurrentMediaType(4294967293U, IntPtr.Zero, pcmAudioType);
-                this.sourceReader.GetCurrentMediaType(4294967293U, out this.audioMediaType);
+                this.numOfAudioSamples = audioDuration * NumOfAudioChannels * this.selectedAudioSamplingRate / HundredNanoSecondsPerSec;
+                this.averageSampleDuration = this.numOfAudioSamples * HundredNanoSecondsPerSec / (this.selectedAudioSamplingRate * NumOfAudioChannels);
+
+                // Select the first audio stream, and deselect all other streams.
+                this.sourceReader.SetStreamSelection(Consts.MF_SOURCE_READER_ALL_STREAMS, false);
+                this.sourceReader.SetStreamSelection(Consts.MF_SOURCE_READER_FIRST_AUDIO_STREAM, true);
+
+                // Create a partial media type that specifies uncompressed PCM audio.
+                IMFMediaType pPartialType;
+                MFHelper.MFCreateMediaType(out pPartialType);
+                pPartialType.SetGUID(new Guid(Consts.MF_MT_MAJOR_TYPE), new Guid(Consts.MFMediaType_Audio));
+                pPartialType.SetGUID(new Guid(Consts.MF_MT_SUBTYPE), new Guid(Consts.MFAudioFormat_PCM));
+                pPartialType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_BITS_PER_SAMPLE), BitsPerSample);
+                pPartialType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_SAMPLES_PER_SECOND), this.selectedAudioSamplingRate);
+                pPartialType.SetUINT32(new Guid(Consts.MF_MT_AUDIO_NUM_CHANNELS), NumOfAudioChannels);
+
+                // Set this type on the source reader. The source reader will
+                // load the necessary decoder.
+                this.sourceReader.SetCurrentMediaType(Consts.MF_SOURCE_READER_FIRST_AUDIO_STREAM, IntPtr.Zero, pPartialType);
+                // Get the complete uncompressed format.
+                this.sourceReader.GetCurrentMediaType(Consts.MF_SOURCE_READER_FIRST_AUDIO_STREAM, out this.audioMediaType);
+
+                // ？
                 MFHelper.MFCreateMediaType(out this.audioOutMediaType);
                 this.audioOutMediaType.SetGUID(new Guid(Consts.MF_MT_MAJOR_TYPE), new Guid(Consts.MFMediaType_Audio));
                 this.audioOutMediaType.SetGUID(new Guid(Consts.MF_MT_SUBTYPE), new Guid(Consts.MFAudioFormat_AAC));
@@ -168,8 +181,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
                 mediaBuffer.Lock(out ppbBuffer, out pcbMaxLength, out pcbCurrentLength);
                 gcHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
                 MFHelper.MFCopyImage(ppbBuffer, stride, gcHandle.AddrOfPinnedObject(), stride, stride, lines);
-                MFHelper.MFCopyImage(IncrementPointer(ppbBuffer, (long)(stride * lines)), stride / 2U, IncrementPointer(gcHandle.AddrOfPinnedObject(), (long)(stride * lines)), stride / 2U, stride / 2U, lines / 2U);
-                MFHelper.MFCopyImage(IncrementPointer(ppbBuffer, (long)(5U * stride * lines / 4U)), stride / 2U, IncrementPointer(gcHandle.AddrOfPinnedObject(), (long)(5U * stride * lines / 4U)), stride / 2U, stride / 2U, lines / 2U);
+                MFHelper.MFCopyImage(IncrementPointer(ppbBuffer, stride * lines), stride / 2U, IncrementPointer(gcHandle.AddrOfPinnedObject(), (long)(stride * lines)), stride / 2U, stride / 2U, lines / 2U);
+                MFHelper.MFCopyImage(IncrementPointer(ppbBuffer, 5U * stride * lines / 4U), stride / 2U, IncrementPointer(gcHandle.AddrOfPinnedObject(), (long)(5U * stride * lines / 4U)), stride / 2U, stride / 2U, lines / 2U);
                 mediaBuffer.Unlock();
                 mediaBuffer.SetCurrentLength(num);
                 MFHelper.MFCreateSample(out sample);
@@ -194,27 +207,36 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
             }
         }
 
+        /// <summary>
+        /// Decoding Audio
+        /// https://msdn.microsoft.com/en-us/library/windows/desktop/dd757929(v=vs.85).aspx
+        /// </summary>
+        /// <param name="loop"></param>
+        /// <param name="fadeIn"></param>
+        /// <param name="fadeOut"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public Task<EncodingStatus> WriteAudioAsync(bool loop, bool fadeIn, bool fadeOut, CancellationToken token)
         {
             TaskCompletionSource<EncodingStatus> source = new TaskCompletionSource<EncodingStatus>();
             if (this.audioMediaType == null || this.audioOutMediaType == null)
                 source.SetResult(EncodingStatus.Success);
             else
-                Task.Factory.StartNew((Action)(() =>
+                Task.Factory.StartNew((() =>
                 {
-                    ulong val2 = (ulong)(this.targetDuration * 10000000.0);
-                    ulong num1 = Math.Min(val2 / 2UL, 20000000UL);
-                    ulong maxSampleNum = num1 / 10000000UL * this.selectedAudioSamplingRate * 2UL;
-                    Hermite hermite1 = new Hermite(0.0, maxSampleNum, 1.0, 0.0, 0.0, 0.0);
-                    Hermite hermite2 = new Hermite(0.0, maxSampleNum, 0.0, 0.0, 1.0, 0.0);
-                    IMFSample ppSample = null;
+                    ulong tarDuration = (ulong)(this.targetDuration * HundredNanoSecondsPerSec);
+                    ulong fadeDuration = Math.Min(tarDuration / NumOfAudioChannels, 20000000UL);
+                    ulong maxSampleNum = fadeDuration / HundredNanoSecondsPerSec * this.selectedAudioSamplingRate * 2UL;
+                    Hermite fadeOutHermite = new Hermite(0.0, maxSampleNum, 1.0, 0.0, 0.0, 0.0);
+                    Hermite fadeInHermite = new Hermite(0.0, maxSampleNum, 0.0, 0.0, 1.0, 0.0);
+                    IMFSample pSample = null;
                     try
                     {
                         bool flag = false;
-                        ulong num2 = 0UL;
+                        ulong sampleTime = 0UL;
                         ulong currSampleNum1 = 0UL;
                         ulong currSampleNum2 = 0UL;
-                        while (num2 < val2)
+                        while (sampleTime < tarDuration)
                         {
                             if (token.IsCancellationRequested)
                             {
@@ -222,19 +244,25 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
                                 return;
                             }
                             uint pdwActualStreamIndex;
-                            uint pdwStreamFlags;
+                            uint dwFlags;
                             ulong pllTimestamp;
-                            this.sourceReader.ReadSample(4294967293U, 0U, out pdwActualStreamIndex, out pdwStreamFlags,
-                                out pllTimestamp, out ppSample);
-                            if (((int)pdwStreamFlags & 2) != 0)
+
+                            // Read the next sample.
+                            this.sourceReader.ReadSample(
+                                Consts.MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                                0U, out pdwActualStreamIndex, out dwFlags,
+                                out pllTimestamp, out pSample);
+                            // 到达流的结尾
+                            if (((int)dwFlags & (int)Enums.MF_SOURCE_READER_FLAG.ENDOFSTREAM) != 0)
                             {
-                                if (num2 < val2 && loop)
+                                // 循环模式下，重新定位音频流到开始位置
+                                if (sampleTime < tarDuration && loop)
                                 {
                                     IMFSourceReader mfSourceReader = this.sourceReader;
-                                    Guid guidTimeFormat = Guid.Empty;
+                                    Guid guidTimeFormat = Guid.Empty;//GUID_NULL means 100-nanosecond units.
                                     PropVariant propVariant = new PropVariant()
                                     {
-                                        vt = 20,
+                                        vt = 20, // variant type is VT_I8
                                         hVal = 0L
                                     };
                                     mfSourceReader.SetCurrentPosition(guidTimeFormat, ref propVariant);
@@ -242,39 +270,39 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
                                 }
                                 else
                                 {
-                                    ReleaseComObject(ppSample);
+                                    ReleaseComObject(pSample);
                                     break;
                                 }
                             }
-                            else if (((int)pdwStreamFlags & 1) != 0)
+                            // 流读取出错
+                            else if (((int)dwFlags & (int)Enums.MF_SOURCE_READER_FLAG.ERROR) != 0)
                             {
                                 source.SetResult(EncodingStatus.AudioSampleProcessingError);
                                 return;
                             }
-                            else if (ppSample != null)
+                            // 开始采样
+                            else if (pSample != null)
                             {
-                                ulong phnsSampleDuration;
-                                ppSample.GetSampleDuration(out phnsSampleDuration);
-                                phnsSampleDuration = (long)phnsSampleDuration == 0L
-                                    ? this.averageSampleDuration
-                                    : phnsSampleDuration;
+                                ulong duration;
+                                pSample.GetSampleDuration(out duration);
+                                duration = (long)duration == 0L ? this.averageSampleDuration : duration;
                                 if (flag)
-                                    ppSample.SetSampleTime(num2);
+                                    pSample.SetSampleTime(sampleTime);
                                 if (fadeOut &&
-                                    (num2 + num1 >= val2 && loop ||
-                                     num2 + num1 >= Math.Min(this.audioLength, val2) && !loop))
-                                    this.ScaleSample(ppSample, hermite1, maxSampleNum, ref currSampleNum1);
-                                if (fadeIn && num2 < num1)
-                                    this.ScaleSample(ppSample, hermite2, maxSampleNum, ref currSampleNum2);
-                                num2 += phnsSampleDuration;
-                                this.sinkWriter.WriteSample(this.audioStreamIndex, ppSample);
-                                AVEncoder.ReleaseComObject((object)ppSample);
-                                ppSample = (IMFSample)null;
+                                    (sampleTime + fadeDuration >= tarDuration && loop ||
+                                     sampleTime + fadeDuration >= Math.Min(this.audioLength, tarDuration) && !loop))
+                                    this.ScaleSample(pSample, fadeOutHermite, maxSampleNum, ref currSampleNum1);
+                                if (fadeIn && sampleTime < fadeDuration)
+                                    this.ScaleSample(pSample, fadeInHermite, maxSampleNum, ref currSampleNum2);
+                                sampleTime += duration;
+                                this.sinkWriter.WriteSample(this.audioStreamIndex, pSample);
+                                ReleaseComObject(pSample);
+                                pSample = null;
                             }
                             else
                             {
-                                this.sinkWriter.SendStreamTick(this.audioStreamIndex, num2);
-                                num2 += this.averageSampleDuration;
+                                this.sinkWriter.SendStreamTick(this.audioStreamIndex, sampleTime);
+                                sampleTime += this.averageSampleDuration;
                             }
                         }
                         source.SetResult(EncodingStatus.Success);
@@ -287,42 +315,50 @@ namespace Microsoft.Data.Visualization.VisualizationControls.Video
                                 this.audioStreamIndex,
                                 (ex is COMException ? ((ExternalException)ex).ErrorCode : 0),
                                 ex.Message));
-                        ReleaseComObject(ppSample);
+                        ReleaseComObject(pSample);
                         source.SetResult(EncodingStatus.AudioSampleProcessingError);
                     }
                 }), token, TaskCreationOptions.LongRunning, TaskScheduler.FromCurrentSynchronizationContext());
             return source.Task;
         }
 
+        /// <summary>
+        /// 使用采样器和缩放器对声音进行缩放，实现隐入和隐退效果
+        /// </summary>
+        /// <param name="sample">采样器</param>
+        /// <param name="hermite">缩放器</param>
+        /// <param name="maxSampleNum"></param>
+        /// <param name="currSampleNum"></param>
         private unsafe void ScaleSample(IMFSample sample, Hermite hermite, ulong maxSampleNum, ref ulong currSampleNum)
         {
-            IMFMediaBuffer ppBuffer;
-            sample.ConvertToContiguousBuffer(out ppBuffer);
+            IMFMediaBuffer pBuffer;
+            // Get a pointer to the audio data in the sample.
+            sample.ConvertToContiguousBuffer(out pBuffer);
             try
             {
-                IntPtr ppbBuffer;
-                uint pcbMaxLength;
-                uint pcbCurrentLength;
-                ppBuffer.Lock(out ppbBuffer, out pcbMaxLength, out pcbCurrentLength);
-                short* cussor = (short*)ppbBuffer.ToPointer();
-                uint num1 = pcbCurrentLength / 2U;
-                for (uint i = 0U; i < num1; ++i)
+                IntPtr pbBuffer;
+                uint maxLength;
+                uint currentLength;
+                pBuffer.Lock(out pbBuffer, out maxLength, out currentLength);
+                short* pSampleData = (short*)pbBuffer.ToPointer();
+                uint channelLength = currentLength / NumOfAudioChannels;
+                for (uint i = 0U; i < channelLength; ++i)
                 {
                     currSampleNum = currSampleNum > maxSampleNum ? maxSampleNum : currSampleNum;
-                    double num2 = cussor[0] * hermite.Evaluate(currSampleNum++);
-                    if (num2 < short.MinValue)
-                        num2 = short.MinValue;
-                    else if (num2 > short.MaxValue)
-                        num2 = short.MaxValue;
-                    cussor[0] = (short)num2;
-                    if (i < num1 - 1U)
-                        ++cussor;
+                    double fadedValue = pSampleData[0] * hermite.Evaluate(currSampleNum++);
+                    if (fadedValue < short.MinValue)
+                        fadedValue = short.MinValue;
+                    else if (fadedValue > short.MaxValue)
+                        fadedValue = short.MaxValue;
+                    pSampleData[0] = (short)fadedValue;
+                    if (i < channelLength - 1U)
+                        ++pSampleData;
                 }
             }
             finally
             {
-                ppBuffer.Unlock();
-                ReleaseComObject(ppBuffer);
+                pBuffer.Unlock();
+                ReleaseComObject(pBuffer);
             }
         }
 

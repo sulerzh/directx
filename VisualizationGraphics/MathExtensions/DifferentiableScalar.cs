@@ -3,6 +3,9 @@ using System;
 
 namespace Microsoft.Data.Visualization.Engine.MathExtensions
 {
+    /// <summary>
+    /// 可微分标量，包括值和该值的一阶导数
+    /// </summary>
     public struct DifferentiableScalar
     {
         public double Value;
@@ -114,6 +117,9 @@ namespace Microsoft.Data.Visualization.Engine.MathExtensions
             return new DifferentiableScalar(Math.Atan2(y.Value, x.Value), (y.Derivative * x.Value - x.Derivative * y.Value) / (MathEx.Square(x.Value) + MathEx.Square(y.Value)));
         }
 
+        /// <summary>
+        /// 计算直角三角形的斜边长
+        /// </summary>
         public static bool Hypot(DifferentiableScalar x, DifferentiableScalar y, out DifferentiableScalar hypot)
         {
             double num1 = MathEx.Hypot(x.Value, y.Value);

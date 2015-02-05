@@ -11,6 +11,9 @@ namespace Microsoft.Data.Visualization.Engine.MathExtensions
             return t * t;
         }
 
+        /// <summary>
+        /// 计算三角形斜边长
+        /// </summary>
         public static double Hypot(double x, double y)
         {
             return Math.Sqrt(x * x + y * y);

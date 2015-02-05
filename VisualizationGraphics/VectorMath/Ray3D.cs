@@ -68,15 +68,35 @@ namespace Microsoft.Data.Visualization.Engine.VectorMath
 
         public Vector3D GetSphereIntersection(double radius)
         {
-            double num1 = this.Origin * this.Direction;
-            double num2 = this.Origin * this.Origin - radius * radius;
-            if (num2 > 0.0 && num1 > 0.0)
+            // Origin is vector of sphere center to ray orition
+            double projOnRay = this.Origin * this.Direction;
+
+            double l_squared = this.Origin * this.Origin;
+            double r_squared = radius * radius;
+
+            bool isOutside = l_squared > r_squared;
+            bool isAwayFromCenter = projOnRay > 0;
+            // ray goes away from the center and the point is outside the sphere
+            if (isOutside && isAwayFromCenter)
+            {
                 return Vector3D.Empty;
-            double d = num1 * num1 - num2;
-            if (d < 0.0)
+            }
+
+            // distance of the ray from the sphere center(squared)
+            double m_squared = l_squared - projOnRay * projOnRay;
+
+            bool isDistanceOfCenterToRayBiggerThanRadius = m_squared > r_squared;
+            if (isDistanceOfCenterToRayBiggerThanRadius)
+            {
                 return Vector3D.Empty;
-            else
-                return this.Origin + Math.Max(0.0, -num1 - Math.Sqrt(d)) * this.Direction;
+            }
+
+            //球心到射线距离最近的点到球面的距离（在射线上）
+            double q = Math.Sqrt(r_squared - m_squared);
+            //球面相交点到射线起点的距离
+            double t = -projOnRay - q;
+            t = Math.Max(0.0, t);
+            return (this.Origin + t * this.Direction);
         }
 
         public override int GetHashCode()
