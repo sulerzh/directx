@@ -19,8 +19,12 @@ namespace Microsoft.Data.Visualization.Engine
 {
     public class RegionLayer : InstanceLayer
     {
-        private Dictionary<Vector3F, RegionBufferToken> tessellatedRegions = new Dictionary<Vector3F, RegionBufferToken>();
-        private Dictionary<Vector3F, List<RegionBufferToken>> regionRings = new Dictionary<Vector3F, List<RegionBufferToken>>();
+        private Dictionary<Vector3F, RegionBufferToken> tessellatedRegions =
+            new Dictionary<Vector3F, RegionBufferToken>();
+
+        private Dictionary<Vector3F, List<RegionBufferToken>> regionRings =
+            new Dictionary<Vector3F, List<RegionBufferToken>>();
+
         private Dictionary<Vector3F, Task<Tesselator>> pendingRegions = new Dictionary<Vector3F, Task<Tesselator>>();
         private List<InstanceId> emptyRegions = new List<InstanceId>();
         private List<InstanceId> failedRegions = new List<InstanceId>();
@@ -61,10 +65,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         public EntityType RegionEntityType
         {
-            get
-            {
-                return this.entityType;
-            }
+            get { return this.entityType; }
             set
             {
                 if (value == this.entityType)
@@ -76,10 +77,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         public RegionLayerShadingMode ShadingMode
         {
-            get
-            {
-                return this.desiredShadingMode;
-            }
+            get { return this.desiredShadingMode; }
             set
             {
                 this.desiredShadingMode = value;
@@ -95,7 +93,7 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 base.DisplayNullValues = value;
                 lock (this.rangeCalculatorLock)
-                    this.rangeCalculator = (ValueRangeCalculator)null;
+                    this.rangeCalculator = null;
                 this.instanceCountUsedForScale = 0;
             }
         }
@@ -106,7 +104,7 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 base.DisplayZeroValues = value;
                 lock (this.rangeCalculatorLock)
-                    this.rangeCalculator = (ValueRangeCalculator)null;
+                    this.rangeCalculator = null;
                 this.instanceCountUsedForScale = 0;
             }
         }
@@ -117,33 +115,24 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 base.DisplayNegativeValues = value;
                 lock (this.rangeCalculatorLock)
-                    this.rangeCalculator = (ValueRangeCalculator)null;
+                    this.rangeCalculator = null;
                 this.instanceCountUsedForScale = 0;
             }
         }
 
         protected override bool OptimizeSpatialIndex
         {
-            get
-            {
-                return this.tessellationIsComplete;
-            }
+            get { return this.tessellationIsComplete; }
         }
 
         internal override int BlockSize
         {
-            get
-            {
-                return 4096;
-            }
+            get { return 4096; }
         }
 
         internal override bool InflatesBounds
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
 
         public event EventHandler<RegionEventArgs> OnRegionReady;
@@ -215,9 +204,12 @@ namespace Microsoft.Data.Visualization.Engine
             });
         }
 
-        public override void BeginDataInput(int estimate, bool progressiveDataInput, bool ignoreData, CustomSpaceTransform dataCustomSpace, double minInstanceValue, double maxInstanceValue, DateTime? minTime, DateTime? maxTime)
+        public override void BeginDataInput(int estimate, bool progressiveDataInput, bool ignoreData,
+            CustomSpaceTransform dataCustomSpace, double minInstanceValue, double maxInstanceValue, DateTime? minTime,
+            DateTime? maxTime)
         {
-            base.BeginDataInput(estimate, progressiveDataInput, ignoreData, dataCustomSpace, minInstanceValue, maxInstanceValue, minTime, maxTime);
+            base.BeginDataInput(estimate, progressiveDataInput, ignoreData, dataCustomSpace, minInstanceValue,
+                maxInstanceValue, minTime, maxTime);
             this.tessellationIsComplete = false;
         }
 
@@ -229,8 +221,8 @@ namespace Microsoft.Data.Visualization.Engine
 
         private RegionBufferToken GetRegionSubset(Vector3F position, InstanceId id, SceneState state)
         {
-            RegionBufferToken region = (RegionBufferToken)null;
-            List<RegionBufferToken> list = (List<RegionBufferToken>)null;
+            RegionBufferToken region = null;
+            List<RegionBufferToken> list = null;
             if (!this.GetTessellation(ref position, out region))
             {
                 if (this.pendingRegions.ContainsKey(position))
@@ -269,12 +261,16 @@ namespace Microsoft.Data.Visualization.Engine
                         this.poolSemaphore.Release();
                         this.pendingRegions.Remove(position);
                         if (this.EventDispatcher != null)
-                            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
-                          {
-                              if (this.OnRegionReady == null)
-                                  return;
-                              this.OnRegionReady((object)this, new RegionEventArgs(this.tessellatedRegions.Count - this.failedRegions.Count - this.emptyRegions.Count, this.failedRegions, this.emptyRegions, this.OptimizeSpatialIndex));
-                          }));
+                            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
+                            {
+                                if (this.OnRegionReady == null)
+                                    return;
+                                this.OnRegionReady(this,
+                                    new RegionEventArgs(
+                                        this.tessellatedRegions.Count - this.failedRegions.Count -
+                                        this.emptyRegions.Count, this.failedRegions, this.emptyRegions,
+                                        this.OptimizeSpatialIndex));
+                            }));
                     }
                 }
                 else
@@ -286,66 +282,74 @@ namespace Microsoft.Data.Visualization.Engine
         private Vector3F GetCanonicalRegionPosition(Vector3F position)
         {
             if (this.planarCoordinates)
-                position = (Vector3F)Coordinates.Flat3DToGeo(position.ToVector3D()).To3D(false);
-            position.X = (float)Math.Round((double)position.X, 5, MidpointRounding.AwayFromZero);
-            position.Y = (float)Math.Round((double)position.Y, 5, MidpointRounding.AwayFromZero);
-            position.Z = (float)Math.Round((double)position.Z, 5, MidpointRounding.AwayFromZero);
+                position = (Vector3F) Coordinates.Flat3DToGeo(position.ToVector3D()).To3D(false);
+            position.X = (float) Math.Round(position.X, 5, MidpointRounding.AwayFromZero);
+            position.Y = (float) Math.Round(position.Y, 5, MidpointRounding.AwayFromZero);
+            position.Z = (float) Math.Round(position.Z, 5, MidpointRounding.AwayFromZero);
             return position;
         }
 
         private Vector3F RequestRegionData(Vector3F position, SceneState state)
         {
-            Coordinates coordinates1 = Coordinates.World3DToGeo(position.ToVector3D());
+            Coordinates queryCoords = Coordinates.World3DToGeo(position.ToVector3D());
             CancellationToken cancellationToken = this.cancellationSource.Token;
-            Task<Tesselator> task1 = this.regionProvider.GetRegionAsync(coordinates1.Latitude * 57.2957795130823, coordinates1.Longitude * 57.2957795130823, this.entityType == EntityType.CountryRegion || this.entityType == EntityType.AdminDivision1 ? 1 : 0, this.RegionEntityType, cancellationToken, true, false, true).ContinueWith<Tesselator>((Func<Task<List<RegionData>>, Tesselator>)(task =>
-            {
-                try
-                {
-                    this.poolSemaphore.Wait(cancellationToken);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    return (Tesselator)null;
-                }
-                List<RegionData> result1 = task.Result;
-                if (result1 != null)
-                {
-                    Tesselator result2 = (Tesselator)null;
-                    try
+            Task<Tesselator> queryAndTesselatorTask =
+                this.regionProvider.GetRegionAsync(
+                queryCoords.Latitude * Constants.DegreesPerRadian,
+                queryCoords.Longitude * Constants.DegreesPerRadian,
+                this.entityType == EntityType.CountryRegion || 
+                this.entityType == EntityType.AdminDivision1 ? 1 : 0,
+                this.RegionEntityType, cancellationToken, true, false, true)
+                    .ContinueWith<Tesselator>((task =>
                     {
-                        if (!this.tesselatorPool.TryTake(out result2))
-                            result2 = new Tesselator();
-                        result2.BeginPolygon();
-                        foreach (RegionData regionData in result1)
+                        try
                         {
-                            Coordinates coordinates2 = regionData.Polygon[0];
-                            result2.BeginRing(coordinates2.Longitude, coordinates2.Latitude);
-                            for (int index = 1; index < regionData.Polygon.Count; ++index)
-                            {
-                                coordinates2 = regionData.Polygon[index];
-                                result2.AddVertex(coordinates2.Longitude, coordinates2.Latitude);
-                            }
+                            this.poolSemaphore.Wait(cancellationToken);
                         }
-                        result2.EndPolygon();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (result2 != null)
-                            this.tesselatorPool.Add(result2);
-                        VisualizationTraceSource.Current.Fail(ex);
-                        return (Tesselator)null;
-                    }
-                    return result2;
-                }
-                else
-                {
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Error retrieving region polygon.");
-                    return (Tesselator)null;
-                }
-            }));
-            this.pendingRegions.Add(position, task1);
+                        catch (OperationCanceledException ex)
+                        {
+                            return (Tesselator) null;
+                        }
+                        List<RegionData> regionDataList = task.Result;
+                        if (regionDataList != null)
+                        {
+                            Tesselator tesselator = null;
+                            try
+                            {
+                                if (!this.tesselatorPool.TryTake(out tesselator))
+                                    tesselator = new Tesselator();
+                                tesselator.BeginPolygon();
+                                foreach (RegionData regionData in regionDataList)
+                                {
+                                    Coordinates coordsInPolygon = regionData.Polygon[0];
+                                    tesselator.BeginRing(coordsInPolygon.Longitude, coordsInPolygon.Latitude);
+                                    for (int i = 1; i < regionData.Polygon.Count; ++i)
+                                    {
+                                        coordsInPolygon = regionData.Polygon[i];
+                                        tesselator.AddVertex(coordsInPolygon.Longitude, coordsInPolygon.Latitude);
+                                    }
+                                }
+                                tesselator.EndPolygon();
+                            }
+                            catch (Exception ex)
+                            {
+                                if (tesselator != null)
+                                    this.tesselatorPool.Add(tesselator);
+                                VisualizationTraceSource.Current.Fail(ex);
+                                return (Tesselator) null;
+                            }
+                            return tesselator;
+                        }
+                        else
+                        {
+                            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
+                                "Error retrieving region polygon.");
+                            return (Tesselator) null;
+                        }
+                    }));
+            this.pendingRegions.Add(position, queryAndTesselatorTask);
             if (state.OfflineRender)
-                task1.Wait();
+                queryAndTesselatorTask.Wait();
             return position;
         }
 
@@ -368,21 +372,23 @@ namespace Microsoft.Data.Visualization.Engine
                     ++num2;
                 }
             }
-            this.Stats.AverageRegionVertexCount = num2 == 0 ? 0 : num1 / num2;
+            this.Stats.AverageRegionVertexCount = num2 == 0 ? 0 : num1/num2;
             this.Stats.RegionCount = num2;
         }
 
         internal override void Update(SceneState state)
         {
             base.Update(state);
-            if (this.tessellationIsComplete || !this.DataIntakeComplete || (this.InstanceClusterCount == 0 || this.InstanceBlocks == null))
+            if (this.tessellationIsComplete || !this.DataIntakeComplete ||
+                (this.InstanceClusterCount == 0 || this.InstanceBlocks == null))
                 return;
             foreach (InstanceBlock instanceBlock in this.InstanceBlocks)
             {
                 Vector3F vector3F = Vector3F.Empty;
                 for (int pos = 0; pos < instanceBlock.Count; ++pos)
                 {
-                    Vector3F canonicalRegionPosition = this.GetCanonicalRegionPosition(instanceBlock.GetInstancePositionAt(pos));
+                    Vector3F canonicalRegionPosition =
+                        this.GetCanonicalRegionPosition(instanceBlock.GetInstancePositionAt(pos));
                     if (!(canonicalRegionPosition == vector3F))
                     {
                         vector3F = canonicalRegionPosition;
@@ -398,7 +404,10 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 if (this.OnRegionCompleted == null)
                     return;
-                this.OnRegionCompleted((object)this, new RegionEventArgs(this.tessellatedRegions.Count - this.failedRegions.Count - this.emptyRegions.Count, this.failedRegions, this.emptyRegions, true));
+                this.OnRegionCompleted(this,
+                    new RegionEventArgs(
+                        this.tessellatedRegions.Count - this.failedRegions.Count - this.emptyRegions.Count,
+                        this.failedRegions, this.emptyRegions, true));
             };
             this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, action);
         }
@@ -410,20 +419,24 @@ namespace Microsoft.Data.Visualization.Engine
             lock (this.regionLock)
             {
                 if (this.technique == null)
-                    this.technique = new RegionRenderingTechnique(this.SharedRenderParameters, this.ColorRenderParameters);
+                    this.technique = new RegionRenderingTechnique(this.SharedRenderParameters,
+                        this.ColorRenderParameters);
+                // 设置深度模板点击测试状态
                 if (this.depthStencilHitTest == null && parameters.DepthStencil != null)
                 {
-                    DepthStencilStateDescription local_0 = parameters.DepthStencil.GetStateDescription();
-                    DepthStencilStateDescription local_1 = this.depthStencilState.GetStateDescription();
-                    local_0.StencilEnable = local_1.StencilEnable;
-                    local_0.StencilFrontFace = local_1.StencilFrontFace;
-                    local_0.StencilBackFace = local_1.StencilBackFace;
-                    local_0.StencilReferenceValue = local_1.StencilReferenceValue;
-                    this.depthStencilHitTest = DepthStencilState.Create(local_0);
+                    DepthStencilStateDescription paramsDSSD = parameters.DepthStencil.GetStateDescription();
+                    DepthStencilStateDescription localDSSD = this.depthStencilState.GetStateDescription();
+                    paramsDSSD.StencilEnable = localDSSD.StencilEnable;
+                    paramsDSSD.StencilFrontFace = localDSSD.StencilFrontFace;
+                    paramsDSSD.StencilBackFace = localDSSD.StencilBackFace;
+                    paramsDSSD.StencilReferenceValue = localDSSD.StencilReferenceValue;
+                    this.depthStencilHitTest = DepthStencilState.Create(paramsDSSD);
                 }
-                this.technique.SetRenderStates(parameters.DepthStencil == null ? (DepthStencilState)null : this.depthStencilHitTest, parameters.Blend, parameters.Rasterizer);
-                int local_2;
-                this.technique.ColorParameters = this.ColorManager.GetColors(out local_2);
+                this.technique.SetRenderStates(
+                    parameters.DepthStencil == null ? null : this.depthStencilHitTest,
+                    parameters.Blend, parameters.Rasterizer);
+                int count;
+                this.technique.ColorParameters = this.ColorManager.GetColors(out count);
                 this.technique.FrameId = parameters.FrameId;
                 this.technique.DesaturateFactor = this.DesaturateFactor;
                 if (parameters.DrawStyle == DrawStyle.HitTest)
@@ -433,25 +446,30 @@ namespace Microsoft.Data.Visualization.Engine
                 }
                 else
                     this.UpdateShading();
-                if (parameters.QueryType == InstanceBlockQueryType.ZeroInstances || parameters.QueryType == InstanceBlockQueryType.NullInstances)
+                if (parameters.QueryType == InstanceBlockQueryType.ZeroInstances ||
+                    parameters.QueryType == InstanceBlockQueryType.NullInstances)
                     this.technique.LocalShadingEnabled = false;
                 if (state.FlatteningFactor == 1.0 != this.planarCoordinates)
                 {
                     this.planarCoordinates = !this.planarCoordinates;
                     this.regionBuffer.ReprojectVertices(this.planarCoordinates);
                 }
-                using (VertexBuffer resource_0 = parameters.SourceStreamBuffer.PeekVertexBuffer())
+                using (VertexBuffer buffer = parameters.SourceStreamBuffer.PeekVertexBuffer())
                 {
-                    VertexBuffer local_4 = (VertexBuffer)null;
+                    VertexBuffer idVertexBuffer = null;
                     if (parameters.DrawStyle == DrawStyle.HitTest)
-                        local_4 = parameters.SourceIdStreamBuffer.PeekVertexBuffer();
+                        idVertexBuffer = parameters.SourceIdStreamBuffer.PeekVertexBuffer();
                     try
                     {
-                        this.technique.Mode = parameters.DrawStyle == DrawStyle.HitTest ? RegionRenderingTechnique.RenderMode.HitTest : RegionRenderingTechnique.RenderMode.Color;
-                        renderer.SetRasterizerState(parameters.RenderingOptions.Wireframe ? this.wireframeRasterizerState : this.rasterizerState);
+                        this.technique.Mode = parameters.DrawStyle == DrawStyle.HitTest
+                            ? RegionRenderingTechnique.RenderMode.HitTest
+                            : RegionRenderingTechnique.RenderMode.Color;
+                        renderer.SetRasterizerState(parameters.RenderingOptions.Wireframe
+                            ? this.wireframeRasterizerState
+                            : this.rasterizerState);
                         renderer.SetBlendState(this.blendState);
                         renderer.SetDepthStencilState(this.depthStencilState);
-                        renderer.SetEffect((EffectTechnique)this.technique);
+                        renderer.SetEffect(this.technique);
                         if (parameters.DrawStyle == DrawStyle.HitTest)
                         {
                             if (this.hitTestRasterizerState == null)
@@ -467,53 +485,57 @@ namespace Microsoft.Data.Visualization.Engine
                             renderer.SetRasterizerState(this.hitTestRasterizerState);
                         }
                         this.tokensToRender.Clear();
-                        for (int local_6 = 0; local_6 < parameters.InstanceCount; ++local_6)
+                        for (int i = 0; i < parameters.InstanceCount; ++i)
                         {
-                            Vector3F local_7 = parameters.PositionProvider.GetInstancePositionAtGeoIndex(local_6, parameters.QueryType);
-                            if (!(local_7 == Vector3F.Empty))
+                            Vector3F insPosition = parameters.PositionProvider.GetInstancePositionAtGeoIndex(i,
+                                parameters.QueryType);
+                            if (!(insPosition == Vector3F.Empty))
                             {
-                                InstanceId local_8 = parameters.PositionProvider.GetInstanceIdAtGeoIndex(local_6, parameters.QueryType);
-                                RegionBufferToken local_9 = this.GetRegionSubset(local_7, local_8, state);
-                                if (state.OfflineRender && local_9 == null)
-                                    local_9 = this.GetRegionSubset(local_7, local_8, state);
-                                this.tokensToRender.Add(local_9);
+                                InstanceId insId = parameters.PositionProvider.GetInstanceIdAtGeoIndex(i,
+                                    parameters.QueryType);
+                                RegionBufferToken region = this.GetRegionSubset(insPosition, insId, state);
+                                if (state.OfflineRender && region == null)
+                                    region = this.GetRegionSubset(insPosition, insId, state);
+                                this.tokensToRender.Add(region);
                             }
                         }
-                        RegionBufferToken local_10 = (RegionBufferToken)null;
+                        RegionBufferToken lastTokenRegion = null;
                         renderer.RenderLockEnter();
                         try
                         {
-                            int local_11 = 0;
-                            foreach (RegionBufferToken item_0 in this.tokensToRender)
+                            int renderedRegionCount = 0;
+                            foreach (RegionBufferToken tokenRegion in this.tokensToRender)
                             {
-                                if (item_0 != null)
+                                if (tokenRegion != null)
                                 {
-                                    if (local_10 == null || local_10.Indices != item_0.Indices || item_0.Indices.IsDirty)
-                                        renderer.SetIndexSourceNoLock(item_0.Indices);
-                                    if (local_10 == null || local_10.Vertices != item_0.Vertices || item_0.Vertices.IsDirty)
+                                    if (lastTokenRegion == null || lastTokenRegion.Indices != tokenRegion.Indices || tokenRegion.Indices.IsDirty)
+                                        renderer.SetIndexSourceNoLock(tokenRegion.Indices);
+                                    if (lastTokenRegion == null || lastTokenRegion.Vertices != tokenRegion.Vertices ||
+                                        tokenRegion.Vertices.IsDirty)
                                     {
-                                        Renderer temp_152 = renderer;
-                                        VertexBuffer[] temp_168;
+                                        Renderer r = renderer;
+                                        VertexBuffer[] vertexBufferArray;
                                         if (parameters.DrawStyle != DrawStyle.HitTest)
-                                            temp_168 = new VertexBuffer[3]
-                      {
-                        item_0.Vertices,
-                        resource_0,
-                        null
-                      };
+                                            vertexBufferArray = new VertexBuffer[3]
+                                            {
+                                                tokenRegion.Vertices,
+                                                buffer,
+                                                null
+                                            };
                                         else
-                                            temp_168 = new VertexBuffer[3]
-                      {
-                        item_0.Vertices,
-                        resource_0,
-                        local_4
-                      };
-                                        temp_152.SetVertexSourceNoLock(temp_168);
+                                            vertexBufferArray = new VertexBuffer[3]
+                                            {
+                                                tokenRegion.Vertices,
+                                                buffer,
+                                                idVertexBuffer
+                                            };
+                                        r.SetVertexSourceNoLock(vertexBufferArray);
                                     }
-                                    renderer.DrawIndexedInstancedNoLock(item_0.StartVertex, item_0.VertexCount, local_11, 1, PrimitiveTopology.TriangleList);
+                                    renderer.DrawIndexedInstancedNoLock(tokenRegion.StartVertex, tokenRegion.VertexCount, renderedRegionCount,
+                                        1, PrimitiveTopology.TriangleList);
                                 }
-                                local_10 = item_0;
-                                ++local_11;
+                                lastTokenRegion = tokenRegion;
+                                ++renderedRegionCount;
                             }
                         }
                         finally
@@ -521,13 +543,13 @@ namespace Microsoft.Data.Visualization.Engine
                             renderer.RenderLockExit();
                         }
                         renderer.SetTexture(0, state.GlobeDepth);
-                        this.DrawOutlines(renderer, parameters, resource_0, local_4);
-                        renderer.SetTexture(0, (Texture)null);
+                        this.DrawOutlines(renderer, parameters, buffer, idVertexBuffer);
+                        renderer.SetTexture(0, null);
                     }
                     finally
                     {
-                        if (local_4 != null)
-                            local_4.Dispose();
+                        if (idVertexBuffer != null)
+                            idVertexBuffer.Dispose();
                     }
                     renderer.SetVertexSource(new VertexBuffer[3]);
                 }
@@ -545,19 +567,22 @@ namespace Microsoft.Data.Visualization.Engine
             regionOutlineColor.A *= this.Opacity;
             this.technique.OutlineColor = regionOutlineColor;
             this.technique.BrightnessModeEnabled = parameters.RenderingOptions.RegionBrightnessEnabled;
-            renderer.SetEffect((EffectTechnique)this.technique);
+            renderer.SetEffect(this.technique);
             renderer.SetRasterizerState(this.rasterizerState);
             renderer.SetBlendState(this.blendState);
             renderer.SetDepthStencilState(this.depthStencilState);
-            RegionBufferToken regionBufferToken = (RegionBufferToken)null;
+            RegionBufferToken regionBufferToken = null;
             renderer.RenderLockEnter();
             try
             {
                 for (int index1 = 0; index1 < parameters.InstanceCount; ++index1)
                 {
-                    Vector3F positionAtGeoIndex = parameters.PositionProvider.GetInstancePositionAtGeoIndex(index1, parameters.QueryType);
+                    Vector3F positionAtGeoIndex = parameters.PositionProvider.GetInstancePositionAtGeoIndex(index1,
+                        parameters.QueryType);
                     List<RegionBufferToken> list;
-                    if (positionAtGeoIndex != Vector3F.Empty && this.regionRings.TryGetValue(this.GetCanonicalRegionPosition(positionAtGeoIndex), out list) && list != null)
+                    if (positionAtGeoIndex != Vector3F.Empty &&
+                        this.regionRings.TryGetValue(this.GetCanonicalRegionPosition(positionAtGeoIndex), out list) &&
+                        list != null)
                     {
                         for (int index2 = 0; index2 < list.Count; ++index2)
                         {
@@ -567,20 +592,21 @@ namespace Microsoft.Data.Visualization.Engine
                                 VertexBuffer[] vertexBuffers;
                                 if (parameters.DrawStyle != DrawStyle.HitTest)
                                     vertexBuffers = new VertexBuffer[2]
-                  {
-                    list[index2].Vertices,
-                    vb
-                  };
+                                    {
+                                        list[index2].Vertices,
+                                        vb
+                                    };
                                 else
                                     vertexBuffers = new VertexBuffer[3]
-                  {
-                    list[index2].Vertices,
-                    vb,
-                    idBuffer
-                  };
+                                    {
+                                        list[index2].Vertices,
+                                        vb,
+                                        idBuffer
+                                    };
                                 renderer1.SetVertexSourceNoLock(vertexBuffers);
                             }
-                            renderer.DrawInstancedNoLock(list[index2].StartVertex, list[index2].VertexCount, index1, 1, PrimitiveTopology.LineStrip);
+                            renderer.DrawInstancedNoLock(list[index2].StartVertex, list[index2].VertexCount, index1, 1,
+                                PrimitiveTopology.LineStrip);
                             regionBufferToken = list[index2];
                         }
                     }
@@ -595,7 +621,7 @@ namespace Microsoft.Data.Visualization.Engine
         private void UpdateShading()
         {
             this.technique.ShiftGlobalShadingEnabled = false;
-            float num = (float)this.GetInstanceValueOffset();
+            float num = (float) this.GetInstanceValueOffset();
             switch (this.ShadingMode)
             {
                 case RegionLayerShadingMode.FullBleed:
@@ -605,25 +631,25 @@ namespace Microsoft.Data.Visualization.Engine
                 case RegionLayerShadingMode.Global:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = false;
-                    this.technique.MinValue = (float)this.minGlobalValue + num;
-                    this.technique.ValueScale = (float)this.globalScale;
+                    this.technique.MinValue = (float) this.minGlobalValue + num;
+                    this.technique.ValueScale = (float) this.globalScale;
                     break;
                 case RegionLayerShadingMode.Local:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = true;
-                    this.technique.MinValue = (float)this.minLocalValue;
-                    this.technique.ValueScale = (float)this.localScale;
+                    this.technique.MinValue = (float) this.minLocalValue;
+                    this.technique.ValueScale = (float) this.localScale;
                     break;
                 case RegionLayerShadingMode.ShiftGlobal:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = false;
                     this.technique.ShiftGlobalShadingEnabled = true;
-                    this.technique.SetMinValueAndScalePerShift(this.minValuesPerShift, this.scalePerShift, (double)num);
+                    this.technique.SetMinValueAndScalePerShift(this.minValuesPerShift, this.scalePerShift, (double) num);
                     break;
             }
             if (this.currentShadingMode.HasValue && this.currentShadingMode.Value != this.ShadingMode)
             {
-                ValueRangeCalculator calc = (ValueRangeCalculator)null;
+                ValueRangeCalculator calc = null;
                 lock (this.rangeCalculatorLock)
                     calc = this.rangeCalculator;
                 if (calc != null)
@@ -645,7 +671,7 @@ namespace Microsoft.Data.Visualization.Engine
                     this.technique.FrameId = parameters.FrameId;
                     this.technique.DesaturateFactor = 0.0f;
                     this.technique.Mode = RegionRenderingTechnique.RenderMode.Color;
-                    renderer.SetEffect((EffectTechnique)this.technique);
+                    renderer.SetEffect((EffectTechnique) this.technique);
                 }
                 else
                 {
@@ -655,7 +681,7 @@ namespace Microsoft.Data.Visualization.Engine
                         this.outlineTechnique.RegionsMode = true;
                         this.outlineTechnique.DepthEnabled = true;
                     }
-                    renderer.SetEffect((EffectTechnique)this.outlineTechnique);
+                    renderer.SetEffect(this.outlineTechnique);
                     renderer.SetTexture(0, state.GlobeDepth);
                     if (parameters.RenderingOptions != null)
                     {
@@ -669,8 +695,8 @@ namespace Microsoft.Data.Visualization.Engine
                 renderer.SetBlendState(this.blendState);
                 renderer.SetDepthStencilState(this.depthStencilSelection);
                 int local_1 = 0;
-                RegionBufferToken local_2 = (RegionBufferToken)null;
-                VertexBuffer local_3 = (VertexBuffer)null;
+                RegionBufferToken local_2 = null;
+                VertexBuffer local_3 = null;
                 foreach (InstanceId item_0 in this.SelectedItems)
                 {
                     Vector3F local_5 = this.GetInstancePosition(item_0);
@@ -685,25 +711,28 @@ namespace Microsoft.Data.Visualization.Engine
                             {
                                 local_3 = parameters.SourceStreamBuffer.PeekVertexBuffer();
                                 renderer.SetVertexSource(new VertexBuffer[2]
-                {
-                  local_6.Vertices,
-                  local_3
-                });
+                                {
+                                    local_6.Vertices,
+                                    local_3
+                                });
                             }
-                            renderer.DrawIndexedInstanced(local_6.StartVertex, local_6.VertexCount, local_1, 1, PrimitiveTopology.TriangleList);
+                            renderer.DrawIndexedInstanced(local_6.StartVertex, local_6.VertexCount, local_1, 1,
+                                PrimitiveTopology.TriangleList);
                         }
                         local_2 = local_6;
                     }
                     else
                     {
                         List<RegionBufferToken> local_7;
-                        if (this.regionRings.TryGetValue(this.GetCanonicalRegionPosition(local_5), out local_7) && local_7 != null)
+                        if (this.regionRings.TryGetValue(this.GetCanonicalRegionPosition(local_5), out local_7) &&
+                            local_7 != null)
                         {
                             for (int local_8 = 0; local_8 < local_7.Count; ++local_8)
                             {
                                 if (local_2 == null || local_7[local_8].Vertices != local_2.Vertices)
                                     renderer.SetVertexSource(local_7[local_8].Vertices);
-                                renderer.Draw(local_7[local_8].StartVertex, local_7[local_8].VertexCount, PrimitiveTopology.LineStrip);
+                                renderer.Draw(local_7[local_8].StartVertex, local_7[local_8].VertexCount,
+                                    PrimitiveTopology.LineStrip);
                                 local_2 = local_7[local_8];
                             }
                         }
@@ -724,7 +753,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         protected override DrawMode GetDrawMode(bool preRender, bool hitTest)
         {
-            DrawMode drawMode = (DrawMode)3;
+            DrawMode drawMode = (DrawMode) 3;
             if (this.ShadingMode == RegionLayerShadingMode.Local)
                 drawMode |= DrawMode.PieChart;
             if (this.IgnoreData)
@@ -734,7 +763,8 @@ namespace Microsoft.Data.Visualization.Engine
 
         internal override RenderQuery GetSpatialQuery(SceneState state, List<int> queryResult)
         {
-            return RenderQuery.GetQuery(1.0 - state.FlatteningFactor, state.ViewProjection, 1f, (InstanceLayer)this, queryResult);
+            return RenderQuery.GetQuery(1.0 - state.FlatteningFactor, state.ViewProjection, 1f, (InstanceLayer) this,
+                queryResult);
         }
 
         internal override double GetMaxInstanceExtent(float scale, int maxShift)
@@ -766,21 +796,22 @@ namespace Microsoft.Data.Visualization.Engine
             lock (this.rangeCalculatorLock)
             {
                 if (this.rangeCalculator == null)
-                    this.rangeCalculator = new ValueRangeCalculator(this.instanceList, this.visualTimeRange != 0.0, this.DisplayZeroValues, this.DisplayNegativeValues, this.UseLogarithmicClampedValue);
+                    this.rangeCalculator = new ValueRangeCalculator(this.instanceList, this.visualTimeRange != 0.0,
+                        this.DisplayZeroValues, this.DisplayNegativeValues, this.UseLogarithmicClampedValue);
                 this.rangeCalculator.Compute(this.instanceCountUsedForScale);
                 double local_1 = this.rangeCalculator.MaxOverallValue - this.rangeCalculator.MinOverallMaxValue;
                 this.minGlobalValue = this.rangeCalculator.MinOverallMaxValue;
-                this.globalScale = local_1 <= 1E-06 ? 0.0 : 1.0 / local_1;
+                this.globalScale = local_1 <= 1E-06 ? 0.0 : 1.0/local_1;
                 double local_2 = this.rangeCalculator.MaxLocalMaxValue - this.rangeCalculator.MinLocalMaxValue;
                 this.minLocalValue = this.rangeCalculator.MinLocalMaxValue;
-                this.localScale = local_2 <= 1E-06 ? 0.0 : 1.0 / local_2;
+                this.localScale = local_2 <= 1E-06 ? 0.0 : 1.0/local_2;
                 this.rangeCalculator.GetValuesPerShift(this.minValuesPerShift, this.maxValuesPerShift);
                 for (int local_3 = 0; local_3 < this.maxValuesPerShift.Length; ++local_3)
                 {
                     double local_4 = this.maxValuesPerShift[local_3] - this.minValuesPerShift[local_3];
                     if (local_4 > 1E-06)
                     {
-                        this.scalePerShift[local_3] = 1.0 / local_4;
+                        this.scalePerShift[local_3] = 1.0/local_4;
                     }
                     else
                     {
@@ -797,18 +828,20 @@ namespace Microsoft.Data.Visualization.Engine
         {
             if (this.EventDispatcher == null || this.OnShadingScaleChanged == null)
                 return;
-            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
             {
                 double[] minValues = new double[2048];
                 double[] maxValues = new double[2048];
                 calc.GetValuesPerShift(minValues, maxValues);
                 if (this.OnShadingScaleChanged == null)
                     return;
-                this.OnShadingScaleChanged((object)this, new RegionScaleEventArgs(calc, minValues, maxValues, this.ShadingMode, this.MaxAbsValue));
+                this.OnShadingScaleChanged((object) this,
+                    new RegionScaleEventArgs(calc, minValues, maxValues, this.ShadingMode, this.MaxAbsValue));
             }));
         }
 
-        protected override void OverrideDimensionAndScales(InstanceBlockQueryType queryType, ref float dimension, ref Vector2F fixedScale, ref Vector2F variableScale)
+        protected override void OverrideDimensionAndScales(InstanceBlockQueryType queryType, ref float dimension,
+            ref Vector2F fixedScale, ref Vector2F variableScale)
         {
             base.OverrideDimensionAndScales(queryType, ref dimension, ref fixedScale, ref variableScale);
         }
@@ -823,7 +856,7 @@ namespace Microsoft.Data.Visualization.Engine
             base.EraseAllData();
             this.tessellationIsComplete = false;
             if (this.EngineDispatcher != null)
-                this.EngineDispatcher.RunOnRenderThread((RenderThreadMethod)(() => this.ClearRegions()));
+                this.EngineDispatcher.RunOnRenderThread((() => this.ClearRegions()));
             else
                 this.ClearRegions();
         }
@@ -842,7 +875,7 @@ namespace Microsoft.Data.Visualization.Engine
                 this.localScale = 0.0;
                 this.tessellationIsComplete = false;
                 lock (this.rangeCalculatorLock)
-                    this.rangeCalculator = (ValueRangeCalculator)null;
+                    this.rangeCalculator = (ValueRangeCalculator) null;
                 this.instanceCountUsedForScale = 0;
                 try
                 {
@@ -874,8 +907,8 @@ namespace Microsoft.Data.Visualization.Engine
                     vector3F = instancePositionAt;
                     if (region != null)
                     {
-                        int* numPtr = (int*)region.Indices.GetData().ToPointer();
-                        if ((IntPtr)numPtr != IntPtr.Zero)
+                        int* numPtr = (int*) region.Indices.GetData().ToPointer();
+                        if ((IntPtr) numPtr != IntPtr.Zero)
                         {
                             int num = region.StartVertex + region.VertexCount - 1;
                             if (num < region.Indices.IndexCount)
@@ -907,8 +940,8 @@ namespace Microsoft.Data.Visualization.Engine
             RegionBufferToken region;
             if (!this.GetTessellation(ref instancePosition, out region) || region == null)
                 return;
-            int* numPtr = (int*)region.Indices.GetData().ToPointer();
-            if ((IntPtr)numPtr == IntPtr.Zero)
+            int* numPtr = (int*) region.Indices.GetData().ToPointer();
+            if ((IntPtr) numPtr == IntPtr.Zero)
                 return;
             int num = region.StartVertex + region.VertexCount - 1;
             if (num >= region.Indices.IndexCount)
@@ -928,22 +961,22 @@ namespace Microsoft.Data.Visualization.Engine
             lock (this.regionLock)
             {
                 base.Dispose();
-                this.EngineDispatcher.RunOnRenderThread((RenderThreadMethod)(() =>
+                this.EngineDispatcher.RunOnRenderThread((() =>
                 {
                     this.ClearRegions();
                     DisposableResource[] disposableResourceArray = new DisposableResource[10]
-          {
-            (DisposableResource) this.regionBuffer,
-            (DisposableResource) this.rasterizerState,
-            (DisposableResource) this.wireframeRasterizerState,
-            (DisposableResource) this.depthStencilState,
-            (DisposableResource) this.depthStencilSelection,
-            (DisposableResource) this.depthStencilHitTest,
-            (DisposableResource) this.blendState,
-            (DisposableResource) this.technique,
-            (DisposableResource) this.outlineTechnique,
-            (DisposableResource) this.hitTestRasterizerState
-          };
+                    {
+                        this.regionBuffer,
+                        this.rasterizerState,
+                        this.wireframeRasterizerState,
+                        this.depthStencilState,
+                        this.depthStencilSelection,
+                        this.depthStencilHitTest,
+                        this.blendState,
+                        this.technique,
+                        this.outlineTechnique,
+                        this.hitTestRasterizerState
+                    };
                     foreach (DisposableResource disposableResource in disposableResourceArray)
                     {
                         if (disposableResource != null)
