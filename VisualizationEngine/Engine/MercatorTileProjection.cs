@@ -170,15 +170,15 @@ namespace Microsoft.Data.Visualization.Engine
         }
 
         /// <summary>
-        /// todo 探讨该方法与网络上普遍出现的方法之间的关系
+        /// 纬度转像素坐标系PixelY, 内含
         /// </summary>
         /// <param name="latitude">纬度，弧度单位</param>
         /// <param name="zoom">缩放级别，对应层号</param>
         /// <returns>像素坐标系，pixelY</returns>
         private static double AbsoluteLatToMetersAtZoom(double latitude, int zoom)
         {
-            double num = Math.Sin(latitude);
-            return (OffsetMeters - 0.5 * Constants.EarthRadius * Math.Log((1.0 + num) / (1.0 - num))) / MetersPerPixel2(zoom);
+            double sinLat = Math.Sin(latitude);
+            return (OffsetMeters - 0.5 * Constants.EarthRadius * Math.Log((1.0 + sinLat) / (1.0 - sinLat))) / MetersPerPixel2(zoom);
         }
 
         /// <summary>
