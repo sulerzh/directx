@@ -654,7 +654,7 @@ namespace Microsoft.Data.Visualization.Engine
         public void ForceUpdate()
         {
             this.DisposedCheck();
-            this.RunOnRenderThread((RenderThreadMethod)(() => this.frameSizeUpdated = true));
+            this.RunOnRenderThread((() => this.frameSizeUpdated = true));
         }
 
         public void SetTheme(BuiltinTheme theme, bool isWithLabels)
@@ -668,7 +668,7 @@ namespace Microsoft.Data.Visualization.Engine
                 this.CurrentThemeWithLabels = !this.CurrentThemeWithLabels;
                 this.themeUpdated = true;
             }
-            VisualizationTheme theme1 = (VisualizationTheme)null;
+            VisualizationTheme theme1 = null;
             if (this.CurrentTheme == theme)
             {
                 if (!this.themeUpdated)
