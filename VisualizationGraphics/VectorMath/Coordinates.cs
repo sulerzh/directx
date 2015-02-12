@@ -17,7 +17,7 @@ namespace Microsoft.Data.Visualization.Engine.VectorMath
         {
             get
             {
-                return this.Latitude * 57.2957795130823;
+                return this.Latitude * Constants.DegreesPerRadian;
             }
         }
 
@@ -25,7 +25,7 @@ namespace Microsoft.Data.Visualization.Engine.VectorMath
         {
             get
             {
-                return this.Longitude * 57.2957795130823;
+                return this.Longitude * Constants.DegreesPerRadian;
             }
         }
 
@@ -68,10 +68,10 @@ namespace Microsoft.Data.Visualization.Engine.VectorMath
         public static Vector3D GeoTo3DFlattening(double lon, double lat, double flattening)
         {
             if (flattening == 0.0)
-                return Coordinates.GeoTo3D(lon, lat);
+                return GeoTo3D(lon, lat);
             Vector3D position;
             Vector3D normal;
-            Coordinates.ComputeWarp(lat, lon, flattening, out position, out normal);
+            ComputeWarp(lat, lon, flattening, out position, out normal);
             return position;
         }
 
