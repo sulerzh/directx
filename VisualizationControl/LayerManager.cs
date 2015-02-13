@@ -95,20 +95,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 bool flag = true;
                 lock (this.syncRoot)
                 {
-                    foreach (LayerDefinition item_0 in (Collection<LayerDefinition>)this.layerDefinitions)
+                    foreach (LayerDefinition layerDef in this.layerDefinitions)
                     {
-                        DateTime? local_3 = item_0.PlayFromTime;
-                        if (local_3.HasValue && local_3.Value < dateTime)
+                        DateTime? time = layerDef.PlayFromTime;
+                        if (time.HasValue && time.Value < dateTime)
                         {
-                            dateTime = local_3.Value;
+                            dateTime = time.Value;
                             flag = false;
                         }
                     }
                 }
                 if (!flag)
                     return new DateTime?(dateTime);
-                else
-                    return new DateTime?();
+                return new DateTime?();
             }
         }
 
@@ -128,20 +127,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 bool flag = true;
                 lock (this.syncRoot)
                 {
-                    foreach (LayerDefinition item_0 in (Collection<LayerDefinition>)this.layerDefinitions)
+                    foreach (LayerDefinition layerDef in this.layerDefinitions)
                     {
-                        DateTime? local_3 = item_0.PlayToTime;
-                        if (local_3.HasValue && local_3.Value > dateTime)
+                        DateTime? time = layerDef.PlayToTime;
+                        if (time.HasValue && time.Value > dateTime)
                         {
-                            dateTime = local_3.Value;
+                            dateTime = time.Value;
                             flag = false;
                         }
                     }
                 }
                 if (!flag)
                     return new DateTime?(dateTime);
-                else
-                    return new DateTime?();
+                return new DateTime?();
             }
         }
 
@@ -160,8 +158,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = this.dataDimensionScale;
                 if (!double.IsNaN(d))
                     return d;
-                else
-                    return 1.0;
+                return 1.0;
             }
             set
             {
@@ -171,13 +168,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 else
                 {
-                    value = Math.Min(value, LayerManager.MaximumDataDimensionScaleValue);
-                    value = Math.Max(value, LayerManager.MinimumDataDimensionScaleValue);
+                    value = Math.Min(value, MaximumDataDimensionScaleValue);
+                    value = Math.Max(value, MinimumDataDimensionScaleValue);
                 }
                 this.dataDimensionScale = value;
                 this.SetDataDimensionScale();
-                this.RaisePropertyChanged(LayerManager.DataDimensionScaleProperty);
-                this.NotifyStateChanged((object)this);
+                this.RaisePropertyChanged(DataDimensionScaleProperty);
+                this.NotifyStateChanged(this);
             }
         }
 
@@ -196,8 +193,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = this.fixedDimensionScale;
                 if (!double.IsNaN(d))
                     return d;
-                else
-                    return 1.0;
+                return 1.0;
             }
             set
             {
@@ -207,13 +203,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 else
                 {
-                    value = Math.Min(value, LayerManager.MaximumFixedDimensionScaleValue);
-                    value = Math.Max(value, LayerManager.MinimumFixedDimensionScaleValue);
+                    value = Math.Min(value, MaximumFixedDimensionScaleValue);
+                    value = Math.Max(value, MinimumFixedDimensionScaleValue);
                 }
                 this.fixedDimensionScale = value;
                 this.SetFixedDimensionScale();
-                this.RaisePropertyChanged(LayerManager.FixedDimensionScaleProperty);
-                this.NotifyStateChanged((object)this);
+                this.RaisePropertyChanged(FixedDimensionScaleProperty);
+                this.NotifyStateChanged(this);
             }
         }
 
@@ -231,14 +227,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.playFrom.HasValue)
                     return this.playFrom;
-                else
-                    return this.MinTime;
+                return this.MinTime;
             }
             set
             {
                 this.playFrom = value;
-                this.RaisePropertyChanged(LayerManager.PlayFromTimeProperty);
-                this.NotifyStateChanged((object)this);
+                this.RaisePropertyChanged(PlayFromTimeProperty);
+                this.NotifyStateChanged(this);
             }
         }
 
@@ -256,14 +251,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.playTo.HasValue)
                     return this.playTo;
-                else
-                    return this.MaxTime;
+                return this.MaxTime;
             }
             set
             {
                 this.playTo = value;
-                this.RaisePropertyChanged(LayerManager.PlayToTimeProperty);
-                this.NotifyStateChanged((object)this);
+                this.RaisePropertyChanged(PlayToTimeProperty);
+                this.NotifyStateChanged(this);
             }
         }
 
@@ -303,15 +297,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             this.layerContentBuilder.Clear();
             XmlWriter xmlWriter = XmlWriter.Create(this.layerContentBuilder);
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(LayerManager.SerializableLayerManager), "http://microsoft.data.visualization.geo3d/1.0");
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(SerializableLayerManager), "http://microsoft.data.visualization.geo3d/1.0");
             try
             {
                 lock (this.syncRoot)
                 {
-                    LayerManager.SerializableLayerManager local_2 = new LayerManager.SerializableLayerManager()
+                    SerializableLayerManager serializableLayerManager = new SerializableLayerManager()
                     {
-                        LayerDefinitions = Enumerable.ToList<LayerDefinition.SerializableLayerDefinition>(Enumerable.Where<LayerDefinition.SerializableLayerDefinition>(Enumerable.Select<LayerDefinition, LayerDefinition.SerializableLayerDefinition>((IEnumerable<LayerDefinition>)this.layerDefinitions, (Func<LayerDefinition, LayerDefinition.SerializableLayerDefinition>)(layer => layer.Wrap())), (Func<LayerDefinition.SerializableLayerDefinition, bool>)(k => !shouldDropLayers))),
-                        Decorators = Enumerable.ToList<DecoratorModel>(Enumerable.Where<DecoratorModel>((IEnumerable<DecoratorModel>)this._decorators, (Func<DecoratorModel, bool>)(k => !shouldDropLayers))),
+                        LayerDefinitions = this.layerDefinitions.Select(layer => layer.Wrap()).Where(k => !shouldDropLayers).ToList(),
+                        Decorators = this._decorators.Where(k => !shouldDropLayers).ToList(),
                         PlayFromIsNull = !this.PlayFromTime.HasValue,
                         PlayFromTicks = this.PlayFromTime.HasValue ? this.PlayFromTime.Value.Ticks : DateTime.MinValue.Ticks,
                         PlayToIsNull = !this.PlayToTime.HasValue,
@@ -319,7 +313,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         DataDimensionScale = this.dataDimensionScale,
                         FixedDimensionScale = this.fixedDimensionScale
                     };
-                    xmlSerializer.Serialize(xmlWriter, (object)local_2);
+                    xmlSerializer.Serialize(xmlWriter, serializableLayerManager);
                 }
             }
             catch (Exception ex)
@@ -331,14 +325,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 xmlWriter.Close();
             }
-            string str = ((object)this.layerContentBuilder).ToString();
+            string str = this.layerContentBuilder.ToString();
             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "GetSceneLayersContent() serialized LayerManager.layerDefinitions to xml: {0}", (object)str);
             return str;
         }
 
         public void SetSceneLayersContent(string layersContent, Guid customMapSpaceId, Action<object, Exception> completedCallback = null, object completionContext = null)
         {
-            this.SetSceneLayers(this.PrepareSceneLayers(layersContent, customMapSpaceId, false, (Action<object, Exception>)null, (object)null), completedCallback, completionContext);
+            this.SetSceneLayers(this.PrepareSceneLayers(layersContent, customMapSpaceId, false), completedCallback, completionContext);
         }
 
         public object PrepareSceneLayers(string layersContent, Guid customMapSpaceId, Action<object, Exception> completedCallback = null, object completionContext = null)
@@ -371,19 +365,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     throw new TourDeserializationException("Exception while deserializing a scene ", exception);
                 }
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
-                    "PrepareSceneLayers(): cookie={0}, new layer content : {1}", new object[] { cookie, layersContent });
+                    "PrepareSceneLayers(): cookie={0}, new layer content : {1}", cookie, layersContent);
 
                 Func<LayerDefinition.SerializableLayerDefinition, LayerDefinition> selector = serializedLayer =>
                     serializedLayer.Unwrap(
-                        this,
-                        this.LayerDefinitions.FirstOrDefault<LayerDefinition>(
-                            layer => layer.Key == serializedLayer.Key),
+                        this, this.LayerDefinitions.FirstOrDefault(layer => layer.Key == serializedLayer.Key),
                         this.Model.GetModelMetadata().Culture);
                 List<LayerDefinition> newLayerDefinitions =
-                    manager.LayerDefinitions.Select<LayerDefinition.SerializableLayerDefinition, LayerDefinition>(selector)
-                        .ToList<LayerDefinition>();
+                    manager.LayerDefinitions.Select(selector).ToList<LayerDefinition>();
 
-                newLayerDefinitions.ForEach((Action<LayerDefinition>)(layer =>
+                newLayerDefinitions.ForEach((layer =>
                 {
                     layer.DataLoadedCustomSpaceId = customMapSpaceId;
                     if (layer.GeoVisualization == null)
@@ -402,7 +393,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     for (int i = 0; i < newLayerDefinitions.Count; i++)
                     {
                         int reusedLayerIndex = 0;
-                        this.layerDefinitions.FirstOrDefault<LayerDefinition>(delegate(LayerDefinition layer)
+                        this.layerDefinitions.FirstOrDefault(delegate(LayerDefinition layer)
                         {
                             if ((layer.Key == newLayerDefinitions[i].Key) &&
                                 (layer.DataLoadedCustomSpaceId == customMapSpaceId))
@@ -512,7 +503,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             catch (Exception exception2)
             {
                 VisualizationTraceSource.Current.Fail(
-                    "Exception while loading PrepareSceneLayers, cookie=" + cookie.ToString(), exception2);
+                    "Exception while loading PrepareSceneLayers, cookie=" + cookie, exception2);
                 throw;
             }
             finally
@@ -545,17 +536,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     if (count != context.layerDefinitionCount)
                     {
                         throw new InvalidOperationException("context.layerDefinitionCount=" +
-                                                            context.layerDefinitionCount.ToString() +
-                                                            " != current layerDefinitionCount=" + count.ToString());
+                                                            context.layerDefinitionCount +
+                                                            " != current layerDefinitionCount=" + count);
                     }
                     for (int i = 0; i < count; i++)
                     {
                         if ((reusedLayers[i] != null) && (this.layerDefinitions[i].Key != reusedLayers[i].Key))
                         {
-                            throw new InvalidOperationException("reusedLayers[" + i.ToString() + "].Key=" +
-                                                                reusedLayers[i].Key.ToString() +
-                                                                " != this.layerDefinitions[" + i.ToString() + "].Key=" +
-                                                                this.layerDefinitions[i].Key.ToString());
+                            throw new InvalidOperationException(
+                                "reusedLayers[" + i + "].Key=" + reusedLayers[i].Key +
+                                " != this.layerDefinitions[" + i + "].Key=" + this.layerDefinitions[i].Key);
                         }
                     }
                     foreach (DecoratorModel model in this.Decorators.Clone())
@@ -604,24 +594,23 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                                 visibilityChangedCallback);
                         }
                     }
-                    LayerDefinition[] definitionArray2 = this.layerDefinitions.ToArray<LayerDefinition>();
+                    LayerDefinition[] definitionArray2 = this.layerDefinitions.ToArray();
                     this.LayerDefinitions.RemoveAll();
                     for (int k = 0; k < definitionArray2.Length; k++)
                     {
                         this.layerDefinitions.Add(definitionArray2[k]);
                     }
 
-                    newlyAddedLayers.ForEach((Action<LayerDefinition>)(layer =>
+                    newlyAddedLayers.ForEach((layer =>
                     {
                         layer.DisallowIncrementRevisionCount();
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
-                            "SetSceneLayers(cookie={0}): Adding layerDefinition with id = {1}",
-                            new object[] { cookie, layer.Id });
+                            "SetSceneLayers(cookie={0}): Adding layerDefinition with id = {1}", cookie, layer.Id);
                         this.LayerDefinitions.Add(layer);
                         layer.AllowIncrementRevisionCount(true);
                     }));
                     this.Model.ColorSelector.SetColorIndex(
-                        this.layerDefinitions.SelectMany<LayerDefinition, int>(delegate(LayerDefinition layer)
+                        this.layerDefinitions.SelectMany(delegate(LayerDefinition layer)
                         {
                             if ((layer.GeoVisualization != null) && (layer.GeoVisualization.ColorIndices != null))
                             {
@@ -633,9 +622,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     this.FixedDimensionScale = serializableLayerDefinitions.FixedDimensionScale;
                     this.Decorators.RemoveAll();
 
-                    serializableLayerDefinitions.Decorators.ForEach(
-                        (Action<DecoratorModel>)(decorator =>
-                            this.Decorators.Add(decorator)));
+                    serializableLayerDefinitions.Decorators.ForEach((decorator => this.Decorators.Add(decorator)));
                     int newlyAddedLayerIndex = 0;
                     newlyAddedLayers.ForEach(delegate(LayerDefinition layer)
                     {
@@ -672,29 +659,40 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             return dataSource;
         }
 
+        /// <summary>
+        /// 新建图层，并添加到图层管理器中
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="modelTableName"></param>
+        /// <param name="createGeoVisualization"></param>
+        /// <param name="forInstructionsOnly"></param>
+        /// <returns></returns>
         public LayerDefinition AddLayerDefinition(string name = null, string modelTableName = null, bool createGeoVisualization = true, bool forInstructionsOnly = false)
         {
+            // 根据预设规则，构建图层名称
             if (name == null)
             {
                 lock (this.syncRoot)
                 {
-                    int local_0 = Enumerable.Count<LayerDefinition>((IEnumerable<LayerDefinition>)this.layerDefinitions) + 1;
-                    name = string.Format(Resources.LayerDefaultName, (object)local_0.ToString());
-                    while (Enumerable.Any<LayerDefinition>((IEnumerable<LayerDefinition>)this.layerDefinitions, (Func<LayerDefinition, bool>)(layer => layer.Name.ToLower() == name.ToLower())))
+                    int seqNum = this.layerDefinitions.Count + 1;
+                    name = string.Format(Resources.LayerDefaultName, seqNum);
+                    while (this.layerDefinitions.Any(layer => layer.Name.ToLower() == name.ToLower()))
                     {
-                        ++local_0;
-                        name = string.Format(Resources.LayerDefaultName, (object)local_0.ToString());
+                        ++seqNum;
+                        name = string.Format(Resources.LayerDefaultName, seqNum);
                     }
                 }
             }
-            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "AddLayerDefinition(): Adding layer '{0}'", (object)name);
+            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
+                "AddLayerDefinition(): Adding layer '{0}'", name);
             LayerDefinition layerDefinition = new LayerDefinition(this, name, modelTableName, forInstructionsOnly);
             if (createGeoVisualization)
-                layerDefinition.AddGeoVisualization((DataSource)null);
+                layerDefinition.AddGeoVisualization();
             lock (this.syncRoot)
                 this.layerDefinitions.Add(layerDefinition);
             this.ResetPlayTimes();
-            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "AddLayerDefinition(): Added layer '{0}', id={1}", (object)layerDefinition.Name, (object)layerDefinition.Id);
+            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
+                "AddLayerDefinition(): Added layer '{0}', id={1}", layerDefinition.Name, layerDefinition.Id);
             return layerDefinition;
         }
 
@@ -711,7 +709,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 string name = layerDefinition.Name;
                 layerDefinition.Removed();
                 this.ResetPlayTimes();
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "RemoveLayerDefinition(): Removed layer '{0}', id = {1}", (object)name, (object)id);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
+                    "RemoveLayerDefinition(): Removed layer '{0}', id = {1}", name, id);
             }
             return flag;
         }
@@ -721,13 +720,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             bool removed = false;
             lock (this.syncRoot)
             {
-                List<LayerDefinition> source = this.layerDefinitions.ToList<LayerDefinition>();
+                List<LayerDefinition> source = this.layerDefinitions.ToList();
 
-                source.ForEach((Action<LayerDefinition>)(layer =>
+                source.ForEach((layer =>
                 {
                     removed |= this.RemoveLayerDefinition(layer);
                 }));
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "RemoveAllLayerDefinitions: removed {0} layers", new object[] { source.Count<LayerDefinition>() });
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
+                    "RemoveAllLayerDefinitions: removed {0} layers", source.Count());
             }
             return removed;
 
@@ -747,7 +747,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         public IEnumerable<TableIsland> GetTableIslands()
         {
-            return (IEnumerable<TableIsland>)this.Model.GetModelMetadata().TableIslands;
+            return this.Model.GetModelMetadata().TableIslands;
         }
 
         internal void Reset()
@@ -767,23 +767,26 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.NotifyPlayTimePropertyChanges();
         }
 
-        internal void RefreshSettings(bool layerVisible, LayerManager.Settings settings, Exception ex)
+        internal void RefreshSettings(bool layerVisible, Settings settings, Exception ex)
         {
             if (settings == null)
                 return;
             if (Interlocked.Decrement(ref settings.InProgressQueryCount) == 0)
             {
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): InProgressQueryCount=0", (object)settings.TraceMessage);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                    "LayerManager.RefreshSettings(cookie={0}): InProgressQueryCount=0", settings.TraceMessage);
                 this.RefreshSettings(settings, ex);
             }
             else
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): InProgressQueryCount={1} (after decrement)", (object)settings.TraceMessage, (object)settings.InProgressQueryCount);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                    "LayerManager.RefreshSettings(cookie={0}): InProgressQueryCount={1} (after decrement)",
+                    settings.TraceMessage, settings.InProgressQueryCount);
         }
 
         internal void SelectionStatsChanged()
         {
             this.SelectionStats.Clear();
-            foreach (LayerDefinition layerDefinition in (Collection<LayerDefinition>)this.layerDefinitions)
+            foreach (LayerDefinition layerDefinition in this.layerDefinitions)
             {
                 GeoVisualization geoVisualization = layerDefinition.GeoVisualization;
                 if (geoVisualization != null)
@@ -802,16 +805,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     if (this.MaxTime.HasValue)
                         this.Model.Engine.TimeControl.CurrentVisualTime = this.MaxTime.Value;
                 }
-                List<LayerDefinition> local_0 = new List<LayerDefinition>((IEnumerable<LayerDefinition>)this.LayerDefinitions);
-                ObservableCollectionEx<DecoratorModel> local_1 = this.Decorators.Clone();
+                List<LayerDefinition> layerDefArray = new List<LayerDefinition>(this.LayerDefinitions);
+                ObservableCollectionEx<DecoratorModel> decoratorModels = this.Decorators.Clone();
                 this.LayerDefinitions.RemoveAll();
                 ModelMetadata modelMetadata = this.Model.GetModelMetadata();
-                bool[] requery = new bool[local_0.Count];
-                bool[] queryChanged = new bool[local_0.Count];
-                Array.Clear((Array)requery, 0, requery.Length);
-                Array.Clear((Array)queryChanged, 0, queryChanged.Length);
+                bool[] requery = new bool[layerDefArray.Count];
+                bool[] queryChanged = new bool[layerDefArray.Count];
+                Array.Clear(requery, 0, requery.Length);
+                Array.Clear(queryChanged, 0, queryChanged.Length);
                 int layerIndex = 0;
-                local_0.ForEach((Action<LayerDefinition>)(layer =>
+                layerDefArray.ForEach((layer =>
                 {
                     GeoVisualization geoVisualization = layer.GeoVisualization;
                     if (geoVisualization != null && geoVisualization.DataSource != null)
@@ -820,17 +823,17 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     {
                         layer.ModelMetadataChanged(modelMetadata, tablesWithUpdatedData, ref requery[layerIndex], ref queryChanged[layerIndex]);
                         if (requery[layerIndex])
-                            layer.RefreshDisplay(false, (CancellationTokenSource)null, true, false, (LayerManager.Settings)null, (Action<object, bool, bool, Exception>)null, (object)null);
+                            layer.RefreshDisplay(false, null, true);
                         this.layerDefinitions.Add(layer);
                     }
                     else
                         layer.Removed();
                     ++layerIndex;
                 }));
-                foreach (DecoratorModel item_0 in (Collection<DecoratorModel>)local_1)
+                foreach (DecoratorModel decoratorModel in decoratorModels)
                 {
-                    if (!this.Decorators.Contains(item_0))
-                        this.Decorators.Add(item_0);
+                    if (!this.Decorators.Contains(decoratorModel))
+                        this.Decorators.Add(decoratorModel);
                 }
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.ModelChanged() completed");
             }
@@ -845,40 +848,53 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         private void NotifyPlayTimePropertyChanges()
         {
-            this.RaisePropertyChanged(LayerManager.PlayFromTimeProperty);
-            this.RaisePropertyChanged(LayerManager.PlayToTimeProperty);
-            this.RaisePropertyChanged(LayerManager.MinTimeProperty);
-            this.RaisePropertyChanged(LayerManager.MaxTimeProperty);
+            this.RaisePropertyChanged(PlayFromTimeProperty);
+            this.RaisePropertyChanged(PlayToTimeProperty);
+            this.RaisePropertyChanged(MinTimeProperty);
+            this.RaisePropertyChanged(MaxTimeProperty);
         }
 
-        private void RefreshSettings(LayerManager.Settings settings, Exception ex)
+        private void RefreshSettings(Settings settings, Exception ex)
         {
-            LayerManager.RefreshDisplaySettings refreshDisplaySettings = settings as LayerManager.RefreshDisplaySettings;
-            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): ex is{1} null", (object)settings.TraceMessage, ex == null ? (object)string.Empty : (object)" not");
+            RefreshDisplaySettings refreshDisplaySettings = settings as RefreshDisplaySettings;
+            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                "LayerManager.RefreshSettings(cookie={0}): ex is{1} null",
+                settings.TraceMessage, ex == null ? string.Empty : " not");
             if (refreshDisplaySettings != null)
             {
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): setting from/to play time", (object)settings.TraceMessage);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                    "LayerManager.RefreshSettings(cookie={0}): setting from/to play time", settings.TraceMessage);
                 DateTime? minTime = this.MinTime;
                 DateTime? maxTime = this.MaxTime;
                 if (minTime.HasValue && maxTime.HasValue && (refreshDisplaySettings.PlayFrom.HasValue && refreshDisplaySettings.PlayFrom.Value >= minTime.Value) && refreshDisplaySettings.PlayFrom.Value <= maxTime.Value)
                 {
                     this.playFrom = refreshDisplaySettings.PlayFrom;
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): set playFrom to {1}", (object)settings.TraceMessage, (object)refreshDisplaySettings.PlayFrom);
+                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                        "LayerManager.RefreshSettings(cookie={0}): set playFrom to {1}",
+                        settings.TraceMessage, refreshDisplaySettings.PlayFrom);
                 }
                 else
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): did not change playFrom={1}", (object)settings.TraceMessage, (object)this.playFrom);
+                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                        "LayerManager.RefreshSettings(cookie={0}): did not change playFrom={1}",
+                        settings.TraceMessage, this.playFrom);
                 if (minTime.HasValue && maxTime.HasValue && (refreshDisplaySettings.PlayTo.HasValue && refreshDisplaySettings.PlayTo.Value >= minTime.Value) && refreshDisplaySettings.PlayTo.Value <= maxTime.Value)
                 {
                     this.playTo = refreshDisplaySettings.PlayTo;
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): set playTo to {1}", (object)settings.TraceMessage, (object)refreshDisplaySettings.PlayTo);
+                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                        "LayerManager.RefreshSettings(cookie={0}): set playTo to {1}",
+                        settings.TraceMessage, refreshDisplaySettings.PlayTo);
                 }
                 else
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): did not change playTo={1}", (object)settings.TraceMessage, (object)this.playTo);
+                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                        "LayerManager.RefreshSettings(cookie={0}): did not change playTo={1}",
+                        settings.TraceMessage, this.playTo);
                 this.NotifyPlayTimePropertyChanges();
             }
             if (settings.QueryCompletedCallback == null)
                 return;
-            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerManager.RefreshSettings(cookie={0}): calling query callback", (object)settings.TraceMessage);
+            VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0,
+                "LayerManager.RefreshSettings(cookie={0}): calling query callback",
+                settings.TraceMessage);
             settings.QueryCompletedCallback(settings.CompletionContext, ex);
         }
 
@@ -886,10 +902,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             lock (this.syncRoot)
             {
-                foreach (LayerDefinition item_0 in (Collection<LayerDefinition>)this.layerDefinitions)
+                foreach (LayerDefinition layerDef in this.layerDefinitions)
                 {
-                    if (item_0.GeoVisualization != null)
-                        item_0.GeoVisualization.SetDataDimensionScale();
+                    if (layerDef.GeoVisualization != null)
+                        layerDef.GeoVisualization.SetDataDimensionScale();
                 }
             }
         }
@@ -898,10 +914,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             lock (this.syncRoot)
             {
-                foreach (LayerDefinition item_0 in (Collection<LayerDefinition>)this.layerDefinitions)
+                foreach (LayerDefinition layerDef in this.layerDefinitions)
                 {
-                    if (item_0.GeoVisualization != null)
-                        item_0.GeoVisualization.SetFixedDimensionScale();
+                    if (layerDef.GeoVisualization != null)
+                        layerDef.GeoVisualization.SetFixedDimensionScale();
                 }
             }
         }
@@ -944,7 +960,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             public object CompletionContext;
         }
 
-        public class RefreshDisplaySettings : LayerManager.Settings
+        public class RefreshDisplaySettings : Settings
         {
             public bool IgnoreDisplayPropertiesUpdates;
             public DateTime? PlayFrom;
@@ -954,7 +970,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private class PrepareSceneLayersContext
         {
             public int layerDefinitionCount;
-            public LayerManager.SerializableLayerManager serializableLayerDefinitions;
+            public SerializableLayerManager serializableLayerDefinitions;
             public List<LayerDefinition> newlyAddedLayers;
             public LayerDefinition[] reusedLayers;
             public Guid cookie;

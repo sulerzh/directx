@@ -17,6 +17,9 @@ using System.Xml.Serialization;
 
 namespace Microsoft.Data.Visualization.VisualizationControls
 {
+    /// <summary>
+    /// 设置图层的空间可视化属性
+    /// </summary>
     public class GeoVisualization : Visualization
     {
         public static readonly double MinimumDataDimensionScaleValue = LayerManager.MinimumDataDimensionScaleValue;
@@ -35,34 +38,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private SelectionStats selectionStats = new SelectionStats();
         private object showHideLock = new object();
         private List<ChartVisualization> chartVisualizations = new List<ChartVisualization>();
-        private double[] opacityFactors = new double[4]
-    {
-      1.0,
-      1.0,
-      1.0,
-      1.0
-    };
-        private double[] dataDimensionScales = new double[4]
-    {
-      1.0,
-      1.0,
-      1.0,
-      1.0
-    };
-        private double[] fixedDimensionScales = new double[4]
-    {
-      1.0,
-      1.0,
-      1.0,
-      1.0
-    };
-        private double[] lockedViewScales = new double[4]
-    {
-      double.NaN,
-      double.NaN,
-      double.NaN,
-      double.NaN
-    };
+        private double[] opacityFactors = { 1.0, 1.0, 1.0, 1.0 };
+        private double[] dataDimensionScales = { 1.0, 1.0, 1.0, 1.0 };
+        private double[] fixedDimensionScales = { 1.0, 1.0, 1.0, 1.0 };
+        private double[] lockedViewScales = { double.NaN, double.NaN, double.NaN, double.NaN };
         private InstancedShape visualShape;
         private InstancedShape? visualShapeForLayer;
         private bool displayNullValues;
@@ -169,9 +148,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 List<ChartVisualization> list = this.chartVisualizations;
                 if (list == null)
-                    return (IEnumerable<ChartDecoratorModel>)null;
+                    return null;
                 lock (list)
-                    return Enumerable.Select<ChartVisualization, ChartDecoratorModel>((IEnumerable<ChartVisualization>)list, (Func<ChartVisualization, ChartDecoratorModel>)(cvis => cvis.Model));
+                    return list.Select(cvis => cvis.Model);
             }
         }
 
@@ -183,13 +162,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = numArray == null ? double.NaN : numArray[(int)this.ChartTypeFromLayerType(this.VisualType)];
                 if (!double.IsNaN(d))
                     return d;
-                else
-                    return 1.0;
+                return 1.0;
             }
             set
             {
-                value = Math.Min(value, GeoVisualization.MaximumOpacityFactorValue);
-                value = Math.Max(value, GeoVisualization.MinimumOpacityFactorValue);
+                value = Math.Min(value, MaximumOpacityFactorValue);
+                value = Math.Max(value, MinimumOpacityFactorValue);
                 int index = (int)this.ChartTypeFromLayerType(this.VisualType);
                 double[] numArray = this.opacityFactors;
                 if (numArray == null || numArray[index] == value)
@@ -213,8 +191,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                value = Math.Min(value, GeoVisualization.MaximumDataDimensionScaleValue);
-                value = Math.Max(value, GeoVisualization.MinimumDataDimensionScaleValue);
+                value = Math.Min(value, MaximumDataDimensionScaleValue);
+                value = Math.Max(value, MinimumDataDimensionScaleValue);
                 int index = (int)this.ChartTypeFromLayerType(this.VisualType);
                 double[] numArray = this.dataDimensionScales;
                 if (numArray == null || numArray[index] == value)
@@ -238,8 +216,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                value = Math.Min(value, GeoVisualization.MaximumFixedDimensionScaleValue);
-                value = Math.Max(value, GeoVisualization.MinimumFixedDimensionScaleValue);
+                value = Math.Min(value, MaximumFixedDimensionScaleValue);
+                value = Math.Max(value, MinimumFixedDimensionScaleValue);
                 int index = (int)this.ChartTypeFromLayerType(this.VisualType);
                 double[] numArray = this.fixedDimensionScales;
                 if (numArray == null || numArray[index] == value)
@@ -364,10 +342,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 ChartLayer chartLayer = layerDataBinding == null ? (ChartLayer)null : layerDataBinding.Layer as ChartLayer;
                 if (chartLayer == null)
                     return;
-                InstancedShape[] newShapes = new InstancedShape[1]
-        {
-          value.Value
-        };
+                InstancedShape[] newShapes = new InstancedShape[1] { value.Value };
                 chartLayer.SetShapes(newShapes);
             }
         }
@@ -379,8 +354,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoDataSource geoDataSource = this.GeoDataSource;
                 if (geoDataSource == null)
                     return new DateTime?();
-                else
-                    return geoDataSource.PlayFromTime;
+                return geoDataSource.PlayFromTime;
             }
         }
 
@@ -396,8 +370,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoDataSource geoDataSource = this.GeoDataSource;
                 if (geoDataSource == null)
                     return new DateTime?();
-                else
-                    return geoDataSource.PlayToTime;
+                return geoDataSource.PlayToTime;
             }
         }
 
@@ -429,10 +402,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 {
                     lock (hashtable.SyncRoot)
                     {
-                        foreach (object item_0 in (IEnumerable)hashtable.Values)
+                        foreach (object val in hashtable.Values)
                         {
-                            GeoVisualizationInstanceProperties local_2 = item_0 as GeoVisualizationInstanceProperties;
-                            if (local_2 != null && local_2.ColorSet)
+                            GeoVisualizationInstanceProperties prop = val as GeoVisualizationInstanceProperties;
+                            if (prop != null && prop.ColorSet)
                                 return true;
                         }
                     }
@@ -459,9 +432,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 GeoDataSource geoDataSource = this.GeoDataSource;
                 if (geoDataSource == null)
-                    return (IEnumerable<string>)null;
-                else
-                    return (IEnumerable<string>)geoDataSource.AllCategories;
+                    return null;
+                return geoDataSource.AllCategories;
             }
         }
 
@@ -471,14 +443,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 GeoDataSource geoDataSource = this.GeoDataSource;
                 if (geoDataSource == null)
-                    return (List<Tuple<TableField, AggregationFunction>>)null;
+                    return null;
                 List<Tuple<TableField, AggregationFunction>> measures = geoDataSource.Measures;
                 List<Tuple<TableField, AggregationFunction>> measuresRet = new List<Tuple<TableField, AggregationFunction>>(measures == null ? 0 : measures.Count);
                 if (measures != null)
                 {
                     try
                     {
-                        measures.ForEach((Action<Tuple<TableField, AggregationFunction>>)(measure => measuresRet.Add(new Tuple<TableField, AggregationFunction>(measure.Item1, measure.Item2))));
+                        measures.ForEach((measure => measuresRet.Add(new Tuple<TableField, AggregationFunction>(measure.Item1, measure.Item2))));
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -502,7 +474,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 this.chartVisualizations = value;
                 if (this.chartVisualizations == null)
                     return;
-                this.chartVisualizations.ForEach((Action<ChartVisualization>)(cv => cv.LayerDefinition = this.LayerDefinition));
+                this.chartVisualizations.ForEach((cv => cv.LayerDefinition = this.LayerDefinition));
             }
         }
 
@@ -513,8 +485,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoDataSource geoDataSource = this.GeoDataSource;
                 if (geoDataSource != null)
                     return geoDataSource.Time != null;
-                else
-                    return false;
+                return false;
             }
         }
 
@@ -534,27 +505,27 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         public event Action<RegionLayerShadingMode> RegionShadingModeChanged;
 
-        internal GeoVisualization(GeoVisualization.SerializableGeoVisualization state, LayerDefinition layerDefinition, GeoDataSource dataSource, CultureInfo modelCulture)
-            : base((Visualization.SerializableVisualization)state, layerDefinition, (DataSource)dataSource)
+        internal GeoVisualization(SerializableGeoVisualization state, LayerDefinition layerDefinition, GeoDataSource dataSource, CultureInfo modelCulture)
+            : base(state, layerDefinition, dataSource)
         {
             this.Unwrap(state, modelCulture);
             this.onTimeControllerPropertyChanged = new WeakEventListener<GeoVisualization, object, PropertyChangedEventArgs>(this)
             {
-                OnEventAction = new Action<GeoVisualization, object, PropertyChangedEventArgs>(GeoVisualization.TimeControllerPropertyChanged)
+                OnEventAction = TimeControllerPropertyChanged
             };
-            this.VisualizationModel.TimeController.PropertyChanged += new PropertyChangedEventHandler(this.onTimeControllerPropertyChanged.OnEvent);
+            this.VisualizationModel.TimeController.PropertyChanged += this.onTimeControllerPropertyChanged.OnEvent;
         }
 
         internal GeoVisualization(LayerDefinition layerDefinition, DataSource dataSource)
             : base(layerDefinition, dataSource)
         {
-            this.FieldWellDefinition = (FieldWellDefinition)new GeoFieldWellDefinition(this);
+            this.FieldWellDefinition = new GeoFieldWellDefinition(this);
             this.Initialize();
             this.onTimeControllerPropertyChanged = new WeakEventListener<GeoVisualization, object, PropertyChangedEventArgs>(this)
             {
-                OnEventAction = new Action<GeoVisualization, object, PropertyChangedEventArgs>(GeoVisualization.TimeControllerPropertyChanged)
+                OnEventAction = TimeControllerPropertyChanged
             };
-            this.VisualizationModel.TimeController.PropertyChanged += new PropertyChangedEventHandler(this.onTimeControllerPropertyChanged.OnEvent);
+            this.VisualizationModel.TimeController.PropertyChanged += this.onTimeControllerPropertyChanged.OnEvent;
         }
 
         public void AddChartVisualization(ChartDecoratorModel model)
@@ -566,15 +537,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             lock (list)
             {
-                ChartVisualization local_3 = Enumerable.FirstOrDefault<ChartVisualization>((IEnumerable<ChartVisualization>)list, (Func<ChartVisualization, bool>)(cvis => cvis.Id == model.Id));
-                if (local_3 != null)
+                ChartVisualization chartVis = list.FirstOrDefault(cvis => cvis.Id == model.Id);
+                if (chartVis != null)
                 {
-                    local_3.Model = model;
+                    chartVis.Model = model;
                 }
                 else
                 {
-                    ChartVisualization local_3_1 = new ChartVisualization(model, layerDefinition, (DataSource)geoDataSource);
-                    list.Add(local_3_1);
+                    ChartVisualization chartVisItem = new ChartVisualization(model, layerDefinition, geoDataSource);
+                    list.Add(chartVisItem);
                 }
             }
         }
@@ -587,13 +558,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return false;
             lock (list)
             {
-                ChartVisualization local_2 = Enumerable.FirstOrDefault<ChartVisualization>((IEnumerable<ChartVisualization>)list, (Func<ChartVisualization, bool>)(cv => cv.Model.Id == model.Id));
-                if (local_2 == null)
+                ChartVisualization chartVis = list.FirstOrDefault(cv => cv.Model.Id == model.Id);
+                if (chartVis == null)
                     return false;
-                list.Remove(local_2);
-                if (object.ReferenceEquals((object)dataSource, (object)local_2.DataSource))
+                list.Remove(chartVis);
+                if (object.ReferenceEquals(dataSource, chartVis.DataSource))
                     dataSource.IncrementReuseCount();
-                local_2.Remove();
+                chartVis.Remove();
                 return true;
             }
         }
@@ -603,7 +574,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             HitTestableLayer hitTestableLayer = this.Layer as HitTestableLayer;
             if (hitTestableLayer == null)
                 return;
-            hitTestableLayer.SetSelected((IList<InstanceId>)ids, replaceSelection, style, tag);
+            hitTestableLayer.SetSelected(ids, replaceSelection, style, tag);
         }
 
         public void FocusOnSelection()
@@ -622,8 +593,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoDataSource geoDataSource = this.GeoDataSource;
             if (geoDataSource == null)
                 return -1;
-            else
-                return geoDataSource.GetSeriesIndexForInstanceId(id, considerPointMarkersAsSeries);
+            return geoDataSource.GetSeriesIndexForInstanceId(id, considerPointMarkersAsSeries);
         }
 
         public Color4F ColorForCategory(string category)
@@ -636,20 +606,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             userOverride = false;
             if (category == null)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             GeoDataSource geoDataSource = this.GeoDataSource;
             if (geoDataSource == null)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
             int seriesIndex;
             int colorIndex;
             if (layerDataBinding == null || !geoDataSource.IndexForCategoryColor(category, out seriesIndex, out colorIndex))
-                return GeoVisualization.DefaultColor;
-            Color4F? nullable = layerDataBinding.ColorForSeriesIndex(seriesIndex, colorIndex, out userOverride);
-            if (nullable.HasValue)
-                return nullable.Value;
-            else
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
+            Color4F? color = layerDataBinding.ColorForSeriesIndex(seriesIndex, colorIndex, out userOverride);
+            if (color.HasValue)
+                return color.Value;
+            return DefaultColor;
         }
 
         public Color4F? LayerColor()
@@ -665,15 +634,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 userOverride = true;
                 return this.LayerColorOverride;
             }
-            else
-            {
-                userOverride = false;
-                LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
-                if (layerDataBinding == null)
-                    return new Color4F?();
-                else
-                    return layerDataBinding.LayerColorForCurrentTheme();
-            }
+
+            userOverride = false;
+            LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
+            if (layerDataBinding == null)
+                return new Color4F?();
+
+            return layerDataBinding.LayerColorForCurrentTheme();
+
         }
 
         public Color4F ColorForMeasure(TableField tableField, AggregationFunction aggregation)
@@ -687,33 +655,31 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             userOverride = false;
             TableMember tableColumn = tableField as TableMember;
             if (tableColumn == null)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
             if (measures == null)
-                return GeoVisualization.DefaultColor;
-            int index = measures.FindIndex((Predicate<Tuple<TableField, AggregationFunction>>)(m =>
+                return DefaultColor;
+            int index = measures.FindIndex((m =>
             {
                 if (tableColumn.QuerySubstitutable(m.Item1 as TableMember))
                     return m.Item2 == aggregation;
-                else
-                    return false;
+                return false;
             }));
             if (index < 0)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             GeoDataSource geoDataSource = this.GeoDataSource;
             if (geoDataSource == null)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             int colorIndex = geoDataSource.ColorIndexForSeriesIndex(index);
             if (colorIndex < 0)
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
             LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
             if (layerDataBinding == null)
-                return GeoVisualization.DefaultColor;
-            Color4F? nullable = layerDataBinding.ColorForSeriesIndex(index, colorIndex, out userOverride);
-            if (nullable.HasValue)
-                return nullable.Value;
-            else
-                return GeoVisualization.DefaultColor;
+                return DefaultColor;
+            Color4F? color = layerDataBinding.ColorForSeriesIndex(index, colorIndex, out userOverride);
+            if (color.HasValue)
+                return color.Value;
+            return DefaultColor;
         }
 
         public void RegionChartBoundsForCategory(string category, out double? min, out double? max)
@@ -745,12 +711,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
             if (measures == null)
                 return;
-            int index = measures.FindIndex((Predicate<Tuple<TableField, AggregationFunction>>)(m =>
+            int index = measures.FindIndex((m =>
             {
                 if (tableColumn.QuerySubstitutable(m.Item1 as TableMember))
                     return m.Item2 == aggregation;
-                else
-                    return false;
+                return false;
             }));
             if (index < 0)
                 return;
@@ -766,7 +731,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (layerDataBinding != null)
                 return layerDataBinding.GetGeoAmbiguities(out confidencePercetage);
             confidencePercetage = 1f;
-            return (List<GeoAmbiguity>)null;
+            return null;
         }
 
         public void SetColorForSeries(int seriesIndex, Color4F color)
@@ -799,7 +764,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             properties = new GeoVisualizationInstanceProperties(modelId);
                             properties.Color = color;
                             properties.ColorSet = true;
-                            hashtable.Add((object)modelId, (object)properties);
+                            hashtable.Add(modelId, properties);
                         }
                     }
                     LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
@@ -826,16 +791,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 else
                 {
-                    GeoVisualizationInstanceProperties properties = (GeoVisualizationInstanceProperties)null;
+                    GeoVisualizationInstanceProperties properties = null;
                     bool flag = false;
                     lock (hashtable.SyncRoot)
                     {
-                        if (hashtable.ContainsKey((object)str))
+                        if (hashtable.ContainsKey(str))
                         {
-                            properties = hashtable[(object)str] as GeoVisualizationInstanceProperties;
+                            properties = hashtable[str] as GeoVisualizationInstanceProperties;
                             properties.ColorSet = false;
                             if (properties.IsEmpty())
-                                hashtable.Remove((object)str);
+                                hashtable.Remove(str);
                             flag = true;
                         }
                     }
@@ -858,31 +823,31 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 bool flag = false;
                 lock (hashtable.SyncRoot)
                 {
-                    foreach (GeoVisualizationInstanceProperties item_0 in this.GetInstancePropertiesArray())
+                    foreach (GeoVisualizationInstanceProperties prop in this.GetInstancePropertiesArray())
                     {
-                        int? local_5 = new int?();
-                        if (item_0.ColorSet)
+                        int? seriesIndex = new int?();
+                        if (prop.ColorSet)
                         {
-                            item_0.ColorSet = false;
-                            if (item_0.IsEmpty())
-                                hashtable.Remove((object)item_0.ModelId);
-                            local_5 = geoDataSource == null ? new int?() : geoDataSource.GetSeriesIndexForModelDataId(item_0.ModelId);
+                            prop.ColorSet = false;
+                            if (prop.IsEmpty())
+                                hashtable.Remove(prop.ModelId);
+                            seriesIndex = geoDataSource == null ? new int?() : geoDataSource.GetSeriesIndexForModelDataId(prop.ModelId);
                         }
-                        if (local_5.HasValue)
+                        if (seriesIndex.HasValue)
                         {
-                            LayerDataBinding local_6 = this.DataBinding as LayerDataBinding;
-                            if (local_6 != null)
+                            LayerDataBinding binding = this.DataBinding as LayerDataBinding;
+                            if (binding != null)
                             {
-                                local_6.UpdateSeriesProperties(local_5.Value, item_0, false);
+                                binding.UpdateSeriesProperties(seriesIndex.Value, prop, false);
                                 flag = true;
                             }
                         }
                     }
                     if (flag)
                     {
-                        VisualizationModel local_7 = this.VisualizationModel;
-                        if (local_7 != null)
-                            local_7.ColorSelector.NotifyColorsChanged();
+                        VisualizationModel visModel = this.VisualizationModel;
+                        if (visModel != null)
+                            visModel.ColorSelector.NotifyColorsChanged();
                     }
                 }
             }
@@ -905,8 +870,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             List<Tuple<TableField, AggregationFunction>> measures = geoDataSource.Measures;
             if (geoDataSource.Category == null && measures != null)
                 return measures.Count > 1;
-            else
-                return false;
+            return false;
         }
 
         public bool GetDisplayAnyCategoryValue()
@@ -917,8 +881,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoDataSource geoDataSource = this.GeoDataSource;
             if (geoDataSource == null)
                 return false;
-            else
-                return geoDataSource.Category != null;
+            return geoDataSource.Category != null;
         }
 
         public void AddOrUpdateAnnotation(InstanceId id, AnnotationTemplateModel annotation)
@@ -940,16 +903,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     GeoVisualizationInstanceProperties properties;
                     lock (hashtable.SyncRoot)
                     {
-                        if (hashtable.ContainsKey((object)modelId))
+                        if (hashtable.ContainsKey(modelId))
                         {
-                            properties = hashtable[(object)modelId] as GeoVisualizationInstanceProperties;
+                            properties = hashtable[modelId] as GeoVisualizationInstanceProperties;
                             properties.Annotation = annotation;
                         }
                         else
                         {
                             properties = new GeoVisualizationInstanceProperties(modelId);
                             properties.Annotation = annotation;
-                            hashtable.Add((object)modelId, (object)properties);
+                            hashtable.Add(modelId, properties);
                         }
                     }
                     LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
@@ -976,16 +939,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 else
                 {
-                    GeoVisualizationInstanceProperties properties = (GeoVisualizationInstanceProperties)null;
+                    GeoVisualizationInstanceProperties properties = null;
                     bool flag = false;
                     lock (hashtable.SyncRoot)
                     {
-                        if (hashtable.ContainsKey((object)str))
+                        if (hashtable.ContainsKey(str))
                         {
-                            properties = hashtable[(object)str] as GeoVisualizationInstanceProperties;
-                            properties.Annotation = (AnnotationTemplateModel)null;
+                            properties = hashtable[str] as GeoVisualizationInstanceProperties;
+                            properties.Annotation = null;
                             if (properties.IsEmpty())
-                                hashtable.Remove((object)str);
+                                hashtable.Remove(str);
                             flag = true;
                         }
                     }
@@ -1004,20 +967,20 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             Hashtable hashtable = this.instancePropertiesLookUpByModelID;
             if (hashtable == null)
             {
-                keys = (ICollection)new object[0];
-                values = (ICollection)new object[0];
+                keys = new object[0];
+                values = new object[0];
             }
             else
             {
                 lock (hashtable.SyncRoot)
                 {
-                    int local_1 = hashtable.Keys.Count;
-                    object[] local_2 = new object[local_1];
-                    object[] local_3 = new object[local_1];
-                    hashtable.Keys.CopyTo((Array)local_2, 0);
-                    hashtable.Values.CopyTo((Array)local_3, 0);
-                    keys = (ICollection)local_2;
-                    values = (ICollection)local_3;
+                    int count = hashtable.Keys.Count;
+                    object[] keyArray = new object[count];
+                    object[] valArray = new object[count];
+                    hashtable.Keys.CopyTo(keyArray, 0);
+                    hashtable.Values.CopyTo(valArray, 0);
+                    keys = keyArray;
+                    values = valArray;
                 }
             }
         }
@@ -1029,124 +992,126 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return false;
             lock (hashtable.SyncRoot)
             {
-                string local_0 = this.ModelDataIdForId(instanceId);
-                return !string.IsNullOrEmpty(local_0) && hashtable.ContainsKey((object)local_0);
+                string modelDataId = this.ModelDataIdForId(instanceId);
+                return !string.IsNullOrEmpty(modelDataId) && hashtable.ContainsKey(modelDataId);
             }
         }
 
+        /// <summary>
+        /// 获取点击查询弹出注记信息
+        /// </summary>
+        /// <param name="idArray"></param>
+        /// <returns></returns>
         public AnnotationTemplateModel GetAnnotation(params InstanceId[] idArray)
         {
             if (idArray == null)
-                return (AnnotationTemplateModel)null;
-            AnnotationTemplateModel annotationTemplateModel = (AnnotationTemplateModel)null;
-            bool flag1 = false;
-            bool flag2 = false;
-            bool flag3 = false;
-            bool flag4 = false;
-            bool flag5 = false;
-            bool flag6 = false;
-            bool flag7 = false;
+            {
+                return null;
+            }
+            AnnotationTemplateModel result = null;
+            bool cloneFlag = false;
+            bool titleFlag = false;
+            bool titleAFFlag = false;
+            bool descFlag = false;
+            bool columnFlag = false;
+            bool fieldFormatFlag = false;
+            bool backgroundColorFlag = false;
             Hashtable hashtable = this.instancePropertiesLookUpByModelID;
             if (hashtable == null)
-                return (AnnotationTemplateModel)null;
+            {
+                return null;
+            }
             lock (hashtable.SyncRoot)
             {
-                for (int local_11 = 0; local_11 < idArray.Length; ++local_11)
+                for (int i = 0; i < idArray.Length; i++)
                 {
-                    string local_2 = this.ModelDataIdForId(idArray[local_11]);
-                    if (!string.IsNullOrEmpty(local_2) && hashtable.ContainsKey((object)local_2))
+                    string modelDataId = this.ModelDataIdForId(idArray[i]);
+                    if (!string.IsNullOrEmpty(modelDataId) && hashtable.ContainsKey(modelDataId))
                     {
-                        AnnotationTemplateModel local_1_1 = (hashtable[(object)local_2] as GeoVisualizationInstanceProperties).Annotation;
-                        if (local_1_1 != null)
+                        AnnotationTemplateModel anno = (hashtable[modelDataId] as GeoVisualizationInstanceProperties).Annotation;
+                        if (anno != null)
                         {
-                            if (!flag1)
+                            if (!cloneFlag)
                             {
-                                annotationTemplateModel = local_1_1.Clone();
-                                flag1 = true;
+                                result = anno.Clone();
+                                cloneFlag = true;
+                                continue;
                             }
-                            else
+                            if (!titleFlag && !result.Title.Equals(anno.Title))
                             {
-                                if (!flag2 && !annotationTemplateModel.Title.Equals(local_1_1.Title))
+                                result.Title = new RichTextModel();
+                                titleFlag = true;
+                            }
+                            if (!titleAFFlag &&
+                                (0 != string.Compare(result.TitleField, anno.TitleField, StringComparison.OrdinalIgnoreCase) ||
+                                result.TitleAF != anno.TitleAF))
+                            {
+                                result.TitleField = null;
+                                result.TitleAF = null;
+                                titleAFFlag = true;
+                            }
+                            if (!descFlag && !result.Description.Equals(anno.Description))
+                            {
+                                result.Description = new RichTextModel();
+                                descFlag = true;
+                            }
+                            if (!columnFlag)
+                            {
+                                bool isEquel = true;
+                                if (result.NamesOfColumnsToDisplay.Count == anno.NamesOfColumnsToDisplay.Count &&
+                                    result.ColumnAggregationFunctions.Count == anno.ColumnAggregationFunctions.Count)
                                 {
-                                    annotationTemplateModel.Title = new RichTextModel();
-                                    flag2 = true;
-                                }
-                                if (!flag3)
-                                {
-                                    if (string.Compare(annotationTemplateModel.TitleField, local_1_1.TitleField, StringComparison.OrdinalIgnoreCase) == 0)
+                                    for (int j = 0; j < result.NamesOfColumnsToDisplay.Count; j++)
                                     {
-                                        AggregationFunction? local_17 = annotationTemplateModel.TitleAF;
-                                        AggregationFunction? local_18 = local_1_1.TitleAF;
-                                        if ((local_17.GetValueOrDefault() != local_18.GetValueOrDefault() ? 1 : (local_17.HasValue != local_18.HasValue ? 1 : 0)) == 0)
-                                            goto label_16;
-                                    }
-                                    annotationTemplateModel.TitleField = (string)null;
-                                    annotationTemplateModel.TitleAF = new AggregationFunction?();
-                                    flag3 = true;
-                                }
-                            label_16:
-                                if (!flag4 && !annotationTemplateModel.Description.Equals(local_1_1.Description))
-                                {
-                                    annotationTemplateModel.Description = new RichTextModel();
-                                    flag4 = true;
-                                }
-                                if (!flag5)
-                                {
-                                    bool local_12 = true;
-                                    if (annotationTemplateModel.NamesOfColumnsToDisplay.Count == local_1_1.NamesOfColumnsToDisplay.Count && annotationTemplateModel.ColumnAggregationFunctions.Count == local_1_1.ColumnAggregationFunctions.Count)
-                                    {
-                                        for (int local_13 = 0; local_13 < annotationTemplateModel.NamesOfColumnsToDisplay.Count; ++local_13)
+                                        if (0 != string.Compare(result.NamesOfColumnsToDisplay[j], anno.NamesOfColumnsToDisplay[j], StringComparison.OrdinalIgnoreCase))
                                         {
-                                            if (string.Compare(annotationTemplateModel.NamesOfColumnsToDisplay[local_13], local_1_1.NamesOfColumnsToDisplay[local_13], StringComparison.OrdinalIgnoreCase) != 0)
+                                            isEquel = false;
+                                            break;
+                                        }
+                                    }
+                                    if (isEquel)
+                                    {
+                                        for (int k = 0; k < result.ColumnAggregationFunctions.Count; k++)
+                                        {
+                                            if (result.ColumnAggregationFunctions[k] != anno.ColumnAggregationFunctions[k])
                                             {
-                                                local_12 = false;
+                                                isEquel = false;
                                                 break;
                                             }
                                         }
-                                        if (local_12)
-                                        {
-                                            for (int local_14 = 0; local_14 < annotationTemplateModel.ColumnAggregationFunctions.Count; ++local_14)
-                                            {
-                                                AggregationFunction? local_20 = annotationTemplateModel.ColumnAggregationFunctions[local_14];
-                                                AggregationFunction? local_21 = local_1_1.ColumnAggregationFunctions[local_14];
-                                                if ((local_20.GetValueOrDefault() != local_21.GetValueOrDefault() ? 1 : (local_20.HasValue != local_21.HasValue ? 1 : 0)) != 0)
-                                                {
-                                                    local_12 = false;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                        local_12 = false;
-                                    if (!local_12)
-                                    {
-                                        annotationTemplateModel.NamesOfColumnsToDisplay.Clear();
-                                        annotationTemplateModel.ColumnAggregationFunctions.Clear();
-                                        flag5 = true;
                                     }
                                 }
-                                if (!flag6 && !annotationTemplateModel.FieldFormat.Equals(local_1_1.FieldFormat))
+                                else
                                 {
-                                    annotationTemplateModel.FieldFormat = new RichTextModel();
-                                    flag6 = true;
+                                    isEquel = false;
                                 }
-                                if (!flag7 && annotationTemplateModel.BackgroundColor != local_1_1.BackgroundColor)
+                                if (!isEquel)
                                 {
-                                    annotationTemplateModel.BackgroundColor = new System.Windows.Media.Color();
-                                    flag7 = true;
+                                    result.NamesOfColumnsToDisplay.Clear();
+                                    result.ColumnAggregationFunctions.Clear();
+                                    columnFlag = true;
                                 }
-                                if (flag2 && flag3 && (flag4 && flag5) && flag6)
-                                {
-                                    if (flag7)
-                                        break;
-                                }
+                            }
+                            if (!fieldFormatFlag && !result.FieldFormat.Equals(anno.FieldFormat))
+                            {
+                                result.FieldFormat = new RichTextModel();
+                                fieldFormatFlag = true;
+                            }
+                            if (!backgroundColorFlag && (result.BackgroundColor != anno.BackgroundColor))
+                            {
+                                result.BackgroundColor = new System.Windows.Media.Color();
+                                ;
+                                backgroundColorFlag = true;
+                            }
+                            if (titleFlag && titleAFFlag && descFlag && columnFlag && fieldFormatFlag && backgroundColorFlag)
+                            {
+                                return result;
                             }
                         }
                     }
                 }
             }
-            return annotationTemplateModel;
+            return result;
         }
 
         public List<Tuple<AggregationFunction?, string, object>> TableColumnsWithValuesForId(InstanceId id, bool showRelatedCategories)
@@ -1164,11 +1129,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     }
                     catch (DataSource.InvalidQueryResultsException ex)
                     {
-                        return (List<Tuple<AggregationFunction?, string, object>>)null;
+                        return null;
                     }
                 }
             }
-            return (List<Tuple<AggregationFunction?, string, object>>)null;
+            return null;
         }
 
         public override bool Remove()
@@ -1178,15 +1143,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             LayerDefinition layerDefinition = this.LayerDefinition;
             if (layerDefinition == null)
                 return false;
-            else
-                return layerDefinition.RemoveGeoVisualization();
+            return layerDefinition.RemoveGeoVisualization();
         }
 
         public void SetOpacityFactor()
         {
             Layer layer = this.Layer;
             LayerDefinition layerDefinition = this.LayerDefinition;
-            LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+            LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
             if (layer == null || layerManager == null)
                 return;
             double num = Math.Max(Math.Min(this.OpacityFactor, 1.0), 0.0);
@@ -1197,7 +1161,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             Layer layer = this.Layer;
             LayerDefinition layerDefinition = this.LayerDefinition;
-            LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+            LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
             if (layer == null || layerManager == null)
                 return;
             double num = Math.Max(Math.Min(this.DataDimensionScale * layerManager.DataDimensionScale, 10.0), 0.1);
@@ -1208,12 +1172,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             Layer layer = this.Layer;
             LayerDefinition layerDefinition = this.LayerDefinition;
-            LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+            LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
             if (layer == null || layerManager == null)
                 return;
             double val1 = this.FixedDimensionScale * layerManager.FixedDimensionScale;
             double val2 = 0.02;
-            if (this.ChartTypeFromLayerType(this.VisualType) == GeoVisualization.ChartType.Bubble)
+            if (this.ChartTypeFromLayerType(this.VisualType) == ChartType.Bubble)
                 val2 = 0.22;
             double num = Math.Max(Math.Min(val1, 10.0), val2);
             layer.FixedDimensionScale = (float)num;
@@ -1235,9 +1199,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             this.Visible = false;
             this.Hide();
-            this.chartVisualizations.ForEach((Action<ChartVisualization>)(cv =>
+            this.chartVisualizations.ForEach((cv =>
             {
-                if (object.ReferenceEquals((object)this.DataSource, (object)cv.DataSource))
+                if (object.ReferenceEquals(this.DataSource, cv.DataSource))
                     this.DataSource.IncrementReuseCount();
                 cv.Removed();
             }));
@@ -1248,7 +1212,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         internal override void OnVisibleChanged(bool visible)
         {
             LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
-            this.chartVisualizations.ForEach((Action<ChartVisualization>)(cvis => cvis.OnVisibleChanged(visible)));
+            this.chartVisualizations.ForEach((cvis => cvis.OnVisibleChanged(visible)));
             if (layerDataBinding != null && (!visible || !this.ShouldRefreshDisplay))
             {
                 if (visible)
@@ -1256,7 +1220,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 else
                     this.Hide();
                 LayerDefinition layerDefinition = this.LayerDefinition;
-                LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+                LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
                 if (this.HasTime && layerManager != null)
                     layerManager.ResetPlayTimes();
             }
@@ -1288,37 +1252,37 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 lock (hashtable.SyncRoot)
                 {
-                    foreach (GeoVisualizationInstanceProperties item_0 in newGeo.GetInstancePropertiesArray())
+                    foreach (GeoVisualizationInstanceProperties item in newGeo.GetInstancePropertiesArray())
                     {
-                        int? local_4 = new int?();
-                        if (item_0.ColorSet)
+                        int? seriesIndex = new int?();
+                        if (item.ColorSet)
                         {
-                            GeoVisualizationInstanceProperties local_5 = hashtable[(object)item_0.ModelId] as GeoVisualizationInstanceProperties;
-                            if (local_5 != null)
+                            GeoVisualizationInstanceProperties props = hashtable[item.ModelId] as GeoVisualizationInstanceProperties;
+                            if (props != null)
                             {
-                                local_5.Color = item_0.Color;
-                                local_5.ColorSet = true;
+                                props.Color = item.Color;
+                                props.ColorSet = true;
                             }
                             else
-                                hashtable.Add((object)item_0.ModelId, (object)new GeoVisualizationInstanceProperties(item_0.ModelId)
+                                hashtable.Add(item.ModelId, new GeoVisualizationInstanceProperties(item.ModelId)
                                 {
-                                    Color = item_0.Color,
+                                    Color = item.Color,
                                     ColorSet = true
                                 });
-                            local_4 = geoDataSource == null ? new int?() : geoDataSource.GetSeriesIndexForModelDataId(item_0.ModelId);
+                            seriesIndex = geoDataSource == null ? new int?() : geoDataSource.GetSeriesIndexForModelDataId(item.ModelId);
                         }
-                        if (local_4.HasValue)
+                        if (seriesIndex.HasValue)
                         {
-                            LayerDataBinding local_7 = this.DataBinding as LayerDataBinding;
-                            if (local_7 != null)
-                                local_7.UpdateSeriesProperties(local_4.Value, item_0, false);
+                            LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
+                            if (layerDataBinding != null)
+                                layerDataBinding.UpdateSeriesProperties(seriesIndex.Value, item, false);
                         }
                     }
                 }
             }
             this.ChartVisualizations = newGeo.ChartVisualizations;
             this.SelectedRegionShadingMode = newGeo.SelectedRegionShadingMode;
-            this.SetSelected((InstanceId[])null, true, SelectionStyle.Outline, (object)null);
+            this.SetSelected(null, true);
             this.Visible = newGeo.Visible;
             if (this.Visible && this.LayerDefinition.Visible && !wasVisible && this.ShouldRefreshDisplay)
                 visibilityChangedCallback();
@@ -1395,29 +1359,28 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private IEnumerable<int> WrapColorIndices()
         {
             GeoDataSource geoDataSource = this.GeoDataSource;
-            GeoQueryResults geoQueryResults = geoDataSource == null ? (GeoQueryResults)null : geoDataSource.QueryResults;
-            ModelQueryIndexedKeyColumn indexedKeyColumn = geoQueryResults == null ? (ModelQueryIndexedKeyColumn)null : geoQueryResults.Category;
+            GeoQueryResults geoQueryResults = geoDataSource == null ? null : geoDataSource.QueryResults;
+            ModelQueryIndexedKeyColumn indexedKeyColumn = geoQueryResults == null ? null : geoQueryResults.Category;
             List<int> colorIndices = this.ColorIndices;
             if (colorIndices == null)
                 return Enumerable.Empty<int>();
             if (geoQueryResults == null || geoDataSource.seriesToColorIndex.Count == 0)
-                return Enumerable.Take<int>((IEnumerable<int>)colorIndices, 64);
+                return colorIndices.Take(64);
             int numColorIndices = colorIndices.Count;
             if (indexedKeyColumn == null)
-                return Enumerable.Take<int>(Enumerable.Select<int, int>(Enumerable.TakeWhile<int>((IEnumerable<int>)geoDataSource.seriesToColorIndex, (Func<int, bool>)(index => index < numColorIndices)), (Func<int, int>)(index => colorIndices[index])), 64);
+                return geoDataSource.seriesToColorIndex.TakeWhile(index => index < numColorIndices).Select(index => colorIndices[index]).Take(64);
             if (indexedKeyColumn.PreservedValuesIndex == null)
                 return Enumerable.Empty<int>();
-            else
-                return Enumerable.Take<int>(Enumerable.Select<int, int>(Enumerable.TakeWhile<int>((IEnumerable<int>)indexedKeyColumn.PreservedValuesIndex, (Func<int, bool>)(index => index < numColorIndices)), (Func<int, int>)(index => colorIndices[index])), 64);
+            return indexedKeyColumn.PreservedValuesIndex.TakeWhile(index => index < numColorIndices).Select(index => colorIndices[index]).Take(64);
         }
 
-        internal GeoVisualization.SerializableGeoVisualization Wrap()
+        internal SerializableGeoVisualization Wrap()
         {
-            GeoVisualization.SerializableGeoVisualization geoVisualization1 = new GeoVisualization.SerializableGeoVisualization();
+            SerializableGeoVisualization geoVisualization1 = new SerializableGeoVisualization();
             geoVisualization1.VisualType = this.VisualType;
             geoVisualization1.VisualShape = this.VisualShape;
             geoVisualization1.VisualShapeForLayerSet = this.VisualShapeForLayer.HasValue;
-            GeoVisualization.SerializableGeoVisualization geoVisualization2 = geoVisualization1;
+            SerializableGeoVisualization geoVisualization2 = geoVisualization1;
             InstancedShape? visualShapeForLayer = this.VisualShapeForLayer;
             int num1 = visualShapeForLayer.HasValue ? (int)visualShapeForLayer.GetValueOrDefault() : 0;
             geoVisualization2.VisualShapeForLayer = (InstancedShape)num1;
@@ -1429,7 +1392,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             geoVisualization1.FixedDimensionScales = this.fixedDimensionScales;
             geoVisualization1.LockedViewScales = this.lockedViewScales;
             geoVisualization1.SelectedRegionShadingModeSet = this.SelectedRegionShadingMode.HasValue;
-            GeoVisualization.SerializableGeoVisualization geoVisualization3 = geoVisualization1;
+            SerializableGeoVisualization geoVisualization3 = geoVisualization1;
             RegionLayerShadingMode? regionShadingMode = this.SelectedRegionShadingMode;
             int num2 = regionShadingMode.HasValue ? (int)regionShadingMode.GetValueOrDefault() : 1;
             geoVisualization3.SelectedRegionShadingMode = (RegionLayerShadingMode)num2;
@@ -1437,15 +1400,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             geoVisualization1.LayerColorOverride = this.LayerColorOverride ?? new Color4F();
             geoVisualization1.HiddenMeasure = this.HiddenMeasure;
             geoVisualization1.GeoWellDefn = this.GeoFieldWellDefinition.Wrap() as GeoFieldWellDefinition.SerializableGeoFieldWellDefinition;
-            geoVisualization1.ColorIndices = Enumerable.ToList<int>(this.WrapColorIndices());
+            geoVisualization1.ColorIndices = this.WrapColorIndices().ToList();
             geoVisualization1.GeoInstanceProperties = this.GetInstancePropertiesArray();
-            geoVisualization1.ChartVisualizations = Enumerable.ToList<ChartVisualization.SerializableChartVisualization>(Enumerable.Select<ChartVisualization, ChartVisualization.SerializableChartVisualization>((IEnumerable<ChartVisualization>)this.chartVisualizations, (Func<ChartVisualization, ChartVisualization.SerializableChartVisualization>)(cv => cv.Wrap())));
-            GeoVisualization.SerializableGeoVisualization geoVisualization4 = geoVisualization1;
-            this.SnapState((Visualization.SerializableVisualization)geoVisualization4);
+            geoVisualization1.ChartVisualizations = this.chartVisualizations.Select(cv => cv.Wrap()).ToList();
+            SerializableGeoVisualization geoVisualization4 = geoVisualization1;
+            this.SnapState(geoVisualization4);
             return geoVisualization4;
         }
 
-        internal void Unwrap(GeoVisualization.SerializableGeoVisualization state, CultureInfo modelCulture)
+        internal void Unwrap(SerializableGeoVisualization state, CultureInfo modelCulture)
         {
             if (state == null)
                 throw new ArgumentNullException("state");
@@ -1453,32 +1416,32 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 throw new ArgumentException("state.GeoWellDefn must not be null");
             if (this.FieldWellDefinition != null)
                 throw new InvalidOperationException("A FieldWellDefinition has already been set");
-            this.SetStateTo((Visualization.SerializableVisualization)state);
+            this.SetStateTo(state);
             this.DisplayNegativeValues = state.DisplayNegativeValues;
             this.DisplayNullValues = state.DisplayNullValues;
             this.DisplayZeroValues = state.DisplayZeroValues;
             this.VisualType = state.VisualType;
-            this.VisualShapeForLayer = !state.VisualShapeForLayerSet ? new InstancedShape?() : new InstancedShape?(state.VisualShapeForLayer);
+            this.VisualShapeForLayer = !state.VisualShapeForLayerSet ? new InstancedShape?() : state.VisualShapeForLayer;
             this.VisualShape = state.VisualShape;
             if (state.OpacityFactors != null)
-                Array.Copy((Array)state.OpacityFactors, (Array)this.opacityFactors, Math.Min(this.opacityFactors.Length, state.OpacityFactors.Length));
-            Array.Copy((Array)state.DataDimensionScales, (Array)this.dataDimensionScales, Math.Min(this.dataDimensionScales.Length, state.DataDimensionScales.Length));
-            Array.Copy((Array)state.FixedDimensionScales, (Array)this.fixedDimensionScales, Math.Min(this.fixedDimensionScales.Length, state.FixedDimensionScales.Length));
+                Array.Copy(state.OpacityFactors, this.opacityFactors, Math.Min(this.opacityFactors.Length, state.OpacityFactors.Length));
+            Array.Copy(state.DataDimensionScales, this.dataDimensionScales, Math.Min(this.dataDimensionScales.Length, state.DataDimensionScales.Length));
+            Array.Copy(state.FixedDimensionScales, this.fixedDimensionScales, Math.Min(this.fixedDimensionScales.Length, state.FixedDimensionScales.Length));
             if (state.LockedViewScales != null)
-                Array.Copy((Array)state.LockedViewScales, (Array)this.lockedViewScales, Math.Min(this.lockedViewScales.Length, state.LockedViewScales.Length));
+                Array.Copy(state.LockedViewScales, this.lockedViewScales, Math.Min(this.lockedViewScales.Length, state.LockedViewScales.Length));
             this.OpacityFactor = this.opacityFactors[(int)this.ChartTypeFromLayerType(this.VisualType)];
             this.DataDimensionScale = this.dataDimensionScales[(int)this.ChartTypeFromLayerType(this.VisualType)];
             this.FixedDimensionScale = this.fixedDimensionScales[(int)this.ChartTypeFromLayerType(this.VisualType)];
-            this.SelectedRegionShadingMode = !state.SelectedRegionShadingModeSet ? new RegionLayerShadingMode?() : new RegionLayerShadingMode?(state.SelectedRegionShadingMode);
-            this.LayerColorOverride = !state.LayerColorOverrideSet ? new Color4F?() : new Color4F?(state.LayerColorOverride);
+            this.SelectedRegionShadingMode = !state.SelectedRegionShadingModeSet ? new RegionLayerShadingMode?() : state.SelectedRegionShadingMode;
+            this.LayerColorOverride = !state.LayerColorOverrideSet ? new Color4F?() : state.LayerColorOverride;
             this.HiddenMeasure = state.HiddenMeasure;
-            this.FieldWellDefinition = state.GeoWellDefn.Unwrap((Visualization)this, modelCulture);
+            this.FieldWellDefinition = state.GeoWellDefn.Unwrap(this, modelCulture);
             this.ColorIndices = state.ColorIndices;
             this.SetInstancePropertiesFromArray(state.GeoInstanceProperties);
             this.Initialize();
             if (state.ChartVisualizations == null)
                 return;
-            this.chartVisualizations.AddRange(Enumerable.Select<ChartVisualization.SerializableChartVisualization, ChartVisualization>((IEnumerable<ChartVisualization.SerializableChartVisualization>)state.ChartVisualizations, (Func<ChartVisualization.SerializableChartVisualization, ChartVisualization>)(cv => cv.Unwrap(this.LayerDefinition, (DataSource)this.GeoDataSource, modelCulture))));
+            this.chartVisualizations.AddRange(state.ChartVisualizations.Select(cv => cv.Unwrap(this.LayerDefinition, this.GeoDataSource, modelCulture)));
             this.DisplayPropertiesUpdated(true);
         }
 
@@ -1527,37 +1490,37 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (this.chartVisualizations != null)
             {
                 this.chartVisualizations.Clear();
-                this.chartVisualizations = (List<ChartVisualization>)null;
+                this.chartVisualizations = null;
             }
             if (this.VisualizationModel != null && this.VisualizationModel.TimeController != null)
-                this.VisualizationModel.TimeController.PropertyChanged -= new PropertyChangedEventHandler(this.onTimeControllerPropertyChanged.OnEvent);
+                this.VisualizationModel.TimeController.PropertyChanged -= this.onTimeControllerPropertyChanged.OnEvent;
             Hashtable hashtable = this.instancePropertiesLookUpByModelID;
             if (hashtable != null)
             {
                 lock (hashtable.SyncRoot)
                     hashtable.Clear();
             }
-            this.instancePropertiesLookUpByModelID = (Hashtable)null;
+            this.instancePropertiesLookUpByModelID = null;
             this.visualShapeForLayer = new InstancedShape?();
-            this.selectionStats = (SelectionStats)null;
-            this.opacityFactors = (double[])null;
-            this.dataDimensionScales = (double[])null;
-            this.fixedDimensionScales = (double[])null;
-            this.lockedViewScales = (double[])null;
-            this.LayerAdded = (Action<Layer>)null;
-            this.LayerRemoved = (Action<Layer>)null;
-            this.DataUpdateStarted = (Action)null;
-            this.DataUpdateCompleted = (Action<bool>)null;
-            this.DisplayPropertiesChanged = (Action<LayerManager.Settings>)null;
-            this.ColorsChanged = (Action)null;
-            this.RegionShadingModeChanged = (Action<RegionLayerShadingMode>)null;
-            this.LayerScalesChanged = (Action)null;
+            this.selectionStats = null;
+            this.opacityFactors = null;
+            this.dataDimensionScales = null;
+            this.fixedDimensionScales = null;
+            this.lockedViewScales = null;
+            this.LayerAdded = null;
+            this.LayerRemoved = null;
+            this.DataUpdateStarted = null;
+            this.DataUpdateCompleted = null;
+            this.DisplayPropertiesChanged = null;
+            this.ColorsChanged = null;
+            this.RegionShadingModeChanged = null;
+            this.LayerScalesChanged = null;
             if (this.CompletionStats != null)
             {
                 this.CompletionStats.Shutdown();
-                this.CompletionStats = (CompletionStats)null;
+                this.CompletionStats = null;
             }
-            this.ColorIndices = (List<int>)null;
+            this.ColorIndices = null;
             base.Shutdown();
         }
 
@@ -1565,14 +1528,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             if (this.ColorIndices == null)
                 this.ColorIndices = new List<int>();
-            return (DataBinding)new LayerDataBinding(this, (Layer)null, this.DataSource.CreateDataView(DataView.DataViewType.Excel), this.VisualizationModel.LatLonProvider, this.VisualizationModel.TwoDRenderThread, this.ColorIndices);
+            return new LayerDataBinding(this, null, this.DataSource.CreateDataView(DataView.DataViewType.Excel), this.VisualizationModel.LatLonProvider, this.VisualizationModel.TwoDRenderThread, this.ColorIndices);
         }
 
         protected override object OnBeginRefresh(bool visible, LayerManager.Settings layerManagerSettings)
         {
             this.CompletionStats = new CompletionStats();
             this.NotifyDataUpdateStarted();
-            return (object)new
+            return new
             {
                 LayerManagerSettings = layerManagerSettings,
                 HasTime = this.HasTime,
@@ -1609,72 +1572,66 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             lock (this.showHideLock)
             {
-                LayerDefinition local_0 = this.LayerDefinition;
-                if (local_0 == null || !this.Visible || !local_0.Visible)
+                LayerDefinition layerDef = this.LayerDefinition;
+                if (layerDef == null || !this.Visible || !layerDef.Visible)
                     return;
-                LayerDataBinding local_1 = this.DataBinding as LayerDataBinding;
-                if (local_1 == null)
+                LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
+                if (layerDataBinding == null)
                     return;
-                Layer local_2 = local_1.Layer;
-                bool local_3 = local_2 == null || !local_2.CanSetLayerType(this.VisualType);
-                bool local_4 = !local_3;
-                if (local_2 != null && local_3)
+                Layer bindingLayer = layerDataBinding.Layer;
+                bool matching = bindingLayer == null || !bindingLayer.CanSetLayerType(this.VisualType);
+                bool notMatching = !matching;
+                if (bindingLayer != null && matching)
                 {
                     if (this.LayerRemoved != null)
-                        this.LayerRemoved(local_2);
+                        this.LayerRemoved(bindingLayer);
                     this.HideWorker();
-                    local_1.ClearVisualElement();
+                    layerDataBinding.ClearVisualElement();
                 }
                 cancellationToken.ThrowIfCancellationRequested();
-                if (local_4)
+                if (notMatching)
                 {
-                    local_2.TrySetLayerType(this.VisualType);
+                    bindingLayer.TrySetLayerType(this.VisualType);
                     this.SetOpacityFactor();
                     this.SetDataDimensionScale();
                     this.SetFixedDimensionScale();
                     this.SetLockScales();
-                    ChartLayer local_6 = local_2 as ChartLayer;
-                    if (local_6 != null)
-                        local_6.SetShapes(new InstancedShape[1]
-            {
-              this.VisualShape
-            });
+                    ChartLayer chartLayer = bindingLayer as ChartLayer;
+                    if (chartLayer != null)
+                        chartLayer.SetShapes(new InstancedShape[1] { this.VisualShape });
                 }
                 else
                 {
-                    Layer local_7;
+                    Layer layer;
                     if (this.VisualType == LayerType.HeatMapChart)
-                        local_7 = (Layer)new HeatMapLayer();
+                        layer = new HeatMapLayer();
                     else if (this.VisualType == LayerType.RegionChart)
-                        local_7 = (Layer)new RegionLayer(this.VisualizationModel.RegionProvider, (IInstanceIdRelationshipProvider)this.GeoDataSource);
+                        layer = new RegionLayer(this.VisualizationModel.RegionProvider, this.GeoDataSource);
                     else
-                        local_7 = (Layer)new ChartLayer(new InstancedShape[1]
-            {
-              this.VisualShape
-            }, this.VisualType, (IInstanceIdRelationshipProvider)this.GeoDataSource);
+                        layer = new ChartLayer(new InstancedShape[1] { this.VisualShape }, this.VisualType, this.GeoDataSource);
                     cancellationToken.ThrowIfCancellationRequested();
-                    local_1.Layer = local_7;
-                    local_7.DisplayNullValues = this.DisplayNullValues;
-                    local_7.DisplayZeroValues = this.DisplayZeroValues;
-                    local_7.DisplayNegativeValues = this.DisplayNegativeValues;
+                    layerDataBinding.Layer = layer;
+                    layer.DisplayNullValues = this.DisplayNullValues;
+                    layer.DisplayZeroValues = this.DisplayZeroValues;
+                    layer.DisplayNegativeValues = this.DisplayNegativeValues;
                     this.SetOpacityFactor();
                     this.SetDataDimensionScale();
                     this.SetFixedDimensionScale();
-                    int temp_66 = (int)this.ChartTypeFromLayerType(this.VisualType);
+                    int chartType = (int)this.ChartTypeFromLayerType(this.VisualType);
                     this.SetLockScales();
                     if (this.LayerAdded != null)
-                        this.LayerAdded(local_7);
-                    HitTestableLayer local_9 = local_1.Layer as HitTestableLayer;
-                    if (local_9 != null)
-                        local_9.OnSelectionChanged += new EventHandler<SelectionEventArgs>(this.SelectionsChanged);
+                        this.LayerAdded(layer);
+                    HitTestableLayer hitTestableLayer = layerDataBinding.Layer as HitTestableLayer;
+                    if (hitTestableLayer != null)
+                        hitTestableLayer.OnSelectionChanged += this.SelectionsChanged;
                 }
                 cancellationToken.ThrowIfCancellationRequested();
-                local_1.CompletionStats = this.CompletionStats;
+                layerDataBinding.CompletionStats = this.CompletionStats;
                 cancellationToken.ThrowIfCancellationRequested();
-                VisualizationModel local_10 = this.VisualizationModel;
-                if (local_10 == null)
+                VisualizationModel visModel = this.VisualizationModel;
+                if (visModel == null)
                     return;
-                local_10.Engine.AddLayer(local_1.Layer);
+                visModel.Engine.AddLayer(layerDataBinding.Layer);
             }
         }
 
@@ -1682,8 +1639,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             lock (this.showHideLock)
             {
-                LayerDefinition local_0 = this.LayerDefinition;
-                if (local_0 == null || this.Visible && local_0.Visible)
+                LayerDefinition layerDef = this.LayerDefinition;
+                if (layerDef == null || this.Visible && layerDef.Visible)
                     return;
                 this.HideWorker();
             }
@@ -1700,7 +1657,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             HitTestableLayer hitTestableLayer = layer as HitTestableLayer;
             if (hitTestableLayer != null)
-                hitTestableLayer.OnSelectionChanged -= new EventHandler<SelectionEventArgs>(this.SelectionsChanged);
+                hitTestableLayer.OnSelectionChanged -= this.SelectionsChanged;
             VisualizationModel visualizationModel = this.VisualizationModel;
             if (visualizationModel == null)
                 return;
@@ -1727,7 +1684,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 else
                 {
                     if (selectedIds == null)
-                        selectedIds = (IList<InstanceId>)hitTestableLayer.GetSelected();
+                        selectedIds = (hitTestableLayer.GetSelected();
                     if (selectedIds.Count == 0)
                     {
                         this.ClearSelectionStats();
@@ -1746,11 +1703,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             try
                             {
                                 DateTime currentTime = geoDataSource.QueryResultsHaveTimeData(geoDataSource.DataVersion) ? visualizationModel.TimeController.CurrentVisualTime : DateTime.MaxValue;
-                                foreach (InstanceId id1 in (IEnumerable<InstanceId>)selectedIds)
+                                foreach (InstanceId selectedId in selectedIds)
                                 {
-                                    foreach (InstanceId id2 in geoDataSource.GetRelatedIdsOverTime(id1))
+                                    foreach (InstanceId relatedIdOverTime in geoDataSource.GetRelatedIdsOverTime(selectedId))
                                     {
-                                        double? valueForIdAtTime = geoDataSource.GetValueForIdAtTime(id2, currentTime);
+                                        double? valueForIdAtTime = geoDataSource.GetValueForIdAtTime(relatedIdOverTime, currentTime);
                                         if (valueForIdAtTime.HasValue)
                                         {
                                             selectionStats.UpdateWithValue(valueForIdAtTime.Value);
@@ -1764,7 +1721,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                                 selectionStats.Clear();
                             }
                             LayerDefinition layerDefinition = this.LayerDefinition;
-                            LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+                            LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
                             if (layerManager == null)
                                 return;
                             layerManager.SelectionStatsChanged();
@@ -1781,7 +1738,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             selectionStats.Clear();
             LayerDefinition layerDefinition = this.LayerDefinition;
-            LayerManager layerManager = layerDefinition == null ? (LayerManager)null : layerDefinition.LayerManager;
+            LayerManager layerManager = layerDefinition == null ? null : layerDefinition.LayerManager;
             if (layerManager == null)
                 return;
             layerManager.SelectionStatsChanged();
@@ -1805,10 +1762,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             if (visualizationModel.TimeController == null || !(args.PropertyName == visualizationModel.TimeController.PropertyVisualTimeEnabled) && !(args.PropertyName == visualizationModel.TimeController.PropertyCurrentVisualTime))
                 return;
-            geoViz.UpdateSelectionStatistics((IList<InstanceId>)null);
+            geoViz.UpdateSelectionStatistics();
         }
 
-        private GeoVisualization.ChartType ChartTypeFromLayerType(LayerType layerType)
+        private ChartType ChartTypeFromLayerType(LayerType layerType)
         {
             switch (layerType)
             {
@@ -1816,16 +1773,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 case LayerType.ColumnChart:
                 case LayerType.ClusteredColumnChart:
                 case LayerType.StackedColumnChart:
-                    return GeoVisualization.ChartType.Column;
+                    return ChartType.Column;
                 case LayerType.BubbleChart:
                 case LayerType.PieChart:
-                    return GeoVisualization.ChartType.Bubble;
+                    return ChartType.Bubble;
                 case LayerType.HeatMapChart:
-                    return GeoVisualization.ChartType.HeatMap;
+                    return ChartType.HeatMap;
                 case LayerType.RegionChart:
-                    return GeoVisualization.ChartType.Region;
+                    return ChartType.Region;
                 default:
-                    return GeoVisualization.ChartType.NumChartTypes;
+                    return ChartType.NumChartTypes;
             }
         }
 
@@ -1838,7 +1795,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             lock (hashtable.SyncRoot)
             {
                 instancePropertiesArray = new GeoVisualizationInstanceProperties[hashtable.Count];
-                hashtable.Values.CopyTo((Array)instancePropertiesArray, 0);
+                hashtable.Values.CopyTo(instancePropertiesArray, 0);
             }
             return instancePropertiesArray;
         }
@@ -1850,10 +1807,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             lock (hashtable.SyncRoot)
             {
-                foreach (GeoVisualizationInstanceProperties item_0 in instancePropertiesArray)
+                foreach (GeoVisualizationInstanceProperties prop in instancePropertiesArray)
                 {
-                    item_0.Repair();
-                    hashtable.Add((object)item_0.ModelId, (object)item_0);
+                    prop.Repair();
+                    hashtable.Add(prop.ModelId, prop);
                 }
             }
         }
@@ -1868,7 +1825,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         }
 
         [Serializable]
-        public class SerializableGeoVisualization : Visualization.SerializableVisualization
+        public class SerializableGeoVisualization : SerializableVisualization
         {
             [XmlArrayItem("LockedViewScale", typeof(double))]
             [XmlArray("LockedViewScales")]
@@ -1933,8 +1890,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (!(dataSource is GeoDataSource))
                     throw new ArgumentException("dataSource is not a GeoDataSource");
-                else
-                    return new GeoVisualization(this, layerDefinition, dataSource as GeoDataSource, modelCulture);
+                return new GeoVisualization(this, layerDefinition, dataSource as GeoDataSource, modelCulture);
             }
         }
     }

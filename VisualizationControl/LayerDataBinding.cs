@@ -711,7 +711,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             ICollection values;
             geoVisualization.GetVisualizationInstanceModelDataIdsAndProperties(out keys, out values);
             IEnumerator enumerator = values.GetEnumerator();
-            foreach (string modelId in (IEnumerable) keys)
+            foreach (string modelId in keys)
             {
               enumerator.MoveNext();
               int? indexForModelDataId = geoDataView.GetSeriesIndexForModelDataId(sourceDataVersion, modelId);
