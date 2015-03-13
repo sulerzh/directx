@@ -1684,7 +1684,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 else
                 {
                     if (selectedIds == null)
-                        selectedIds = (hitTestableLayer.GetSelected();
+                        selectedIds = hitTestableLayer.GetSelected();
                     if (selectedIds.Count == 0)
                     {
                         this.ClearSelectionStats();

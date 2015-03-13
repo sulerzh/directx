@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.Data.Visualization.Engine.RegionLayer
-// Assembly: VisualizationEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c
-// MVID: D1CA6C2A-5AF8-4816-98B2-7B03B8D226FF
-// Assembly location: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONENGINE.DLL
-
-using Microsoft.Data.Visualization.Engine.Graphics;
+﻿using Microsoft.Data.Visualization.Engine.Graphics;
 using Microsoft.Data.Visualization.Engine.VectorMath;
 using Microsoft.Data.Visualization.Utilities;
 using System;
@@ -19,18 +13,19 @@ namespace Microsoft.Data.Visualization.Engine
 {
     public class RegionLayer : InstanceLayer
     {
-        private Dictionary<Vector3F, RegionBufferToken> tessellatedRegions =
-            new Dictionary<Vector3F, RegionBufferToken>();
-
-        private Dictionary<Vector3F, List<RegionBufferToken>> regionRings =
-            new Dictionary<Vector3F, List<RegionBufferToken>>();
-
+        // 经过细分处理后的区域列表
+        private Dictionary<Vector3F, RegionBufferToken> tessellatedRegions = new Dictionary<Vector3F, RegionBufferToken>();
+        // 区域环列表
+        private Dictionary<Vector3F, List<RegionBufferToken>> regionRings = new Dictionary<Vector3F, List<RegionBufferToken>>();
+        // 需要处理的区域列表
         private Dictionary<Vector3F, Task<Tesselator>> pendingRegions = new Dictionary<Vector3F, Task<Tesselator>>();
+        // 空的区域列表
         private List<InstanceId> emptyRegions = new List<InstanceId>();
+        // 处理失败的区域列表
         private List<InstanceId> failedRegions = new List<InstanceId>();
         private RegionBuffer regionBuffer = new RegionBuffer();
         private ConcurrentBag<Tesselator> tesselatorPool = new ConcurrentBag<Tesselator>();
-        private SemaphoreSlim poolSemaphore = new SemaphoreSlim(24);
+        private SemaphoreSlim poolSemaphore = new SemaphoreSlim(MaxConcurrentTesselationJobs);
         private CancellationTokenSource cancellationSource = new CancellationTokenSource();
         private object regionLock = new object();
         private object rangeCalculatorLock = new object();
@@ -164,7 +159,7 @@ namespace Microsoft.Data.Visualization.Engine
                 CullMode = CullMode.Front,
                 FillMode = FillMode.Solid,
                 AntialiasedLineEnable = true,
-                MultisampleEnable = true
+                MultisampleEnable = true,
             });
             this.wireframeRasterizerState = RasterizerState.Create(new RasterizerStateDescription()
             {
@@ -204,12 +199,17 @@ namespace Microsoft.Data.Visualization.Engine
             });
         }
 
-        public override void BeginDataInput(int estimate, bool progressiveDataInput, bool ignoreData,
-            CustomSpaceTransform dataCustomSpace, double minInstanceValue, double maxInstanceValue, DateTime? minTime,
-            DateTime? maxTime)
+        public override void BeginDataInput(int estimate, 
+            bool progressiveDataInput, bool ignoreData,
+            CustomSpaceTransform dataCustomSpace, 
+            double minInstanceValue, double maxInstanceValue, 
+            DateTime? minTime, DateTime? maxTime)
         {
-            base.BeginDataInput(estimate, progressiveDataInput, ignoreData, dataCustomSpace, minInstanceValue,
-                maxInstanceValue, minTime, maxTime);
+            base.BeginDataInput(estimate,
+                progressiveDataInput, ignoreData,
+                dataCustomSpace, 
+                minInstanceValue, maxInstanceValue, 
+                minTime, maxTime);
             this.tessellationIsComplete = false;
         }
 
@@ -261,7 +261,7 @@ namespace Microsoft.Data.Visualization.Engine
                         this.poolSemaphore.Release();
                         this.pendingRegions.Remove(position);
                         if (this.EventDispatcher != null)
-                            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
+                            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
                             {
                                 if (this.OnRegionReady == null)
                                     return;
@@ -282,10 +282,10 @@ namespace Microsoft.Data.Visualization.Engine
         private Vector3F GetCanonicalRegionPosition(Vector3F position)
         {
             if (this.planarCoordinates)
-                position = (Vector3F) Coordinates.Flat3DToGeo(position.ToVector3D()).To3D(false);
-            position.X = (float) Math.Round(position.X, 5, MidpointRounding.AwayFromZero);
-            position.Y = (float) Math.Round(position.Y, 5, MidpointRounding.AwayFromZero);
-            position.Z = (float) Math.Round(position.Z, 5, MidpointRounding.AwayFromZero);
+                position = (Vector3F)Coordinates.Flat3DToGeo(position.ToVector3D()).To3D(false);
+            position.X = (float)Math.Round(position.X, RegionPositionDigitsOfPrecision, MidpointRounding.AwayFromZero);
+            position.Y = (float)Math.Round(position.Y, RegionPositionDigitsOfPrecision, MidpointRounding.AwayFromZero);
+            position.Z = (float)Math.Round(position.Z, RegionPositionDigitsOfPrecision, MidpointRounding.AwayFromZero);
             return position;
         }
 
@@ -297,7 +297,7 @@ namespace Microsoft.Data.Visualization.Engine
                 this.regionProvider.GetRegionAsync(
                 queryCoords.Latitude * Constants.DegreesPerRadian,
                 queryCoords.Longitude * Constants.DegreesPerRadian,
-                this.entityType == EntityType.CountryRegion || 
+                this.entityType == EntityType.CountryRegion ||
                 this.entityType == EntityType.AdminDivision1 ? 1 : 0,
                 this.RegionEntityType, cancellationToken, true, false, true)
                     .ContinueWith<Tesselator>((task =>
@@ -308,7 +308,7 @@ namespace Microsoft.Data.Visualization.Engine
                         }
                         catch (OperationCanceledException ex)
                         {
-                            return (Tesselator) null;
+                            return (Tesselator)null;
                         }
                         List<RegionData> regionDataList = task.Result;
                         if (regionDataList != null)
@@ -336,7 +336,7 @@ namespace Microsoft.Data.Visualization.Engine
                                 if (tesselator != null)
                                     this.tesselatorPool.Add(tesselator);
                                 VisualizationTraceSource.Current.Fail(ex);
-                                return (Tesselator) null;
+                                return (Tesselator)null;
                             }
                             return tesselator;
                         }
@@ -344,7 +344,7 @@ namespace Microsoft.Data.Visualization.Engine
                         {
                             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
                                 "Error retrieving region polygon.");
-                            return (Tesselator) null;
+                            return (Tesselator)null;
                         }
                     }));
             this.pendingRegions.Add(position, queryAndTesselatorTask);
@@ -372,7 +372,7 @@ namespace Microsoft.Data.Visualization.Engine
                     ++num2;
                 }
             }
-            this.Stats.AverageRegionVertexCount = num2 == 0 ? 0 : num1/num2;
+            this.Stats.AverageRegionVertexCount = num2 == 0 ? 0 : num1 / num2;
             this.Stats.RegionCount = num2;
         }
 
@@ -621,7 +621,7 @@ namespace Microsoft.Data.Visualization.Engine
         private void UpdateShading()
         {
             this.technique.ShiftGlobalShadingEnabled = false;
-            float num = (float) this.GetInstanceValueOffset();
+            float num = (float)this.GetInstanceValueOffset();
             switch (this.ShadingMode)
             {
                 case RegionLayerShadingMode.FullBleed:
@@ -631,20 +631,20 @@ namespace Microsoft.Data.Visualization.Engine
                 case RegionLayerShadingMode.Global:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = false;
-                    this.technique.MinValue = (float) this.minGlobalValue + num;
-                    this.technique.ValueScale = (float) this.globalScale;
+                    this.technique.MinValue = (float)this.minGlobalValue + num;
+                    this.technique.ValueScale = (float)this.globalScale;
                     break;
                 case RegionLayerShadingMode.Local:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = true;
-                    this.technique.MinValue = (float) this.minLocalValue;
-                    this.technique.ValueScale = (float) this.localScale;
+                    this.technique.MinValue = (float)this.minLocalValue;
+                    this.technique.ValueScale = (float)this.localScale;
                     break;
                 case RegionLayerShadingMode.ShiftGlobal:
                     this.technique.ColorShadingEnabled = true;
                     this.technique.LocalShadingEnabled = false;
                     this.technique.ShiftGlobalShadingEnabled = true;
-                    this.technique.SetMinValueAndScalePerShift(this.minValuesPerShift, this.scalePerShift, (double) num);
+                    this.technique.SetMinValueAndScalePerShift(this.minValuesPerShift, this.scalePerShift, (double)num);
                     break;
             }
             if (this.currentShadingMode.HasValue && this.currentShadingMode.Value != this.ShadingMode)
@@ -671,7 +671,7 @@ namespace Microsoft.Data.Visualization.Engine
                     this.technique.FrameId = parameters.FrameId;
                     this.technique.DesaturateFactor = 0.0f;
                     this.technique.Mode = RegionRenderingTechnique.RenderMode.Color;
-                    renderer.SetEffect((EffectTechnique) this.technique);
+                    renderer.SetEffect((EffectTechnique)this.technique);
                 }
                 else
                 {
@@ -753,7 +753,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         protected override DrawMode GetDrawMode(bool preRender, bool hitTest)
         {
-            DrawMode drawMode = (DrawMode) 3;
+            DrawMode drawMode = (DrawMode)3;
             if (this.ShadingMode == RegionLayerShadingMode.Local)
                 drawMode |= DrawMode.PieChart;
             if (this.IgnoreData)
@@ -763,7 +763,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         internal override RenderQuery GetSpatialQuery(SceneState state, List<int> queryResult)
         {
-            return RenderQuery.GetQuery(1.0 - state.FlatteningFactor, state.ViewProjection, 1f, (InstanceLayer) this,
+            return RenderQuery.GetQuery(1.0 - state.FlatteningFactor, state.ViewProjection, 1f, (InstanceLayer)this,
                 queryResult);
         }
 
@@ -801,17 +801,17 @@ namespace Microsoft.Data.Visualization.Engine
                 this.rangeCalculator.Compute(this.instanceCountUsedForScale);
                 double local_1 = this.rangeCalculator.MaxOverallValue - this.rangeCalculator.MinOverallMaxValue;
                 this.minGlobalValue = this.rangeCalculator.MinOverallMaxValue;
-                this.globalScale = local_1 <= 1E-06 ? 0.0 : 1.0/local_1;
+                this.globalScale = local_1 <= 1E-06 ? 0.0 : 1.0 / local_1;
                 double local_2 = this.rangeCalculator.MaxLocalMaxValue - this.rangeCalculator.MinLocalMaxValue;
                 this.minLocalValue = this.rangeCalculator.MinLocalMaxValue;
-                this.localScale = local_2 <= 1E-06 ? 0.0 : 1.0/local_2;
+                this.localScale = local_2 <= 1E-06 ? 0.0 : 1.0 / local_2;
                 this.rangeCalculator.GetValuesPerShift(this.minValuesPerShift, this.maxValuesPerShift);
                 for (int local_3 = 0; local_3 < this.maxValuesPerShift.Length; ++local_3)
                 {
                     double local_4 = this.maxValuesPerShift[local_3] - this.minValuesPerShift[local_3];
                     if (local_4 > 1E-06)
                     {
-                        this.scalePerShift[local_3] = 1.0/local_4;
+                        this.scalePerShift[local_3] = 1.0 / local_4;
                     }
                     else
                     {
@@ -828,14 +828,14 @@ namespace Microsoft.Data.Visualization.Engine
         {
             if (this.EventDispatcher == null || this.OnShadingScaleChanged == null)
                 return;
-            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
+            this.EventDispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 double[] minValues = new double[2048];
                 double[] maxValues = new double[2048];
                 calc.GetValuesPerShift(minValues, maxValues);
                 if (this.OnShadingScaleChanged == null)
                     return;
-                this.OnShadingScaleChanged((object) this,
+                this.OnShadingScaleChanged((object)this,
                     new RegionScaleEventArgs(calc, minValues, maxValues, this.ShadingMode, this.MaxAbsValue));
             }));
         }
@@ -875,7 +875,7 @@ namespace Microsoft.Data.Visualization.Engine
                 this.localScale = 0.0;
                 this.tessellationIsComplete = false;
                 lock (this.rangeCalculatorLock)
-                    this.rangeCalculator = (ValueRangeCalculator) null;
+                    this.rangeCalculator = (ValueRangeCalculator)null;
                 this.instanceCountUsedForScale = 0;
                 try
                 {
@@ -907,8 +907,8 @@ namespace Microsoft.Data.Visualization.Engine
                     vector3F = instancePositionAt;
                     if (region != null)
                     {
-                        int* numPtr = (int*) region.Indices.GetData().ToPointer();
-                        if ((IntPtr) numPtr != IntPtr.Zero)
+                        int* numPtr = (int*)region.Indices.GetData().ToPointer();
+                        if ((IntPtr)numPtr != IntPtr.Zero)
                         {
                             int num = region.StartVertex + region.VertexCount - 1;
                             if (num < region.Indices.IndexCount)
@@ -940,8 +940,8 @@ namespace Microsoft.Data.Visualization.Engine
             RegionBufferToken region;
             if (!this.GetTessellation(ref instancePosition, out region) || region == null)
                 return;
-            int* numPtr = (int*) region.Indices.GetData().ToPointer();
-            if ((IntPtr) numPtr == IntPtr.Zero)
+            int* numPtr = (int*)region.Indices.GetData().ToPointer();
+            if ((IntPtr)numPtr == IntPtr.Zero)
                 return;
             int num = region.StartVertex + region.VertexCount - 1;
             if (num >= region.Indices.IndexCount)
