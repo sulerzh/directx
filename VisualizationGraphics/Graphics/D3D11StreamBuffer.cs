@@ -139,8 +139,8 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             }
             vertexCount = 0;
             if (this.inUseReadableBuffers.Count == 0)
-                return (D3D11StreamBuffer.BufferInfo)null;
-            D3D11StreamBuffer.BufferInfo bufferInfo = (D3D11StreamBuffer.BufferInfo)null;
+                return null;
+            D3D11StreamBuffer.BufferInfo bufferInfo = null;
             int vetexCount;
             do
             {
@@ -191,7 +191,7 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             {
                 this.renderer.CheckDeviceRemoved(ex);
             }
-            return (D3DBuffer)null;
+            return null;
         }
 
         private D3DBuffer CreateStagingBuffer(D3DDevice device)

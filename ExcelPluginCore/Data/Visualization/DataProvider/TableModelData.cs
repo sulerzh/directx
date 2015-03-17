@@ -28,7 +28,7 @@ namespace Microsoft.Data.Visualization.DataProvider
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "Column with index {0} is not hidden, adding to canvas.", (object)num);
                         list.Add(num.ToString(CultureInfo.InvariantCulture));
                     }
-                    if (list.Count == 6)
+                    if (list.Count == s_MaxColumnCount)
                         break;
                 }
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "Found {0} columns, done looking.", (object)list.Count);

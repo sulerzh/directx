@@ -16,4 +16,3 @@ using System.Security.Permissions;
 [assembly: AssemblyProduct("Microsoft Power Map for Excel")]
 [assembly: AssemblyCopyright("© 2013 Microsoft Corporation.  All rights reserved.")]
 [assembly: AssemblyVersion("16.0.0.0")]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]

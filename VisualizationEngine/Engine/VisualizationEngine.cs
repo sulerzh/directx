@@ -22,7 +22,7 @@ namespace Microsoft.Data.Visualization.Engine
         private List<RenderThreadMethod> renderThreadDispatcherCalls = new List<RenderThreadMethod>();
         private object renderThreadDispatcherLock = new object();
         private List<Exception> renderExceptions = new List<Exception>();
-        private KeyValuePair<Guid, CustomMap> mCachedCustomMap = new KeyValuePair<Guid, CustomMap>(CustomMap.InvalidMapId, (CustomMap)null);
+        private KeyValuePair<Guid, CustomMap> mCachedCustomMap = new KeyValuePair<Guid, CustomMap>(CustomMap.InvalidMapId, null);
         public const string BingKey = "AutmxuJvVVVQyluwfF-Le9A6WQ_ypucXcJbzx5Rwf5u8on47kJRDu19BzV4kZlq9";
         private const int FixedFrameWaitTime = 50;
         private const int MaxRenderThreadShutdownTime = 4000;
@@ -89,7 +89,7 @@ namespace Microsoft.Data.Visualization.Engine
                 Guid currentCustomMapId = this.CurrentCustomMapId;
                 if (currentCustomMapId == CustomMap.InvalidMapId)
                 {
-                    this.mCachedCustomMap = new KeyValuePair<Guid, CustomMap>(currentCustomMapId, (CustomMap)null);
+                    this.mCachedCustomMap = new KeyValuePair<Guid, CustomMap>(currentCustomMapId, null);
                 }
                 else
                 {
@@ -107,8 +107,7 @@ namespace Microsoft.Data.Visualization.Engine
                 ImageSet imageSet = this.themes.GetImageSet(this.CurrentTheme, this.CurrentThemeWithLabels);
                 if (imageSet == null)
                     return new ImagerySet?();
-                else
-                    return new ImagerySet?(imageSet.ImagerySet);
+                return imageSet.ImagerySet;
             }
         }
 
@@ -220,13 +219,13 @@ namespace Microsoft.Data.Visualization.Engine
             get
             {
                 this.DisposedCheck();
-                foreach (Layer layer in (IEnumerable<Layer>)this.layerStep.Layers)
+                foreach (Layer layer in this.layerStep.Layers)
                 {
                     RegionLayer regionLayer = layer as RegionLayer;
                     if (regionLayer != null)
                         return regionLayer.Stats;
                 }
-                return (RegionLayerStatistics)null;
+                return null;
             }
         }
 
@@ -264,7 +263,7 @@ namespace Microsoft.Data.Visualization.Engine
             get
             {
                 this.DisposedCheck();
-                return (ITimeController)this.timeStep;
+                return this.timeStep;
             }
         }
 
@@ -273,7 +272,7 @@ namespace Microsoft.Data.Visualization.Engine
             get
             {
                 this.DisposedCheck();
-                return (ITourPlayer)this.tourStep;
+                return this.tourStep;
             }
         }
 
@@ -338,7 +337,7 @@ namespace Microsoft.Data.Visualization.Engine
         }
 
         public VisualizationEngine(int renderTargetWidth, int renderTargetHeight, Dispatcher eventDispatcher, ICustomMapProvider mapsList, BingMapResourceUri bingMapResourceUri, int framerate)
-            : this(renderTargetWidth, renderTargetHeight, IntPtr.Zero, (InputHandler)null, eventDispatcher, mapsList, GraphicsLevel.Quality, false, bingMapResourceUri, framerate)
+            : this(renderTargetWidth, renderTargetHeight, IntPtr.Zero, null, eventDispatcher, mapsList, GraphicsLevel.Quality, false, bingMapResourceUri, framerate)
         {
         }
 
@@ -347,9 +346,9 @@ namespace Microsoft.Data.Visualization.Engine
             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "Initializing visualization engine. Width: {0}, Height: {1}", (object)renderTargetWidth, (object)renderTargetHeight);
             this.themes = new BuiltinThemes(bingMapResourceUri);
             if (renderTargetWidth <= 0)
-                renderTargetWidth = 8;
+                renderTargetWidth = minimumFrameSize;
             if (renderTargetHeight <= 0)
-                renderTargetHeight = 8;
+                renderTargetHeight = minimumFrameSize;
             this.graphicsLevel = graphicsQualityLevel;
             this.fixedFramerate = framerate;
             this.screenWidth = renderTargetWidth;
@@ -359,10 +358,10 @@ namespace Microsoft.Data.Visualization.Engine
             this.inputHandler = input;
             this.dispatcher = eventDispatcher;
             this.customMapsProvider = engCustomMapsProvider;
-            this.requestRenderSemaphore = new SemaphoreSlim(1, 6);
+            this.requestRenderSemaphore = new SemaphoreSlim(1, MaxPendingFrameRequests);
             this.InitializedEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
             this.shutdownEvent = new EventWaitHandle(false, EventResetMode.ManualReset);
-            this.renderThread = new Thread(new ThreadStart(this.RenderLoop));
+            this.renderThread = new Thread(this.RenderLoop);
             this.renderThread.Name = "RenderThread";
             this.running = true;
             this.renderThread.Start();
@@ -385,8 +384,8 @@ namespace Microsoft.Data.Visualization.Engine
         private bool InitializeEngine()
         {
             this.renderer = Renderer.Create();
-            this.renderer.OnInformation += new RendererInfoEventHander(this.renderer_OnInformation);
-            this.renderer.OnInternalError += new RendererErrorEventHandler(this.renderer_OnInternalError);
+            this.renderer.OnInformation += this.renderer_OnInformation;
+            this.renderer.OnInternalError += this.renderer_OnInternalError;
             if (!(!(this.windowHandle == IntPtr.Zero) ? 
                 this.renderer.Initialize(this.windowHandle, this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.useSwapChain) : 
                 this.renderer.Initialize(this.screenWidth, this.screenHeight, this.GraphicsLevel == GraphicsLevel.Quality, this.IsOfflineModeEnabled)))
@@ -394,20 +393,17 @@ namespace Microsoft.Data.Visualization.Engine
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Critical, 0, "Renderer initialization failed. Render target width: {0} height: {1}. A driver update may be required.", (object)this.screenWidth, (object)this.screenHeight);
                 return false;
             }
-            else
+            if (this.useSwapChain)
             {
-                if (this.useSwapChain)
-                {
-                    if (this.fullScreenViewer == null)
-                        this.fullScreenViewer = new FullScreenQuadViewer();
-                    this.renderer.OnPresent += new RendererPresentEventHandler(this.renderer_OnPresent);
-                }
-                this.forceRenderingFrameCount = this.renderer.FrameLatency;
-                this.sceneState = new SceneState();
-                this.InitializeSteps();
-                this.SetTheme(this.DefaultTheme, false);
-                return true;
+                if (this.fullScreenViewer == null)
+                    this.fullScreenViewer = new FullScreenQuadViewer();
+                this.renderer.OnPresent += this.renderer_OnPresent;
             }
+            this.forceRenderingFrameCount = this.renderer.FrameLatency;
+            this.sceneState = new SceneState();
+            this.InitializeSteps();
+            this.SetTheme(this.DefaultTheme, false);
+            return true;
         }
 
         private void renderer_OnPresent(Renderer sender, RendererPresentEventArgs args)
@@ -432,48 +428,48 @@ namespace Microsoft.Data.Visualization.Engine
             ITimeProvider timeProvider;
             if (this.fixedFramerate > 0)
             {
-                timeProvider = (ITimeProvider)new FixedTimeProvider(this.fixedFramerate);
+                timeProvider = new FixedTimeProvider(this.fixedFramerate);
                 this.fixedTimeProvider = (FixedTimeProvider)timeProvider;
             }
             else
-                timeProvider = (ITimeProvider)new RealtimeTimeProvider();
-            this.timeStep = new TimeStep((IVisualizationEngineDispatcher)this, timeProvider, this.dispatcher);
-            this.inputStep = new InputStep((IVisualizationEngineDispatcher)this, this.dispatcher, this.inputHandler);
+                timeProvider = new RealtimeTimeProvider();
+            this.timeStep = new TimeStep(this, timeProvider, this.dispatcher);
+            this.inputStep = new InputStep(this, this.dispatcher, this.inputHandler);
             this.tourStep = new TourStep(this, this.dispatcher);
-            this.cameraStep = new CameraStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.hitTestStep = new HitTestStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.shadowStep = new ShadowStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.lightingStep = new LightingStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.globeStep = new GlobeStep((IVisualizationEngineDispatcher)this, this.dispatcher, this.themes.GetImageSet(BuiltinTheme.BingRoad, false), new Action<Exception>(this.InternalErrorHandler));
-            this.backgroundStep = new BackgroundStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.antialiasingStep = new AntialiasingStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.annotationStep = new AnnotationStep((IVisualizationEngineDispatcher)this, this.dispatcher);
-            this.layerStep = new LayerStep((IVisualizationEngineDispatcher)this, this.dispatcher, this.annotationStep);
+            this.cameraStep = new CameraStep(this, this.dispatcher);
+            this.hitTestStep = new HitTestStep(this, this.dispatcher);
+            this.shadowStep = new ShadowStep(this, this.dispatcher);
+            this.lightingStep = new LightingStep(this, this.dispatcher);
+            this.globeStep = new GlobeStep(this, this.dispatcher, this.themes.GetImageSet(BuiltinTheme.BingRoad, false), this.InternalErrorHandler);
+            this.backgroundStep = new BackgroundStep(this, this.dispatcher);
+            this.antialiasingStep = new AntialiasingStep(this, this.dispatcher);
+            this.annotationStep = new AnnotationStep(this, this.dispatcher);
+            this.layerStep = new LayerStep(this, this.dispatcher, this.annotationStep);
             this.steps = new EngineStep[15]
-      {
-        (EngineStep) this.timeStep,
-        (EngineStep) this.inputStep,
-        (EngineStep) this.tourStep,
-        (EngineStep) this.cameraStep,
-        (EngineStep) this.lightingStep,
-        (EngineStep) this.backgroundStep,
-        (EngineStep) this.globeStep,
-        (EngineStep) this.hitTestStep,
-        (EngineStep) this.layerStep,
-        (EngineStep) this.globeStep,
-        (EngineStep) this.layerStep,
-        (EngineStep) this.shadowStep,
-        (EngineStep) this.backgroundStep,
-        (EngineStep) this.antialiasingStep,
-        (EngineStep) this.annotationStep
-      };
+            {
+                this.timeStep,
+                this.inputStep,
+                this.tourStep,
+                this.cameraStep,
+                this.lightingStep,
+                this.backgroundStep,
+                this.globeStep,
+                this.hitTestStep,
+                this.layerStep,
+                this.globeStep,
+                this.layerStep,
+                this.shadowStep,
+                this.backgroundStep,
+                this.antialiasingStep,
+                this.annotationStep
+            };
             this.stepIds = new int[this.steps.Length];
             HashSet<EngineStep> hashSet = new HashSet<EngineStep>();
             for (int index = 0; index < this.steps.Length; ++index)
             {
                 if (!hashSet.Contains(this.steps[index]))
                 {
-                    this.steps[index].Initialize((IUIControllerManager)this.inputStep, (ICameraControllerManager)this.cameraStep, (IHitTestManager)this.hitTestStep, (IShadowManager)this.shadowStep);
+                    this.steps[index].Initialize(this.inputStep, this.cameraStep, this.hitTestStep, this.shadowStep);
                     this.stepIds[index] = 0;
                     hashSet.Add(this.steps[index]);
                 }
@@ -482,8 +478,8 @@ namespace Microsoft.Data.Visualization.Engine
             }
             foreach (EngineStep engineStep in hashSet)
                 engineStep.OnInitialized();
-            this.cameraStep.CameraIdle += new EventHandler(this.cameraStep_CameraIdle);
-            this.tourStep.TourSceneStateChanged += new TourSceneStateChangeHandler(this.TourStepOnTourSceneStateChanged);
+            this.cameraStep.CameraIdle += this.cameraStep_CameraIdle;
+            this.tourStep.TourSceneStateChanged += this.TourStepOnTourSceneStateChanged;
         }
 
         private void TourStepOnTourSceneStateChanged(object sender, TourSceneStateChangedEventArgs eventArgs)
@@ -540,7 +536,7 @@ namespace Microsoft.Data.Visualization.Engine
                             int num = 0;
                             while (this.fixedFramerate > 0 && !flag)
                             {
-                                Thread.Sleep(50);
+                                Thread.Sleep(FixedFrameWaitTime);
                                 flag = this.RunFrame(true);
                                 ++num;
                                 if (num % 50 == 0)
@@ -553,7 +549,7 @@ namespace Microsoft.Data.Visualization.Engine
                     {
                         GC.Collect();
                         VisualizationTraceSource.Current.Fail("Render thread raised an out of memory exception. Aborting execution.");
-                        this.InternalErrorHandler((Exception)ex);
+                        this.InternalErrorHandler(ex);
                     }
                     catch (ThreadAbortException ex)
                     {
@@ -562,8 +558,8 @@ namespace Microsoft.Data.Visualization.Engine
                     }
                     catch (COMException ex)
                     {
-                        VisualizationTraceSource.Current.Fail(string.Format("Fatal error while rendering a frame. Possible cause: {0}; DirectX error: {1}", (object)this.renderer.CorruptionErrorMessage, (object)((object)(ErrorCode)ex.ErrorCode).ToString()), (Exception)ex);
-                        this.InternalErrorHandler((Exception)ex);
+                        VisualizationTraceSource.Current.Fail(string.Format("Fatal error while rendering a frame. Possible cause: {0}; DirectX error: {1}", this.renderer.CorruptionErrorMessage, ((object)(ErrorCode)ex.ErrorCode).ToString()), ex);
+                        this.InternalErrorHandler(ex);
                     }
                     catch (Exception ex)
                     {
@@ -594,12 +590,12 @@ namespace Microsoft.Data.Visualization.Engine
                     if (this.targetBitmap != null)
                     {
                         this.targetBitmap.Dispose();
-                        this.targetBitmap = (ReadableBitmap)null;
+                        this.targetBitmap = null;
                     }
                     if (this.renderer != null)
                     {
-                        this.renderer.OnInformation -= new RendererInfoEventHander(this.renderer_OnInformation);
-                        this.renderer.OnInternalError -= new RendererErrorEventHandler(this.renderer_OnInternalError);
+                        this.renderer.OnInformation -= this.renderer_OnInformation;
+                        this.renderer.OnInternalError -= this.renderer_OnInternalError;
                         this.renderer.Dispose();
                     }
                     VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "Visualization engine shutting down.");
@@ -618,7 +614,7 @@ namespace Microsoft.Data.Visualization.Engine
         private void InternalErrorHandler(Exception e)
         {
             if (this.OnInternalError != null && this.dispatcher != null)
-                this.dispatcher.BeginInvoke((Action)(() => this.OnInternalError((object)this, new InternalErrorEventArgs(e))));
+                this.dispatcher.BeginInvoke((Action)(() => this.OnInternalError(this, new InternalErrorEventArgs(e))));
             this.running = false;
         }
 
@@ -646,7 +642,7 @@ namespace Microsoft.Data.Visualization.Engine
             this.DisposedCheck();
             if (this.fixedTimeProvider != null)
                 this.fixedTimeProvider.IncrementFrame();
-            if (this.requestRenderSemaphore.CurrentCount >= 6)
+            if (this.requestRenderSemaphore.CurrentCount >= MaxPendingFrameRequests)
                 return;
             this.requestRenderSemaphore.Release();
         }
@@ -688,13 +684,13 @@ namespace Microsoft.Data.Visualization.Engine
             }
             catch (Exception ex)
             {
-                VisualizationTraceSource.Current.Fail(string.Format("Loading theme {0} failed with exception", (object)theme1), ex);
+                VisualizationTraceSource.Current.Fail(string.Format("Loading theme {0} failed with exception", theme1), ex);
             }
         }
 
         private void SetTheme(VisualizationTheme theme)
         {
-            this.RunOnRenderThread((RenderThreadMethod)(() =>
+            this.RunOnRenderThread(() =>
             {
                 this.lightingStep.Rig = theme.Lighting;
                 this.backgroundStep.TopColor = theme.BackgroundTopColor;
@@ -709,13 +705,13 @@ namespace Microsoft.Data.Visualization.Engine
                     this.globeStep.Renderer.PostProcessingOperations.AddOperation(operation);
                 this.shadowStep.Color = theme.ShadowColor;
                 this.layerStep.RenderingParameters = theme.LayerParameters;
-                this.layerStep.ColorManager.SetVisualColors((IList<Color4F>)theme.ColorsForVisuals, (IList<double>)theme.ColorStepsForVisuals);
+                this.layerStep.ColorManager.SetVisualColors(theme.ColorsForVisuals, theme.ColorStepsForVisuals);
                 this.annotationStep.SetStyle(theme.AnnotationStyle);
                 this.themeUpdated = true;
                 if (this.ThemeChanged == null || this.dispatcher == null)
                     return;
                 this.dispatcher.BeginInvoke((Action)(() => this.ThemeChanged(this.CurrentTheme, theme, this.CurrentThemeWithLabels)));
-            }));
+            });
             this.CurrentVisualizationTheme = theme;
         }
 
@@ -731,9 +727,9 @@ namespace Microsoft.Data.Visualization.Engine
             bool flag1 = false;
             ++this.requestedFrameCount;
             SceneState state = new SceneState();
-            state.ScreenWidth = (double)this.screenWidth;
-            state.ScreenHeight = (double)this.screenHeight;
-            state.ElapsedFrames = (long)this.renderer.FrameCount;
+            state.ScreenWidth = this.screenWidth;
+            state.ScreenHeight = this.screenHeight;
+            state.ElapsedFrames = this.renderer.FrameCount;
             state.GraphicsLevel = this.GraphicsLevel;
             state.SceneCustomMap = this.CurrentCustomMap;
             state.OfflineRender = this.fixedFramerate > 0;
@@ -748,7 +744,7 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 try
                 {
-                    if (this.renderer.BeginFrame(new Color4F?(this.clearColor)))
+                    if (this.renderer.BeginFrame(this.clearColor))
                     {
                         for (int index = 0; index < this.steps.Length; ++index)
                             this.steps[index].Execute(this.renderer, state, this.stepIds[index]);
@@ -761,10 +757,10 @@ namespace Microsoft.Data.Visualization.Engine
                 }
                 catch (Exception ex)
                 {
-                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "Exception while rendering a frame: " + (object)ex);
+                    VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "Exception while rendering a frame: " + ex);
                     if (ex.GetType() == typeof(OutOfMemoryException))
                     {
-                        if (this.renderExceptions.FindIndex((Predicate<Exception>)(re => re.GetType() == typeof(OutOfMemoryException))) < 0)
+                        if (this.renderExceptions.FindIndex(re => re.GetType() == typeof(OutOfMemoryException)) < 0)
                         {
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
@@ -773,7 +769,7 @@ namespace Microsoft.Data.Visualization.Engine
                             throw;
                     }
                     this.renderExceptions.Add(ex);
-                    if (this.renderExceptions.Count > 30)
+                    if (this.renderExceptions.Count > MaxExceptionFrames)
                     {
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "The maximum number of exception frames has been reached. Aborting...");
                         throw;
@@ -781,7 +777,7 @@ namespace Microsoft.Data.Visualization.Engine
                 }
             }
             long timestamp = Stopwatch.GetTimestamp();
-            if ((double)(timestamp - this.lastTimestamp) / (double)Stopwatch.Frequency > 1.0)
+            if ((timestamp - this.lastTimestamp) / (double)Stopwatch.Frequency > 1.0)
             {
                 this.RequestedFramesPerSecond = this.requestedFrameCount;
                 this.RenderedFramesPerSecond = this.renderedFrameCount;
@@ -816,20 +812,17 @@ namespace Microsoft.Data.Visualization.Engine
             this.DisposedCheck();
             if (!this.running)
             {
-                target = (ReadableBitmap)null;
+                target = null;
                 return false;
             }
-            else
-            {
-                RenderTarget target1 = (RenderTarget)null;
-                bool renderTargetFrame = this.GetRenderTargetFrame(out target1);
-                if (this.targetBitmap == null && renderTargetFrame)
-                    this.targetBitmap = ReadableBitmap.Create(target1.RenderTargetTexture.Width, target1.RenderTargetTexture.Height, target1.RenderTargetTexture.Format);
-                if (renderTargetFrame)
-                    this.renderer.CopyRenderTargetData(target1, new Rect(0, 0, target1.RenderTargetTexture.Width, target1.RenderTargetTexture.Height), this.targetBitmap);
-                target = this.targetBitmap;
-                return renderTargetFrame;
-            }
+            RenderTarget target1 = null;
+            bool renderTargetFrame = this.GetRenderTargetFrame(out target1);
+            if (this.targetBitmap == null && renderTargetFrame)
+                this.targetBitmap = ReadableBitmap.Create(target1.RenderTargetTexture.Width, target1.RenderTargetTexture.Height, target1.RenderTargetTexture.Format);
+            if (renderTargetFrame)
+                this.renderer.CopyRenderTargetData(target1, new Rect(0, 0, target1.RenderTargetTexture.Width, target1.RenderTargetTexture.Height), this.targetBitmap);
+            target = this.targetBitmap;
+            return renderTargetFrame;
         }
 
         private bool GetRenderTargetFrame(out RenderTarget target)
@@ -838,7 +831,7 @@ namespace Microsoft.Data.Visualization.Engine
             if (this.fixedFramerate > 0)
             {
                 for (; !renderTargetFrame && this.running; renderTargetFrame = this.renderer.TryGetRenderTargetFrame(out target))
-                    Thread.Sleep(50);
+                    Thread.Sleep(FixedFrameWaitTime);
             }
             return renderTargetFrame;
         }
@@ -857,18 +850,18 @@ namespace Microsoft.Data.Visualization.Engine
             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "Request frame resize; width: {0}, height: {1}.", (object)width, (object)height);
             if (this.resizeTimer != null)
                 this.resizeTimer.Dispose();
-            TimerCallback callback = (TimerCallback)(o => this.RunOnRenderThread((RenderThreadMethod)(() =>
+            TimerCallback callback = o => this.RunOnRenderThread(() =>
             {
                 this.renderer.UpdateRenderTargetSize(width, height);
                 this.screenWidth = width;
                 this.screenHeight = height;
                 this.frameSizeUpdated = true;
-            })));
-            if (this.renderer.FrameWidth == 8)
+            });
+            if (this.renderer.FrameWidth == minimumFrameSize)
             {
                 int frameHeight = this.renderer.FrameHeight;
             }
-            this.resizeTimer = new Timer(callback, (object)null, 250, -1);
+            this.resizeTimer = new Timer(callback, null, resizeTimeout, -1);
         }
 
         public SceneState GetCurrentSceneState()
@@ -876,8 +869,7 @@ namespace Microsoft.Data.Visualization.Engine
             this.DisposedCheck();
             if (this.sceneState != null)
                 return this.sceneState.Clone();
-            else
-                return (SceneState)null;
+            return null;
         }
 
         public void AddLayer(Layer layer)
@@ -997,8 +989,7 @@ namespace Microsoft.Data.Visualization.Engine
             this.DisposedCheck();
             if (this.layerStep.ColorManager != null)
                 return this.layerStep.ColorManager.GetColor(index);
-            else
-                return new Color4F();
+            return new Color4F();
         }
 
         public void Dispose()
@@ -1008,30 +999,30 @@ namespace Microsoft.Data.Visualization.Engine
             this.running = false;
             if (this.requestRenderSemaphore != null && this.requestRenderSemaphore.CurrentCount == 0)
                 this.requestRenderSemaphore.Release();
-            if (this.shutdownEvent != null && !this.shutdownEvent.WaitOne(4000))
+            if (this.shutdownEvent != null && !this.shutdownEvent.WaitOne(MaxRenderThreadShutdownTime))
             {
                 this.renderThread.Abort();
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "The render thread exceeded the maximum allowed ({0} ms) time before it was forced to shut down.", (object)4000);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "The render thread exceeded the maximum allowed ({0} ms) time before it was forced to shut down.", MaxRenderThreadShutdownTime);
             }
             if (this.requestRenderSemaphore != null)
             {
                 this.requestRenderSemaphore.Dispose();
-                this.requestRenderSemaphore = (SemaphoreSlim)null;
+                this.requestRenderSemaphore = null;
             }
             if (this.InitializedEvent != null)
             {
                 this.InitializedEvent.Dispose();
-                this.InitializedEvent = (EventWaitHandle)null;
+                this.InitializedEvent = null;
             }
             if (this.shutdownEvent != null)
             {
                 this.shutdownEvent.Dispose();
-                this.shutdownEvent = (EventWaitHandle)null;
+                this.shutdownEvent = null;
             }
             if (this.resizeTimer != null)
             {
                 this.resizeTimer.Dispose();
-                this.resizeTimer = (Timer)null;
+                this.resizeTimer = null;
             }
             this.disposed = true;
             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "Visualization Engine shutdown complete.");

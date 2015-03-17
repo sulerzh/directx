@@ -465,8 +465,8 @@
       <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Gdi32.lib;User32.lib</AdditionalDependencies>
-      <OutputFile>$(OutDir)Microsoft.WindowsAPICodePack.DirectX.dll</OutputFile>
+      <AdditionalDependencies>d3d9.lib;Gdi32.lib;User32.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)VisualizationDirectX.dll</OutputFile>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>

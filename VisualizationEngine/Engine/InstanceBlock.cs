@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.Data.Visualization.Engine.InstanceBlock
-// Assembly: VisualizationEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c
-// MVID: D1CA6C2A-5AF8-4816-98B2-7B03B8D226FF
-// Assembly location: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONENGINE.DLL
-
-using Microsoft.Data.Visualization.Engine.Graphics;
+﻿using Microsoft.Data.Visualization.Engine.Graphics;
 using Microsoft.Data.Visualization.Engine.VectorMath;
 using System;
 using System.Collections.Generic;
@@ -62,7 +56,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return (ushort)this.maxShift;
+                return (ushort)maxShift;
             }
         }
 
@@ -70,7 +64,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return (ushort)this.maxRenderPriority;
+                return (ushort)maxRenderPriority;
             }
         }
 
@@ -84,25 +78,25 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.planarCoordinates;
+                return planarCoordinates;
             }
             set
             {
-                if (value == this.planarCoordinates)
+                if (value == planarCoordinates)
                     return;
-                this.planarCoordinates = value;
-                if (this.cachedPositions.Count <= 0)
+                planarCoordinates = value;
+                if (cachedPositions.Count <= 0)
                     return;
-                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)this.dataBuffer.GetData().ToPointer();
-                this.baseReferencePosition = Coordinates.ComputePosition(this.cachedPositions[0], this.planarCoordinates);
-                for (int index = 0; index < this.cachedPositions.Count; ++index)
+                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+                baseReferencePosition = Coordinates.ComputePosition(cachedPositions[0], planarCoordinates);
+                for (int index = 0; index < cachedPositions.Count; ++index)
                 {
-                    Vector3D position = Coordinates.ComputePosition(this.cachedPositions[index], this.planarCoordinates);
-                    instanceBlockVertexPtr[index].X = (float)(position.X - this.baseReferencePosition.X);
-                    instanceBlockVertexPtr[index].Y = (float)(position.Y - this.baseReferencePosition.Y);
-                    instanceBlockVertexPtr[index].Z = (float)(position.Z - this.baseReferencePosition.Z);
+                    Vector3D position = Coordinates.ComputePosition(cachedPositions[index], planarCoordinates);
+                    instanceBlockVertexPtr[index].X = (float)(position.X - baseReferencePosition.X);
+                    instanceBlockVertexPtr[index].Y = (float)(position.Y - baseReferencePosition.Y);
+                    instanceBlockVertexPtr[index].Z = (float)(position.Z - baseReferencePosition.Z);
                 }
-                this.dataBuffer.SetDirty();
+                dataBuffer.SetDirty();
             }
         }
 
@@ -110,10 +104,9 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                if (this.dataBuffer != null)
-                    return this.dataBuffer.VertexCount;
-                else
-                    return 0;
+                if (dataBuffer != null)
+                    return dataBuffer.VertexCount;
+                return 0;
             }
         }
 
@@ -121,7 +114,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.baseReferencePosition;
+                return baseReferencePosition;
             }
         }
 
@@ -129,7 +122,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.negativeUniqueCount > 0;
+                return negativeUniqueCount > 0;
             }
         }
 
@@ -137,7 +130,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.dataCount;
+                return dataCount;
             }
         }
 
@@ -145,7 +138,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.timeEnabled;
+                return timeEnabled;
             }
         }
 
@@ -153,7 +146,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.hasMultiInstanceData;
+                return hasMultiInstanceData;
             }
         }
 
@@ -161,68 +154,65 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return this.hasEventData;
+                return hasEventData;
             }
         }
 
         public InstanceBlock(GatherAccumulateProcessor gatherAcc, InstanceProcessingTechnique instanceProcessingTechnique, uint layerId)
         {
-            this.gatherAccProcessor = gatherAcc;
-            this.processingTechnique = instanceProcessingTechnique;
-            this.ShowNegatives = true;
-            this.hitTestLayerId = layerId;
+            gatherAccProcessor = gatherAcc;
+            processingTechnique = instanceProcessingTechnique;
+            ShowNegatives = true;
+            hitTestLayerId = layerId;
         }
 
         public unsafe InstanceId GetInstanceIdAt(int pos)
         {
-            if (pos >= this.Count)
+            if (pos >= Count)
                 return new InstanceId();
-            else
-                return new InstanceId(((HitTestVertex*)this.idBuffer.GetData().ToPointer())[pos].HitTestId);
+            return new InstanceId(((HitTestVertex*)idBuffer.GetData().ToPointer())[pos].HitTestId);
         }
 
         public unsafe Vector3F GetInstancePositionAt(int pos)
         {
-            if (pos >= this.Count)
+            if (pos >= Count)
                 return Vector3F.Empty;
-            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)this.dataBuffer.GetData().ToPointer();
-            return (Vector3F)(new Vector3D((double)instanceBlockVertexPtr[pos].X, (double)instanceBlockVertexPtr[pos].Y, (double)instanceBlockVertexPtr[pos].Z) + this.baseReferencePosition);
+            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+            return (Vector3F)(new Vector3D(instanceBlockVertexPtr[pos].X, instanceBlockVertexPtr[pos].Y, instanceBlockVertexPtr[pos].Z) + baseReferencePosition);
         }
 
         public Vector3F GetInstancePositionAtGeoIndex(int pos, InstanceBlockQueryType queryType)
         {
-            int dataPosition = this.GetDataPosition(pos, queryType);
+            int dataPosition = GetDataPosition(pos, queryType);
             if (dataPosition < 0)
                 return Vector3F.Empty;
-            else
-                return this.GetInstancePositionAt(dataPosition);
+            return GetInstancePositionAt(dataPosition);
         }
 
         public InstanceId GetInstanceIdAtGeoIndex(int pos, InstanceBlockQueryType queryType)
         {
-            int dataPosition = this.GetDataPosition(pos, queryType);
+            int dataPosition = GetDataPosition(pos, queryType);
             if (dataPosition < 0)
                 return new InstanceId();
-            else
-                return this.GetInstanceIdAt(dataPosition);
+            return GetInstanceIdAt(dataPosition);
         }
 
         private unsafe int GetDataPosition(int pos, InstanceBlockQueryType queryType)
         {
-            IndexBuffer indexBuffer = (IndexBuffer)null;
+            IndexBuffer indexBuffer = null;
             switch (queryType)
             {
                 case InstanceBlockQueryType.PositiveInstances:
-                    indexBuffer = this.positiveUniqueIndices;
+                    indexBuffer = positiveUniqueIndices;
                     break;
                 case InstanceBlockQueryType.NegativeInstances:
-                    indexBuffer = this.negativeUniqueIndices;
+                    indexBuffer = negativeUniqueIndices;
                     break;
                 case InstanceBlockQueryType.ZeroInstances:
-                    indexBuffer = this.zeroUniqueIndices;
+                    indexBuffer = zeroUniqueIndices;
                     break;
                 case InstanceBlockQueryType.NullInstances:
-                    indexBuffer = this.nullUniqueIndices;
+                    indexBuffer = nullUniqueIndices;
                     break;
             }
             if (indexBuffer == null || pos >= indexBuffer.IndexCount)
@@ -235,146 +225,146 @@ namespace Microsoft.Data.Visualization.Engine
             globePosition.AssertIsUnitVector();
             if (flatMap)
                 return new Vector3D(1.0, Coordinates.MercatorFromSine(globePosition.Y), longitude);
-            else
-                return globePosition;
+            return globePosition;
         }
 
         public unsafe void SetData(IEnumerable<InstanceData> instanceData, int instanceDataCount, Dictionary<int, int> colorOverrides, ref Box3D bounds, bool updateBounds, double timeRange, DateTime? minTime, bool useColorAsRenderPriority)
         {
-            this.Clear();
-            this.TimeRange = timeRange;
-            this.MinInstanceTime = minTime;
-            this.previousDataPosition = Vector3D.Empty;
+            Clear();
+            TimeRange = timeRange;
+            MinInstanceTime = minTime;
+            previousDataPosition = Vector3D.Empty;
             int num1 = int.MinValue;
             int num2 = int.MinValue;
             foreach (InstanceData instanceData1 in instanceData)
             {
-                this.CreateBuffersIfNeeded(instanceDataCount, (double)instanceData1.Value < 0.0, minTime.HasValue);
+                CreateBuffersIfNeeded(instanceDataCount, instanceData1.Value < 0.0, minTime.HasValue);
                 Vector3D position1 = instanceData1.Location.Position;
-                if (this.baseReferencePosition == Vector3D.Empty)
-                    this.baseReferencePosition = InstanceBlock.GetPosition(this.planarCoordinates, ref position1, instanceData1.Location.Longitude);
-                if (position1 != this.previousDataPosition || instanceData1.FirstInstance)
+                if (baseReferencePosition == Vector3D.Empty)
+                    baseReferencePosition = GetPosition(planarCoordinates, ref position1, instanceData1.Location.Longitude);
+                if (position1 != previousDataPosition || instanceData1.FirstInstance)
                 {
-                    ++this.geoCount;
-                    this.firstPositionInstances.Add(this.dataCount);
-                    this.previousDataPosition = position1;
+                    ++geoCount;
+                    firstPositionInstances.Add(dataCount);
+                    previousDataPosition = position1;
                     num1 = int.MinValue;
                     num2 = int.MinValue;
                 }
-                this.cachedPositions.Add(position1);
+                cachedPositions.Add(position1);
                 if (updateBounds)
                     bounds.UpdateWith(position1);
                 InstanceBlockVertex instanceBlockVertex = new InstanceBlockVertex();
-                Vector3D position2 = InstanceBlock.GetPosition(this.planarCoordinates, ref position1, instanceData1.Location.Longitude);
-                instanceBlockVertex.X = (float)(position2.X - this.baseReferencePosition.X);
-                instanceBlockVertex.Y = (float)(position2.Y - this.baseReferencePosition.Y);
-                instanceBlockVertex.Z = (float)(position2.Z - this.baseReferencePosition.Z);
-                instanceBlockVertex.GeoIndex = (short)(this.geoCount - 1);
+                Vector3D position2 = GetPosition(planarCoordinates, ref position1, instanceData1.Location.Longitude);
+                instanceBlockVertex.X = (float)(position2.X - baseReferencePosition.X);
+                instanceBlockVertex.Y = (float)(position2.Y - baseReferencePosition.Y);
+                instanceBlockVertex.Z = (float)(position2.Z - baseReferencePosition.Z);
+                instanceBlockVertex.GeoIndex = (short)(geoCount - 1);
                 instanceBlockVertex.Shift = instanceData1.Shift;
                 int num3 = 0;
-                instanceBlockVertex.ColorIndex = !colorOverrides.TryGetValue((int)instanceData1.SourceShift, out num3) ? instanceData1.Color : (short)num3;
+                instanceBlockVertex.ColorIndex = !colorOverrides.TryGetValue(instanceData1.SourceShift, out num3) ? instanceData1.Color : (short)num3;
                 instanceBlockVertex.RenderPriority = useColorAsRenderPriority ? instanceData1.Color : instanceData1.SourceShift;
                 instanceBlockVertex.Value = Math.Abs(instanceData1.Value);
-                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)this.dataBuffer.GetData().ToPointer();
-                HitTestVertex* hitTestVertexPtr = (HitTestVertex*)this.idBuffer.GetData().ToPointer();
-                instanceBlockVertexPtr[this.dataCount] = instanceBlockVertex;
-                hitTestVertexPtr[this.dataCount].HitTestId = new InstanceId(this.hitTestLayerId, instanceData1.Id).Id;
-                this.dataBuffer.SetDirty();
-                this.idBuffer.SetDirty();
+                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+                HitTestVertex* hitTestVertexPtr = (HitTestVertex*)idBuffer.GetData().ToPointer();
+                instanceBlockVertexPtr[dataCount] = instanceBlockVertex;
+                hitTestVertexPtr[dataCount].HitTestId = new InstanceId(hitTestLayerId, instanceData1.Id).Id;
+                dataBuffer.SetDirty();
+                idBuffer.SetDirty();
                 if (float.IsNaN(instanceData1.Value))
                 {
-                    *(int*)((IntPtr)this.nullUniqueIndices.GetData().ToPointer() + this.nullCount++) = this.dataCount;
-                    instanceBlockVertexPtr[this.dataCount].Value = -2f;
+                    *(int*)((IntPtr)nullUniqueIndices.GetData().ToPointer() + nullCount++) = dataCount;
+                    instanceBlockVertexPtr[dataCount].Value = -2f;
                 }
-                if ((double)instanceData1.Value == 0.0)
-                    *(int*)((IntPtr)this.zeroUniqueIndices.GetData().ToPointer() + this.zeroCount++) = this.dataCount;
+                if (instanceData1.Value == 0.0)
+                    *(int*)((IntPtr)zeroUniqueIndices.GetData().ToPointer() + zeroCount++) = dataCount;
                 if (minTime.HasValue)
                 {
-                    InstanceTime* instanceTimePtr = (InstanceTime*)this.timeBuffer.GetData().ToPointer();
-                    this.timeBuffer.SetDirty();
-                    instanceTimePtr[this.dataCount].StartTime = !instanceData1.StartTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.StartTime.Value - minTime.Value).TotalMilliseconds / timeRange));
-                    instanceTimePtr[this.dataCount].EndTime = !instanceData1.EndTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.EndTime.Value - minTime.Value).TotalMilliseconds / timeRange));
+                    InstanceTime* instanceTimePtr = (InstanceTime*)timeBuffer.GetData().ToPointer();
+                    timeBuffer.SetDirty();
+                    instanceTimePtr[dataCount].StartTime = !instanceData1.StartTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.StartTime.Value - minTime.Value).TotalMilliseconds / timeRange));
+                    instanceTimePtr[dataCount].EndTime = !instanceData1.EndTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.EndTime.Value - minTime.Value).TotalMilliseconds / timeRange));
                     if (instanceData1.StartTime.HasValue && instanceData1.EndTime.HasValue && instanceData1.StartTime.Value == instanceData1.EndTime.Value)
-                        this.hasEventData = true;
+                        hasEventData = true;
                 }
-                else if (this.timeBuffer != null)
+                else if (timeBuffer != null)
                 {
-                    this.timeBuffer.Dispose();
-                    this.timeBuffer = (VertexBuffer)null;
+                    timeBuffer.Dispose();
+                    timeBuffer = null;
                 }
-                if (float.IsNaN(instanceData1.Value) || (double)instanceData1.Value >= 0.0)
+                if (float.IsNaN(instanceData1.Value) || instanceData1.Value >= 0.0)
                 {
-                    *(int*)((IntPtr)this.positiveIndices.GetData().ToPointer() + this.positiveCount++) = this.dataCount;
-                    this.positiveIndices.SetDirty();
-                    if (num1 != (int)instanceData1.Shift)
+                    *(int*)((IntPtr)positiveIndices.GetData().ToPointer() + positiveCount++) = dataCount;
+                    positiveIndices.SetDirty();
+                    if (num1 != instanceData1.Shift)
                     {
-                        *(int*)((IntPtr)this.positiveUniqueIndices.GetData().ToPointer() + this.positiveUniqueCount++) = this.dataCount;
-                        num1 = (int)instanceData1.Shift;
-                        this.positiveUniqueIndices.SetDirty();
+                        *(int*)((IntPtr)positiveUniqueIndices.GetData().ToPointer() + positiveUniqueCount++) = dataCount;
+                        num1 = instanceData1.Shift;
+                        positiveUniqueIndices.SetDirty();
                     }
                 }
                 else
                 {
-                    *(int*)((IntPtr)this.negativeIndices.GetData().ToPointer() + this.negativeCount++) = this.dataCount;
-                    this.negativeIndices.SetDirty();
-                    if (num2 != (int)instanceData1.Shift)
+                    *(int*)((IntPtr)negativeIndices.GetData().ToPointer() + negativeCount++) = dataCount;
+                    negativeIndices.SetDirty();
+                    if (num2 != instanceData1.Shift)
                     {
-                        *(int*)((IntPtr)this.negativeUniqueIndices.GetData().ToPointer() + this.negativeUniqueCount++) = this.dataCount;
-                        num2 = (int)instanceData1.Shift;
-                        this.negativeUniqueIndices.SetDirty();
+                        *(int*)((IntPtr)negativeUniqueIndices.GetData().ToPointer() + negativeUniqueCount++) = dataCount;
+                        num2 = instanceData1.Shift;
+                        negativeUniqueIndices.SetDirty();
                     }
                 }
-                ++this.dataCount;
-                this.maxShift = Math.Max(this.maxShift, (int)instanceData1.Shift);
-                this.maxRenderPriority = Math.Max(this.maxRenderPriority, useColorAsRenderPriority ? (int)instanceData1.Color : (int)instanceData1.SourceShift);
+                ++dataCount;
+                maxShift = Math.Max(maxShift, instanceData1.Shift);
+                maxRenderPriority = Math.Max(maxRenderPriority, useColorAsRenderPriority ? instanceData1.Color : instanceData1.SourceShift);
             }
-            if (this.zeroCount > 0)
-                this.zeroUniqueIndices.SetDirty();
-            if (this.nullCount > 0)
-                this.nullUniqueIndices.SetDirty();
+            if (zeroCount > 0)
+                zeroUniqueIndices.SetDirty();
+            if (nullCount > 0)
+                nullUniqueIndices.SetDirty();
             if (minTime.HasValue)
-                this.timeEnabled = true;
-            if (this.dataCount == this.geoCount && !this.timeEnabled && this.negativeCount <= 0)
+                timeEnabled = true;
+            if (dataCount == geoCount && !timeEnabled && negativeCount <= 0)
                 return;
-            this.hasMultiInstanceData = true;
+            hasMultiInstanceData = true;
         }
 
         private unsafe void ComputeMaxSimultaneousInstances(float scaledFadeTime)
         {
-            if (!this.timeEnabled)
+            if (!timeEnabled)
             {
-                this.maxPositiveVisibleCount = this.positiveUniqueCount;
-                this.maxNegativeVisibleCount = this.negativeUniqueCount;
+                maxPositiveVisibleCount = positiveUniqueCount;
+                maxNegativeVisibleCount = negativeUniqueCount;
             }
             else
             {
-                for (int index1 = 0; index1 < 2; ++index1)
+                for (int i = 0; i < 2; ++i)
                 {
-                    this.timeStamps.Clear();
-                    int num1 = index1 == 0 ? this.positiveCount : this.negativeCount;
-                    if (num1 != 0)
+                    timeStamps.Clear();
+                    int count = i == 0 ? positiveCount : negativeCount;
+                    if (count != 0)
                     {
-                        InstanceTime* instanceTimePtr = (InstanceTime*)this.timeBuffer.GetData().ToPointer();
-                        uint* numPtr = (uint*)(index1 == 0 ? this.positiveIndices : this.negativeIndices).GetData().ToPointer();
-                        for (int index2 = 0; index2 < num1; ++index2)
+                        InstanceTime* instanceTimeArray = (InstanceTime*)timeBuffer.GetData().ToPointer();
+                        IndexBuffer buffer = i == 0 ? positiveIndices : negativeIndices;
+                        uint* indexArray = (uint*)buffer.GetData().ToPointer();
+                        for (int j = 0; j < count; ++j)
                         {
-                            this.timeStamps.Add(new Tuple<float, bool>((double)((InstanceTime*)instanceTimePtr + numPtr[index2])->StartTime <= 0.0 ? 0.0f : ((InstanceTime*)instanceTimePtr + numPtr[index2])->StartTime, true));
-                            float num2 = ((InstanceTime*)instanceTimePtr + numPtr[index2])->EndTime;
-                            if ((double)num2 >= 0.0)
-                                this.timeStamps.Add(new Tuple<float, bool>(num2 + scaledFadeTime * 2f, false));
+                            timeStamps.Add(new Tuple<float, bool>(instanceTimeArray[indexArray[j]].StartTime <= 0.0 ? 0.0f : instanceTimeArray[indexArray[j]].StartTime, true));
+                            float num2 = instanceTimeArray[indexArray[j]].EndTime;
+                            if (num2 >= 0.0)
+                                timeStamps.Add(new Tuple<float, bool>(num2 + scaledFadeTime * 2f, false));
                         }
-                        this.timeStamps.Sort((Comparison<Tuple<float, bool>>)((a, b) => a.Item1.CompareTo(b.Item1)));
+                        timeStamps.Sort((a, b) => a.Item1.CompareTo(b.Item1));
                         int val1 = 0;
                         int val2 = 0;
-                        for (int index2 = 0; index2 < this.timeStamps.Count; ++index2)
+                        for (int index2 = 0; index2 < timeStamps.Count; ++index2)
                         {
-                            val2 += this.timeStamps[index2].Item2 ? 1 : -1;
+                            val2 += timeStamps[index2].Item2 ? 1 : -1;
                             val1 = Math.Max(val1, val2);
                         }
-                        if (index1 == 0)
-                            this.maxPositiveVisibleCount = Math.Min(val1, this.positiveUniqueCount);
+                        if (i == 0)
+                            maxPositiveVisibleCount = Math.Min(val1, positiveUniqueCount);
                         else
-                            this.maxNegativeVisibleCount = Math.Min(val1, this.negativeUniqueCount);
+                            maxNegativeVisibleCount = Math.Min(val1, negativeUniqueCount);
                     }
                 }
             }
@@ -382,101 +372,100 @@ namespace Microsoft.Data.Visualization.Engine
 
         public void Clear()
         {
-            this.dataCount = 0;
-            this.geoCount = 0;
-            this.positiveCount = 0;
-            this.negativeCount = 0;
-            this.positiveUniqueCount = 0;
-            this.negativeUniqueCount = 0;
-            this.maxPositiveVisibleCount = 0;
-            this.maxNegativeVisibleCount = 0;
-            this.zeroCount = 0;
-            this.nullCount = 0;
-            this.maxShift = 0;
-            this.maxRenderPriority = 0;
-            this.timeEnabled = false;
-            this.hasMultiInstanceData = false;
-            this.hasEventData = false;
-            this.baseReferencePosition = Vector3D.Empty;
-            this.previousDataPosition = Vector3D.Empty;
-            this.lastVisualTimeScale = -1f;
-            this.firstPositionInstances.Clear();
-            this.cachedPositions.Clear();
-            this.filterItems.Clear();
-            this.filterSubsets.Clear();
-            this.filterItemsInSubsetsCount = 0;
-            this.filterDirty = false;
-            this.annotationItems.Clear();
-            this.annotationSubsets.Clear();
-            this.annotationItemsInSubsetsCount = 0;
-            this.annotationDirty = false;
+            dataCount = 0;
+            geoCount = 0;
+            positiveCount = 0;
+            negativeCount = 0;
+            positiveUniqueCount = 0;
+            negativeUniqueCount = 0;
+            maxPositiveVisibleCount = 0;
+            maxNegativeVisibleCount = 0;
+            zeroCount = 0;
+            nullCount = 0;
+            maxShift = 0;
+            maxRenderPriority = 0;
+            timeEnabled = false;
+            hasMultiInstanceData = false;
+            hasEventData = false;
+            baseReferencePosition = Vector3D.Empty;
+            previousDataPosition = Vector3D.Empty;
+            lastVisualTimeScale = -1f;
+            firstPositionInstances.Clear();
+            cachedPositions.Clear();
+            filterItems.Clear();
+            filterSubsets.Clear();
+            filterItemsInSubsetsCount = 0;
+            filterDirty = false;
+            annotationItems.Clear();
+            annotationSubsets.Clear();
+            annotationItemsInSubsetsCount = 0;
+            annotationDirty = false;
         }
 
         public void AddFilterInstance(int pos)
         {
-            this.filterItems.Add(pos);
-            this.filterDirty = true;
+            filterItems.Add(pos);
+            filterDirty = true;
         }
 
         public void ClearFilterInstances()
         {
-            this.filterItems.Clear();
-            this.filterDirty = true;
+            filterItems.Clear();
+            filterDirty = true;
         }
 
         public void AddAnnotationInstance(int pos)
         {
-            this.annotationItems.Add(pos);
-            this.annotationDirty = true;
+            annotationItems.Add(pos);
+            annotationDirty = true;
         }
 
         public void ClearAnnotationInstances()
         {
-            this.annotationItems.Clear();
-            this.annotationDirty = true;
+            annotationItems.Clear();
+            annotationDirty = true;
         }
 
         public unsafe InstanceId? GetAnnotationInstanceId(int annotationIndex, DateTime? time, SceneState state)
         {
-            if (annotationIndex >= this.annotationItems.Count)
+            if (annotationIndex >= annotationItems.Count)
                 return new InstanceId?();
-            if (this.Count == 0)
+            if (Count == 0)
                 return new InstanceId?();
-            int pos1 = this.annotationItems[annotationIndex];
-            if (!time.HasValue || this.timeBuffer == null || this.timeBuffer.VertexCount == 0)
-                return new InstanceId?(this.GetInstanceIdAt(pos1));
-            if (!this.MinInstanceTime.HasValue)
+            int pos1 = annotationItems[annotationIndex];
+            if (!time.HasValue || timeBuffer == null || timeBuffer.VertexCount == 0)
+                return GetInstanceIdAt(pos1);
+            if (!MinInstanceTime.HasValue)
                 return new InstanceId?();
             int num1 = 0;
             int num2 = 0;
-            for (int index = 0; index < this.firstPositionInstances.Count; ++index)
+            for (int index = 0; index < firstPositionInstances.Count; ++index)
             {
-                if (this.firstPositionInstances[index] > pos1)
+                if (firstPositionInstances[index] > pos1)
                 {
-                    num2 = this.firstPositionInstances[index] - num1;
+                    num2 = firstPositionInstances[index] - num1;
                     break;
                 }
-                else
-                    num1 = this.firstPositionInstances[index];
+                num1 = firstPositionInstances[index];
             }
             if (num2 == 0)
-                num2 = this.dataCount - num1;
+                num2 = dataCount - num1;
             InstanceId? nullable1 = new InstanceId?();
-            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)this.dataBuffer.GetData().ToPointer();
-            InstanceTime* instanceTimePtr = (InstanceTime*)this.timeBuffer.GetData().ToPointer();
-            int num3 = (int)instanceBlockVertexPtr[pos1].Shift;
+            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+            InstanceTime* instanceTimePtr = (InstanceTime*)timeBuffer.GetData().ToPointer();
+            int num3 = instanceBlockVertexPtr[pos1].Shift;
             for (int pos2 = num1; pos2 < num1 + num2; ++pos2)
             {
-                if ((int)instanceBlockVertexPtr[pos2].Shift >= num3)
+                if (instanceBlockVertexPtr[pos2].Shift >= num3)
                 {
-                    if ((int)instanceBlockVertexPtr[pos2].Shift <= num3)
+                    if (instanceBlockVertexPtr[pos2].Shift <= num3)
                     {
-                        DateTime? nullable2 = (double)instanceTimePtr[pos2].StartTime == -1.0 ? new DateTime?() : new DateTime?(this.MinInstanceTime.Value.AddMilliseconds((double)instanceTimePtr[pos2].StartTime * this.TimeRange));
-                        DateTime? nullable3 = (double)instanceTimePtr[pos2].EndTime == -1.0 ? new DateTime?() : new DateTime?(this.MinInstanceTime.Value.AddMilliseconds((double)instanceTimePtr[pos2].EndTime * this.TimeRange));
+                        DateTime? nullable2 = (double)instanceTimePtr[pos2].StartTime == -1.0 ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(instanceTimePtr[pos2].StartTime * TimeRange);
+                        DateTime? nullable3 = (double)instanceTimePtr[pos2].EndTime == -1.0 ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(instanceTimePtr[pos2].EndTime * TimeRange);
                         if (nullable3.HasValue)
                         {
                             double num4 = 0.25 * state.VisualTimeToRealtimeRatio * 1000.0 * 2.0;
-                            nullable3 = new DateTime?(nullable3.Value.AddMilliseconds(num4));
+                            nullable3 = nullable3.Value.AddMilliseconds(num4);
                         }
                         int num5;
                         if (nullable2.HasValue)
@@ -499,7 +488,7 @@ namespace Microsoft.Data.Visualization.Engine
                             num6 = 1;
                         bool flag2 = num6 != 0;
                         if (flag1 && flag2)
-                            nullable1 = new InstanceId?(this.GetInstanceIdAt(pos2));
+                            nullable1 = GetInstanceIdAt(pos2);
                     }
                     else
                         break;
@@ -543,30 +532,30 @@ namespace Microsoft.Data.Visualization.Engine
 
         private void CreateBuffersIfNeeded(int instanceCount, bool needNegativeIndices, bool needsTimeBuffer)
         {
-            int num = Math.Max(instanceCount, 4096);
-            if (this.dataBuffer == null)
+            int count = Math.Max(instanceCount, BlockSize);
+            if (dataBuffer == null)
             {
-                this.dataBuffer = VertexBuffer.Create<InstanceBlockVertex>((InstanceBlockVertex[])null, num, false);
-                this.positiveIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
-                this.positiveUniqueIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
-                this.zeroUniqueIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
-                this.nullUniqueIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
+                dataBuffer = VertexBuffer.Create<InstanceBlockVertex>(null, count, false);
+                positiveIndices = IndexBuffer.Create<uint>(null, count, false);
+                positiveUniqueIndices = IndexBuffer.Create<uint>(null, count, false);
+                zeroUniqueIndices = IndexBuffer.Create<uint>(null, count, false);
+                nullUniqueIndices = IndexBuffer.Create<uint>(null, count, false);
             }
-            if (needNegativeIndices && this.negativeIndices == null)
+            if (needNegativeIndices && negativeIndices == null)
             {
-                this.negativeIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
-                this.negativeUniqueIndices = IndexBuffer.Create<uint>((uint[])null, num, false);
+                negativeIndices = IndexBuffer.Create<uint>(null, count, false);
+                negativeUniqueIndices = IndexBuffer.Create<uint>(null, count, false);
             }
-            if (this.timeBuffer != null && this.timeBuffer.VertexCount < num)
+            if (timeBuffer != null && timeBuffer.VertexCount < count)
             {
-                this.timeBuffer.Dispose();
-                this.timeBuffer = (VertexBuffer)null;
+                timeBuffer.Dispose();
+                timeBuffer = null;
             }
-            if (needsTimeBuffer && this.timeBuffer == null)
-                this.timeBuffer = VertexBuffer.Create<InstanceTime>((InstanceTime[])null, num, false);
-            if (this.idBuffer != null)
+            if (needsTimeBuffer && timeBuffer == null)
+                timeBuffer = VertexBuffer.Create<InstanceTime>(null, count, false);
+            if (idBuffer != null)
                 return;
-            this.idBuffer = VertexBuffer.Create<InstanceColor>((InstanceColor[])null, num, false);
+            idBuffer = VertexBuffer.Create<InstanceColor>(null, count, false);
         }
 
         private int Update(Renderer renderer, bool ignoreInstanceValues, bool hitTest, bool useGatherAccumulate, bool useConstantMode)
@@ -574,13 +563,13 @@ namespace Microsoft.Data.Visualization.Engine
             int num = 0;
             if (useGatherAccumulate)
             {
-                GatherAccumulateProcessBlock gatherAccumulateBlock = this.GetGatherAccumulateBlock();
-                num = !hitTest ? this.gatherAccProcessor.Process(gatherAccumulateBlock, renderer, ignoreInstanceValues, useConstantMode) : this.gatherAccProcessor.ProcessHitTest(gatherAccumulateBlock, renderer, ignoreInstanceValues, useConstantMode);
+                GatherAccumulateProcessBlock gatherAccumulateBlock = GetGatherAccumulateBlock();
+                num = !hitTest ? gatherAccProcessor.Process(gatherAccumulateBlock, renderer, ignoreInstanceValues, useConstantMode) : gatherAccProcessor.ProcessHitTest(gatherAccumulateBlock, renderer, ignoreInstanceValues, useConstantMode);
             }
             if (!hitTest)
             {
-                InstanceBlock.UpdateSubsets(this.filterItems, this.filterSubsets, ref this.filterItemsInSubsetsCount, ref this.filterDirty);
-                InstanceBlock.UpdateSubsets(this.annotationItems, this.annotationSubsets, ref this.annotationItemsInSubsetsCount, ref this.annotationDirty);
+                UpdateSubsets(filterItems, filterSubsets, ref filterItemsInSubsetsCount, ref filterDirty);
+                UpdateSubsets(annotationItems, annotationSubsets, ref annotationItemsInSubsetsCount, ref annotationDirty);
             }
             return num;
         }
@@ -589,44 +578,44 @@ namespace Microsoft.Data.Visualization.Engine
         {
             return new GatherAccumulateProcessBlock()
             {
-                PositiveIndices = this.positiveIndices,
-                PositiveSubset = new Tuple<uint, uint>(0U, (uint)this.positiveCount),
-                NegativeIndices = this.negativeIndices,
-                NegativeSubset = this.negativeCount <= 0 || !this.ShowNegatives ? (Tuple<uint, uint>)null : new Tuple<uint, uint>(0U, (uint)this.negativeCount),
-                Instances = this.dataBuffer,
-                InstancesTime = this.timeBuffer,
-                InstancesHitId = this.idBuffer,
-                MaxShift = this.maxShift,
+                PositiveIndices = positiveIndices,
+                PositiveSubset = new Tuple<uint, uint>(0U, (uint)positiveCount),
+                NegativeIndices = negativeIndices,
+                NegativeSubset = negativeCount <= 0 || !ShowNegatives ? null : new Tuple<uint, uint>(0U, (uint)negativeCount),
+                Instances = dataBuffer,
+                InstancesTime = timeBuffer,
+                InstancesHitId = idBuffer,
+                MaxShift = maxShift,
                 Owner = this
             };
         }
 
         public int QueryInstanceCount(float visualTimeScale, bool showOnlyMaxValue, InstanceBlockQueryType queryType)
         {
-            if ((double)this.lastVisualTimeScale != (double)visualTimeScale || this.lastShowOnlyMaxValue != showOnlyMaxValue)
+            if (this.lastVisualTimeScale != visualTimeScale || this.lastShowOnlyMaxValue != showOnlyMaxValue)
             {
-                this.ComputeMaxSimultaneousInstances((float)(1.0 / (double)visualTimeScale * 0.25));
+                ComputeMaxSimultaneousInstances(1.0f / visualTimeScale * 0.25f);
                 this.lastVisualTimeScale = visualTimeScale;
                 this.lastShowOnlyMaxValue = showOnlyMaxValue;
             }
             int val2 = Math.Max(this.filterItems.Count, this.annotationItems.Count);
-            int val1 = 0;
+            int zeroCount = 0;
             switch (queryType)
             {
                 case InstanceBlockQueryType.PositiveInstances:
-                    val1 = showOnlyMaxValue ? this.positiveUniqueCount : this.maxPositiveVisibleCount;
+                    zeroCount = showOnlyMaxValue ? this.positiveUniqueCount : this.maxPositiveVisibleCount;
                     break;
                 case InstanceBlockQueryType.NegativeInstances:
-                    val1 = showOnlyMaxValue ? this.negativeUniqueCount : this.maxNegativeVisibleCount;
+                    zeroCount = showOnlyMaxValue ? this.negativeUniqueCount : this.maxNegativeVisibleCount;
                     break;
                 case InstanceBlockQueryType.ZeroInstances:
-                    val1 = this.zeroCount;
+                    zeroCount = this.zeroCount;
                     break;
                 case InstanceBlockQueryType.NullInstances:
-                    val1 = this.nullCount;
+                    zeroCount = this.nullCount;
                     break;
             }
-            return Math.Max(val1, val2);
+            return Math.Max(zeroCount, val2);
         }
 
         public int QueryInstances(Renderer renderer, SceneState state, InstanceBlockQueryParameters parameters)
@@ -636,64 +625,62 @@ namespace Microsoft.Data.Visualization.Engine
             switch (parameters.QueryType)
             {
                 case InstanceBlockQueryType.PositiveInstances:
-                    if (this.maxPositiveVisibleCount > 0)
-                        this.UpdateInstances(renderer, parameters);
+                    if (maxPositiveVisibleCount > 0)
+                        UpdateInstances(renderer, parameters);
                     switch (parameters.InstanceSource)
                     {
                         case InstanceBlockQueryInstanceSource.Filter:
-                            return this.filterItemsInSubsetsCount;
+                            return filterItemsInSubsetsCount;
                         case InstanceBlockQueryInstanceSource.Annotation:
-                            return this.annotationItemsInSubsetsCount;
+                            return annotationItemsInSubsetsCount;
                         default:
                             if (parameters.ShowOnlyMaxValues)
-                                return this.positiveUniqueCount;
-                            else
-                                return this.maxPositiveVisibleCount;
+                                return positiveUniqueCount;
+                            return maxPositiveVisibleCount;
                     }
                 case InstanceBlockQueryType.NegativeInstances:
-                    if (this.maxNegativeVisibleCount > 0)
-                        this.UpdateInstances(renderer, parameters);
+                    if (maxNegativeVisibleCount > 0)
+                        UpdateInstances(renderer, parameters);
                     switch (parameters.InstanceSource)
                     {
                         case InstanceBlockQueryInstanceSource.Filter:
-                            return this.filterItemsInSubsetsCount;
+                            return filterItemsInSubsetsCount;
                         case InstanceBlockQueryInstanceSource.Annotation:
-                            return this.annotationItemsInSubsetsCount;
+                            return annotationItemsInSubsetsCount;
                         default:
                             if (parameters.ShowOnlyMaxValues)
-                                return this.negativeUniqueCount;
-                            else
-                                return this.maxNegativeVisibleCount;
+                                return negativeUniqueCount;
+                            return maxNegativeVisibleCount;
                     }
                 case InstanceBlockQueryType.ZeroInstances:
-                    if (this.zeroCount > 0)
+                    if (zeroCount > 0)
                     {
-                        this.processingTechnique.Mode = parameters.HitTest ? InstanceProcessingTechniqueMode.ZeroHitTest : InstanceProcessingTechniqueMode.Zero;
-                        this.UpdateZeroNullInstances(renderer, parameters);
+                        processingTechnique.Mode = parameters.HitTest ? InstanceProcessingTechniqueMode.ZeroHitTest : InstanceProcessingTechniqueMode.Zero;
+                        UpdateZeroNullInstances(renderer, parameters);
                     }
                     switch (parameters.InstanceSource)
                     {
                         case InstanceBlockQueryInstanceSource.Filter:
-                            return Math.Min(this.filterItemsInSubsetsCount, this.zeroCount);
+                            return Math.Min(filterItemsInSubsetsCount, zeroCount);
                         case InstanceBlockQueryInstanceSource.Annotation:
-                            return Math.Max(this.annotationItemsInSubsetsCount, this.zeroCount);
+                            return Math.Max(annotationItemsInSubsetsCount, zeroCount);
                         default:
-                            return this.zeroCount;
+                            return zeroCount;
                     }
                 case InstanceBlockQueryType.NullInstances:
-                    if (this.nullCount > 0)
+                    if (nullCount > 0)
                     {
-                        this.processingTechnique.Mode = parameters.HitTest ? InstanceProcessingTechniqueMode.NullHitTest : InstanceProcessingTechniqueMode.Null;
-                        this.UpdateZeroNullInstances(renderer, parameters);
+                        processingTechnique.Mode = parameters.HitTest ? InstanceProcessingTechniqueMode.NullHitTest : InstanceProcessingTechniqueMode.Null;
+                        UpdateZeroNullInstances(renderer, parameters);
                     }
                     switch (parameters.InstanceSource)
                     {
                         case InstanceBlockQueryInstanceSource.Filter:
-                            return Math.Min(this.filterItemsInSubsetsCount, this.nullCount);
+                            return Math.Min(filterItemsInSubsetsCount, nullCount);
                         case InstanceBlockQueryInstanceSource.Annotation:
-                            return Math.Max(this.annotationItemsInSubsetsCount, this.nullCount);
+                            return Math.Max(annotationItemsInSubsetsCount, nullCount);
                         default:
-                            return this.nullCount;
+                            return nullCount;
                     }
                 default:
                     return 0;
@@ -703,60 +690,53 @@ namespace Microsoft.Data.Visualization.Engine
         private void UpdateInstances(Renderer renderer, InstanceBlockQueryParameters parameters)
         {
             bool flag = parameters.QueryType == InstanceBlockQueryType.NegativeInstances;
-            if ((flag ? this.negativeUniqueCount : this.positiveUniqueCount) == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter && this.filterItemsInSubsetsCount == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation && this.annotationItemsInSubsetsCount == 0)
+            if ((flag ? negativeUniqueCount : positiveUniqueCount) == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter && filterItemsInSubsetsCount == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation && annotationItemsInSubsetsCount == 0)
                 return;
-            bool useGatherAccumulate = this.hasMultiInstanceData || parameters.HitTest || parameters.IsPieChart || parameters.UseLogScale;
-            int num = this.Update(renderer, parameters.IgnoreInstanceValues, parameters.HitTest, useGatherAccumulate, parameters.IsClusterChart);
+            bool useGatherAccumulate = hasMultiInstanceData || parameters.HitTest || parameters.IsPieChart || parameters.UseLogScale;
+            int num = Update(renderer, parameters.IgnoreInstanceValues, parameters.HitTest, useGatherAccumulate, parameters.IsClusterChart);
             renderer.RenderLockEnter();
             try
             {
                 Renderer renderer1 = renderer;
                 VertexBuffer[] vertexBuffers;
-                if (!this.timeEnabled)
-                    vertexBuffers = new VertexBuffer[1]
-          {
-            this.dataBuffer
-          };
+                if (!timeEnabled)
+                    vertexBuffers = new VertexBuffer[]{dataBuffer};
                 else
-                    vertexBuffers = new VertexBuffer[2]
-          {
-            this.dataBuffer,
-            this.timeBuffer
-          };
+                    vertexBuffers = new VertexBuffer[]{dataBuffer,timeBuffer};
                 renderer1.SetVertexSourceNoLock(vertexBuffers);
-                renderer.SetIndexSourceNoLock(flag ? this.negativeUniqueIndices : this.positiveUniqueIndices);
+                renderer.SetIndexSourceNoLock(flag ? negativeUniqueIndices : positiveUniqueIndices);
                 renderer.SetStreamBufferNoLock(parameters.InstanceOutputBuffer);
-                renderer.SetVertexTextureNoLock(0, flag ? this.gatherAccProcessor.GatherNegativeTexture : this.gatherAccProcessor.GatherPositiveTexture);
-                renderer.SetVertexTextureNoLock(1, flag ? this.gatherAccProcessor.AccumulateNegativeTexture : this.gatherAccProcessor.AccumulatePositiveTexture);
-                renderer.SetVertexTextureNoLock(2, flag ? this.gatherAccProcessor.AccumulatePositiveTexture : this.gatherAccProcessor.AccumulateNegativeTexture);
-                renderer.SetVertexTextureNoLock(3, flag ? (Texture)null : this.gatherAccProcessor.GatherNegativeTexture);
-                renderer.SetVertexTextureNoLock(4, this.gatherAccProcessor.SelectPositiveTexture);
+                renderer.SetVertexTextureNoLock(0, flag ? gatherAccProcessor.GatherNegativeTexture : gatherAccProcessor.GatherPositiveTexture);
+                renderer.SetVertexTextureNoLock(1, flag ? gatherAccProcessor.AccumulateNegativeTexture : gatherAccProcessor.AccumulatePositiveTexture);
+                renderer.SetVertexTextureNoLock(2, flag ? gatherAccProcessor.AccumulatePositiveTexture : gatherAccProcessor.AccumulateNegativeTexture);
+                renderer.SetVertexTextureNoLock(3, flag ? null : gatherAccProcessor.GatherNegativeTexture);
+                renderer.SetVertexTextureNoLock(4, gatherAccProcessor.SelectPositiveTexture);
                 if (parameters.HitTest)
                 {
-                    renderer.SetVertexTextureNoLock(5, flag ? this.gatherAccProcessor.GatherNegativeHitTestTexture : this.gatherAccProcessor.GatherPositiveHitTestTexture);
-                    this.processingTechnique.Mode = InstanceProcessingTechniqueMode.HitTest;
+                    renderer.SetVertexTextureNoLock(5, flag ? gatherAccProcessor.GatherNegativeHitTestTexture : gatherAccProcessor.GatherPositiveHitTestTexture);
+                    processingTechnique.Mode = InstanceProcessingTechniqueMode.HitTest;
                 }
                 else
-                    this.processingTechnique.Mode = parameters.IsPieChart ? InstanceProcessingTechniqueMode.Pie : InstanceProcessingTechniqueMode.Default;
-                this.processingTechnique.MaxShift = this.maxShift;
-                this.processingTechnique.UseNegatives = this.ShowNegatives;
-                this.processingTechnique.UseGatherAccumulate = this.hasMultiInstanceData || parameters.IsPieChart || parameters.UseLogScale;
-                this.processingTechnique.ShiftOffset = num;
-                this.processingTechnique.ValueOffset = parameters.Offset;
-                this.processingTechnique.AnnotationPlacementEnabled = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation;
-                this.processingTechnique.ShowOnlyMaxValueEnabled = parameters.ShowOnlyMaxValues;
-                this.processingTechnique.NegativeValues = flag;
-                this.processingTechnique.UseLogarithmicScale = parameters.UseLogScale;
-                renderer.SetEffect((EffectTechnique)this.processingTechnique);
+                    processingTechnique.Mode = parameters.IsPieChart ? InstanceProcessingTechniqueMode.Pie : InstanceProcessingTechniqueMode.Default;
+                processingTechnique.MaxShift = maxShift;
+                processingTechnique.UseNegatives = ShowNegatives;
+                processingTechnique.UseGatherAccumulate = hasMultiInstanceData || parameters.IsPieChart || parameters.UseLogScale;
+                processingTechnique.ShiftOffset = num;
+                processingTechnique.ValueOffset = parameters.Offset;
+                processingTechnique.AnnotationPlacementEnabled = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation;
+                processingTechnique.ShowOnlyMaxValueEnabled = parameters.ShowOnlyMaxValues;
+                processingTechnique.NegativeValues = flag;
+                processingTechnique.UseLogarithmicScale = parameters.UseLogScale;
+                renderer.SetEffect(processingTechnique);
                 if (parameters.InstanceSource != InstanceBlockQueryInstanceSource.Block)
                 {
-                    List<Tuple<int, int>> list = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter ? this.filterSubsets : this.annotationSubsets;
-                    for (int index = 0; index < list.Count; ++index)
-                        renderer.DrawNoLock(list[index].Item1, list[index].Item2, PrimitiveTopology.PointList);
+                    List<Tuple<int, int>> list = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter ? filterSubsets : annotationSubsets;
+                    for (int i = 0; i < list.Count; ++i)
+                        renderer.DrawNoLock(list[i].Item1, list[i].Item2, PrimitiveTopology.PointList);
                 }
                 else
-                    renderer.DrawIndexedNoLock(0, flag ? this.negativeUniqueCount : this.positiveUniqueCount, PrimitiveTopology.PointList);
-                renderer.SetStreamBufferNoLock((StreamBuffer)null);
+                    renderer.DrawIndexedNoLock(0, flag ? negativeUniqueCount : positiveUniqueCount, PrimitiveTopology.PointList);
+                renderer.SetStreamBufferNoLock(null);
                 renderer.SetVertexTextureNoLock(0, new Texture[6]);
             }
             finally
@@ -767,55 +747,52 @@ namespace Microsoft.Data.Visualization.Engine
 
         private void UpdateZeroNullInstances(Renderer renderer, InstanceBlockQueryParameters parameters)
         {
-            int num = this.Update(renderer, parameters.IgnoreInstanceValues, parameters.HitTest, this.hasMultiInstanceData || parameters.HitTest || parameters.UseLogScale, parameters.IsClusterChart);
-            if (parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter && this.filterItemsInSubsetsCount == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation && this.annotationItemsInSubsetsCount == 0)
+            int num = Update(renderer, parameters.IgnoreInstanceValues, parameters.HitTest,
+                hasMultiInstanceData || 
+                parameters.HitTest || 
+                parameters.UseLogScale, 
+                parameters.IsClusterChart);
+            if (parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter && filterItemsInSubsetsCount == 0 || parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation && annotationItemsInSubsetsCount == 0)
                 return;
             renderer.RenderLockEnter();
             try
             {
                 Renderer renderer1 = renderer;
                 VertexBuffer[] vertexBuffers;
-                if (!this.timeEnabled)
-                    vertexBuffers = new VertexBuffer[1]
-          {
-            this.dataBuffer
-          };
+                if (!timeEnabled)
+                    vertexBuffers = new VertexBuffer[]{dataBuffer};
                 else
-                    vertexBuffers = new VertexBuffer[2]
-          {
-            this.dataBuffer,
-            this.timeBuffer
-          };
+                    vertexBuffers = new VertexBuffer[]{dataBuffer,timeBuffer};
                 renderer1.SetVertexSourceNoLock(vertexBuffers);
                 if (parameters.QueryType == InstanceBlockQueryType.ZeroInstances)
-                    renderer.SetIndexSourceNoLock(this.zeroUniqueIndices);
+                    renderer.SetIndexSourceNoLock(zeroUniqueIndices);
                 else
-                    renderer.SetIndexSourceNoLock(this.nullUniqueIndices);
+                    renderer.SetIndexSourceNoLock(nullUniqueIndices);
                 renderer.SetStreamBufferNoLock(parameters.InstanceOutputBuffer);
-                renderer.SetVertexTextureNoLock(0, this.gatherAccProcessor.AccumulatePositiveTexture);
-                renderer.SetVertexTextureNoLock(1, this.gatherAccProcessor.AccumulateNegativeTexture ?? this.gatherAccProcessor.AccumulatePositiveTexture);
-                renderer.SetVertexTextureNoLock(2, this.gatherAccProcessor.GatherPositiveTexture);
-                renderer.SetVertexTextureNoLock(3, this.gatherAccProcessor.SelectPositiveTexture);
+                renderer.SetVertexTextureNoLock(0, gatherAccProcessor.AccumulatePositiveTexture);
+                renderer.SetVertexTextureNoLock(1, gatherAccProcessor.AccumulateNegativeTexture ?? gatherAccProcessor.AccumulatePositiveTexture);
+                renderer.SetVertexTextureNoLock(2, gatherAccProcessor.GatherPositiveTexture);
+                renderer.SetVertexTextureNoLock(3, gatherAccProcessor.SelectPositiveTexture);
                 if (parameters.HitTest)
-                    renderer.SetVertexTextureNoLock(4, this.gatherAccProcessor.GatherPositiveHitTestTexture);
-                this.processingTechnique.MaxShift = this.maxShift;
-                this.processingTechnique.UseNegatives = this.ShowNegatives && this.negativeUniqueCount > 0;
-                this.processingTechnique.UseGatherAccumulate = this.hasMultiInstanceData || parameters.IsPieChart || parameters.UseLogScale;
-                this.processingTechnique.ShiftOffset = num;
-                this.processingTechnique.ValueOffset = parameters.Offset;
-                this.processingTechnique.AnnotationPlacementEnabled = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation;
-                this.processingTechnique.ShowOnlyMaxValueEnabled = parameters.ShowOnlyMaxValues;
-                this.processingTechnique.UseLogarithmicScale = parameters.UseLogScale;
-                renderer.SetEffect((EffectTechnique)this.processingTechnique);
+                    renderer.SetVertexTextureNoLock(4, gatherAccProcessor.GatherPositiveHitTestTexture);
+                processingTechnique.MaxShift = maxShift;
+                processingTechnique.UseNegatives = ShowNegatives && negativeUniqueCount > 0;
+                processingTechnique.UseGatherAccumulate = hasMultiInstanceData || parameters.IsPieChart || parameters.UseLogScale;
+                processingTechnique.ShiftOffset = num;
+                processingTechnique.ValueOffset = parameters.Offset;
+                processingTechnique.AnnotationPlacementEnabled = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Annotation;
+                processingTechnique.ShowOnlyMaxValueEnabled = parameters.ShowOnlyMaxValues;
+                processingTechnique.UseLogarithmicScale = parameters.UseLogScale;
+                renderer.SetEffect(processingTechnique);
                 if (parameters.InstanceSource != InstanceBlockQueryInstanceSource.Block)
                 {
-                    List<Tuple<int, int>> list = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter ? this.filterSubsets : this.annotationSubsets;
+                    List<Tuple<int, int>> list = parameters.InstanceSource == InstanceBlockQueryInstanceSource.Filter ? filterSubsets : annotationSubsets;
                     for (int index = 0; index < list.Count; ++index)
                         renderer.DrawNoLock(list[index].Item1, list[index].Item2, PrimitiveTopology.PointList);
                 }
                 else
-                    renderer.DrawIndexedNoLock(0, parameters.QueryType == InstanceBlockQueryType.ZeroInstances ? this.zeroCount : this.nullCount, PrimitiveTopology.PointList);
-                renderer.SetStreamBufferNoLock((StreamBuffer)null);
+                    renderer.DrawIndexedNoLock(0, parameters.QueryType == InstanceBlockQueryType.ZeroInstances ? zeroCount : nullCount, PrimitiveTopology.PointList);
+                renderer.SetStreamBufferNoLock(null);
                 renderer.SetVertexTextureNoLock(0, new Texture[5]);
             }
             finally
@@ -829,22 +806,22 @@ namespace Microsoft.Data.Visualization.Engine
             base.Dispose(disposing);
             if (!disposing)
                 return;
-            DisposableResource[] disposableResourceArray = new DisposableResource[9]
-      {
-        (DisposableResource) this.dataBuffer,
-        (DisposableResource) this.timeBuffer,
-        (DisposableResource) this.idBuffer,
-        (DisposableResource) this.positiveIndices,
-        (DisposableResource) this.negativeIndices,
-        (DisposableResource) this.positiveUniqueIndices,
-        (DisposableResource) this.negativeUniqueIndices,
-        (DisposableResource) this.zeroUniqueIndices,
-        (DisposableResource) this.nullUniqueIndices
-      };
-            foreach (DisposableResource disposableResource in disposableResourceArray)
+            DisposableResource[] resArray = new DisposableResource[9]
             {
-                if (disposableResource != null && !disposableResource.Disposed)
-                    disposableResource.Dispose();
+                dataBuffer,
+                timeBuffer,
+                idBuffer,
+                positiveIndices,
+                negativeIndices,
+                positiveUniqueIndices,
+                negativeUniqueIndices,
+                zeroUniqueIndices,
+                nullUniqueIndices
+            };
+            foreach (DisposableResource res in resArray)
+            {
+                if (res != null && !res.Disposed)
+                    res.Dispose();
             }
         }
     }

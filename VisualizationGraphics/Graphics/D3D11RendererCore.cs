@@ -282,10 +282,10 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             this.currentStreamBuffer = (D3D11StreamBuffer)buffer;
             if (this.currentStreamBuffer != null)
             {
-                this.Context.SO.SetTargets(new D3DBuffer[1]
-        {
-          this.currentStreamBuffer.GetD3D11Buffer(this)
-        }, new uint[1]);
+                this.Context.SO.SetTargets(new D3DBuffer[]
+                {
+                    this.currentStreamBuffer.GetD3D11Buffer(this)
+                }, new uint[1]);
             }
             else
             {

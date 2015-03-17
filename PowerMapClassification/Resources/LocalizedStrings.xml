@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<strings xmlns="http://schemas.microsoft.com/data/localizedStrings">
+  <s culture="en-US" _locID="Classification.Address.LabelName">Address</s>
+  <s culture="en-US" _locID="Classification.Address.Description">The description of the location of a person or organization, as directions for delivery</s>
+  <s culture="en-US" _locID="Classification.Address.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.City.LabelName">City</s>
+  <s culture="en-US" _locID="Classification.City.Description">A permanent urban center of population, commerce, and culture</s>
+  <s culture="en-US" _locID="Classification.City.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.CityAndState.LabelName">CityAndState</s>
+  <s culture="en-US" _locID="Classification.CityAndState.Description">A permanent urban center of population, commerce, and culture</s>
+  <s culture="en-US" _locID="Classification.CityAndState.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.Continent.LabelName">Continent</s>
+  <s culture="en-US" _locID="Classification.Continent.Description">One of the principal landmasses on Earth</s>
+  <s culture="en-US" _locID="Classification.Continent.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.Country.LabelName">Country/Region</s>
+  <s culture="en-US" _locID="Classification.Country.Description">A nation or state</s>
+  <s culture="en-US" _locID="Classification.Country.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.County.LabelName">County</s>
+  <s culture="en-US" _locID="Classification.County.Description">A local governmental region; part of a state or province</s>
+  <s culture="en-US" _locID="Classification.County.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.PostalCode.LabelName">Postal Code</s>
+  <s culture="en-US" _locID="Classification.PostalCode.Description">A sequence of letters and/or numbers added to a postal address to aid in delivering the mail</s>
+  <s culture="en-US" _locID="Classification.PostalCode.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.StateorProvince.LabelName">State or Province</s>
+  <s culture="en-US" _locID="Classification.StateorProvince.Description">A territory governed as an administrative or political unit within a country or region.</s>
+  <s culture="en-US" _locID="Classification.StateorProvince.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.ImageURL.LabelName">Image URL</s>
+  <s culture="en-US" _locID="Classification.ImageURL.Description">URL (Uniform resource locator) that points to an image</s>
+  <s culture="en-US" _locID="Classification.ImageURL.Group">Image</s>
+  <s culture="en-US" _locID="Classification.WebUrl.LabelName">Web URL</s>
+  <s culture="en-US" _locID="Classification.WebUrl.Description">URL (Uniform resource locator) that points to a web location</s>
+  <s culture="en-US" _locID="Classification.WebUrl.Group">Web</s>
+  <s culture="en-US" _locID="Classification.Image.LabelName">Image</s>
+  <s culture="en-US" _locID="Classification.Image.Description">A photo or other picture, often in a JPEG, GIFF, or BMP file format</s>
+  <s culture="en-US" _locID="Classification.Image.Group">Image</s>
+  <s culture="en-US" _locID="Classification.Latitude.LabelName">Latitude</s>
+  <s culture="en-US" _locID="Classification.Latitude.Description">The geographic coordinate that determines the north-south position on the Earth's surface</s>
+  <s culture="en-US" _locID="Classification.Latitude.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.Longitude.LabelName">Longitude</s>
+  <s culture="en-US" _locID="Classification.Longitude.Description">The geographic coordinate that determines the east-west position on the Earth's surface</s>
+  <s culture="en-US" _locID="Classification.Longitude.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.Place.LabelName">Place</s>
+  <s culture="en-US" _locID="Classification.Place.Description">A geographical area or location</s>
+  <s culture="en-US" _locID="Classification.Place.Group">Geography</s>
+  <s culture="en-US" _locID="Classification.Organization.LabelName">Organization</s>
+  <s culture="en-US" _locID="Classification.Organization.Description">A group of people organized for a particular purpose; an association</s>
+  <s culture="en-US" _locID="Classification.Organization.Group">Organization</s>
+  <s culture="en-US" _locID="Classification.Company.LabelName">Company</s>
+  <s culture="en-US" _locID="Classification.Company.Description">A business enterprise</s>
+  <s culture="en-US" _locID="Classification.Company.Group">Organization</s>
+  <s culture="en-US" _locID="Classification.Product.LabelName">Product</s>
+  <s culture="en-US" _locID="Classification.Product.Description">Something that is made, grown, or obtained so that it can be sold</s>
+  <s culture="en-US" _locID="Classification.Product.Group">Product</s>
+  <s culture="en-US" _locID="Classification.Date.LabelName">Date</s>
+  <s culture="en-US" _locID="Classification.Date.Description">Time stated in terms of the day, month, quarter, or year</s>
+  <s culture="en-US" _locID="Classification.Date.Group">Calendar</s>
+</strings>

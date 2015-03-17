@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: Microsoft.Data.Visualization.Engine.LayerStep
-// Assembly: VisualizationEngine, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c
-// MVID: D1CA6C2A-5AF8-4816-98B2-7B03B8D226FF
-// Assembly location: D:\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONENGINE.DLL
-
-using Microsoft.Data.Visualization.Engine.Graphics;
+﻿using Microsoft.Data.Visualization.Engine.Graphics;
 using Microsoft.Data.Visualization.Utilities;
 using System;
 using System.Collections.Generic;
@@ -192,30 +186,30 @@ namespace Microsoft.Data.Visualization.Engine
 
         private void BlockOnPendingDataInput()
         {
-            bool flag = true;
+            bool dataInputting = true;
             int num1 = 0;
-            int num2 = 0;
-            while (flag && num2 < 20)
+            int tryTimes = 0;
+            while (dataInputting && tryTimes < BlockOnDataInputMaxAttemptCount)
             {
-                flag = false;
-                int num3 = 0;
+                dataInputting = false;
+                int dataCount = 0;
                 foreach (Layer layer in this.layers)
                 {
-                    num3 += layer.DataCount;
+                    dataCount += layer.DataCount;
                     if (layer.DataInputInProgress)
-                        flag = true;
+                        dataInputting = true;
                 }
-                if (num1 == num3)
+                if (num1 == dataCount)
                 {
-                    ++num2;
+                    ++tryTimes;
                 }
                 else
                 {
-                    num2 = 0;
-                    num1 = num3;
+                    tryTimes = 0;
+                    num1 = dataCount;
                 }
-                if (flag)
-                    Thread.Sleep(1000);
+                if (dataInputting)
+                    Thread.Sleep(BlockOnDataInputWaitTime);
             }
         }
 

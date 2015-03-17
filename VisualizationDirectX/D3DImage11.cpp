@@ -181,7 +181,7 @@ HRESULT D3DImage11::InitD3D9(HWND hWnd)
 	HRESULT hr;
 
 	IDirect3D9Ex* d3D9;
-	Direct3DCreate9Ex(D3D_SDK_VERSION, &d3D9);
+	::Direct3DCreate9Ex(D3D_SDK_VERSION, &d3D9);
 
 	mD3D9 = d3D9;
 

@@ -84,13 +84,17 @@
     <Reference Include="System" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="VISUALIZATIONCHART, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=AMD64">
+    <Reference Include="visualizationchart, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONCHART.DLL</HintPath>
+      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x64\visualizationchart.dll</HintPath>
     </Reference>
-    <Reference Include="VISUALIZATIONCHARTCOMMON, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=AMD64">
+    <Reference Include="visualizationchartcommon, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x86\VISUALIZATIONCHARTCOMMON.DLL</HintPath>
+      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x64\visualizationchartcommon.dll</HintPath>
+    </Reference>
+    <Reference Include="visualizationdirectx, Version=1.1.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x64\visualizationdirectx.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="System.Drawing" />
@@ -1151,10 +1155,6 @@
     <ProjectReference Include="..\VisualizationCommon\VisualizationCommon.csproj">
       <Project>{6b90f178-fdd7-4c53-8051-bac67826abcd}</Project>
       <Name>VisualizationCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
-      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
-      <Name>VisualizationDirectX</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualizationEngine\VisualizationEngine.csproj">
       <Project>{dec678b4-bd56-4b70-b7e5-de225d990df7}</Project>
