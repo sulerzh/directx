@@ -8,6 +8,7 @@ using System.Windows.Threading;
 
 namespace Microsoft.Data.Visualization.Client.Excel
 {
+    // 76904183
     public class PlugInCoreExternalAddin : IPlugInConnectionExternalAddin
     {
         private const string addDataButtonId = "AddDataButtonClicked";
@@ -21,7 +22,7 @@ namespace Microsoft.Data.Visualization.Client.Excel
             this.pluginCore = new PlugInCore();
             this.ribbonInvalidation = new WeakEventListener<PlugInCoreExternalAddin, object, EventArgs>(this)
             {
-                OnEventAction = new Action<PlugInCoreExternalAddin, object, EventArgs>(PlugInCoreExternalAddin.InvalidateRibbon)
+                OnEventAction = PlugInCoreExternalAddin.InvalidateRibbon
             };
             this.pluginCore.ribbonInvalidation = this.ribbonInvalidation;
             this.pluginCore.externalAddin = true;

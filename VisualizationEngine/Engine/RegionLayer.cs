@@ -898,24 +898,24 @@ namespace Microsoft.Data.Visualization.Engine
             if (this.regionBuffer == null)
                 return;
             Vector3F vector3F = Vector3F.Empty;
-            for (int pos = 0; pos < block.Count; ++pos)
+            for (int i = 0; i < block.Count; ++i)
             {
-                Vector3F instancePositionAt = block.GetInstancePositionAt(pos);
+                Vector3F pos = block.GetInstancePositionAt(i);
                 RegionBufferToken region;
-                if (this.GetTessellation(ref instancePositionAt, out region) && instancePositionAt != vector3F)
+                if (this.GetTessellation(ref pos, out region) && pos != vector3F)
                 {
-                    vector3F = instancePositionAt;
+                    vector3F = pos;
                     if (region != null)
                     {
-                        int* numPtr = (int*)region.Indices.GetData().ToPointer();
-                        if ((IntPtr)numPtr != IntPtr.Zero)
+                        int* pIndex = (int*)region.Indices.GetData().ToPointer();
+                        if ((IntPtr)pIndex != IntPtr.Zero)
                         {
                             int num = region.StartVertex + region.VertexCount - 1;
                             if (num < region.Indices.IndexCount)
                             {
-                                for (int index1 = region.StartVertex; index1 <= num; ++index1)
+                                for (int j = region.StartVertex; j <= num; ++j)
                                 {
-                                    int index2 = numPtr[index1];
+                                    int index2 = pIndex[j];
                                     if (index2 < region.Vertices.VertexCount)
                                     {
                                         Vector3D vector3D = this.regionBuffer.GetVertex(region, index2, false);
@@ -940,15 +940,15 @@ namespace Microsoft.Data.Visualization.Engine
             RegionBufferToken region;
             if (!this.GetTessellation(ref instancePosition, out region) || region == null)
                 return;
-            int* numPtr = (int*)region.Indices.GetData().ToPointer();
-            if ((IntPtr)numPtr == IntPtr.Zero)
+            int* pIndex = (int*)region.Indices.GetData().ToPointer();
+            if ((IntPtr)pIndex == IntPtr.Zero)
                 return;
             int num = region.StartVertex + region.VertexCount - 1;
             if (num >= region.Indices.IndexCount)
                 return;
-            for (int index1 = region.StartVertex; index1 <= num; ++index1)
+            for (int i = region.StartVertex; i <= num; ++i)
             {
-                int index2 = numPtr[index1];
+                int index2 = pIndex[i];
                 if (index2 >= region.Vertices.VertexCount)
                     break;
                 Vector3D vertex = this.regionBuffer.GetVertex(region, index2, this.planarCoordinates);

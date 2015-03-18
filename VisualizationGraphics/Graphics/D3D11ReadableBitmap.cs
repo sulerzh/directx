@@ -45,9 +45,9 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             IntPtr reslut = IntPtr.Zero;
             try
             {
-                foreach (int index in this.textureBuffer.Keys)
+                foreach (int key in this.textureBuffer.Keys)
                 {
-                    DirectX.Direct3D11.Texture2D texture2D = this.textureBuffer[index];
+                    DirectX.Direct3D11.Texture2D texture2D = this.textureBuffer[key];
                     lock (this.renderer.ContextLock)
                     {
                         DirectX.Direct3D11.MappedSubresource mapOpsion =
@@ -60,12 +60,12 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
                         {
                             if (reslut != IntPtr.Zero)
                             {
-                                list.Add(index);
+                                list.Add(key);
                                 this.renderer.Context.Unmap(texture2D, 0U);
                             }
                             else
                             {
-                                sourceFrame = index;
+                                sourceFrame = key;
                                 pitch = (int)mapOpsion.RowPitch;
                                 reslut = mapOpsion.Data;
                                 this.lockedResource = texture2D;
@@ -82,10 +82,10 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             {
                 this.renderer.CheckDeviceRemoved(ex);
             }
-            for (int index = 0; index < list.Count; ++index)
+            for (int i = 0; i < list.Count; ++i)
             {
-                this.availableTextures.Enqueue(this.textureBuffer[list[index]]);
-                this.textureBuffer.Remove(list[index]);
+                this.availableTextures.Enqueue(this.textureBuffer[list[i]]);
+                this.textureBuffer.Remove(list[i]);
             }
             return reslut;
         }

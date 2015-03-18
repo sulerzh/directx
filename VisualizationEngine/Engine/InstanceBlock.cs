@@ -87,14 +87,14 @@ namespace Microsoft.Data.Visualization.Engine
                 planarCoordinates = value;
                 if (cachedPositions.Count <= 0)
                     return;
-                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+                InstanceBlockVertex* pDataBuffer = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
                 baseReferencePosition = Coordinates.ComputePosition(cachedPositions[0], planarCoordinates);
-                for (int index = 0; index < cachedPositions.Count; ++index)
+                for (int i = 0; i < cachedPositions.Count; ++i)
                 {
-                    Vector3D position = Coordinates.ComputePosition(cachedPositions[index], planarCoordinates);
-                    instanceBlockVertexPtr[index].X = (float)(position.X - baseReferencePosition.X);
-                    instanceBlockVertexPtr[index].Y = (float)(position.Y - baseReferencePosition.Y);
-                    instanceBlockVertexPtr[index].Z = (float)(position.Z - baseReferencePosition.Z);
+                    Vector3D position = Coordinates.ComputePosition(cachedPositions[i], planarCoordinates);
+                    pDataBuffer[i].X = (float)(position.X - baseReferencePosition.X);
+                    pDataBuffer[i].Y = (float)(position.Y - baseReferencePosition.Y);
+                    pDataBuffer[i].Z = (float)(position.Z - baseReferencePosition.Z);
                 }
                 dataBuffer.SetDirty();
             }
@@ -170,15 +170,16 @@ namespace Microsoft.Data.Visualization.Engine
         {
             if (pos >= Count)
                 return new InstanceId();
-            return new InstanceId(((HitTestVertex*)idBuffer.GetData().ToPointer())[pos].HitTestId);
+            HitTestVertex* pIdBuffer = (HitTestVertex*) idBuffer.GetData().ToPointer();
+            return new InstanceId(pIdBuffer[pos].HitTestId);
         }
 
         public unsafe Vector3F GetInstancePositionAt(int pos)
         {
             if (pos >= Count)
                 return Vector3F.Empty;
-            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
-            return (Vector3F)(new Vector3D(instanceBlockVertexPtr[pos].X, instanceBlockVertexPtr[pos].Y, instanceBlockVertexPtr[pos].Z) + baseReferencePosition);
+            InstanceBlockVertex* pDataBuffer = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+            return (Vector3F)(new Vector3D(pDataBuffer[pos].X, pDataBuffer[pos].Y, pDataBuffer[pos].Z) + baseReferencePosition);
         }
 
         public Vector3F GetInstancePositionAtGeoIndex(int pos, InstanceBlockQueryType queryType)
@@ -217,7 +218,8 @@ namespace Microsoft.Data.Visualization.Engine
             }
             if (indexBuffer == null || pos >= indexBuffer.IndexCount)
                 return -1;
-            return (int)*((uint*)indexBuffer.GetData().ToPointer() + pos);
+            uint* pIndexBuffer = (uint*)indexBuffer.GetData().ToPointer();
+            return (int)pIndexBuffer[pos];
         }
 
         private static Vector3D GetPosition(bool flatMap, ref Vector3D globePosition, double longitude)
@@ -228,7 +230,7 @@ namespace Microsoft.Data.Visualization.Engine
             return globePosition;
         }
 
-        public unsafe void SetData(IEnumerable<InstanceData> instanceData, int instanceDataCount, Dictionary<int, int> colorOverrides, ref Box3D bounds, bool updateBounds, double timeRange, DateTime? minTime, bool useColorAsRenderPriority)
+        public unsafe void SetData(IEnumerable<InstanceData> instanceDataList, int instanceDataCount, Dictionary<int, int> colorOverrides, ref Box3D bounds, bool updateBounds, double timeRange, DateTime? minTime, bool useColorAsRenderPriority)
         {
             Clear();
             TimeRange = timeRange;
@@ -236,54 +238,58 @@ namespace Microsoft.Data.Visualization.Engine
             previousDataPosition = Vector3D.Empty;
             int num1 = int.MinValue;
             int num2 = int.MinValue;
-            foreach (InstanceData instanceData1 in instanceData)
+            foreach (InstanceData instanceData in instanceDataList)
             {
-                CreateBuffersIfNeeded(instanceDataCount, instanceData1.Value < 0.0, minTime.HasValue);
-                Vector3D position1 = instanceData1.Location.Position;
+                CreateBuffersIfNeeded(instanceDataCount, instanceData.Value < 0.0, minTime.HasValue);
+                Vector3D pos = instanceData.Location.Position;
                 if (baseReferencePosition == Vector3D.Empty)
-                    baseReferencePosition = GetPosition(planarCoordinates, ref position1, instanceData1.Location.Longitude);
-                if (position1 != previousDataPosition || instanceData1.FirstInstance)
+                    baseReferencePosition = GetPosition(planarCoordinates, ref pos, instanceData.Location.Longitude);
+                if (pos != previousDataPosition || instanceData.FirstInstance)
                 {
                     ++geoCount;
                     firstPositionInstances.Add(dataCount);
-                    previousDataPosition = position1;
+                    previousDataPosition = pos;
                     num1 = int.MinValue;
                     num2 = int.MinValue;
                 }
-                cachedPositions.Add(position1);
+                cachedPositions.Add(pos);
                 if (updateBounds)
-                    bounds.UpdateWith(position1);
-                InstanceBlockVertex instanceBlockVertex = new InstanceBlockVertex();
-                Vector3D position2 = GetPosition(planarCoordinates, ref position1, instanceData1.Location.Longitude);
-                instanceBlockVertex.X = (float)(position2.X - baseReferencePosition.X);
-                instanceBlockVertex.Y = (float)(position2.Y - baseReferencePosition.Y);
-                instanceBlockVertex.Z = (float)(position2.Z - baseReferencePosition.Z);
-                instanceBlockVertex.GeoIndex = (short)(geoCount - 1);
-                instanceBlockVertex.Shift = instanceData1.Shift;
+                    bounds.UpdateWith(pos);
+                InstanceBlockVertex vertex = new InstanceBlockVertex();
+                Vector3D position2 = GetPosition(planarCoordinates, ref pos, instanceData.Location.Longitude);
+                vertex.X = (float)(position2.X - baseReferencePosition.X);
+                vertex.Y = (float)(position2.Y - baseReferencePosition.Y);
+                vertex.Z = (float)(position2.Z - baseReferencePosition.Z);
+                vertex.GeoIndex = (short)(geoCount - 1);
+                vertex.Shift = instanceData.Shift;
                 int num3 = 0;
-                instanceBlockVertex.ColorIndex = !colorOverrides.TryGetValue(instanceData1.SourceShift, out num3) ? instanceData1.Color : (short)num3;
-                instanceBlockVertex.RenderPriority = useColorAsRenderPriority ? instanceData1.Color : instanceData1.SourceShift;
-                instanceBlockVertex.Value = Math.Abs(instanceData1.Value);
-                InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
-                HitTestVertex* hitTestVertexPtr = (HitTestVertex*)idBuffer.GetData().ToPointer();
-                instanceBlockVertexPtr[dataCount] = instanceBlockVertex;
-                hitTestVertexPtr[dataCount].HitTestId = new InstanceId(hitTestLayerId, instanceData1.Id).Id;
+                vertex.ColorIndex = !colorOverrides.TryGetValue(instanceData.SourceShift, out num3) ? instanceData.Color : (short)num3;
+                vertex.RenderPriority = useColorAsRenderPriority ? instanceData.Color : instanceData.SourceShift;
+                vertex.Value = Math.Abs(instanceData.Value);
+                InstanceBlockVertex* pDataBuffer = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+                HitTestVertex* pIdBuffer = (HitTestVertex*)idBuffer.GetData().ToPointer();
+                pDataBuffer[dataCount] = vertex;
+                pIdBuffer[dataCount].HitTestId = new InstanceId(hitTestLayerId, instanceData.Id).Id;
                 dataBuffer.SetDirty();
                 idBuffer.SetDirty();
-                if (float.IsNaN(instanceData1.Value))
+                if (float.IsNaN(instanceData.Value))
                 {
-                    *(int*)((IntPtr)nullUniqueIndices.GetData().ToPointer() + nullCount++) = dataCount;
-                    instanceBlockVertexPtr[dataCount].Value = -2f;
+                    int* pNnullUniqueIndex = (int*)nullUniqueIndices.GetData().ToPointer();
+                    pNnullUniqueIndex[nullCount++] = dataCount;
+                    pDataBuffer[dataCount].Value = -2f;
                 }
-                if (instanceData1.Value == 0.0)
-                    *(int*)((IntPtr)zeroUniqueIndices.GetData().ToPointer() + zeroCount++) = dataCount;
+                if (instanceData.Value == 0.0)
+                {
+                    int* pZeroUniqueIndex = (int*) zeroUniqueIndices.GetData().ToPointer();
+                    pZeroUniqueIndex[zeroCount++] = dataCount;
+                }
                 if (minTime.HasValue)
                 {
-                    InstanceTime* instanceTimePtr = (InstanceTime*)timeBuffer.GetData().ToPointer();
+                    InstanceTime* pTimeBuffer = (InstanceTime*)timeBuffer.GetData().ToPointer();
                     timeBuffer.SetDirty();
-                    instanceTimePtr[dataCount].StartTime = !instanceData1.StartTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.StartTime.Value - minTime.Value).TotalMilliseconds / timeRange));
-                    instanceTimePtr[dataCount].EndTime = !instanceData1.EndTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData1.EndTime.Value - minTime.Value).TotalMilliseconds / timeRange));
-                    if (instanceData1.StartTime.HasValue && instanceData1.EndTime.HasValue && instanceData1.StartTime.Value == instanceData1.EndTime.Value)
+                    pTimeBuffer[dataCount].StartTime = !instanceData.StartTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData.StartTime.Value - minTime.Value).TotalMilliseconds / timeRange));
+                    pTimeBuffer[dataCount].EndTime = !instanceData.EndTime.HasValue ? -1f : (timeRange == 0.0 ? 0.0f : (float)((instanceData.EndTime.Value - minTime.Value).TotalMilliseconds / timeRange));
+                    if (instanceData.StartTime.HasValue && instanceData.EndTime.HasValue && instanceData.StartTime.Value == instanceData.EndTime.Value)
                         hasEventData = true;
                 }
                 else if (timeBuffer != null)
@@ -291,31 +297,35 @@ namespace Microsoft.Data.Visualization.Engine
                     timeBuffer.Dispose();
                     timeBuffer = null;
                 }
-                if (float.IsNaN(instanceData1.Value) || instanceData1.Value >= 0.0)
+                if (float.IsNaN(instanceData.Value) || instanceData.Value >= 0.0)
                 {
-                    *(int*)((IntPtr)positiveIndices.GetData().ToPointer() + positiveCount++) = dataCount;
+                    int* pPositiveIndex = (int*) positiveIndices.GetData().ToPointer();
+                    pPositiveIndex[positiveCount++] = dataCount;
                     positiveIndices.SetDirty();
-                    if (num1 != instanceData1.Shift)
+                    if (num1 != instanceData.Shift)
                     {
-                        *(int*)((IntPtr)positiveUniqueIndices.GetData().ToPointer() + positiveUniqueCount++) = dataCount;
-                        num1 = instanceData1.Shift;
+                        int* pPositiveUniqueIndex = (int*) positiveUniqueIndices.GetData().ToPointer();
+                        pPositiveUniqueIndex[positiveUniqueCount++] = dataCount;
+                        num1 = instanceData.Shift;
                         positiveUniqueIndices.SetDirty();
                     }
                 }
                 else
                 {
-                    *(int*)((IntPtr)negativeIndices.GetData().ToPointer() + negativeCount++) = dataCount;
+                    int* pNegativeIndex = (int*) negativeIndices.GetData().ToPointer();
+                    pNegativeIndex[negativeCount++] = dataCount;
                     negativeIndices.SetDirty();
-                    if (num2 != instanceData1.Shift)
+                    if (num2 != instanceData.Shift)
                     {
-                        *(int*)((IntPtr)negativeUniqueIndices.GetData().ToPointer() + negativeUniqueCount++) = dataCount;
-                        num2 = instanceData1.Shift;
+                        int* pNegativeUniqueIndex = (int*)negativeUniqueIndices.GetData().ToPointer();
+                        pNegativeUniqueIndex[negativeUniqueCount++] = dataCount;
+                        num2 = instanceData.Shift;
                         negativeUniqueIndices.SetDirty();
                     }
                 }
                 ++dataCount;
-                maxShift = Math.Max(maxShift, instanceData1.Shift);
-                maxRenderPriority = Math.Max(maxRenderPriority, useColorAsRenderPriority ? instanceData1.Color : instanceData1.SourceShift);
+                maxShift = Math.Max(maxShift, instanceData.Shift);
+                maxRenderPriority = Math.Max(maxRenderPriority, useColorAsRenderPriority ? instanceData.Color : instanceData.SourceShift);
             }
             if (zeroCount > 0)
                 zeroUniqueIndices.SetDirty();
@@ -343,22 +353,22 @@ namespace Microsoft.Data.Visualization.Engine
                     int count = i == 0 ? positiveCount : negativeCount;
                     if (count != 0)
                     {
-                        InstanceTime* instanceTimeArray = (InstanceTime*)timeBuffer.GetData().ToPointer();
+                        InstanceTime* pTimeBuffer = (InstanceTime*)timeBuffer.GetData().ToPointer();
                         IndexBuffer buffer = i == 0 ? positiveIndices : negativeIndices;
-                        uint* indexArray = (uint*)buffer.GetData().ToPointer();
+                        uint* pIndexBuffer = (uint*)buffer.GetData().ToPointer();
                         for (int j = 0; j < count; ++j)
                         {
-                            timeStamps.Add(new Tuple<float, bool>(instanceTimeArray[indexArray[j]].StartTime <= 0.0 ? 0.0f : instanceTimeArray[indexArray[j]].StartTime, true));
-                            float num2 = instanceTimeArray[indexArray[j]].EndTime;
+                            timeStamps.Add(new Tuple<float, bool>(pTimeBuffer[pIndexBuffer[j]].StartTime <= 0.0 ? 0.0f : pTimeBuffer[pIndexBuffer[j]].StartTime, true));
+                            float num2 = pTimeBuffer[pIndexBuffer[j]].EndTime;
                             if (num2 >= 0.0)
                                 timeStamps.Add(new Tuple<float, bool>(num2 + scaledFadeTime * 2f, false));
                         }
                         timeStamps.Sort((a, b) => a.Item1.CompareTo(b.Item1));
                         int val1 = 0;
                         int val2 = 0;
-                        for (int index2 = 0; index2 < timeStamps.Count; ++index2)
+                        for (int j = 0; j < timeStamps.Count; ++j)
                         {
-                            val2 += timeStamps[index2].Item2 ? 1 : -1;
+                            val2 += timeStamps[j].Item2 ? 1 : -1;
                             val1 = Math.Max(val1, val2);
                         }
                         if (i == 0)
@@ -439,38 +449,38 @@ namespace Microsoft.Data.Visualization.Engine
                 return new InstanceId?();
             int num1 = 0;
             int num2 = 0;
-            for (int index = 0; index < firstPositionInstances.Count; ++index)
+            for (int i = 0; i < firstPositionInstances.Count; ++i)
             {
-                if (firstPositionInstances[index] > pos1)
+                if (firstPositionInstances[i] > pos1)
                 {
-                    num2 = firstPositionInstances[index] - num1;
+                    num2 = firstPositionInstances[i] - num1;
                     break;
                 }
-                num1 = firstPositionInstances[index];
+                num1 = firstPositionInstances[i];
             }
             if (num2 == 0)
                 num2 = dataCount - num1;
-            InstanceId? nullable1 = new InstanceId?();
-            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
-            InstanceTime* instanceTimePtr = (InstanceTime*)timeBuffer.GetData().ToPointer();
-            int num3 = instanceBlockVertexPtr[pos1].Shift;
-            for (int pos2 = num1; pos2 < num1 + num2; ++pos2)
+            InstanceId? resultId = new InstanceId?();
+            InstanceBlockVertex* pDataBuffer = (InstanceBlockVertex*)dataBuffer.GetData().ToPointer();
+            InstanceTime* pTimeBuffer = (InstanceTime*)timeBuffer.GetData().ToPointer();
+            int num3 = pDataBuffer[pos1].Shift;
+            for (int i = num1; i < num1 + num2; ++i)
             {
-                if (instanceBlockVertexPtr[pos2].Shift >= num3)
+                if (pDataBuffer[i].Shift >= num3)
                 {
-                    if (instanceBlockVertexPtr[pos2].Shift <= num3)
+                    if (pDataBuffer[i].Shift <= num3)
                     {
-                        DateTime? nullable2 = (double)instanceTimePtr[pos2].StartTime == -1.0 ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(instanceTimePtr[pos2].StartTime * TimeRange);
-                        DateTime? nullable3 = (double)instanceTimePtr[pos2].EndTime == -1.0 ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(instanceTimePtr[pos2].EndTime * TimeRange);
-                        if (nullable3.HasValue)
+                        DateTime? start = pTimeBuffer[i].StartTime == -1.0f ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(pTimeBuffer[i].StartTime * TimeRange);
+                        DateTime? end = pTimeBuffer[i].EndTime == -1.0f ? new DateTime?() : MinInstanceTime.Value.AddMilliseconds(pTimeBuffer[i].EndTime * TimeRange);
+                        if (end.HasValue)
                         {
                             double num4 = 0.25 * state.VisualTimeToRealtimeRatio * 1000.0 * 2.0;
-                            nullable3 = nullable3.Value.AddMilliseconds(num4);
+                            end = end.Value.AddMilliseconds(num4);
                         }
                         int num5;
-                        if (nullable2.HasValue)
+                        if (start.HasValue)
                         {
-                            DateTime? nullable4 = nullable2;
+                            DateTime? nullable4 = start;
                             DateTime? nullable5 = time;
                             num5 = nullable4.HasValue & nullable5.HasValue ? (nullable4.GetValueOrDefault() <= nullable5.GetValueOrDefault() ? 1 : 0) : 0;
                         }
@@ -478,9 +488,9 @@ namespace Microsoft.Data.Visualization.Engine
                             num5 = 1;
                         bool flag1 = num5 != 0;
                         int num6;
-                        if (nullable3.HasValue)
+                        if (end.HasValue)
                         {
-                            DateTime? nullable4 = nullable3;
+                            DateTime? nullable4 = end;
                             DateTime? nullable5 = time;
                             num6 = nullable4.HasValue & nullable5.HasValue ? (nullable4.GetValueOrDefault() >= nullable5.GetValueOrDefault() ? 1 : 0) : 0;
                         }
@@ -488,13 +498,13 @@ namespace Microsoft.Data.Visualization.Engine
                             num6 = 1;
                         bool flag2 = num6 != 0;
                         if (flag1 && flag2)
-                            nullable1 = GetInstanceIdAt(pos2);
+                            resultId = GetInstanceIdAt(i);
                     }
                     else
                         break;
                 }
             }
-            return nullable1;
+            return resultId;
         }
 
         private static void UpdateSubsets(List<int> items, List<Tuple<int, int>> subsets, ref int itemsInSubsetsCount, ref bool dirty)
@@ -512,16 +522,16 @@ namespace Microsoft.Data.Visualization.Engine
                 items.Sort();
                 int num1 = items[0];
                 int num2 = 1;
-                for (int index = 1; index < items.Count; ++index)
+                for (int i = 1; i < items.Count; ++i)
                 {
-                    if (items[index] == num1 + num2)
+                    if (items[i] == num1 + num2)
                     {
                         ++num2;
                     }
                     else
                     {
                         subsets.Add(new Tuple<int, int>(num1, num2));
-                        num1 = items[index];
+                        num1 = items[i];
                         num2 = 1;
                     }
                 }

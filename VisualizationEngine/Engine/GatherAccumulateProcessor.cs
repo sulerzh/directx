@@ -163,19 +163,20 @@ namespace Microsoft.Data.Visualization.Engine
         private unsafe void SetGeoIdCount(GatherAccumulateProcessBlock block)
         {
             int geoIndex = 0;
-            InstanceBlockVertex* instanceBlockVertexPtr = (InstanceBlockVertex*)block.Instances.GetData().ToPointer();
+            InstanceBlockVertex* pVertex = (InstanceBlockVertex*)block.Instances.GetData().ToPointer();
             if (block.PositiveSubset.Item2 > 0U)
             {
-                uint positiveIndex = block.PositiveSubset.Item1 + block.PositiveSubset.Item2 - 1;
-                uint* positiveIndexArray = (uint*)block.PositiveIndices.GetData().ToPointer();
-                uint num2 = positiveIndexArray[positiveIndex];
-                geoIndex = instanceBlockVertexPtr[num2].GeoIndex;
+                uint positiveOffset = block.PositiveSubset.Item1 + block.PositiveSubset.Item2 - 1;
+                uint* pPositiveIndex = (uint*)block.PositiveIndices.GetData().ToPointer();
+                uint positiveIndex = pPositiveIndex[positiveOffset];
+                geoIndex = pVertex[positiveIndex].GeoIndex;
             }
             if (block.NegativeSubset == null || block.NegativeSubset.Item2 <= 0U)
                 return;
-            uint num3 = block.NegativeSubset.Item1 + block.NegativeSubset.Item2 - 1;
-            uint num4 = *((uint*)block.NegativeIndices.GetData().ToPointer() + num3);
-            Math.Max(geoIndex, instanceBlockVertexPtr[num4].GeoIndex);
+            uint negativeOffset = block.NegativeSubset.Item1 + block.NegativeSubset.Item2 - 1;
+            uint* pNegativeIndex = (uint*) block.NegativeIndices.GetData().ToPointer();
+            uint negativeIndex = pNegativeIndex[negativeOffset];
+            Math.Max(geoIndex, pVertex[negativeIndex].GeoIndex);
         }
 
         private void EnsureGatherResources(Renderer renderer, int maxWidth, bool needsNegativeResources)

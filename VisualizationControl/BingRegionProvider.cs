@@ -47,11 +47,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 };
                 using (XmlWriter writer = XmlWriter.Create(output, settings))
                 {
-                    ((XmlObjectSerializer)new DataContractSerializer(typeof(BingRegionProvider.ConcurrentDictionary), "RegionCache", string.Empty)).WriteObject(writer, (object)this.RegionMap);
-                    ((XmlObjectSerializer)new DataContractSerializer(typeof(BingRegionProvider.SourcesDictionary), "RegionSources", string.Empty)).WriteObject(writer, (object)this.sourcesMap);
+                    new DataContractSerializer(typeof(BingRegionProvider.ConcurrentDictionary), RegionCacheRoot, string.Empty).WriteObject(writer, this.RegionMap);
+                    new DataContractSerializer(typeof(BingRegionProvider.SourcesDictionary), RegionSourceRoot, string.Empty).WriteObject(writer, this.sourcesMap);
                 }
                 this.isDirty = false;
-                return ((object)stringBuilder).ToString();
+                return stringBuilder.ToString();
             }
         }
 
@@ -60,9 +60,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             get
             {
                 if (this.sourcesMap != null)
-                    return Enumerable.Select<KeyValuePair<int, string>, string>((IEnumerable<KeyValuePair<int, string>>)this.sourcesMap, (Func<KeyValuePair<int, string>, string>)(copyright => copyright.Value));
-                else
-                    return Enumerable.Empty<string>();
+                    return this.sourcesMap.Select(copyright => copyright.Value);
+                return Enumerable.Empty<string>();
             }
         }
 
@@ -81,9 +80,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         public BingRegionProvider(int concurrencyLimit)
         {
             this.requestSemaphore = new SemaphoreSlim(concurrencyLimit, concurrencyLimit);
-            this.requestPerSecSemaphore = new SemaphoreSlim(40, 40);
+            this.requestPerSecSemaphore = new SemaphoreSlim(MaxRps, MaxRps);
             this.webClient = WebRequestHelper.CreateHttpClient();
-            this.webClient.Timeout = TimeSpan.FromSeconds(30.0);
+            this.webClient.Timeout = TimeSpan.FromSeconds(TimeOut);
             BingRegionProvider.RequestDispatcher(this);
         }
 
@@ -95,12 +94,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 ConformanceLevel = ConformanceLevel.Fragment
             };
-            using (XmlReader reader = XmlReader.Create((TextReader)stringReader, settings))
+            using (XmlReader reader = XmlReader.Create(stringReader, settings))
             {
-                this.RegionMap = (BingRegionProvider.ConcurrentDictionary)((XmlObjectSerializer)new DataContractSerializer(typeof(BingRegionProvider.ConcurrentDictionary), "RegionCache", string.Empty)).ReadObject(reader);
-                if (!reader.IsStartElement("RegionSources"))
+                this.RegionMap = (BingRegionProvider.ConcurrentDictionary)new DataContractSerializer(typeof(BingRegionProvider.ConcurrentDictionary), RegionCacheRoot, string.Empty).ReadObject(reader);
+                if (!reader.IsStartElement(RegionSourceRoot))
                     return;
-                this.sourcesMap = (BingRegionProvider.SourcesDictionary)((XmlObjectSerializer)new DataContractSerializer(typeof(BingRegionProvider.SourcesDictionary), "RegionSources", string.Empty)).ReadObject(reader);
+                this.sourcesMap = (BingRegionProvider.SourcesDictionary)new DataContractSerializer(typeof(BingRegionProvider.SourcesDictionary), RegionSourceRoot, string.Empty).ReadObject(reader);
             }
         }
 
@@ -144,7 +143,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     {
                     }
                 };
-                taskCreator().WithRetry<List<RegionData>>(source, taskCreator, token, 5, 0xbb8, exceptionHandler, cancellationHandler, cleanupHandler, new Predicate<Exception>(this.DoRetry));
+                taskCreator().WithRetry<List<RegionData>>(
+                    source, taskCreator, token, MaxTries, DelayInterval, 
+                    exceptionHandler, cancellationHandler, cleanupHandler, this.DoRetry);
             }
             else
             {
@@ -170,8 +171,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 ex = ex.GetBaseException();
             if (!(ex is HttpRequestException))
                 return ex is WebException;
-            else
-                return true;
+            return true;
         }
 
         private async Task<List<RegionData>> FetchRegionData(BingRegionProvider.RegionKey key, double lat, double lon, int lod, Microsoft.Data.Visualization.Engine.EntityType entityType, bool getAllPolygons, bool getMetadata, bool upLevel, CancellationToken token)
@@ -181,12 +181,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             HttpResponseMessage response;
             try
             {
-                response = await this.webClient.GetAsync(string.Format((IFormatProvider)CultureInfo.InvariantCulture, "https://platform.bing.com/geo/spatial/v1/public/geodata?SpatialFilter=GetBoundary({1},{2},{3},'{4}',{5},{6},'{7}','{8}')&key={0}&fb={9}&$format=json", (object)"AutmxuJvVVVQyluwfF-Le9A6WQ_ypucXcJbzx5Rwf5u8on47kJRDu19BzV4kZlq9", (object)lat, (object)lon, (object)lod, (object)entityType, (object)Convert.ToInt32(getAllPolygons), (object)Convert.ToInt32(getMetadata), (object)key.Language, (object)key.UserRegion, (object)Convert.ToInt32(upLevel)), token);
+                response = await this.webClient.GetAsync(string.Format(CultureInfo.InvariantCulture, RegionUrl, "AutmxuJvVVVQyluwfF-Le9A6WQ_ypucXcJbzx5Rwf5u8on47kJRDu19BzV4kZlq9", lat, lon, lod, entityType, Convert.ToInt32(getAllPolygons), Convert.ToInt32(getMetadata), key.Language, key.UserRegion, Convert.ToInt32(upLevel)), token);
             }
             catch (TaskCanceledException ex)
             {
                 if (!ex.CancellationToken.IsCancellationRequested)
-                    throw new HttpRequestException("Http request cancelled due to timeout.", (Exception)ex);
+                    throw new HttpRequestException("Http request cancelled due to timeout.", ex);
                 throw;
             }
             response.EnsureSuccessStatusCode();
@@ -224,15 +224,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 this.RegionMap.TryAdd(key, regionDataList);
                 this.isDirty = true;
-                return (List<RegionData>)regionDataList;
+                return regionDataList;
             }
             catch (ArgumentException ex)
             {
-                throw new HttpRequestException(string.Format("Failed to parse Json response for key {0}.", (object)key));
+                throw new HttpRequestException(string.Format("Failed to parse Json response for key {0}.", key));
             }
             catch (Exception ex)
             {
-                VisualizationTraceSource.Current.Fail(string.Format("Failed to process region response for key {0}.", (object)key), ex);
+                VisualizationTraceSource.Current.Fail(string.Format("Failed to process region response for key {0}.", key), ex);
                 throw;
             }
         }
@@ -244,7 +244,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 await Task.Delay(1000).ConfigureAwait(false);
                 if (!provider.isDisposed)
                 {
-                    int releaseCount = 40 - provider.requestPerSecSemaphore.CurrentCount;
+                    int releaseCount = MaxRps - provider.requestPerSecSemaphore.CurrentCount;
                     if (releaseCount > 0)
                         provider.requestPerSecSemaphore.Release(releaseCount);
                     BingRegionProvider.RequestDispatcher(provider);
@@ -318,25 +318,27 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             public override bool Equals(object obj)
             {
                 BingRegionProvider.RegionKey regionKey = obj as BingRegionProvider.RegionKey;
-                if (regionKey != null && regionKey.EntityType == this.EntityType && (regionKey.LevelOfDepth == this.LevelOfDepth && BingRegionProvider.RegionKey.AreEqual(regionKey.Latitude, this.Latitude)) && (BingRegionProvider.RegionKey.AreEqual(regionKey.Longitude, this.Longitude) && string.Compare(this.Language, regionKey.Language, StringComparison.InvariantCultureIgnoreCase) == 0))
+                if (regionKey != null && 
+                    regionKey.EntityType == this.EntityType && 
+                    (regionKey.LevelOfDepth == this.LevelOfDepth && BingRegionProvider.RegionKey.AreEqual(regionKey.Latitude, this.Latitude)) && 
+                    (BingRegionProvider.RegionKey.AreEqual(regionKey.Longitude, this.Longitude) && string.Compare(this.Language, regionKey.Language, StringComparison.InvariantCultureIgnoreCase) == 0))
                     return string.Compare(this.UserRegion, regionKey.UserRegion, StringComparison.InvariantCultureIgnoreCase) == 0;
-                else
-                    return false;
+                return false;
             }
 
             public override int GetHashCode()
             {
-                return (int)((long)(this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode() * 31 ^ this.LevelOfDepth.GetHashCode() * 31 * 31 ^ this.EntityType.GetHashCode() * 31 * 31 * 31) & (long)int.MaxValue);
+                return (int)((this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode() * 31 ^ this.LevelOfDepth.GetHashCode() * 31 * 31 ^ this.EntityType.GetHashCode() * 31 * 31 * 31) & (long)int.MaxValue);
             }
 
             public override string ToString()
             {
-                return string.Format("{0},{1},{2},{3}", (object)this.Latitude, (object)this.Longitude, (object)this.LevelOfDepth, (object)this.EntityType);
+                return string.Format("{0},{1},{2},{3}", this.Latitude, this.Longitude, this.LevelOfDepth, this.EntityType);
             }
 
             private static bool AreEqual(double actual, double expected)
             {
-                return Math.Abs(actual - expected) <= 1E-06 * Math.Max(Math.Max(Math.Abs(expected), Math.Abs(actual)), 1.0);
+                return Math.Abs(actual - expected) <= tolerance * Math.Max(Math.Max(Math.Abs(expected), Math.Abs(actual)), 1.0);
             }
         }
     }
