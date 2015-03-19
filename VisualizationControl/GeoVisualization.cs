@@ -186,8 +186,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = numArray == null ? double.NaN : numArray[(int)this.ChartTypeFromLayerType(this.VisualType)];
                 if (!double.IsNaN(d))
                     return d;
-                else
-                    return 1.0;
+                return 1.0;
             }
             set
             {
@@ -211,8 +210,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = numArray == null ? double.NaN : numArray[(int)this.ChartTypeFromLayerType(this.VisualType)];
                 if (!double.IsNaN(d))
                     return d;
-                else
-                    return 1.0;
+                return 1.0;
             }
             set
             {
@@ -234,8 +232,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.Layer != null)
                     return this.lockedViewScales != null;
-                else
-                    return false;
+                return false;
             }
         }
 
@@ -299,7 +296,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 this.DisplayPropertiesUpdated(false);
                 this.CurrentRegionShadingMode = value.Value;
                 LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
-                RegionLayer regionLayer = layerDataBinding == null ? (RegionLayer)null : layerDataBinding.Layer as RegionLayer;
+                RegionLayer regionLayer = layerDataBinding == null ? null : layerDataBinding.Layer as RegionLayer;
                 if (regionLayer == null)
                     return;
                 regionLayer.ShadingMode = value.Value;
@@ -339,7 +336,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     return;
                 this.VisualShape = value.Value;
                 LayerDataBinding layerDataBinding = this.DataBinding as LayerDataBinding;
-                ChartLayer chartLayer = layerDataBinding == null ? (ChartLayer)null : layerDataBinding.Layer as ChartLayer;
+                ChartLayer chartLayer = layerDataBinding == null ? null : layerDataBinding.Layer as ChartLayer;
                 if (chartLayer == null)
                     return;
                 InstancedShape[] newShapes = new InstancedShape[1] { value.Value };
@@ -753,9 +750,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     GeoVisualizationInstanceProperties properties;
                     lock (hashtable.SyncRoot)
                     {
-                        if (hashtable.ContainsKey((object)modelId))
+                        if (hashtable.ContainsKey(modelId))
                         {
-                            properties = hashtable[(object)modelId] as GeoVisualizationInstanceProperties;
+                            properties = hashtable[modelId] as GeoVisualizationInstanceProperties;
                             properties.Color = color;
                             properties.ColorSet = true;
                         }
@@ -1313,10 +1310,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (fieldWellDefinition.Category != null && measures.Count == 0)
             {
                 bool flag = false;
-                TableMetadata table1 = fieldWellDefinition.Category is TableColumn ? ((TableMember)fieldWellDefinition.Category).Table : (TableMetadata)null;
+                TableMetadata table1 = fieldWellDefinition.Category is TableColumn ? ((TableMember)fieldWellDefinition.Category).Table : null;
                 if (table1 != null && fieldWellDefinition.Geo != null && fieldWellDefinition.Geo.GeoColumns.Count > 0 && (fieldWellDefinition.Geo.GeoColumns[0].Table.ContainsLookupTable(table1) || table1.ContainsLookupTable(fieldWellDefinition.Geo.GeoColumns[0].Table)))
                 {
-                    TableMetadata table2 = fieldWellDefinition.Time is TableColumn ? ((TableMember)fieldWellDefinition.Time).Table : (TableMetadata)null;
+                    TableMetadata table2 = fieldWellDefinition.Time is TableColumn ? ((TableMember)fieldWellDefinition.Time).Table : null;
                     if (table2 == null || table2.ContainsLookupTable(table1) || table1.ContainsLookupTable(table2))
                         flag = true;
                 }
@@ -1376,34 +1373,34 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         internal SerializableGeoVisualization Wrap()
         {
-            SerializableGeoVisualization geoVisualization1 = new SerializableGeoVisualization();
-            geoVisualization1.VisualType = this.VisualType;
-            geoVisualization1.VisualShape = this.VisualShape;
-            geoVisualization1.VisualShapeForLayerSet = this.VisualShapeForLayer.HasValue;
-            SerializableGeoVisualization geoVisualization2 = geoVisualization1;
+            SerializableGeoVisualization geoVis = new SerializableGeoVisualization();
+            geoVis.VisualType = this.VisualType;
+            geoVis.VisualShape = this.VisualShape;
+            geoVis.VisualShapeForLayerSet = this.VisualShapeForLayer.HasValue;
+            SerializableGeoVisualization geoVisualization2 = geoVis;
             InstancedShape? visualShapeForLayer = this.VisualShapeForLayer;
             int num1 = visualShapeForLayer.HasValue ? (int)visualShapeForLayer.GetValueOrDefault() : 0;
             geoVisualization2.VisualShapeForLayer = (InstancedShape)num1;
-            geoVisualization1.DisplayNegativeValues = this.DisplayNegativeValues;
-            geoVisualization1.DisplayNullValues = this.DisplayNullValues;
-            geoVisualization1.DisplayZeroValues = this.DisplayZeroValues;
-            geoVisualization1.OpacityFactors = this.opacityFactors;
-            geoVisualization1.DataDimensionScales = this.dataDimensionScales;
-            geoVisualization1.FixedDimensionScales = this.fixedDimensionScales;
-            geoVisualization1.LockedViewScales = this.lockedViewScales;
-            geoVisualization1.SelectedRegionShadingModeSet = this.SelectedRegionShadingMode.HasValue;
-            SerializableGeoVisualization geoVisualization3 = geoVisualization1;
+            geoVis.DisplayNegativeValues = this.DisplayNegativeValues;
+            geoVis.DisplayNullValues = this.DisplayNullValues;
+            geoVis.DisplayZeroValues = this.DisplayZeroValues;
+            geoVis.OpacityFactors = this.opacityFactors;
+            geoVis.DataDimensionScales = this.dataDimensionScales;
+            geoVis.FixedDimensionScales = this.fixedDimensionScales;
+            geoVis.LockedViewScales = this.lockedViewScales;
+            geoVis.SelectedRegionShadingModeSet = this.SelectedRegionShadingMode.HasValue;
+            SerializableGeoVisualization geoVisualization3 = geoVis;
             RegionLayerShadingMode? regionShadingMode = this.SelectedRegionShadingMode;
             int num2 = regionShadingMode.HasValue ? (int)regionShadingMode.GetValueOrDefault() : 1;
             geoVisualization3.SelectedRegionShadingMode = (RegionLayerShadingMode)num2;
-            geoVisualization1.LayerColorOverrideSet = this.LayerColorOverride.HasValue;
-            geoVisualization1.LayerColorOverride = this.LayerColorOverride ?? new Color4F();
-            geoVisualization1.HiddenMeasure = this.HiddenMeasure;
-            geoVisualization1.GeoWellDefn = this.GeoFieldWellDefinition.Wrap() as GeoFieldWellDefinition.SerializableGeoFieldWellDefinition;
-            geoVisualization1.ColorIndices = this.WrapColorIndices().ToList();
-            geoVisualization1.GeoInstanceProperties = this.GetInstancePropertiesArray();
-            geoVisualization1.ChartVisualizations = this.chartVisualizations.Select(cv => cv.Wrap()).ToList();
-            SerializableGeoVisualization geoVisualization4 = geoVisualization1;
+            geoVis.LayerColorOverrideSet = this.LayerColorOverride.HasValue;
+            geoVis.LayerColorOverride = this.LayerColorOverride ?? new Color4F();
+            geoVis.HiddenMeasure = this.HiddenMeasure;
+            geoVis.GeoWellDefn = this.GeoFieldWellDefinition.Wrap() as GeoFieldWellDefinition.SerializableGeoFieldWellDefinition;
+            geoVis.ColorIndices = this.WrapColorIndices().ToList();
+            geoVis.GeoInstanceProperties = this.GetInstancePropertiesArray();
+            geoVis.ChartVisualizations = this.chartVisualizations.Select(cv => cv.Wrap()).ToList();
+            SerializableGeoVisualization geoVisualization4 = geoVis;
             this.SnapState(geoVisualization4);
             return geoVisualization4;
         }

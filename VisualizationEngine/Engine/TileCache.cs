@@ -215,12 +215,7 @@ namespace Microsoft.Data.Visualization.Engine
         {
             lock (this.queueLock)
             {
-                if (tile.ReadyToRender)
-                {
-                    if (tile.TextureReady)
-                        goto label_8;
-                }
-                if (!this.queue.ContainsKey(tile.Key))
+                if ((!tile.ReadyToRender || !tile.TextureReady) && !this.queue.ContainsKey(tile.Key))
                 {
                     this.queue[tile.Key] = tile;
                     ThreadPool.QueueUserWorkItem(o =>
@@ -285,7 +280,6 @@ namespace Microsoft.Data.Visualization.Engine
                     });
                 }
             }
-        label_8:
             this.tileSemaphore[tile.ServerID].Release();
         }
 

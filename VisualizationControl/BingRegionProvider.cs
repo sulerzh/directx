@@ -195,36 +195,44 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             return this.ProcessResponse(jsonString, key);
         }
 
+        /// <summary>
+        /// 处理Region GeoCoding响应结果
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         private List<RegionData> ProcessResponse(string jsonString, BingRegionProvider.RegionKey key)
         {
             try
             {
-                RegionResponse regionResponse = new JavaScriptSerializer().Deserialize<RegionResponse>(jsonString);
-                BingRegionProvider.RegionDataList regionDataList = new BingRegionProvider.RegionDataList();
-                if (regionResponse != null && regionResponse.D != null)
+                RegionResponse result = new JavaScriptSerializer().Deserialize<RegionResponse>(jsonString);
+                BingRegionProvider.RegionDataList polygonArray = new BingRegionProvider.RegionDataList();
+                if (result != null && result.D != null)
                 {
-                    foreach (Result result in regionResponse.D.Results)
+                    foreach (Result entity in result.D.Results)
                     {
-                        foreach (Primitive primitive in result.Primitives)
+                        foreach (Primitive primitive in entity.Primitives)
                         {
-                            string[] strArray = primitive.Shape.Split(',');
-                            for (int index = 1; index < strArray.Length; ++index)
-                                regionDataList.Add(new RegionData()
+                            string[] ringArray = primitive.Shape.Split(',');
+                            for (int i = 1; i < ringArray.Length; ++i)
+                                polygonArray.Add(new RegionData()
                                 {
                                     PolygonId = primitive.PrimitiveID,
-                                    Ring = strArray[index]
+                                    Ring = ringArray[i]
                                 });
                         }
-                        if (result.Copyright != null && result.Copyright.Sources != null)
+                        if (entity.Copyright != null && entity.Copyright.Sources != null)
                         {
-                            foreach (Source source in result.Copyright.Sources)
+                            foreach (Source source in entity.Copyright.Sources)
+                            {
                                 this.sourcesMap.TryAdd(source.SourceID, source.Copyright);
+                            }
                         }
                     }
                 }
-                this.RegionMap.TryAdd(key, regionDataList);
+                this.RegionMap.TryAdd(key, polygonArray);
                 this.isDirty = true;
-                return regionDataList;
+                return polygonArray;
             }
             catch (ArgumentException ex)
             {

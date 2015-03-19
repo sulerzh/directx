@@ -83,7 +83,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.Fields = new ObservableCollectionEx<TableFieldViewModel>();
             this.Fields.ItemAdded += (ObservableCollectionExChangedHandler<TableFieldViewModel>)(item => item.PropertyChanged += new PropertyChangedEventHandler(this.OnTableFieldSelectedChanged));
             this.Fields.ItemRemoved += (ObservableCollectionExChangedHandler<TableFieldViewModel>)(item => item.PropertyChanged -= new PropertyChangedEventHandler(this.OnTableFieldSelectedChanged));
-            this.FieldsDragHandler = new DragItemsHandler<TableFieldViewModel>((Collection<TableFieldViewModel>)this.Fields, true);
+            this.FieldsDragHandler = new DragItemsHandler<TableFieldViewModel>(this.Fields, true);
         }
 
         public TableViewModel(TableMetadata model, bool disableTableMeasures, Action<TableFieldViewModel> addHeight = null, Action<TableFieldViewModel> addCategory = null, Action<TableFieldViewModel> addTime = null, Func<bool> chartAllowsCategories = null)
@@ -98,7 +98,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             foreach (TableMeasure tableMeasure in model.Measures)
             {
                 if (tableMeasure.Visible)
-                    this.Fields.Add(new TableFieldViewModel((TableField)tableMeasure, disableTableMeasures, addHeight, addCategory, addTime, chartAllowsCategories));
+                    this.Fields.Add(new TableFieldViewModel(tableMeasure, disableTableMeasures, addHeight, addCategory, addTime, chartAllowsCategories));
             }
         }
 

@@ -30,24 +30,20 @@ namespace Microsoft.Data.Visualization.WpfExtensions
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string str = parameter as string;
-            if (!string.IsNullOrEmpty(str))
+            if ((string.IsNullOrEmpty(str) || value == null) && !(bool)value)
             {
-                if (value != null)
-                {
-                    if (!(bool)value)
-                        goto label_3;
-                }
-                try
-                {
-                    return Enum.Parse(targetType, str);
-                }
-                catch (ArgumentException ex)
-                {
-                    return DependencyProperty.UnsetValue;
-                }
+                return DependencyProperty.UnsetValue;
             }
-        label_3:
-            return DependencyProperty.UnsetValue;
+
+            try
+            {
+                return Enum.Parse(targetType, str);
+            }
+            catch (ArgumentException ex)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
         }
     }
 }

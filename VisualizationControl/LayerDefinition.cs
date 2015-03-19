@@ -107,8 +107,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.GeoVisualization == null)
                     return new DateTime?();
-                else
-                    return this.GeoVisualization.PlayFromTime;
+                return this.GeoVisualization.PlayFromTime;
             }
         }
 
@@ -118,8 +117,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.GeoVisualization == null)
                     return new DateTime?();
-                else
-                    return this.GeoVisualization.PlayToTime;
+                return this.GeoVisualization.PlayToTime;
             }
         }
 
@@ -167,7 +165,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         }
 
         internal LayerDefinition(LayerDefinition.SerializableLayerDefinition state, LayerManager layerManager, LayerDefinition inUseLayerWithSameKey, CultureInfo modelCulture)
-            : this(layerManager, state.Name, (string)null, state.ForInstructionsOnly)
+            : this(layerManager, state.Name, null, state.ForInstructionsOnly)
         {
             this.Unwrap(state, inUseLayerWithSameKey, modelCulture);
             this.Deserialized = true;
@@ -187,7 +185,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     if (!layerBeingReused)
                     {
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerDefinition.PrepareData(cookie={0}): Calling PrepareData for not-reused layerDefinition with id = {1}", (object)cookie, (object)this.Id);
-                        this.BeginInvokeAction(new Action<bool, CancellationTokenSource, bool, bool, LayerManager.Settings>(((Visualization)this.geoVisualization).PrepareData), false, (CancellationTokenSource)null, false, false, (LayerManager.Settings)null, (Action<object, bool, bool, Exception>)null, (object)null);
+                        this.BeginInvokeAction(((Visualization)this.geoVisualization).PrepareData, false, (CancellationTokenSource)null, false, false, (LayerManager.Settings)null, (Action<object, bool, bool, Exception>)null, (object)null);
                     }
                     else
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Verbose, 0, "LayerDefinition.PrepareData(cookie={0}): ShouldPrepareData is true for reused layerDefinition with id = {1}", (object)cookie, (object)this.Id);
@@ -203,7 +201,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.geoVisualization == null)
                     return;
-                this.BeginInvokeAction(new Action<bool, CancellationTokenSource, bool, bool, LayerManager.Settings>(((Visualization)this.geoVisualization).RefreshDisplay), zoomToData, cancellationTokenSource, forceRequeryIfVisible, forciblyRefreshDisplay, layerManagerSettings, completionCallback, context);
+                this.BeginInvokeAction(((Visualization)this.geoVisualization).RefreshDisplay, zoomToData, cancellationTokenSource, forceRequeryIfVisible, forciblyRefreshDisplay, layerManagerSettings, completionCallback, context);
             }
         }
 
@@ -226,7 +224,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoVisualization geoVisualization;
             lock (this.syncRoot)
             {
-                CancellationTokenSource local_2 = Interlocked.Exchange<CancellationTokenSource>(ref this.cancellationSource, (CancellationTokenSource)null);
+                CancellationTokenSource local_2 = Interlocked.Exchange(ref this.cancellationSource, null);
                 if (local_2 != null)
                 {
                     try
@@ -238,7 +236,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     }
                 }
                 geoVisualization = this.geoVisualization;
-                this.geoVisualization = (GeoVisualization)null;
+                this.geoVisualization = null;
             }
             bool flag = geoVisualization != null;
             if (flag)
@@ -290,7 +288,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 flag = true;
             if (!flag)
                 return;
-            this.LayerManager.NotifyStateChanged((object)this);
+            this.LayerManager.NotifyStateChanged(this);
         }
 
         internal void AllowIncrementRevisionCount(bool discardPendingCounts = false)
@@ -312,7 +310,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             if (!flag)
                 return;
-            this.LayerManager.NotifyStateChanged((object)this);
+            this.LayerManager.NotifyStateChanged(this);
         }
 
         internal void DisallowIncrementRevisionCount()
@@ -342,7 +340,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 RevisionCount = this.RevisionCount,
                 RevisionCountGuid = this.RevisionCountGuid,
                 Visible = this.Visible,
-                Geo = this.GeoVisualization == null ? (GeoVisualization.SerializableGeoVisualization)null : this.GeoVisualization.Wrap()
+                Geo = this.GeoVisualization == null ? null : this.GeoVisualization.Wrap()
             };
         }
 
@@ -351,15 +349,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (state == null)
                 throw new ArgumentNullException("state");
             if (this.geoVisualization != null)
-                throw new InvalidOperationException(string.Format("A GeoVisualization has already been created for layerdefinition'{0}', Id={1}", (object)this.Name, (object)this.Id));
+                throw new InvalidOperationException(string.Format("A GeoVisualization has already been created for layerdefinition'{0}', Id={1}", this.Name, this.Id));
             this.Name = state.Name;
             this.Id = state.Id;
             this.Visible = state.Visible;
             this.revisionCount = state.RevisionCount;
             this.revisionCountGuid = state.RevisionCountGuid;
             this.DisallowIncrementRevisionCount();
-            GeoVisualization geoVisualization = inUseLayerWithSameKey == null ? (GeoVisualization)null : inUseLayerWithSameKey.GeoVisualization;
-            DataSource dataSource1 = geoVisualization == null ? (DataSource)null : geoVisualization.DataSource;
+            GeoVisualization geoVisualization = inUseLayerWithSameKey == null ? null : inUseLayerWithSameKey.GeoVisualization;
+            DataSource dataSource1 = geoVisualization == null ? null : geoVisualization.DataSource;
             DataSource dataSource2;
             if (dataSource1 != null)
             {
@@ -372,7 +370,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 dataSource2 = this.LayerManager.CreateDataSource(this.GeoDataSourceName);
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "LayerDefinition.Unwrap(): creating new data source for layer Id={1}, after query runs", (object)this.Name, (object)this.Id);
             }
-            this.geoVisualization = state.Geo == null ? (GeoVisualization)null : state.Geo.Unwrap(this, dataSource2, modelCulture);
+            this.geoVisualization = state.Geo == null ? null : state.Geo.Unwrap(this, dataSource2, modelCulture);
             this.AllowIncrementRevisionCount(true);
             VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "LayerDefinition.Unwrap() completed, name={0}, Id={1}", (object)this.Name, (object)this.Id);
         }
@@ -401,27 +399,27 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         private void Shutdown()
         {
-            this.DisplayPropertiesChanged = (Action)null;
-            this.geoVisualization = (GeoVisualization)null;
+            this.DisplayPropertiesChanged = null;
+            this.geoVisualization = null;
             this.name = string.Empty;
-            this.LayerManager = (LayerManager)null;
+            this.LayerManager = null;
         }
 
         private void BeginInvokeAction(Action<bool, CancellationTokenSource, bool, bool, LayerManager.Settings> action, bool zoomToData = false, CancellationTokenSource clientCancellationSource = null, bool forceRequeryIfVisible = false, bool forciblyRefreshDisplay = false, LayerManager.Settings layerManagerSettings = null, Action<object, bool, bool, Exception> completionCallback = null, object context = null)
-    {
-      CancellationTokenSource cancellationTokenSource1 = new CancellationTokenSource();
-      CancellationTokenSource cancellationTokenSource2 = Interlocked.Exchange<CancellationTokenSource>(ref this.cancellationSource, cancellationTokenSource1);
-      CancellationTokenSource linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(clientCancellationSource == null ? CancellationToken.None : clientCancellationSource.Token, cancellationTokenSource1.Token);
-      if (cancellationTokenSource2 != null)
-      {
-        try
         {
-          cancellationTokenSource2.Cancel(false);
-        }
-        catch (ObjectDisposedException ex)
-        {
-        }
-      }
+            CancellationTokenSource cancellationTokenSource1 = new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource2 = Interlocked.Exchange(ref this.cancellationSource, cancellationTokenSource1);
+            CancellationTokenSource linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(clientCancellationSource == null ? CancellationToken.None : clientCancellationSource.Token, cancellationTokenSource1.Token);
+            if (cancellationTokenSource2 != null)
+            {
+                try
+                {
+                    cancellationTokenSource2.Cancel(false);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                }
+            }
             Action
                 <bool, CancellationTokenSource, CancellationTokenSource, bool, bool,
                     Microsoft.Data.Visualization.VisualizationControls.LayerManager.Settings> method =
@@ -431,7 +429,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             Microsoft.Data.Visualization.VisualizationControls.LayerManager.Settings settings)
                         {
                             bool flag1 = false;
-                            Exception exception = (Exception) null;
+                            Exception exception = null;
                             bool flag2 = false;
                             try
                             {
@@ -442,38 +440,38 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             {
                                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
                                     "LayerDefinition {0} (Guid = {1}): User cancelled query evaluation (caught OperationCanceledException)",
-                                    (object) this.Name, (object) this.Id);
+                                    (object)this.Name, (object)this.Id);
                                 flag2 = true;
                             }
                             catch (ThreadAbortException ex)
                             {
                                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0,
-                                    "LayerDefinition {0} (Guid = {1}): Caught ThreadAbortException", (object) this.Name,
-                                    (object) this.Id);
+                                    "LayerDefinition {0} (Guid = {1}): Caught ThreadAbortException", (object)this.Name,
+                                    (object)this.Id);
                             }
                             catch (DataSource.InvalidQueryResultsException ex)
                             {
                                 VisualizationTraceSource.Current.Fail(
-                                    "QueryEngine caught and ignored exception in query evaluation", (Exception) ex);
+                                    "QueryEngine caught and ignored exception in query evaluation", ex);
                                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0,
                                     "LayerDefinition {0} (Guid = {1}): InvokeActionOnDispatcher() caught InvalidQueryResultsException, QueryResultsFailed = {2}, QueryResultsFailed = {3}, innerException={4}",
-                                    (object) this.Name, (object) this.Id,
+                                    (object)this.Name, (object)this.Id,
                                     ex.QueryEvaluationFailed,
-                                    ex.QueryResultsStale, (object) ex.InnerException);
-                                exception = (Exception) ex;
+                                    ex.QueryResultsStale, (object)ex.InnerException);
+                                exception = ex;
                             }
                             catch (Exception ex)
                             {
                                 VisualizationTraceSource.Current.Fail("QueryEngine caught and ignored exception", ex);
                                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0,
                                     "LayerDefinition {0} (Guid = {1}): InvokeActionOnDispatcher() caught and ignored exception {2}",
-                                    (object) this.Name, (object) this.Id, (object) ex);
+                                    (object)this.Name, (object)this.Id, (object)ex);
                                 exception = ex;
                             }
                             finally
                             {
-                                Interlocked.CompareExchange<CancellationTokenSource>(ref this.cancellationSource,
-                                    (CancellationTokenSource) null, cancellationSource);
+                                Interlocked.CompareExchange(ref this.cancellationSource,
+                                    null, cancellationSource);
                                 cancellationSource.Dispose();
                                 if (completionCallback != null)
                                 {
@@ -487,8 +485,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                                 }
                             }
                         };
-      this.LayerManager.QueryEngineDispatcher.BeginInvoke(method, zoomToData, (object) linkedTokenSource, (object) cancellationTokenSource1, forceRequeryIfVisible, forciblyRefreshDisplay, (object) layerManagerSettings);
-    }
+            this.LayerManager.QueryEngineDispatcher.BeginInvoke(method, zoomToData, (object)linkedTokenSource, (object)cancellationTokenSource1, forceRequeryIfVisible, forciblyRefreshDisplay, (object)layerManagerSettings);
+        }
 
         [Serializable]
         public class SerializableLayerDefinition

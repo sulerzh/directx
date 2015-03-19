@@ -82,8 +82,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.Geo != null)
                     return this.Geo.HasLatLongOrXY;
-                else
-                    return false;
+                return false;
             }
         }
 
@@ -105,9 +104,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 GeoQueryResults queryResults = this.QueryResults;
                 if (queryResults != null && queryResults.Time != null)
-                    return new DateTime?(queryResults.Time.Min);
-                else
-                    return new DateTime?();
+                    return queryResults.Time.Min;
+                return new DateTime?();
             }
         }
 
@@ -117,9 +115,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 GeoQueryResults queryResults = this.QueryResults;
                 if (queryResults != null && queryResults.Time != null)
-                    return new DateTime?(queryResults.Time.Max);
-                else
-                    return new DateTime?();
+                    return queryResults.Time.Max;
+                return new DateTime?();
             }
         }
 
@@ -129,10 +126,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 GeoQueryResults queryResults = this.QueryResults;
                 ModelQueryIndexedKeyColumn indexedKeyColumn = queryResults == null
-                    ? (ModelQueryIndexedKeyColumn) null
+                    ? null
                     : queryResults.Category;
                 if (indexedKeyColumn == null)
-                    return (string[]) null;
+                    return null;
                 return (string[]) indexedKeyColumn.AllValues;
             }
         }
@@ -147,8 +144,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.QueryResults != null)
                     return this.QueryResults.ResultsItemCount == 0;
-                else
-                    return true;
+                return true;
             }
         }
 
@@ -162,7 +158,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.AccumulateResultsOverTime = false;
             this.Decay = GeoFieldWellDefinition.PlaybackValueDecayType.None;
             this.InstanceCount = -1;
-            this.QueryResults = (GeoQueryResults) null;
+            this.QueryResults = null;
             this.QueryUsesAggregation = false;
             this.Filter = new Filter();
         }
@@ -175,11 +171,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             bool noneAFsInQuery = false;
             bool nonNoneAFsInQuery = false;
-            geoWellDefinition.Measures.ForEach((Action<Tuple<TableField, AggregationFunction>>) (m =>
+            geoWellDefinition.Measures.ForEach(m =>
             {
                 noneAFsInQuery = noneAFsInQuery || m.Item2 == AggregationFunction.None;
                 nonNoneAFsInQuery = nonNoneAFsInQuery || m.Item2 != AggregationFunction.None;
-            }));
+            });
             if (geoWellDefinition.Color != null)
             {
                 noneAFsInQuery = noneAFsInQuery || geoWellDefinition.Color.Item2 == AggregationFunction.None;
@@ -230,44 +226,34 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return;
             List<Tuple<TableField, AggregationFunction>> updatedDataSourceMeasures =
                 new List<Tuple<TableField, AggregationFunction>>(measures.Count);
-            measures.ForEach((Action<Tuple<TableField, AggregationFunction>>) (measure =>
+            measures.ForEach(measure =>
             {
                 Tuple<TableField, AggregationFunction> tuple =
-                    Enumerable.FirstOrDefault<Tuple<TableField, AggregationFunction>>(
-                        (IEnumerable<Tuple<TableField, AggregationFunction>>) geoWellDefinition.Measures,
-                        (Func<Tuple<TableField, AggregationFunction>, bool>)
-                            (newMeasure =>
-                                TableMember.QuerySubstitutable((object) measure.Item1, (object) newMeasure.Item1)));
-                TableField tableField = tuple == null ? (TableField) null : tuple.Item1;
+                    geoWellDefinition.Measures.FirstOrDefault(newMeasure =>
+                        TableMember.QuerySubstitutable(measure.Item1, newMeasure.Item1));
+                TableField tableField = tuple == null ? null : tuple.Item1;
                 updatedDataSourceMeasures.Add(tableField == null
                     ? measure
                     : new Tuple<TableField, AggregationFunction>(tableField, measure.Item2));
-            }));
+            });
             List<Tuple<TableField, AggregationFunction>> newMeasures;
             if (flag2)
             {
                 newMeasures = new List<Tuple<TableField, AggregationFunction>>(geoWellDefinition.Measures.Count);
                 geoWellDefinition.Measures.ForEach(
-                    (Action<Tuple<TableField, AggregationFunction>>)
-                        (measure =>
-                            newMeasures.Add(new Tuple<TableField, AggregationFunction>(measure.Item1,
-                                AggregationFunction.None))));
+                    measure =>
+                        newMeasures.Add(new Tuple<TableField, AggregationFunction>(measure.Item1,
+                            AggregationFunction.None)));
             }
             else
                 newMeasures = geoWellDefinition.Measures;
             if (
-                Enumerable.Any<Tuple<TableField, AggregationFunction>>(
-                    Enumerable.Except<Tuple<TableField, AggregationFunction>>(
-                        (IEnumerable<Tuple<TableField, AggregationFunction>>) updatedDataSourceMeasures,
-                        (IEnumerable<Tuple<TableField, AggregationFunction>>) newMeasures)) ||
-                Enumerable.Any<Tuple<TableField, AggregationFunction>>(
-                    Enumerable.Except<Tuple<TableField, AggregationFunction>>(
-                        (IEnumerable<Tuple<TableField, AggregationFunction>>) newMeasures,
-                        (IEnumerable<Tuple<TableField, AggregationFunction>>) updatedDataSourceMeasures)))
+                updatedDataSourceMeasures.Except(newMeasures).Any() ||
+                newMeasures.Except(updatedDataSourceMeasures).Any())
             {
                 this.RemoveAllMeasures();
                 newMeasures.ForEach(
-                    (Action<Tuple<TableField, AggregationFunction>>) (newMeasure => this.AddMeasure(newMeasure)));
+                    newMeasure => this.AddMeasure(newMeasure));
                 flag1 = flag1 | noneAFsInQuery;
                 this.MainQueryUpdatePending = true;
             }
@@ -311,8 +297,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.VerifyQueryResultsAreCurrent(sourceDataVersion);
             if (this.QueryResults != null)
                 return this.QueryResults.ResultsItemCount;
-            else
-                return 0;
+            return 0;
         }
 
         public bool QueryResultsHaveTimeData(int sourceDataVersion)
@@ -320,20 +305,18 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             if (queryResults != null)
                 return queryResults.Time != null;
-            else
-                return false;
+            return false;
         }
 
         public bool QueryResultsHaveMeasures(int sourceDataVersion)
         {
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             List<ModelQueryMeasureColumn> list = queryResults == null
-                ? (List<ModelQueryMeasureColumn>) null
+                ? null
                 : queryResults.Measures;
             if (list != null)
                 return list.Count > 0;
-            else
-                return false;
+            return false;
         }
 
         public bool QueryResultsHaveCategory(int sourceDataVersion)
@@ -341,8 +324,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             if (queryResults != null)
                 return queryResults.Category != null;
-            else
-                return false;
+            return false;
         }
 
         public int GetMaxInstanceCount(int sourceDataVersion)
@@ -355,23 +337,20 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             List<ModelQueryMeasureColumn> list = queryResults == null
-                ? (List<ModelQueryMeasureColumn>) null
+                ? null
                 : queryResults.Measures;
             if (list != null && list.Count > 0)
             {
-                max = Enumerable.Max<ModelQueryMeasureColumn>((IEnumerable<ModelQueryMeasureColumn>) list,
-                    (Func<ModelQueryMeasureColumn, double>) (measure => measure.Max));
+                max = list.Max(measure => measure.Max);
                 double maxVal = max;
                 min = double.IsNaN(max)
                     ? double.NaN
-                    : Enumerable.Min<ModelQueryMeasureColumn>((IEnumerable<ModelQueryMeasureColumn>) list,
-                        (Func<ModelQueryMeasureColumn, double>) (measure =>
-                        {
-                            if (!double.IsNaN(measure.Min))
-                                return measure.Min;
-                            else
-                                return maxVal;
-                        }));
+                    : list.Min(measure =>
+                    {
+                        if (!double.IsNaN(measure.Min))
+                            return measure.Min;
+                        return maxVal;
+                    });
             }
             else
             {
@@ -388,12 +367,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 double[] numArray1 = queryResults.Latitude != null
                     ? queryResults.Latitude.Values as double[]
-                    : (double[]) null;
+                    : null;
                 double[] numArray2 = queryResults.Longitude != null
                     ? queryResults.Longitude.Values as double[]
-                    : (double[]) null;
-                out_latRange = RangeExtensions.RangeExcludingNaNs((IEnumerable<double>) numArray1);
-                out_longRange = RangeExtensions.RangeExcludingNaNs((IEnumerable<double>) numArray2);
+                    : null;
+                out_latRange = numArray1.RangeExcludingNaNs();
+                out_longRange = numArray2.RangeExcludingNaNs();
             }
             else
             {
@@ -417,7 +396,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoModelDataId geoModelDataId1 = new GeoModelDataId();
                 int rowFromInstanceId = this.GetRowFromInstanceId(id);
                 if (rowFromInstanceId < 0)
-                    return (string) null;
+                    return null;
                 if (this.Geo != null)
                 {
                     if (this.Geo is LatLongField && !this.Geo.IsUsingXY)
@@ -501,7 +480,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 {
                     Tuple<TableField, AggregationFunction> tuple = this.MeasureForId(id);
                     if (tuple == null)
-                        return (string) null;
+                        return null;
                     geoModelDataId1.Measure = tuple;
                     if (tuple.Item2 == AggregationFunction.None)
                     {
@@ -509,28 +488,26 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             (double?)
                                 this.QueryResults.Measures[this.GetMeasureIndexFromInstanceId(id)].Values[
                                     rowFromInstanceId];
-                        ;
                     }
                 }
                 return geoModelDataId1.ToString();
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (IndexOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (NullReferenceException ex)
             {
-                return (string) null;
+                return null;
             }
-            return (string) null;
         }
 
         public override string ModelDataIdForSeriesIndex(int seriesIndex)
@@ -540,41 +517,41 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 this.VerifyQueryResultsAreCurrent(this.DataVersion);
                 GeoModelDataId geoModelDataId = new GeoModelDataId();
                 if (seriesIndex < 0)
-                    return (string) null;
+                    return null;
                 if (this.Category != null)
                 {
                     string[] allCategories = this.AllCategories;
                     if (allCategories == null ||
-                        seriesIndex >= Enumerable.Count<string>((IEnumerable<string>) allCategories))
-                        return (string) null;
+                        seriesIndex >= allCategories.Count())
+                        return null;
                     geoModelDataId.CategoryColumn = this.Category as TableColumn;
                     geoModelDataId.Category = allCategories[seriesIndex];
                 }
                 else
                 {
                     if (seriesIndex >= this.Measures.Count)
-                        return (string) null;
+                        return null;
                     geoModelDataId.Measure = this.Measures[seriesIndex];
                     if (geoModelDataId.Measure.Item2 == AggregationFunction.None)
-                        geoModelDataId.MeasureValue = new double?(0.0);
+                        geoModelDataId.MeasureValue = 0.0;
                 }
                 return geoModelDataId.ToString();
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (IndexOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (NullReferenceException ex)
             {
-                return (string) null;
+                return null;
             }
         }
 
@@ -588,26 +565,26 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoQueryResults queryResults = this.GetQueryResults(this.DataVersion);
                 int row = this.GetRowFromInstanceId(id);
                 if (row < 0)
-                    return (List<Tuple<AggregationFunction?, string, object>>) null;
+                    return null;
                 if (this.HasLatLong)
                 {
                     if (this.Geo.GeoColumns[0] == this.Geo.Longitude)
                     {
                         retval.Add(new Tuple<AggregationFunction?, string, object>(new AggregationFunction?(),
-                            queryResults.Longitude.TableColumn.Name, (object) this.LongitudeForId(id)));
+                            queryResults.Longitude.TableColumn.Name, this.LongitudeForId(id)));
                         retval.Add(new Tuple<AggregationFunction?, string, object>(new AggregationFunction?(),
-                            queryResults.Latitude.TableColumn.Name, (object) this.LatitudeForId(id)));
+                            queryResults.Latitude.TableColumn.Name, this.LatitudeForId(id)));
                     }
                     else
                     {
                         retval.Add(new Tuple<AggregationFunction?, string, object>(new AggregationFunction?(),
-                            queryResults.Latitude.TableColumn.Name, (object) this.LatitudeForId(id)));
+                            queryResults.Latitude.TableColumn.Name, this.LatitudeForId(id)));
                         retval.Add(new Tuple<AggregationFunction?, string, object>(new AggregationFunction?(),
-                            queryResults.Longitude.TableColumn.Name, (object) this.LongitudeForId(id)));
+                            queryResults.Longitude.TableColumn.Name, this.LongitudeForId(id)));
                     }
                 }
                 else
-                    queryResults.GeoFields.ForEach((Action<ModelQueryKeyColumn>) (col =>
+                    queryResults.GeoFields.ForEach(col =>
                     {
                         Tuple<AggregationFunction?, string, dynamic> tuple = new Tuple
                             <AggregationFunction?, string, dynamic>(
@@ -615,7 +592,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             col.TableColumn.Name,
                             col.Values[row]);
                         retval.Add(tuple);
-                    }));
+                    });
                 if (showRelatedCategories)
                 {
                     if (this.Category == null)
@@ -646,7 +623,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         dynamic value = queryResults.Measures[indexFromInstanceId].Values[row];
 
                         if (double.IsNaN(value))
-                            value = (object) string.Empty;
+                            value = string.Empty;
 
                         retval.Add(new Tuple<AggregationFunction?, string, dynamic>(
                             queryResults.Measures[indexFromInstanceId].AggregationFunction,
@@ -718,19 +695,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (List<Tuple<AggregationFunction?, string, object>>) null;
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return (List<Tuple<AggregationFunction?, string, object>>) null;
+                return null;
             }
             catch (IndexOutOfRangeException ex)
             {
-                return (List<Tuple<AggregationFunction?, string, object>>) null;
+                return null;
             }
             catch (NullReferenceException ex)
             {
-                return (List<Tuple<AggregationFunction?, string, object>>) null;
+                return null;
             }
         }
 
@@ -759,7 +736,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         return new double?();
                 }
                 if (measureIndex < 0)
-                    return new double?(double.NaN);
+                    return double.NaN;
                 return (double?) this.QueryResults.Measures[measureIndex].Values[row];
             }
             catch (ArgumentOutOfRangeException ex)
@@ -786,26 +763,25 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 double d = (double) queryResults.Latitude.Values[row];
                 if ((double.IsNaN(d) || Math.Abs(d) > 90.0) && (this.Geo == null || !this.Geo.IsUsingXY))
                     return double.NaN;
-                else
-                    return d;
+                return d;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
             }
             catch (IndexOutOfRangeException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
             }
             catch (NullReferenceException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
@@ -823,21 +799,21 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
             }
             catch (IndexOutOfRangeException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
             }
             catch (NullReferenceException ex)
             {
-                throw new DataSource.InvalidQueryResultsException("Query results stale", (Exception) ex)
+                throw new DataSource.InvalidQueryResultsException("Query results stale", ex)
                 {
                     QueryResultsStale = true
                 };
@@ -856,7 +832,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 num = this.GetFirstRowInNextGeoBucket(row);
                 firstRow = this.GetFirstRowInGeoBucket(row);
                 if (this.Time != null || this.Category != null)
-                    ;
+                {
+                }
             }
             else
             {
@@ -865,17 +842,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             nextRowInResults = num;
             enumerable =
-                (IEnumerable<IInstanceParameter>)
-                    new GeoDataSource.QueryResultsDataEnumerable(queryResults, colorIndices, this.seriesToColorIndex,
-                        firstRow, nextRowInResults);
+                new GeoDataSource.QueryResultsDataEnumerable(queryResults, colorIndices, this.seriesToColorIndex,
+                    firstRow, nextRowInResults);
         }
 
         public IEnumerable<InstanceId> GetRelatedIdsOverTime(InstanceId id)
         {
             if (this.Time != null)
                 return
-                    (IEnumerable<InstanceId>) new GeoDataSource.InstanceIdOverTimeEnumerable(this, this.DataVersion, id);
-            return (IEnumerable<InstanceId>) new InstanceId[1]
+                    new GeoDataSource.InstanceIdOverTimeEnumerable(this, this.DataVersion, id);
+            return new InstanceId[1]
             {
                 id
             };
@@ -908,30 +884,24 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 int num = this.IndexForCategory(modelDataId.Category);
                 if (num >= 0)
-                    return new int?(num);
-                else
-                    return new int?();
+                    return num;
+                return new int?();
             }
-            else
+            List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
+            if (measures == null)
+                return new int?();
+            if (measures.Count <= 0)
+                return new int?();
+            int index = measures.FindIndex(measure =>
             {
-                List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
-                if (measures == null)
-                    return new int?();
-                if (measures.Count <= 0)
-                    return new int?();
-                int index = measures.FindIndex((Predicate<Tuple<TableField, AggregationFunction>>) (measure =>
-                {
-                    if (measure.Item2 == modelDataId.Measure.Item2)
-                        return
-                            (measure.Item1 as TableMember).QuerySubstitutable(modelDataId.Measure.Item1 as TableMember);
-                    else
-                        return false;
-                }));
-                if (index != -1)
-                    return new int?(index);
-                else
-                    return new int?();
-            }
+                if (measure.Item2 == modelDataId.Measure.Item2)
+                    return
+                        (measure.Item1 as TableMember).QuerySubstitutable(modelDataId.Measure.Item1 as TableMember);
+                return false;
+            });
+            if (index != -1)
+                return index;
+            return new int?();
         }
 
         public InstanceId? GetCanonicalInstanceIdForModelDataId(int sourceDataVersion, string modelId)
@@ -950,7 +920,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         public InstanceId?[] GetCanonicalInstanceIdsForAllSeries(int sourceDataVersion, InstanceId? instanceId)
         {
             if (!instanceId.HasValue)
-                return (InstanceId?[]) null;
+                return null;
             InstanceId? canonicalInstanceId = this.GetCanonicalInstanceId(sourceDataVersion, instanceId.Value);
             return this.GetCanonicalInstanceIdsForAllSeriesWorker(sourceDataVersion, canonicalInstanceId);
         }
@@ -958,59 +928,53 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         protected InstanceId?[] GetCanonicalInstanceIdsForAllSeriesWorker(int sourceDataVersion, InstanceId? instanceId)
         {
             if (!instanceId.HasValue)
-                return (InstanceId?[]) null;
+                return null;
             List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
             if (measures == null)
-                return (InstanceId?[]) null;
+                return null;
             if (this.Category == null && measures.Count <= 1)
             {
                 return new InstanceId?[1]
                 {
-                    new InstanceId?(instanceId.Value)
+                    instanceId.Value
                 };
             }
-            else
+            int rowFromInstanceId = this.GetRowFromInstanceId(instanceId.Value);
+            List<InstanceId?> list = new List<InstanceId?>();
+            if (measures.Count > 1)
             {
-                int rowFromInstanceId = this.GetRowFromInstanceId(instanceId.Value);
-                List<InstanceId?> list = new List<InstanceId?>();
-                if (measures.Count > 1)
+                for (int measureIndex = 0; measureIndex < measures.Count; ++measureIndex)
+                    list.Add(this.GetInstanceIdForRow(rowFromInstanceId, measureIndex));
+                return list.ToArray();
+            }
+            try
+            {
+                GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
+                int firstRowInGeoBucket = this.GetFirstRowInGeoBucket(rowFromInstanceId);
+                int rowInNextGeoBucket = this.GetFirstRowInNextGeoBucket(rowFromInstanceId);
+                int firstRowValue = (int) queryResults.Category.Values[firstRowInGeoBucket];
+                list.Add(this.GetInstanceIdForRow(firstRowInGeoBucket, 0));
+                for (int row = firstRowInGeoBucket; row < rowInNextGeoBucket; ++row)
                 {
-                    for (int measureIndex = 0; measureIndex < measures.Count; ++measureIndex)
-                        list.Add(new InstanceId?(this.GetInstanceIdForRow(rowFromInstanceId, measureIndex)));
-                    return list.ToArray();
-                }
-                else
-                {
-                    try
+                    if (firstRowValue != queryResults.Category.Values[row])
                     {
-                        GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
-                        int firstRowInGeoBucket = this.GetFirstRowInGeoBucket(rowFromInstanceId);
-                        int rowInNextGeoBucket = this.GetFirstRowInNextGeoBucket(rowFromInstanceId);
-                        int firstRowValue = (int) queryResults.Category.Values[firstRowInGeoBucket];
-                        list.Add(new InstanceId?(this.GetInstanceIdForRow(firstRowInGeoBucket, 0)));
-                        for (int row = firstRowInGeoBucket; row < rowInNextGeoBucket; ++row)
-                        {
-                            if (firstRowValue != queryResults.Category.Values[row])
-                            {
-                                list.Add(new InstanceId?(this.GetInstanceIdForRow(row, 0)));
-                                firstRowValue = (int) queryResults.Category.Values[row];
-                            }
-                        }
-                        return list.ToArray();
-                    }
-                    catch (ArgumentOutOfRangeException ex)
-                    {
-                        return (InstanceId?[]) null;
-                    }
-                    catch (IndexOutOfRangeException ex)
-                    {
-                        return (InstanceId?[]) null;
-                    }
-                    catch (NullReferenceException ex)
-                    {
-                        return (InstanceId?[]) null;
+                        list.Add(this.GetInstanceIdForRow(row, 0));
+                        firstRowValue = (int) queryResults.Category.Values[row];
                     }
                 }
+                return list.ToArray();
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return null;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                return null;
+            }
+            catch (NullReferenceException ex)
+            {
+                return null;
             }
         }
 
@@ -1033,20 +997,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (modelDataId.AnyCategoryValue != anyCategoryValue)
                 return new InstanceId?();
             if (anyCategoryValue)
-                cat = (TableColumn) null;
+                cat = null;
             int measureIndex = 0;
             if (cat != null && this.IndexForCategory(modelDataId.Category) < 0)
                 return new InstanceId?();
             if (measures.Count > 0)
             {
-                int index = measures.FindIndex((Predicate<Tuple<TableField, AggregationFunction>>) (measure =>
+                int index = measures.FindIndex(measure =>
                 {
                     if (measure.Item2 == modelDataId.Measure.Item2)
                         return
                             (measure.Item1 as TableMember).QuerySubstitutable(modelDataId.Measure.Item1 as TableMember);
-                    else
-                        return false;
-                }));
+                    return false;
+                });
                 if (index == -1)
                     return new InstanceId?();
                 measureIndex = index;
@@ -1073,7 +1036,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                                double.IsNaN(queryResults.Measures[measureIndex].Values[row]))) ||
                              modelDataId.MeasureValue.Value == queryResults.Measures[measureIndex].Values[row]))
                         {
-                            result = new InstanceId?(this.GetInstanceIdForRow(row, measureIndex));
+                            result = this.GetInstanceIdForRow(row, measureIndex);
                             break;
                         }
                     }
@@ -1095,7 +1058,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                               double.IsNaN(queryResults.Measures[measureIndex].Values[row])) ||
                              modelDataId.MeasureValue.Value == queryResults.Measures[measureIndex].Values[row]))
                         {
-                            result = new InstanceId?(this.GetInstanceIdForRow(row, measureIndex));
+                            result = this.GetInstanceIdForRow(row, measureIndex);
                             break;
                         }
                     }
@@ -1153,7 +1116,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                               double.IsNaN(queryResults.Measures[measureIndex].Values[row])) ||
                              modelDataId.MeasureValue.Value == queryResults.Measures[measureIndex].Values[row]))
                         {
-                            result = new InstanceId?(this.GetInstanceIdForRow(row, measureIndex));
+                            result = this.GetInstanceIdForRow(row, measureIndex);
                             break;
                         }
                     }
@@ -1179,7 +1142,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         public InstanceId? GetCanonicalInstanceId(int sourceDataVersion, InstanceId id)
         {
             this.VerifyQueryResultsAreCurrent(sourceDataVersion);
-            return new InstanceId?(Enumerable.First<InstanceId>(this.GetRelatedIdsOverTime(id)));
+            return this.GetRelatedIdsOverTime(id).First();
         }
 
         internal int ColorIndexForSeriesIndex(int seriesIndex)
@@ -1187,8 +1150,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             List<int> list = this.seriesToColorIndex;
             if (list == null || seriesIndex < 0 || seriesIndex >= list.Count)
                 return -1;
-            else
-                return list[seriesIndex];
+            return list[seriesIndex];
         }
 
         internal int IndexForCategory(string category)
@@ -1196,8 +1158,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoQueryResults queryResults = this.QueryResults;
             if (queryResults == null)
                 return -1;
-            else
-                return queryResults.IndexForCategory(category);
+            return queryResults.IndexForCategory(category);
         }
 
         internal bool IndexForCategoryColor(string category, out int seriesIndex, out int colorIndex)
@@ -1208,29 +1169,20 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 seriesIndex = colorIndex = -1;
                 return false;
             }
-            else
+            seriesIndex = queryResults.IndexForCategory(category);
+            if (seriesIndex == -1)
             {
-                seriesIndex = queryResults.IndexForCategory(category);
-                if (seriesIndex == -1)
-                {
-                    seriesIndex = colorIndex = -1;
-                    return false;
-                }
-                else
-                {
-                    ModelQueryIndexedKeyColumn category1 = queryResults.Category;
-                    if (category1 == null)
-                    {
-                        seriesIndex = colorIndex = -1;
-                        return false;
-                    }
-                    else
-                    {
-                        colorIndex = category1.PreservedValuesIndex[seriesIndex];
-                        return true;
-                    }
-                }
+                seriesIndex = colorIndex = -1;
+                return false;
             }
+            ModelQueryIndexedKeyColumn category1 = queryResults.Category;
+            if (category1 == null)
+            {
+                seriesIndex = colorIndex = -1;
+                return false;
+            }
+            colorIndex = category1.PreservedValuesIndex[seriesIndex];
+            return true;
         }
 
         internal Func<int, int, string> GetGeoValuesAccessor(int sourceDataVersion, out int firstGeoCol)
@@ -1238,7 +1190,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             firstGeoCol = 0;
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             firstGeoCol = 0;
-            return (Func<int, int, string>) ((row, col) =>
+            return (row, col) =>
             {
                 try
                 {
@@ -1246,25 +1198,24 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 catch (NullReferenceException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
                 catch (IndexOutOfRangeException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
-            });
-            return null;
+            };
         }
 
         internal Func<int, int> GetGeoRowsAccessor(int sourceDataVersion)
         {
             int numRows = this.GetQueryResultsItemCount(sourceDataVersion);
             this.GetQueryResults(sourceDataVersion);
-            return (Func<int, int>) (row =>
+            return row =>
             {
                 try
                 {
@@ -1272,17 +1223,17 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 catch (NullReferenceException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
                 catch (IndexOutOfRangeException ex)
                 {
-                    throw new OperationCanceledException("Datasource has been shut down", (Exception) ex);
+                    throw new OperationCanceledException("Datasource has been shut down", ex);
                 }
-            });
+            };
         }
 
         internal int GetColorCount(int sourceDataVersion)
@@ -1296,18 +1247,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 if (queryResults.Measures == null)
                     return 0;
                 if (this.seriesToColorIndex.Count != 0)
-                    return Enumerable.Max((IEnumerable<int>) this.seriesToColorIndex) + 1;
-                else
-                    return 1;
+                    return this.seriesToColorIndex.Max() + 1;
+                return 1;
             }
-            else
-            {
-                int[] preservedValuesIndex = category.PreservedValuesIndex;
-                if (preservedValuesIndex != null)
-                    return Enumerable.Max((IEnumerable<int>) preservedValuesIndex) + 1;
-                else
-                    return 0;
-            }
+            int[] preservedValuesIndex = category.PreservedValuesIndex;
+            if (preservedValuesIndex != null)
+                return preservedValuesIndex.Max() + 1;
+            return 0;
         }
 
         internal GeoEntityField.GeoEntityLevel? GetGeoEntityLevel(int sourceDataVersion)
@@ -1315,9 +1261,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.VerifyQueryResultsAreCurrent(sourceDataVersion);
             GeoEntityField geoEntityField = this.Geo as GeoEntityField;
             if (geoEntityField != null && geoEntityField.GeoColumns.Count > 0)
-                return new GeoEntityField.GeoEntityLevel?(geoEntityField.GeoLevel(geoEntityField.GeoColumns[0]));
-            else
-                return new GeoEntityField.GeoEntityLevel?();
+                return geoEntityField.GeoLevel(geoEntityField.GeoColumns[0]);
+            return new GeoEntityField.GeoEntityLevel?();
         }
 
         internal RegionLayerShadingMode? GetRegionShadingMode(int sourceDataVersion,
@@ -1329,24 +1274,24 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             ModelQueryIndexedKeyColumn category = queryResults.Category;
             List<ModelQueryMeasureColumn> measures = queryResults.Measures;
             if (measures == null || measures.Count == 0)
-                return new RegionLayerShadingMode?(RegionLayerShadingMode.FullBleed);
+                return RegionLayerShadingMode.FullBleed;
             if (measures.Count == 1 && category == null)
-                return new RegionLayerShadingMode?(RegionLayerShadingMode.Global);
+                return RegionLayerShadingMode.Global;
             if (selectedShadingMode.HasValue)
                 return selectedShadingMode;
             if (category == null)
-                return new RegionLayerShadingMode?(RegionLayerShadingMode.Local);
+                return RegionLayerShadingMode.Local;
             int[] numArray1 = category.Values as int[];
             if (numArray1 == null)
                 return new RegionLayerShadingMode?();
             ModelQueryKeyColumn firstModelQueryKey = queryResults.FirstModelQueryKey;
-            int[] numArray2 = firstModelQueryKey == null ? (int[]) null : firstModelQueryKey.Buckets;
+            int[] numArray2 = firstModelQueryKey == null ? null : firstModelQueryKey.Buckets;
             int resultsItemCount = this.GetQueryResultsItemCount(sourceDataVersion);
             if (numArray2 == null)
                 return new RegionLayerShadingMode?();
             int length = numArray2.Length;
             if (length == 0 || resultsItemCount == 0)
-                return new RegionLayerShadingMode?(RegionLayerShadingMode.Local);
+                return RegionLayerShadingMode.Local;
             int index1 = resultsItemCount - 1;
             int index2 = length;
             while (index2-- > 0)
@@ -1356,10 +1301,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 while (--index1 >= num1)
                 {
                     if (numArray1[index1] != num2)
-                        return new RegionLayerShadingMode?(RegionLayerShadingMode.Local);
+                        return RegionLayerShadingMode.Local;
                 }
             }
-            return new RegionLayerShadingMode?(RegionLayerShadingMode.ShiftGlobal);
+            return RegionLayerShadingMode.ShiftGlobal;
         }
 
         internal int GetGeoBucketCount(int sourceDataVersion)
@@ -1367,8 +1312,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             if (queryResults != null)
                 return queryResults.FirstModelQueryKey.Buckets.Length;
-            else
-                return -1;
+            return -1;
         }
 
         internal int GetBucketForInstanceId(int sourceDataVersion, InstanceId id)
@@ -1394,7 +1338,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         internal static InstanceId GetInstanceIdForRow(int row, int measureIndex, uint numMeasures)
         {
-            return new InstanceId((uint) ((ulong) row*(ulong) numMeasures + (ulong) measureIndex + 1UL));
+            return new InstanceId((uint) ((ulong) row*numMeasures + (ulong) measureIndex + 1UL));
         }
 
         internal int GetSeriesIndexForInstanceId(InstanceId id, bool considerPointMarkersAsSeries)
@@ -1408,32 +1352,28 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     return indexFromInstanceId;
                 return considerPointMarkersAsSeries && this.Measures.Count == 0 ? 0 : -1;
             }
-            else
+            try
             {
-                try
-                {
-                    GeoQueryResults queryResults = this.GetQueryResults(this.DataVersion);
-                    int rowFromInstanceId = this.GetRowFromInstanceId(id);
-                    return (int) queryResults.Category.Values[rowFromInstanceId];
-                }
-                catch (DataSource.InvalidQueryResultsException ex)
-                {
-                    return -1;
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    return -1;
-                }
-                catch (IndexOutOfRangeException ex)
-                {
-                    return -1;
-                }
-                catch (NullReferenceException ex)
-                {
-                    return -1;
-                }
+                GeoQueryResults queryResults = this.GetQueryResults(this.DataVersion);
+                int rowFromInstanceId = this.GetRowFromInstanceId(id);
+                return (int) queryResults.Category.Values[rowFromInstanceId];
             }
-            return -1;
+            catch (DataSource.InvalidQueryResultsException ex)
+            {
+                return -1;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return -1;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                return -1;
+            }
+            catch (NullReferenceException ex)
+            {
+                return -1;
+            }
         }
 
         protected internal override void Shutdown()
@@ -1441,16 +1381,16 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (!this.OkayToShutdown)
                 return;
             GeoQueryResults queryResults = this.QueryResults;
-            this.QueryResults = (GeoQueryResults) null;
+            this.QueryResults = null;
             List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
-            this.Measures = (List<Tuple<TableField, AggregationFunction>>) null;
+            this.Measures = null;
             if (measures != null)
                 measures.Clear();
-            this.Geo = (GeoField) null;
-            this.Category = (TableField) null;
-            this.Time = (TableField) null;
-            this.Color = (Tuple<TableField, AggregationFunction>) null;
-            this.Filter = (Filter) null;
+            this.Geo = null;
+            this.Category = null;
+            this.Time = null;
+            this.Color = null;
+            this.Filter = null;
             if (queryResults != null)
                 queryResults.Shutdown();
             base.Shutdown();
@@ -1464,8 +1404,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             int num = Math.Max(measures.Count, 1);
             if (num == 1)
                 return (int) id.ElementId - 1;
-            else
-                return ((int) id.ElementId - 1)/num;
+            return ((int) id.ElementId - 1)/num;
         }
 
         protected int GetMeasureIndexFromInstanceId(InstanceId id)
@@ -1475,8 +1414,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 return -1;
             if (measures.Count == 1)
                 return 0;
-            else
-                return ((int) id.ElementId - 1)%measures.Count;
+            return ((int) id.ElementId - 1)%measures.Count;
         }
 
         protected GeoQueryResults GetQueryResults(int sourceDataVersion)
@@ -1492,25 +1430,25 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 GeoQueryResults queryResults = this.GetQueryResults(this.DataVersion);
                 int rowFromInstanceId = this.GetRowFromInstanceId(id);
                 if (this.Category == null)
-                    return (string) null;
+                    return null;
 
                 return (string) queryResults.Category.AllValues[queryResults.Category.Values[rowFromInstanceId]];
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (IndexOutOfRangeException ex)
             {
-                return (string) null;
+                return null;
             }
             catch (NullReferenceException ex)
             {
-                return (string) null;
+                return null;
             }
         }
 
@@ -1521,21 +1459,20 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 int indexFromInstanceId = this.GetMeasureIndexFromInstanceId(id);
                 List<Tuple<TableField, AggregationFunction>> measures = this.Measures;
                 if (indexFromInstanceId < 0 || measures == null || indexFromInstanceId >= measures.Count)
-                    return (Tuple<TableField, AggregationFunction>) null;
-                else
-                    return measures[indexFromInstanceId];
+                    return null;
+                return measures[indexFromInstanceId];
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (Tuple<TableField, AggregationFunction>) null;
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                return (Tuple<TableField, AggregationFunction>) null;
+                return null;
             }
             catch (IndexOutOfRangeException ex)
             {
-                return (Tuple<TableField, AggregationFunction>) null;
+                return null;
             }
         }
 
@@ -1547,8 +1484,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             double forQueryResultsRow = this.GetLatitudeForQueryResultsRow(this.DataVersion, rowFromInstanceId);
             if (double.IsNaN(forQueryResultsRow))
                 return new double?();
-            else
-                return new double?(forQueryResultsRow);
+            return forQueryResultsRow;
         }
 
         protected double? LongitudeForId(InstanceId id)
@@ -1559,8 +1495,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             double forQueryResultsRow = this.GetLongitudeForQueryResultsRow(this.DataVersion, rowFromInstanceId);
             if (double.IsNaN(forQueryResultsRow))
                 return new double?();
-            else
-                return new double?(forQueryResultsRow);
+            return forQueryResultsRow;
         }
 
         protected DateTime? GetStartTimeForQueryResultsRow(int sourceDataVersion, int row)
@@ -1568,38 +1503,36 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoQueryResults queryResults = this.GetQueryResults(sourceDataVersion);
             if (!this.QueryResultsHaveTimeData(sourceDataVersion))
                 return new DateTime?();
-            else
-                return new DateTime?(queryResults.Time.StartTime[row]);
+            return queryResults.Time.StartTime[row];
         }
 
         protected DateTime? GetEndTimeForQueryResultsRow(int sourceDataVersion, int row)
         {
             if (!this.QueryResultsHaveTimeData(sourceDataVersion))
                 return new DateTime?();
-            else
-                return this.GetQueryResults(sourceDataVersion).GetEndTimeForRow(row);
+            return this.GetQueryResults(sourceDataVersion).GetEndTimeForRow(row);
         }
 
         protected override bool QueryData(CancellationToken cancellationToken, bool shouldRunMainQuery)
         {
-            GeoQueryResults geoQueryResults = (GeoQueryResults) null;
+            GeoQueryResults geoQueryResults = null;
             bool flag1 = false;
             long num1 = -1L;
             GeoQueryResults queryResults = this.QueryResults;
-            VisualizationTraceSource visualizationTraceSource = (VisualizationTraceSource) null;
+            VisualizationTraceSource visualizationTraceSource = null;
             GeoField geo = this.Geo;
             List<Tuple<TableField, AggregationFunction>> measuresList = this.Measures;
             TableField categoryColumn = this.Category;
             TableField timeColumn = this.Time;
             Filter filterForMainQuery = this.Filter ?? new Filter();
             string name = this.Name;
-            long num2 = (long) Math.Max(1, measuresList == null ? 1 : measuresList.Count);
+            long num2 = Math.Max(1, measuresList == null ? 1 : measuresList.Count);
             bool flag2 = this.MainQueryUpdatePending && shouldRunMainQuery;
             cancellationToken.ThrowIfCancellationRequested();
             if (geo != null && geo.GeoColumns.Count > 0)
             {
                 List<Tuple<FilterClause, Filter>> forPropertyQueries = filterForMainQuery.GetFiltersForPropertyQueries();
-                Tuple<ModelQuery, GeoQueryResults> tuple = (Tuple<ModelQuery, GeoQueryResults>) null;
+                Tuple<ModelQuery, GeoQueryResults> tuple = null;
                 if (forPropertyQueries.Count == 0)
                 {
                     if (flag2)
@@ -1608,24 +1541,21 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 }
                 else
                 {
-                    Task<Tuple<ModelQuery, GeoQueryResults>> task = (Task<Tuple<ModelQuery, GeoQueryResults>>) null;
+                    Task<Tuple<ModelQuery, GeoQueryResults>> task = null;
                     if (flag2)
                         task =
                             Task.Factory.StartNew<Tuple<ModelQuery, GeoQueryResults>>(
-                                (Func<Tuple<ModelQuery, GeoQueryResults>>)
-                                    (() =>
-                                        this.RunMainQuery(geo, categoryColumn, timeColumn, measuresList,
-                                            filterForMainQuery, this.QueryResults, cancellationToken)),
+                                () =>
+                                    this.RunMainQuery(geo, categoryColumn, timeColumn, measuresList,
+                                        filterForMainQuery, this.QueryResults, cancellationToken),
                                 cancellationToken);
                     forPropertyQueries.ForEach(
-                        (Action<Tuple<FilterClause, Filter>>)
-                            (filterClauseWithFilter =>
-                                Task.Factory.StartNew(
-                                    (Action)
-                                        (() =>
-                                            this.RunQueryForFilterProperties(filterClauseWithFilter.Item1, geo,
-                                                categoryColumn, timeColumn, filterClauseWithFilter.Item2,
-                                                cancellationToken)))));
+                        filterClauseWithFilter =>
+                            Task.Factory.StartNew(
+                                () =>
+                                    this.RunQueryForFilterProperties(filterClauseWithFilter.Item1, geo,
+                                        categoryColumn, timeColumn, filterClauseWithFilter.Item2,
+                                        cancellationToken)));
                     try
                     {
                         if (flag2)
@@ -1648,8 +1578,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                                 QueryResultsStale = resultsException.QueryResultsStale
                             };
                         }
-                        else
-                            throw;
+                        throw;
                     }
                 }
                 if (flag2)
@@ -1657,8 +1586,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     ModelQuery modelQuery = tuple.Item1;
                     geoQueryResults = tuple.Item2;
                     flag1 = modelQuery.QueryUsesAggregation;
-                    num1 = (long) geoQueryResults.ResultsItemCount*num2;
-                    if (num1 >= (long) int.MaxValue)
+                    num1 = geoQueryResults.ResultsItemCount*num2;
+                    if (num1 >= int.MaxValue)
                     {
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
                             "{0}: Instance Count (= {1}) >= int.MaxValue, resetting to {2}", (object) name,
@@ -1678,8 +1607,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             for (index2 = 0; index2 < count; ++index2)
                             {
                                 if (measuresList[index1].Item2 == this.colorAssignedMeasures[index2].Item2 &&
-                                    TableMember.QuerySubstitutable((object) measuresList[index1].Item1,
-                                        (object) this.colorAssignedMeasures[index2].Item1))
+                                    TableMember.QuerySubstitutable(measuresList[index1].Item1,
+                                        this.colorAssignedMeasures[index2].Item1))
                                 {
                                     this.seriesToColorIndex.Add(index2);
                                     break;
@@ -1702,12 +1631,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             cancellationToken.ThrowIfCancellationRequested();
             if (geoQueryResults == null)
                 num1 = -1L;
-            bool flag3 = !object.ReferenceEquals((object) queryResults, (object) geoQueryResults);
+            bool flag3 = !object.ReferenceEquals(queryResults, geoQueryResults);
             if (flag3)
             {
                 ++this.DataVersion;
                 if (geoQueryResults != null)
-                    geoQueryResults.Log((TraceSource) visualizationTraceSource, cancellationToken, this.DataVersion,
+                    geoQueryResults.Log(visualizationTraceSource, cancellationToken, this.DataVersion,
                         (uint) num2);
                 if (visualizationTraceSource != null)
                     visualizationTraceSource.Close();
@@ -1743,7 +1672,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
                 queryResults.Latitude = new ModelQueryKeyColumn()
                 {
-                    TableColumn = (TableMember) geo.Latitude,
+                    TableColumn = geo.Latitude,
                     Type = KeyColumnDataType.Double,
                     SortAscending = true,
                     UseForBuckets = true,
@@ -1753,7 +1682,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 ;
                 queryResults.Longitude = new ModelQueryKeyColumn()
                 {
-                    TableColumn = (TableMember) geo.Longitude,
+                    TableColumn = geo.Longitude,
                     Type = KeyColumnDataType.Double,
                     SortAscending = true,
                     UseForBuckets = true,
@@ -1768,7 +1697,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             else
             {
                 queryResults.GeoFields = new List<ModelQueryKeyColumn>(geo.GeoColumns.Count);
-                geo.GeoColumns.ForEach((Action<TableColumn>) (col =>
+                geo.GeoColumns.ForEach(col =>
                 {
                     ModelQueryKeyColumn item = new ModelQueryKeyColumn
                     {
@@ -1780,30 +1709,30 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         FetchValues = true
                     };
                     queryResults.GeoFields.Add(item);
-                }));
+                });
 
                 queryResults.GeoFields[0].DiscardNulls = true;
 
                 queryResults.GeoFields.ForEach(
-                    (Action<ModelQueryKeyColumn>) ((ModelQueryKeyColumn key) =>
+                    (ModelQueryKeyColumn key) =>
                     {
                         modelQuery.AddKey(key);
-                    }));
+                    });
 
                 queryResults.FirstModelQueryKey = queryResults.GeoFields[0];
             }
             if (categoryColumn != null)
             {
                 ModelQueryIndexedKeyColumn indexedKeyColumn1 = currentQueryResults == null
-                    ? (ModelQueryIndexedKeyColumn) null
+                    ? null
                     : currentQueryResults.Category;
                 bool flag = indexedKeyColumn1 != null &&
                             indexedKeyColumn1.TableColumn.RefersToTheSameMemberAs(
-                                (TableMember) (categoryColumn as TableColumn));
+                                categoryColumn as TableColumn);
 
                 queryResults.Category = new ModelQueryIndexedKeyColumn()
                 {
-                    TableColumn = (TableMember) (categoryColumn as TableColumn),
+                    TableColumn = categoryColumn as TableColumn,
                     Type = KeyColumnDataType.String,
                     SortAscending = true,
                     UseForBuckets = false,
@@ -1848,21 +1777,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (measuresList != null)
             {
                 measuresList.ForEach(
-                    (Action<Tuple<TableField, AggregationFunction>>)
-                        (measure =>
-                            queryResults.Measures.Add(
-                                new ModelQueryMeasureColumn
-                                {
-                                    TableColumn = measure.Item1 as TableMember,
-                                    AggregationFunction = measure.Item2,
-                                    Accumulate = accumulation,
-                                    ModelQueryIndexedKey = categoryKey,
-                                    FetchValues = true
-                                })));
+                    measure =>
+                        queryResults.Measures.Add(
+                            new ModelQueryMeasureColumn
+                            {
+                                TableColumn = measure.Item1 as TableMember,
+                                AggregationFunction = measure.Item2,
+                                Accumulate = accumulation,
+                                ModelQueryIndexedKey = categoryKey,
+                                FetchValues = true
+                            }));
             }
             queryResults.Measures.ForEach(
-                (Action<ModelQueryMeasureColumn>)
-                    (measure => modelQuery.AddMeasure(measure)));
+                measure => modelQuery.AddMeasure(measure));
             cancellationToken.ThrowIfCancellationRequested();
             modelQuery.QueryData(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
@@ -1873,25 +1800,25 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private void RunQueryForFilterProperties(FilterClause filterClause, GeoField geo, TableField categoryColumn,
             TableField timeColumn, Filter filter, CancellationToken cancellationToken)
         {
-            ModelQuery modelQuery = (ModelQuery) null;
+            ModelQuery modelQuery = null;
             string name = string.Format(
                 "{0} filterclause (tablecol = {1}, Agg Fn = {2}, filterId={3}, querycount={4})", (object) this.Name,
                 (object) filterClause.TableMember.Name, (object) filterClause.AggregationFunction, (object) filter.Id,
                 (object) Interlocked.Increment(ref this.queryCount));
             try
             {
-                TableMember tableMember = (TableMember) null;
+                TableMember tableMember = null;
                 modelQuery = this.InstantiateModelQuery(name, filter, cancellationToken);
                 if (modelQuery == null)
                     throw new OperationCanceledException("Datasource has been shut down: modelQuery = null",
                         cancellationToken);
-                List<Tuple<TableField, AggregationFunction>> list = (List<Tuple<TableField, AggregationFunction>>) null;
-                ModelQueryKeyColumn modelQueryKey1 = (ModelQueryKeyColumn) null;
-                ModelQueryMeasureColumn modelQueryMeasure = (ModelQueryMeasureColumn) null;
+                List<Tuple<TableField, AggregationFunction>> list = null;
+                ModelQueryKeyColumn modelQueryKey1 = null;
+                ModelQueryMeasureColumn modelQueryMeasure = null;
                 if (filterClause is NumericRangeFilterClause)
                 {
                     list = new List<Tuple<TableField, AggregationFunction>>();
-                    list.Add(new Tuple<TableField, AggregationFunction>((TableField) filterClause.TableMember,
+                    list.Add(new Tuple<TableField, AggregationFunction>(filterClause.TableMember,
                         filterClause.AggregationFunction));
                 }
                 else if (filterClause is CategoryFilterClause<double>)
@@ -1966,7 +1893,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 {
                     ModelQuery modelQuery1 = modelQuery;
                     ModelQueryKeyColumn modelQueryKeyColumn1 = new ModelQueryKeyColumn();
-                    modelQueryKeyColumn1.TableColumn = (TableMember) geo.Latitude;
+                    modelQueryKeyColumn1.TableColumn = geo.Latitude;
                     modelQueryKeyColumn1.Type = KeyColumnDataType.Double;
                     modelQueryKeyColumn1.SortAscending = false;
                     modelQueryKeyColumn1.SortDescending = false;
@@ -1977,7 +1904,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     modelQuery1.AddKey(modelQueryKey2);
                     ModelQuery modelQuery2 = modelQuery;
                     ModelQueryKeyColumn modelQueryKeyColumn2 = new ModelQueryKeyColumn();
-                    modelQueryKeyColumn2.TableColumn = (TableMember) geo.Longitude;
+                    modelQueryKeyColumn2.TableColumn = geo.Longitude;
                     modelQueryKeyColumn2.Type = KeyColumnDataType.Double;
                     modelQueryKeyColumn2.SortAscending = false;
                     modelQueryKeyColumn2.SortDescending = false;
@@ -1988,12 +1915,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     modelQuery2.AddKey(modelQueryKey3);
                 }
                 else
-                    geo.GeoColumns.ForEach((Action<TableColumn>) (col =>
+                    geo.GeoColumns.ForEach(col =>
                     {
                         ModelQuery modelQuery1 = modelQuery;
                         ModelQueryKeyColumn modelQueryKey = new ModelQueryKeyColumn()
                         {
-                            TableColumn = (TableMember) col,
+                            TableColumn = col,
                             Type = KeyColumnDataType.String,
                             SortAscending = false,
                             SortDescending = false,
@@ -2002,12 +1929,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             FetchValues = false
                         };
                         modelQuery1.AddKey(modelQueryKey);
-                    }));
+                    });
                 if (categoryColumn != null)
                 {
                     ModelQuery modelQuery1 = modelQuery;
                     ModelQueryKeyColumn modelQueryKeyColumn = new ModelQueryKeyColumn();
-                    modelQueryKeyColumn.TableColumn = (TableMember) (categoryColumn as TableColumn);
+                    modelQueryKeyColumn.TableColumn = categoryColumn as TableColumn;
                     modelQueryKeyColumn.Type = KeyColumnDataType.String;
                     modelQueryKeyColumn.SortAscending = false;
                     modelQueryKeyColumn.SortDescending = false;
@@ -2021,7 +1948,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 {
                     ModelQuery modelQuery1 = modelQuery;
                     ModelQueryTimeKeyColumn queryTimeKeyColumn1 = new ModelQueryTimeKeyColumn();
-                    queryTimeKeyColumn1.TableColumn = (TableMember) (timeColumn as TableColumn);
+                    queryTimeKeyColumn1.TableColumn = timeColumn as TableColumn;
                     queryTimeKeyColumn1.Type = KeyColumnDataType.DateTime;
                     queryTimeKeyColumn1.SortAscending = false;
                     queryTimeKeyColumn1.SortDescending = false;
@@ -2033,7 +1960,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         : TimeChunkPeriod.None;
                     queryTimeKeyColumn1.FetchValues = false;
                     ModelQueryTimeKeyColumn queryTimeKeyColumn2 = queryTimeKeyColumn1;
-                    modelQuery1.AddKey((ModelQueryKeyColumn) queryTimeKeyColumn2);
+                    modelQuery1.AddKey(queryTimeKeyColumn2);
                 }
                 if (list != null)
                 {
@@ -2041,7 +1968,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     queryMeasureColumn.TableColumn = list[0].Item1 as TableMember;
                     queryMeasureColumn.AggregationFunction = list[0].Item2;
                     queryMeasureColumn.Accumulate = ModelQueryMeasureColumn.AccumulationType.NoAccumulation;
-                    queryMeasureColumn.ModelQueryIndexedKey = (ModelQueryIndexedKeyColumn) null;
+                    queryMeasureColumn.ModelQueryIndexedKey = null;
                     queryMeasureColumn.FetchValues = true;
                     modelQueryMeasure = queryMeasureColumn;
                     modelQuery.AddMeasure(modelQueryMeasure);
@@ -2052,9 +1979,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0,
                     "{0}: Calling UpdateProperties() for filterclause", (object) name);
                 if (modelQueryKey1 != null)
-                    filterClause.UpdateProperties(filter.MajorVersion, (ModelQueryColumn) modelQueryKey1);
+                    filterClause.UpdateProperties(filter.MajorVersion, modelQueryKey1);
                 else
-                    filterClause.UpdateProperties(filter.MajorVersion, (ModelQueryColumn) modelQueryMeasure);
+                    filterClause.UpdateProperties(filter.MajorVersion, modelQueryMeasure);
             }
             catch (OperationCanceledException ex)
             {
@@ -2071,7 +1998,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 VisualizationTraceSource.Current.Fail(
                     "QueryEngine caught and ignored InvalidQueryResultsException exception in query evaluation for " +
-                    name, (Exception) ex);
+                    name, ex);
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0,
                     "GeoDataSource {0}: InvokeActionOnDispatcher() caught InvalidQueryResultsException, QueryResultsFailed = {1}, QueryResultsFailed = {2}, innerException={3}",
                     (object) name, ex.QueryEvaluationFailed,
@@ -2118,7 +2045,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             if (categoryField != null)
                 this.ValidateCategoryField(categoryField);
-            bool flag = !TableMember.QuerySubstitutable((object) categoryField, (object) this.Category);
+            bool flag = !TableMember.QuerySubstitutable(categoryField, this.Category);
             this.Category = categoryField;
             if (flag)
                 this.FieldsChangedSinceLastQuery = true;
@@ -2129,7 +2056,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             if (timeField != null)
                 this.ValidateTimeField(timeField);
-            bool flag = !TableMember.QuerySubstitutable((object) timeField, (object) this.Time);
+            bool flag = !TableMember.QuerySubstitutable(timeField, this.Time);
             this.Time = timeField;
             if (flag)
                 this.FieldsChangedSinceLastQuery = true;
@@ -2140,7 +2067,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             return
                 this.SetColor(colorField == null
-                    ? (Tuple<TableField, AggregationFunction>) null
+                    ? null
                     : new Tuple<TableField, AggregationFunction>(colorField, aggregationFunction));
         }
 
@@ -2151,7 +2078,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 this.ValidateColorField(color.Item1);
                 flag = this.Color == null || color.Item2 != this.Color.Item2 ||
-                       !(color.Item1 as TableColumn).QuerySubstitutable((TableMember) (this.Color.Item1 as TableColumn));
+                       !(color.Item1 as TableColumn).QuerySubstitutable(this.Color.Item1 as TableColumn);
             }
             else
                 flag = this.Color != null;
@@ -2165,7 +2092,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             return
                 this.AddMeasure(measureField == null
-                    ? (Tuple<TableField, AggregationFunction>) null
+                    ? null
                     : new Tuple<TableField, AggregationFunction>(measureField, aggregationFunction));
         }
 
@@ -2188,9 +2115,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (measures == null)
                 return false;
             bool flag =
-                Enumerable.Any<Tuple<TableField, AggregationFunction>>(
-                    (IEnumerable<Tuple<TableField, AggregationFunction>>) measures);
-            measures.RemoveAll((Predicate<Tuple<TableField, AggregationFunction>>) (measure => true));
+                measures.Any();
+            measures.RemoveAll(measure => true);
             if (flag)
                 this.FieldsChangedSinceLastQuery = true;
             return flag;
@@ -2243,13 +2169,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             public IEnumerator<InstanceId> GetEnumerator()
             {
                 return
-                    (IEnumerator<InstanceId>)
-                        new GeoDataSource.InstanceIdOverTimeEnumerator(this.dataSource, this.sourceVersion, this.id);
+                    new GeoDataSource.InstanceIdOverTimeEnumerator(this.dataSource, this.sourceVersion, this.id);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return (IEnumerator) this.GetEnumerator();
+                return this.GetEnumerator();
             }
         }
 
@@ -2269,7 +2194,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
             object IEnumerator.Current
             {
-                get { return (object) this.Current; }
+                get { return this.Current; }
             }
 
             public InstanceId Current
@@ -2288,8 +2213,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     }
                     if (!this.initialized || this.queryResultsStale)
                         return new InstanceId(134217727U);
-                    else
-                        return this.dataSource.GetInstanceIdForRow(this.current, this.measureIndex);
+                    return this.dataSource.GetInstanceIdForRow(this.current, this.measureIndex);
                 }
             }
 
@@ -2340,16 +2264,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         this.initialized = true;
                         return this.current <= this.last;
                     }
+                    if (this.current == this.last)
+                        return false;
+                    if (this.dataSource.Category != null)
+                        this.current = this.FindRowWithCategory(this.current + 1, this.last, this.category);
                     else
-                    {
-                        if (this.current == this.last)
-                            return false;
-                        if (this.dataSource.Category != null)
-                            this.current = this.FindRowWithCategory(this.current + 1, this.last, this.category);
-                        else
-                            ++this.current;
-                        return this.current <= this.last;
-                    }
+                        ++this.current;
+                    return this.current <= this.last;
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -2439,14 +2360,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             public IEnumerator<IInstanceParameter> GetEnumerator()
             {
                 return
-                    (IEnumerator<IInstanceParameter>)
-                        new GeoDataSource.QueryResultsDataEnumerator(this.queryResults, this.colorIndices,
-                            this.seriesToColorIndex, this.firstRow, this.lastRow);
+                    new GeoDataSource.QueryResultsDataEnumerator(this.queryResults, this.colorIndices,
+                        this.seriesToColorIndex, this.firstRow, this.lastRow);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return (IEnumerator) this.GetEnumerator();
+                return this.GetEnumerator();
             }
         }
 
@@ -2467,7 +2387,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
             object IEnumerator.Current
             {
-                get { return (object) this.Current; }
+                get { return this.Current; }
             }
 
             public IInstanceParameter Current
@@ -2476,12 +2396,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 {
                     if (this.disposed)
                         throw new ObjectDisposedException("QueryResultsDataEnumerator");
-                    else
-                        return
-                            (IInstanceParameter)
-                                new GeoDataSource.QueryResultsDataForRow(this.queryResults, this.colorIndices,
-                                    this.queryResults.Measures, this.seriesToColorIndex, this.currentMeasure,
-                                    this.category, this.currentRow);
+                    return
+                        new GeoDataSource.QueryResultsDataForRow(this.queryResults, this.colorIndices,
+                            this.queryResults.Measures, this.seriesToColorIndex, this.currentMeasure,
+                            this.category, this.currentRow);
                 }
             }
 
@@ -2536,11 +2454,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     this.lastRowCurrentCategory = -1;
                     return false;
                 }
-                else
-                {
-                    this.firstRowCurrentCategory = this.lastRow;
-                    return this.InitializeRowsForNextCategory();
-                }
+                this.firstRowCurrentCategory = this.lastRow;
+                return this.InitializeRowsForNextCategory();
             }
 
             private bool InitializeRowsForNextCategory()
@@ -2550,11 +2465,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     this.currentRow = this.firstRowCurrentCategory - 1;
                     return true;
                 }
-                else
-                {
-                    this.currentRow = -1;
-                    return false;
-                }
+                this.currentRow = -1;
+                return false;
             }
 
             private bool SetRowsForNextCategory(int row)
@@ -2567,32 +2479,26 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         this.lastRowCurrentCategory = this.lastRow;
                         return true;
                     }
-                    else
-                    {
-                        this.firstRowCurrentCategory = -1;
-                        this.lastRowCurrentCategory = -1;
-                        return false;
-                    }
+                    this.firstRowCurrentCategory = -1;
+                    this.lastRowCurrentCategory = -1;
+                    return false;
                 }
-                else if (--row < this.firstRow)
+                if (--row < this.firstRow)
                 {
                     this.firstRowCurrentCategory = -1;
                     this.lastRowCurrentCategory = -1;
                     return false;
                 }
-                else
+                this.lastRowCurrentCategory = row + 1;
+                if (this.category.Values == null)
+                    return false;
+                int uniqueValue = (int) this.category.Values[row];
+                do
                 {
-                    this.lastRowCurrentCategory = row + 1;
-                    if (this.category.Values == null)
-                        return false;
-                    int uniqueValue = (int) this.category.Values[row];
-                    do
-                    {
-                    } while (--row >= this.firstRow && this.category.Values[row] == uniqueValue);
+                } while (--row >= this.firstRow && this.category.Values[row] == uniqueValue);
 
-                    this.firstRowCurrentCategory = row + 1;
-                    return true;
-                }
+                this.firstRowCurrentCategory = row + 1;
+                return true;
             }
         }
 
@@ -2613,8 +2519,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     if (this.qrMeasures != null)
                         return GeoDataSource.GetInstanceIdForRow(this.rowIndex, this.measureIndex,
                             (uint) Math.Max(1, this.qrMeasures.Count));
-                    else
-                        return new InstanceId(134217727U);
+                    return new InstanceId(134217727U);
                 }
             }
 
@@ -2643,8 +2548,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         return this.colorIndices[this.category.PreservedValuesIndex[this.ShiftValue]];
                     if (this.qrMeasures == null || this.qrMeasures.Count == 0)
                         return this.colorIndices[0];
-                    else
-                        return this.colorIndices[this.seriesToColorIndex[this.ShiftValue]];
+                    return this.colorIndices[this.seriesToColorIndex[this.ShiftValue]];
                 }
             }
 
@@ -2665,11 +2569,10 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 get
                 {
                     ModelQueryTimeKeyColumn time = this.queryResults.Time;
-                    DateTime[] dateTimeArray = time == null ? (DateTime[]) null : time.StartTime;
+                    DateTime[] dateTimeArray = time == null ? null : time.StartTime;
                     if (dateTimeArray != null)
-                        return new DateTime?(dateTimeArray[this.rowIndex]);
-                    else
-                        return new DateTime?();
+                        return dateTimeArray[this.rowIndex];
+                    return new DateTime?();
                 }
             }
 

@@ -26,7 +26,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             get
             {
-                return (IEnumerable<T>)this.specifiedItems;
+                return this.specifiedItems;
             }
         }
 
@@ -63,8 +63,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 throw new ArgumentNullException("TableMeasures may not be used in category filters");
             if (!(type == typeof(string)) && !(type == typeof(double)) && (!(type == typeof(bool)) && !(type == typeof(DateTime))))
                 throw new ArgumentException("Unsupported type: " + this.GetType().FullName);
-            this.equalityComparer = (IEqualityComparer<T>)EqualityComparer<T>.Default;
-            this.comparer = (IComparer<T>)Comparer<T>.Default;
+            this.equalityComparer = EqualityComparer<T>.Default;
+            this.comparer = Comparer<T>.Default;
             this.modelCulture = modelCulture;
             switch (tableMember.DataType)
             {
@@ -73,25 +73,25 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         throw new ArgumentException(type.FullName + "can not be used with TableMember data type " + ((object)tableMember.DataType).ToString());
                     this.comparer = StringComparer.Create(this.modelCulture, true) as IComparer<T>;
                     this.equalityComparer = this.comparer as IEqualityComparer<T>;
-                    this.isBlank = (Func<T, bool>)(val => (object)val == null);
+                    this.isBlank = val => (object)val == null;
                     break;
                 case TableMemberDataType.Bool:
                     if (type != typeof(bool))
                         throw new ArgumentException(type.FullName + "can not be used with TableMember data type " + ((object)tableMember.DataType).ToString());
-                    this.comparer = (IComparer<T>)Comparer<T>.Create((Comparison<T>)((x, y) => -Comparer<T>.Default.Compare(x, y)));
-                    this.isBlank = (Func<T, bool>)(val => false);
+                    this.comparer = Comparer<T>.Create((x, y) => -Comparer<T>.Default.Compare(x, y));
+                    this.isBlank = val => false;
                     break;
                 case TableMemberDataType.Double:
                 case TableMemberDataType.Long:
                 case TableMemberDataType.Currency:
                     if (!(type == typeof(float)) && !(type == typeof(double)) && (!(type == typeof(long)) && !(type == typeof(short))) && (!(type == typeof(int)) && !(type == typeof(byte)) && (!(type == typeof(ulong)) && !(type == typeof(ushort)))) && !(type == typeof(uint)))
                         throw new ArgumentException(type.FullName + "can not be used with TableMember data type " + ((object)tableMember.DataType).ToString());
-                    this.isBlank = (Func<T, bool>)(val => double.IsNaN(Convert.ToDouble((object)val)));
+                    this.isBlank = val => double.IsNaN(Convert.ToDouble(val));
                     break;
                 case TableMemberDataType.DateTime:
                     if (type != typeof(DateTime))
                         throw new ArgumentException(type.FullName + "can not be used with TableMember data type " + ((object)tableMember.DataType).ToString());
-                    this.isBlank = (Func<T, bool>)(val => Convert.ToDateTime((object)val) == ModelQuery.UnknownDateTime);
+                    this.isBlank = val => Convert.ToDateTime(val) == ModelQuery.UnknownDateTime;
                     break;
                 default:
                     throw new ArgumentException("Unsupported table column data type " + ((object)tableMember.DataType).ToString());
@@ -106,12 +106,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             this.BlankSpecified = blankSpecified;
             this.AllSpecified = allSpecified;
-            this.selectables = (T[])null;
+            this.selectables = null;
             this.blankIsASelectableItem = false;
         }
 
         public CategoryFilterClause(CategoryFilterClause<T> oldFilterClause, IEnumerable<T> specifiedItems = null, bool blankSpecified = false, bool allSpecified = false)
-            : base((FilterClause)oldFilterClause)
+            : base(oldFilterClause)
         {
             this.equalityComparer = oldFilterClause.equalityComparer;
             this.comparer = oldFilterClause.comparer;
@@ -127,7 +127,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             this.BlankSpecified = blankSpecified;
             this.AllSpecified = allSpecified;
-            this.selectables = (T[])null;
+            this.selectables = null;
             this.blankIsASelectableItem = false;
             if (oldFilterClause.selectables == null)
                 return;
@@ -144,27 +144,27 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 this.comparer = StringComparer.Create(this.modelCulture, true) as IComparer<T>;
                 this.equalityComparer = this.comparer as IEqualityComparer<T>;
-                this.isBlank = (Func<T, bool>)(val => (object)val == null);
+                this.isBlank = val => (object)val == null;
             }
             else if (type == typeof(bool))
             {
-                this.equalityComparer = (IEqualityComparer<T>)EqualityComparer<T>.Default;
-                this.comparer = (IComparer<T>)Comparer<T>.Create((Comparison<T>)((x, y) => -Comparer<T>.Default.Compare(x, y)));
-                this.isBlank = (Func<T, bool>)(val => false);
+                this.equalityComparer = EqualityComparer<T>.Default;
+                this.comparer = Comparer<T>.Create((x, y) => -Comparer<T>.Default.Compare(x, y));
+                this.isBlank = val => false;
             }
             else if (type == typeof(DateTime))
             {
-                this.equalityComparer = (IEqualityComparer<T>)EqualityComparer<T>.Default;
-                this.comparer = (IComparer<T>)Comparer<T>.Default;
-                this.isBlank = (Func<T, bool>)(val => Convert.ToDateTime((object)val) == ModelQuery.UnknownDateTime);
+                this.equalityComparer = EqualityComparer<T>.Default;
+                this.comparer = Comparer<T>.Default;
+                this.isBlank = val => Convert.ToDateTime(val) == ModelQuery.UnknownDateTime;
             }
             else
             {
                 if (!(type == typeof(double)))
                     throw new ArgumentException("Unexpected type: " + type.Name);
-                this.equalityComparer = (IEqualityComparer<T>)EqualityComparer<T>.Default;
-                this.comparer = (IComparer<T>)Comparer<T>.Default;
-                this.isBlank = (Func<T, bool>)(val => double.IsNaN(Convert.ToDouble((object)val)));
+                this.equalityComparer = EqualityComparer<T>.Default;
+                this.comparer = Comparer<T>.Default;
+                this.isBlank = val => double.IsNaN(Convert.ToDouble(val));
             }
             this.Unwrap(state, modelCulture);
         }
@@ -173,7 +173,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             if (this.selectables == null)
             {
-                selectableItems = (IEnumerable<T>)null;
+                selectableItems = null;
                 selectedIndices = new BitArray(0);
                 showBlank = false;
                 allSpecified = false;
@@ -186,12 +186,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 showBlank = this.blankIsASelectableItem || this.BlankSpecified;
                 blankSpecified = this.BlankSpecified;
                 allSpecified = this.AllSpecified;
-                int length = Enumerable.Count<T>(selectableItems);
+                int length = selectableItems.Count();
                 selectedIndices = new BitArray(length);
                 int index = 0;
                 foreach (T obj in selectableItems)
                 {
-                    bool flag = Enumerable.Contains<T>(this.SpecifiedItems, obj, this.equalityComparer);
+                    bool flag = this.SpecifiedItems.Contains(obj, this.equalityComparer);
                     selectedIndices[index] = allSpecified ? !flag : flag;
                     ++index;
                 }
@@ -297,7 +297,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     return true;
                 }
 
-                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "UpdateProperties(): returning false for AndOrFilterClause (table column = {0}, Agg Fn = {1}, queryVersion={2}, RequestedVersion={3}) - rightType = false, queryColumn.Values.Type={4}, type = {5}", base.TableMember.Name, base.AggregationFunction, queryVersion, base.CurrentVersion, ((dynamic)queryColumn.Values).GetType().Name, typeof(T).Name);
+                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "UpdateProperties(): returning false for AndOrFilterClause (table column = {0}, Agg Fn = {1}, queryVersion={2}, RequestedVersion={3}) - rightType = false, queryColumn.Values.Type={4}, type = {5}", base.TableMember.Name, base.AggregationFunction, queryVersion, base.CurrentVersion, queryColumn.Values.GetType().Name, typeof(T).Name);
             }
             return false;
         }
@@ -310,8 +310,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 AllSpecified = this.AllSpecified,
                 BlankSpecified = this.BlankSpecified
             };
-            base.Wrap((FilterClause.SerializableFilterClause)categoryFilterClause);
-            return (FilterClause.SerializableFilterClause)categoryFilterClause;
+            base.Wrap(categoryFilterClause);
+            return categoryFilterClause;
         }
 
         internal void Unwrap(FilterClause.SerializableFilterClause wrappedState, CultureInfo modelCulture)
@@ -321,19 +321,19 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             CategoryFilterClause<T>.SerializableCategoryFilterClause categoryFilterClause = wrappedState as CategoryFilterClause<T>.SerializableCategoryFilterClause;
             if (categoryFilterClause == null)
                 throw new ArgumentException("wrappedState must be of type SerializableCategoryFilterClause");
-            base.Unwrap((FilterClause.SerializableFilterClause)categoryFilterClause);
+            base.Unwrap(categoryFilterClause);
             this.specifiedItems = categoryFilterClause.SpecifiedItems;
             for (int index = 0; index < this.specifiedItems.Count - 1; ++index)
             {
                 if (this.comparer.Compare(this.specifiedItems[index], this.specifiedItems[index + 1]) >= 0)
                 {
-                    this.specifiedItems = Enumerable.ToList<T>((IEnumerable<T>)Enumerable.OrderBy<T, T>(Enumerable.Distinct<T>((IEnumerable<T>)categoryFilterClause.SpecifiedItems, this.equalityComparer), (Func<T, T>)(val => val), this.comparer));
+                    this.specifiedItems = categoryFilterClause.SpecifiedItems.Distinct(this.equalityComparer).OrderBy(val => val, this.comparer).ToList();
                     break;
                 }
             }
             this.AllSpecified = categoryFilterClause.AllSpecified;
             this.BlankSpecified = categoryFilterClause.BlankSpecified;
-            this.selectables = (T[])null;
+            this.selectables = null;
             this.blankIsASelectableItem = false;
         }
 
@@ -352,7 +352,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this.SpecifiedItems == null)
                     this.SpecifiedItems = new List<T>();
-                return (FilterClause)new CategoryFilterClause<T>((FilterClause.SerializableFilterClause)this, modelCulture);
+                return new CategoryFilterClause<T>(this, modelCulture);
             }
         }
     }

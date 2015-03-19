@@ -46,8 +46,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     return true;
                 if (dataBinding != null)
                     return dataBinding.DisplayNeedsRefresh;
-                else
-                    return false;
+                return false;
             }
         }
 

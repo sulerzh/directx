@@ -33,80 +33,56 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             foreach (Tuple<AggregationFunction?, string, object> tuple in this.Fields)
             {
-                if (string.Compare(fieldName, tuple.Item2, StringComparison.OrdinalIgnoreCase) == 0)
+                if ((string.Compare(fieldName, tuple.Item2, StringComparison.OrdinalIgnoreCase) == 0 &&
+                     agFn == tuple.Item1) ||
+                    (this.AnyMeasure && !agFn.HasValue &&
+                     string.Compare(fieldName, "", StringComparison.OrdinalIgnoreCase) != 0 && !tuple.Item1.HasValue))
                 {
-                    AggregationFunction? nullable1 = agFn;
-                    AggregationFunction? nullable2 = tuple.Item1;
-                    if ((nullable1.GetValueOrDefault() != nullable2.GetValueOrDefault() ? 0 : (nullable1.HasValue == nullable2.HasValue ? 1 : 0)) != 0)
-                        goto label_5;
+                    if (tuple.Item1.HasValue)
+                    {
+                        if ((AggregationFunction)tuple.Item1 == AggregationFunction.UserDefined)
+                            return tuple.Item2;
+                        return string.Format(Resources.Tooltip_FieldFormat, tuple.Item2, tuple.Item1.Value.DisplayString());
+                    }
+                    return tuple.Item2;
                 }
-                if (!this.AnyMeasure || !agFn.HasValue || string.Compare(fieldName, "", StringComparison.OrdinalIgnoreCase) != 0 || !tuple.Item1.HasValue)
-                    continue;
-            label_5:
-                if (!tuple.Item1.HasValue)
-                    return tuple.Item2;
-                AggregationFunction? nullable = tuple.Item1;
-                if ((nullable.GetValueOrDefault() != AggregationFunction.UserDefined ? 0 : (nullable.HasValue ? 1 : 0)) != 0)
-                    return tuple.Item2;
-                else
-                    return string.Format(Resources.Tooltip_FieldFormat, (object)tuple.Item2, (object)AggregationFunctionExtensions.DisplayString(tuple.Item1.Value));
             }
-            return (string)null;
+            return null;
         }
 
         public string GetValueForField(string fieldName, AggregationFunction? agFn)
         {
             foreach (Tuple<AggregationFunction?, string, dynamic> tuple in this.Fields)
             {
-                if (string.Compare(fieldName, tuple.Item2, StringComparison.OrdinalIgnoreCase) == 0)
+                if ((string.Compare(fieldName, tuple.Item2, StringComparison.OrdinalIgnoreCase) == 0 && agFn == tuple.Item1) ||
+                    ((this.AnyMeasure && agFn.HasValue && string.Compare(fieldName, "", StringComparison.OrdinalIgnoreCase) == 0 && tuple.Item1.HasValue)))
                 {
-                    if (agFn.GetValueOrDefault() == tuple.Item1.GetValueOrDefault() &&
-                        agFn.HasValue == tuple.Item1.HasValue)
+                    if (tuple.Item3 == null)
+                        return null;
+                    if (tuple.Item1.HasValue)
                     {
-                        if (tuple.Item3 == null)
-                            return (string)null;
-                        if (tuple.Item1.HasValue)
+                        if (tuple.Item3 is string)
                         {
-                            if (tuple.Item3 is string)
-                            {
-                                return (string)tuple.Item3;
-                            }
-                            else
-                            {
-                                AggregationFunction? nullable1 = tuple.Item1;
-                                int num1;
-                                if ((nullable1.GetValueOrDefault() != AggregationFunction.Count ? 1 : (!nullable1.HasValue ? 1 : 0)) != 0)
-                                {
-                                    AggregationFunction? nullable2 = tuple.Item1;
-                                    num1 = nullable2.GetValueOrDefault() != AggregationFunction.DistinctCount ? 1 : (!nullable2.HasValue ? 1 : 0);
-                                }
-                                else
-                                    num1 = 0;
-                                bool flag = num1 != 0;
-
-                                string format = (flag && Math.Abs(tuple.Item3) > 0.01 && Math.Abs(tuple.Item3) < 1E+21) ? "N" : null;
-                                return (string)tuple.Item3.ToString(format);
-
-                            }
+                            return tuple.Item3;
                         }
-                        else
-                        {
-                            return (string)tuple.Item3.ToString();
-                        }
+                        string format = (tuple.Item1 != AggregationFunction.Count &&
+                            tuple.Item1 != AggregationFunction.DistinctCount &&
+                            Math.Abs(tuple.Item3) > 0.01 &&
+                            Math.Abs(tuple.Item3) < 1E+21) ?
+                            "N" : null;
+                        return tuple.Item3.ToString(format);
                     }
+                    return tuple.Item3.ToString();
                 }
-                if (!this.AnyMeasure || !agFn.HasValue || string.Compare(fieldName, "", StringComparison.OrdinalIgnoreCase) != 0 || !tuple.Item1.HasValue)
-                    continue;
             }
-            return (string)null;
+            return null;
         }
 
         public bool IsMeasure(Tuple<AggregationFunction?, string, object> column)
         {
             if (column != null)
                 return column.Item1.HasValue;
-            else
-                return false;
+            return false;
         }
     }
 }

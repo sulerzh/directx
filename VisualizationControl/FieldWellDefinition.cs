@@ -16,7 +16,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             get
             {
-                return this.fieldsChangedCounter != 0;
+                return this.fieldsChangedCounter != FieldsChangedCounterValueForNoPendingQueries;
             }
             set
             {
@@ -50,27 +50,27 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         internal bool GetFieldsChangedSinceLastQuery(out int counter)
         {
             counter = this.fieldsChangedCounter;
-            return counter != 0;
+            return counter != FieldsChangedCounterValueForNoPendingQueries;
         }
 
         internal void ResetFieldsChangedSinceLastQuery(int counter)
         {
             this.callDisplayPropertiesUpdated = false;
-            Interlocked.CompareExchange(ref this.fieldsChangedCounter, 0, counter);
+            Interlocked.CompareExchange(ref this.fieldsChangedCounter, FieldsChangedCounterValueForNoPendingQueries, counter);
         }
 
         protected TableColumn FindTableColumnInModelMetadata(TableField field, ModelMetadata modelMetadata, List<string> tablesWithUpdatedData, ref bool requery, ref bool queryChanged, ref TableIsland islandForQuery)
         {
             if (field == null)
-                return (TableColumn)null;
+                return null;
             TableColumn col = field as TableColumn;
-            TableColumn tableColumn = col != null ? modelMetadata.FindVisibleTableColumnInModelMetadata(col) : (TableColumn)null;
+            TableColumn tableColumn = col != null ? modelMetadata.FindVisibleTableColumnInModelMetadata(col) : null;
             if (tableColumn != null)
             {
                 if (islandForQuery == null)
                     islandForQuery = tableColumn.Table.Island;
                 else if (islandForQuery != tableColumn.Table.Island)
-                    tableColumn = (TableColumn)null;
+                    tableColumn = null;
             }
             if (tableColumn == null)
             {
@@ -87,14 +87,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         protected TableMeasure FindTableMeasureInModelMetadata(TableMeasure measure, ModelMetadata modelMetadata, List<string> tablesWithUpdatedData, ref bool requery, ref bool queryChanged, ref TableIsland islandForQuery)
         {
             if (measure == null)
-              return (TableMeasure) null;
-            TableMeasure tableMeasure = measure != null ? modelMetadata.FindVisibleTableMeasureInModelMetadata(measure) : (TableMeasure) null;
+              return null;
+            TableMeasure tableMeasure = measure != null ? modelMetadata.FindVisibleTableMeasureInModelMetadata(measure) : null;
             if (tableMeasure != null)
             {
               if (islandForQuery == null)
                 islandForQuery = tableMeasure.Table.Island;
               else if (islandForQuery != tableMeasure.Table.Island)
-                tableMeasure = (TableMeasure) null;
+                tableMeasure = null;
             }
             if (tableMeasure == null)
             {
@@ -109,7 +109,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         internal virtual void Shutdown()
         {
-            this.Visualization = (Visualization)null;
+            this.Visualization = null;
         }
 
         protected virtual void Wrap(FieldWellDefinition.SerializableFieldWellDefinition state)

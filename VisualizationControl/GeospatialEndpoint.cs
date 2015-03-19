@@ -152,7 +152,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                             break;
                     }
                 }
-                endPoint = new GeospatialEndpoint.EndPoint()
+                return new GeospatialEndpoint.EndPoint()
                 {
                     ServerNotReachable = flag,
                     OtherError = !flag,
@@ -167,12 +167,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     CombinedLogoAerial = Properties.Settings.Default.CombinedLogoAerialEndPoint,
                     StatusCode = num
                 };
-                goto label_11;
             }
             catch (Exception ex)
             {
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Error, 0, "Fetching Bing Geocoding and MapTiles URL's failed with exception: {0}", ex.Message);
-                endPoint = new EndPoint()
+                return new EndPoint()
                 {
                     ServerNotReachable = false,
                     OtherError = true,
@@ -187,9 +186,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     CombinedLogoAerial = combinedLogoAerialUrl ?? Properties.Settings.Default.CombinedLogoAerialEndPoint,
                     StatusCode = 900
                 };
-                goto label_11;
             }
-            endPoint = new EndPoint()
+            return new EndPoint()
             {
                 ServerNotReachable = false,
                 OtherError = false,
@@ -202,9 +200,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 CombinedLogo = combinedLogoUrl,
                 BingLogoAerial = bingLogoAerialUrl,
                 CombinedLogoAerial = combinedLogoAerialUrl
-            };
-        label_11:
-            return endPoint;
+            };;
         }
 
         private static async Task<EndpointServiceResponse> GetBingServiceInfoAsync(string language, string region, CancellationToken cancellationToken)

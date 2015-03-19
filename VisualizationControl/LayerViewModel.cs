@@ -43,7 +43,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                if (!this.SetProperty<string>(this.PropertyName, ref this._Name, value, false))
+                if (!this.SetProperty(this.PropertyName, ref this._Name, value, false))
                     return;
                 if (this.LayerDefinition != null)
                     this.LayerDefinition.Name = value;
@@ -71,7 +71,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<FieldListPickerViewModel>(this.PropertyFieldListPicker, ref this._FieldListPicker, value, false);
+                this.SetProperty(this.PropertyFieldListPicker, ref this._FieldListPicker, value, false);
             }
         }
 
@@ -97,26 +97,26 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     this.DetachOnHoverHandler();
                     if (geoVisualization != null)
                     {
-                        geoVisualization.LayerAdded -= new Action<Layer>(this.AttachOnHoverHandler);
-                        geoVisualization.LayerRemoved -= new Action<Layer>(this.DetachOnHoverHandler);
-                        geoVisualization.DataUpdateCompleted -= new Action<bool>(this.DataUpdateCompleted);
-                        geoVisualization.LayerScalesChanged -= new Action(this.LayerScalesChanged);
-                        geoVisualization.DisplayPropertiesChanged -= new Action<LayerManager.Settings>(this.DisplayPropertiesChanged);
-                        geoVisualization.ColorsChanged -= new Action(this.ColorsChanged);
+                        geoVisualization.LayerAdded -= this.AttachOnHoverHandler;
+                        geoVisualization.LayerRemoved -= this.DetachOnHoverHandler;
+                        geoVisualization.DataUpdateCompleted -= this.DataUpdateCompleted;
+                        geoVisualization.LayerScalesChanged -= this.LayerScalesChanged;
+                        geoVisualization.DisplayPropertiesChanged -= this.DisplayPropertiesChanged;
+                        geoVisualization.ColorsChanged -= this.ColorsChanged;
                     }
                 }
-                if (!this.SetProperty<LayerDefinition>(this.PropertyLayerDefinition, ref this._LayerDefinition, value, false) || value == null)
+                if (!this.SetProperty(this.PropertyLayerDefinition, ref this._LayerDefinition, value, false) || value == null)
                     return;
                 GeoVisualization geoVisualization1 = this._LayerDefinition.GeoVisualization;
-                this.AttachOnHoverHandler(geoVisualization1 == null ? (Layer)null : geoVisualization1.Layer);
+                this.AttachOnHoverHandler(geoVisualization1 == null ? null : geoVisualization1.Layer);
                 if (geoVisualization1 != null)
                 {
-                    geoVisualization1.LayerAdded += new Action<Layer>(this.AttachOnHoverHandler);
-                    geoVisualization1.LayerRemoved += new Action<Layer>(this.DetachOnHoverHandler);
-                    geoVisualization1.DataUpdateCompleted += new Action<bool>(this.DataUpdateCompleted);
-                    geoVisualization1.LayerScalesChanged += new Action(this.LayerScalesChanged);
-                    geoVisualization1.DisplayPropertiesChanged += new Action<LayerManager.Settings>(this.DisplayPropertiesChanged);
-                    geoVisualization1.ColorsChanged += new Action(this.ColorsChanged);
+                    geoVisualization1.LayerAdded += this.AttachOnHoverHandler;
+                    geoVisualization1.LayerRemoved += this.DetachOnHoverHandler;
+                    geoVisualization1.DataUpdateCompleted += this.DataUpdateCompleted;
+                    geoVisualization1.LayerScalesChanged += this.LayerScalesChanged;
+                    geoVisualization1.DisplayPropertiesChanged += this.DisplayPropertiesChanged;
+                    geoVisualization1.ColorsChanged += this.ColorsChanged;
                 }
                 this.Name = value.Name;
                 GeoVisualization geoVisualization2 = value.GeoVisualization;
@@ -142,7 +142,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<Tuple<long, InstanceId?>>(LayerViewModel.PropertyHoveredElement, ref this._HoveredElement, value, false);
+                this.SetProperty(LayerViewModel.PropertyHoveredElement, ref this._HoveredElement, value, false);
             }
         }
 
@@ -162,7 +162,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<IList<InstanceId>>(LayerViewModel.PropertySelectedElements, ref this._SelectedElements, value, false);
+                this.SetProperty(LayerViewModel.PropertySelectedElements, ref this._SelectedElements, value, false);
             }
         }
 
@@ -182,7 +182,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetVisibility(value, (LayerManager.Settings)null);
+                this.SetVisibility(value, null);
             }
         }
 
@@ -202,7 +202,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<ICommand>(this.PropertyDeleteLayerCommand, ref this._DeleteLayerCommand, value, false);
+                this.SetProperty(this.PropertyDeleteLayerCommand, ref this._DeleteLayerCommand, value, false);
             }
         }
 
@@ -222,7 +222,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<ICommand>(this.PropertyLayerSettingsCommand, ref this._LayerSettingsCommand, value, false);
+                this.SetProperty(this.PropertyLayerSettingsCommand, ref this._LayerSettingsCommand, value, false);
             }
         }
 
@@ -231,16 +231,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             get
             {
                 LayerDefinition layerDefinition = this.LayerDefinition;
-                GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+                GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
                 if (geoVisualization != null)
                     return geoVisualization.VisualShapeForLayer;
-                else
-                    return new InstancedShape?();
+                return new InstancedShape?();
             }
             set
             {
                 LayerDefinition layerDefinition = this.LayerDefinition;
-                GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+                GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
                 if (geoVisualization == null)
                     return;
                 geoVisualization.VisualShapeForLayer = value;
@@ -287,7 +286,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             set
             {
-                this.SetProperty<bool>(this.PropertyUserClosedLegend, ref this._UserClosedLegend, value, false);
+                this.SetProperty(this.PropertyUserClosedLegend, ref this._UserClosedLegend, value, false);
             }
         }
 
@@ -297,8 +296,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             {
                 if (this._layerManagerVM != null)
                     return this._layerManagerVM.StatusBar;
-                else
-                    return (StatusBarViewModel)null;
+                return null;
             }
         }
 
@@ -328,38 +326,38 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this._layerManagerVM = layerManagerVM;
             this.LayerDefinition = layerDef;
             this.VisualShape = layerDef.GeoVisualization.VisualShapeForLayer;
-            this._layerManagerVM.Model.Model.ColorSelector.ColorsChanged += new Action(this.ColorsChanged);
-            this.HasTables = tableIslands != null && Enumerable.Any<TableIsland>(tableIslands);
+            this._layerManagerVM.Model.Model.ColorSelector.ColorsChanged += this.ColorsChanged;
+            this.HasTables = tableIslands != null && tableIslands.Any();
             this.FieldListPicker = new FieldListPickerViewModel(tableIslands, this, layerDef.GeoVisualization, dialogProvider);
-            this.FieldListPicker.VisualizeCallback = new Action<FieldWellGeographyViewModel, Filter, FieldWellVisualizationViewModel, bool, FieldListPickerState, bool>(this.OnVisualize);
-            this.FieldListPicker.CancelVisualizeCallback = new Action(this.CancelVisualize);
+            this.FieldListPicker.VisualizeCallback = this.OnVisualize;
+            this.FieldListPicker.CancelVisualizeCallback = this.CancelVisualize;
             this.FieldListPicker.InitializeToAutoGeocode(tableIslands, layerDef, layerDef.ModelTableNameForAutoGeocoding);
-            DispatcherExtensions.CheckedInvoke(this._layerManagerVM.Model.Model.UIDispatcher, (Action)(() => this.RefreshLegend()), false);
+            this._layerManagerVM.Model.Model.UIDispatcher.CheckedInvoke(() => this.RefreshLegend(), false);
             this.UpdateGeocodingReport(false);
         }
 
         public LayerViewModel()
         {
-            this.FieldListPicker = new FieldListPickerViewModel((GeoVisualization)null, (IDialogServiceProvider)null);
-            this.FieldListPicker.VisualizeCallback = new Action<FieldWellGeographyViewModel, Filter, FieldWellVisualizationViewModel, bool, FieldListPickerState, bool>(this.OnVisualize);
-            this.FieldListPicker.CancelVisualizeCallback = new Action(this.CancelVisualize);
+            this.FieldListPicker = new FieldListPickerViewModel(null, null);
+            this.FieldListPicker.VisualizeCallback = this.OnVisualize;
+            this.FieldListPicker.CancelVisualizeCallback = this.CancelVisualize;
         }
 
         public void Removed()
         {
             LayerDefinition layerDefinition = this.LayerDefinition;
-            GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+            GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
             if (geoVisualization != null)
             {
-                geoVisualization.LayerAdded -= new Action<Layer>(this.AttachOnHoverHandler);
-                geoVisualization.LayerRemoved -= new Action<Layer>(this.DetachOnHoverHandler);
-                geoVisualization.DataUpdateCompleted -= new Action<bool>(this.DataUpdateCompleted);
-                geoVisualization.DisplayPropertiesChanged -= new Action<LayerManager.Settings>(this.DisplayPropertiesChanged);
-                geoVisualization.LayerScalesChanged -= new Action(this.LayerScalesChanged);
-                geoVisualization.ColorsChanged -= new Action(this.ColorsChanged);
+                geoVisualization.LayerAdded -= this.AttachOnHoverHandler;
+                geoVisualization.LayerRemoved -= this.DetachOnHoverHandler;
+                geoVisualization.DataUpdateCompleted -= this.DataUpdateCompleted;
+                geoVisualization.DisplayPropertiesChanged -= this.DisplayPropertiesChanged;
+                geoVisualization.LayerScalesChanged -= this.LayerScalesChanged;
+                geoVisualization.ColorsChanged -= this.ColorsChanged;
             }
             this.FieldListPicker.UnInitialize();
-            this._layerManagerVM.Model.Model.ColorSelector.ColorsChanged -= new Action(this.ColorsChanged);
+            this._layerManagerVM.Model.Model.ColorSelector.ColorsChanged -= this.ColorsChanged;
             this.DetachOnHoverHandler();
         }
 
@@ -367,16 +365,15 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             if (this.FieldListPicker.FieldWellVisualizationViewModel.SelectedCategory.Value == null)
                 return this.FieldListPicker.FieldWellVisualizationViewModel.HeightFields.Count >= 1;
-            else
-                return true;
+            return true;
         }
 
         private void SetVisibility(bool value, LayerManager.Settings settings = null)
         {
-            if (!this.SetProperty<bool>(this.PropertyVisible, ref this._Visible, value, false))
+            if (!this.SetProperty(this.PropertyVisible, ref this._Visible, value, false))
                 return;
             LayerDefinition layerDefinition = this.LayerDefinition;
-            GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+            GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
             if (geoVisualization == null)
                 return;
             geoVisualization.Visible = value;
@@ -497,15 +494,12 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 visualization.HiddenMeasure = false;
             }
             if (
-                wellDefinition.Measures.Except<Tuple<TableField, AggregationFunction>>(second)
-                    .Any<Tuple<TableField, AggregationFunction>>() ||
-                second.Except<Tuple<TableField, AggregationFunction>>(wellDefinition.Measures)
-                    .Any<Tuple<TableField, AggregationFunction>>())
+                wellDefinition.Measures.Except(second).Any() ||
+                second.Except(wellDefinition.Measures).Any())
             {
                 wellDefinition.RemoveAllMeasures();
                 second.ForEach(
-                    (Action<Tuple<TableField, AggregationFunction>>)
-                        (measure => wellDefinition.AddMeasure(measure)));
+                    measure => wellDefinition.AddMeasure(measure));
             }
             wellDefinition.SetTime((visualizationVM.SelectedTimeField.Value == null)
                 ? null
@@ -543,8 +537,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             this.CancelVisualize();
             this.CancellationSource = new CancellationTokenSource();
             int num = Interlocked.Increment(ref this.refreshCount);
-            this.FieldListPicker.SetGeocodingReport((GeocodingReportViewModel)null);
-            this.LayerDefinition.RefreshDisplay(zoomToData, this.CancellationSource, false, false, settings, new Action<object, bool, bool, Exception>(this.VisualizeCompleted), (object)num);
+            this.FieldListPicker.SetGeocodingReport(null);
+            this.LayerDefinition.RefreshDisplay(zoomToData, this.CancellationSource, false, false, settings, this.VisualizeCompleted, num);
         }
 
         private void VisualizeCompleted(object context, bool succeeded, bool cancelled, Exception exception)
@@ -568,7 +562,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             this.Legend.LegendItems.RemoveAll();
             LayerDefinition layerDefinition = this.LayerDefinition;
-            GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+            GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
             if (geoVisualization == null || this.FieldListPicker == null || this.FieldListPicker.FieldWellVisualizationViewModel == null)
                 return;
             this.Legend.LayerName = this.Name;
@@ -578,8 +572,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             HeatMapLayer heatMapLayer = geoVisualization.Layer as HeatMapLayer;
             if (heatMapLayer != null)
             {
-                this.Legend.Minimum = (double)heatMapLayer.HeatmapMinValue;
-                this.Legend.Maximum = (double)heatMapLayer.HeatmapMaxValue;
+                this.Legend.Minimum = heatMapLayer.HeatmapMinValue;
+                this.Legend.Maximum = heatMapLayer.HeatmapMaxValue;
             }
             else if (geoVisualization.Layer != null)
             {
@@ -606,7 +600,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             else if (this.FieldListPicker.FieldWellVisualizationViewModel.HeightFields.Count > 0)
             {
-                foreach (FieldWellHeightViewModel wellHeightViewModel in (Collection<FieldWellHeightViewModel>)this.FieldListPicker.FieldWellVisualizationViewModel.HeightFields)
+                foreach (FieldWellHeightViewModel wellHeightViewModel in this.FieldListPicker.FieldWellVisualizationViewModel.HeightFields)
                 {
                     System.Windows.Media.Color color = geoVisualization.ColorForMeasure(wellHeightViewModel.TableField.Model, wellHeightViewModel.AggregationFunction).ToWindowsColor();
                     double? min;
@@ -627,28 +621,28 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private void DataUpdateCompleted(bool geocodingCancelled)
         {
             this.UpdateGeocodingReport(geocodingCancelled);
-            DispatcherExtensions.CheckedInvoke(this._layerManagerVM.Model.Model.UIDispatcher, (Action)(() => this.RefreshLegend()), true);
+            this._layerManagerVM.Model.Model.UIDispatcher.CheckedInvoke(() => this.RefreshLegend(), true);
         }
 
         private void LayerScalesChanged()
         {
-            DispatcherExtensions.CheckedInvoke(this._layerManagerVM.Model.Model.UIDispatcher, (Action)(() => this.RefreshLegend()), true);
+            this._layerManagerVM.Model.Model.UIDispatcher.CheckedInvoke(() => this.RefreshLegend(), true);
         }
 
         private void DisplayPropertiesChanged(LayerManager.Settings settings)
         {
-            DispatcherExtensions.CheckedInvoke(this._layerManagerVM.Model.Model.UIDispatcher, (Action)(() => this.RefreshLegend()), true);
+            this._layerManagerVM.Model.Model.UIDispatcher.CheckedInvoke(() => this.RefreshLegend(), true);
             LayerDefinition layerDefinition = this.LayerDefinition;
             if (layerDefinition == null)
                 return;
-            GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+            GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
             this.Name = layerDefinition.Name;
             this.SetVisibility(layerDefinition.Visible && (geoVisualization == null || geoVisualization.Visible), settings);
         }
 
         private void ColorsChanged()
         {
-            DispatcherExtensions.CheckedInvoke(this._layerManagerVM.Model.Model.UIDispatcher, (Action)(() => this.RefreshLegend()), true);
+            this._layerManagerVM.Model.Model.UIDispatcher.CheckedInvoke(() => this.RefreshLegend(), true);
         }
 
         private void UpdateGeocodingReport(bool geocodingCancelled)
@@ -663,11 +657,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             }
             if (!geocodingCancelled)
             {
-                GeocodingReportViewModel geocodingReport = (GeocodingReportViewModel)null;
+                GeocodingReportViewModel geocodingReport = null;
                 float confidencePercetage = 0.0f;
                 LayerDefinition layerDefinition = this.LayerDefinition;
-                GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
-                List<GeoAmbiguity> ambiguities = geoVisualization == null ? (List<GeoAmbiguity>)null : geoVisualization.GetGeoAmbiguities(out confidencePercetage);
+                GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
+                List<GeoAmbiguity> ambiguities = geoVisualization == null ? null : geoVisualization.GetGeoAmbiguities(out confidencePercetage);
                 if (ambiguities != null)
                     geocodingReport = new GeocodingReportViewModel(ambiguities, confidencePercetage)
                     {
@@ -676,13 +670,13 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 fieldListPicker.SetGeocodingReport(geocodingReport);
             }
             else
-                fieldListPicker.SetGeocodingReport((GeocodingReportViewModel)null);
+                fieldListPicker.SetGeocodingReport(null);
         }
 
         private void DetachOnHoverHandler()
         {
             LayerDefinition layerDefinition = this.LayerDefinition;
-            GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+            GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
             if (geoVisualization == null)
                 return;
             this.DetachOnHoverHandler(geoVisualization.Layer);
@@ -691,11 +685,11 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         private void DetachOnHoverHandler(Layer layer)
         {
             HitTestableLayer hitTestableLayer = layer as HitTestableLayer;
-            this.SelectedElements = (IList<InstanceId>)null;
+            this.SelectedElements = null;
             if (hitTestableLayer == null)
                 return;
-            hitTestableLayer.OnHoveredElementChanged -= new EventHandler<HoveredElementEventArgs>(this.Layer_OnHoveredElementChanged);
-            hitTestableLayer.OnSelectionChanged -= new EventHandler<SelectionEventArgs>(this.Layer_OnSelectionChanged);
+            hitTestableLayer.OnHoveredElementChanged -= this.Layer_OnHoveredElementChanged;
+            hitTestableLayer.OnSelectionChanged -= this.Layer_OnSelectionChanged;
         }
 
         private void AttachOnHoverHandler(Layer layer)
@@ -703,8 +697,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             HitTestableLayer hitTestableLayer = layer as HitTestableLayer;
             if (hitTestableLayer == null)
                 return;
-            hitTestableLayer.OnHoveredElementChanged += new EventHandler<HoveredElementEventArgs>(this.Layer_OnHoveredElementChanged);
-            hitTestableLayer.OnSelectionChanged += new EventHandler<SelectionEventArgs>(this.Layer_OnSelectionChanged);
+            hitTestableLayer.OnHoveredElementChanged += this.Layer_OnHoveredElementChanged;
+            hitTestableLayer.OnSelectionChanged += this.Layer_OnSelectionChanged;
         }
 
         private void Layer_OnSelectionChanged(object sender, SelectionEventArgs e)
@@ -712,38 +706,38 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             if (e != null)
             {
                 this.SelectedElements = e.SelectedIds;
-                if (!Enumerable.Any<InstanceId>((IEnumerable<InstanceId>)this.SelectedElements))
+                if (!this.SelectedElements.Any())
                     return;
                 LayerDefinition layerDefinition = this.LayerDefinition;
-                GeoVisualization geoVisualization = layerDefinition == null ? (GeoVisualization)null : layerDefinition.GeoVisualization;
+                GeoVisualization geoVisualization = layerDefinition == null ? null : layerDefinition.GeoVisualization;
                 if (geoVisualization == null)
                     return;
-                this._layerManagerVM.SetSelectionContext(this, geoVisualization.GetSeriesIndexForInstanceId(Enumerable.Last<InstanceId>((IEnumerable<InstanceId>)this.SelectedElements), false));
+                this._layerManagerVM.SetSelectionContext(this, geoVisualization.GetSeriesIndexForInstanceId(this.SelectedElements.Last(), false));
             }
             else
-                this.SelectedElements = (IList<InstanceId>)null;
+                this.SelectedElements = null;
         }
 
         private void Layer_OnHoveredElementChanged(object sender, HoveredElementEventArgs e)
         {
-            this.HoveredElement = Tuple.Create<long, InstanceId?>(e.CurrentFrame, e.HoveredElement);
+            this.HoveredElement = Tuple.Create(e.CurrentFrame, e.HoveredElement);
         }
 
         private GeoField BuildGeoField(IEnumerable<GeoFieldMappingViewModel> geoFieldMappings, out GeoFieldMappingViewModel mapBy)
         {
-            TableColumn tableColumn1 = (TableColumn)null;
-            TableColumn tableColumn2 = (TableColumn)null;
-            TableColumn xCoord = (TableColumn)null;
-            TableColumn yCoord = (TableColumn)null;
-            TableColumn addressLine = (TableColumn)null;
-            TableColumn locality = (TableColumn)null;
-            TableColumn adminDistrict2 = (TableColumn)null;
-            TableColumn adminDistrict = (TableColumn)null;
-            TableColumn postalCode = (TableColumn)null;
-            TableColumn country = (TableColumn)null;
-            TableColumn tableColumn3 = (TableColumn)null;
-            TableColumn tableColumn4 = (TableColumn)null;
-            mapBy = (GeoFieldMappingViewModel)null;
+            TableColumn tableColumn1 = null;
+            TableColumn tableColumn2 = null;
+            TableColumn xCoord = null;
+            TableColumn yCoord = null;
+            TableColumn addressLine = null;
+            TableColumn locality = null;
+            TableColumn adminDistrict2 = null;
+            TableColumn adminDistrict = null;
+            TableColumn postalCode = null;
+            TableColumn country = null;
+            TableColumn tableColumn3 = null;
+            TableColumn tableColumn4 = null;
+            mapBy = null;
             foreach (GeoFieldMappingViewModel mappingViewModel in geoFieldMappings)
             {
                 TableColumn tableColumn5 = mappingViewModel.Field.Model as TableColumn;
@@ -789,35 +783,29 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 if (mappingViewModel.IsMapByField)
                 {
                     if (mapBy != null)
-                        return (GeoField)null;
+                        return null;
                     mapBy = mappingViewModel;
                 }
             }
             if (mapBy == null)
-                return (GeoField)null;
+                return null;
             if (mapBy.Field.Model == tableColumn2 || mapBy.Field.Model == tableColumn1)
             {
                 if (tableColumn1 == null || tableColumn2 == null)
-                    return (GeoField)null;
-                else
-                    return (GeoField)new LatLongField("LatLon", false, tableColumn1, tableColumn2, xCoord, yCoord, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn3, tableColumn4, false);
+                    return null;
+                return new LatLongField("LatLon", false, tableColumn1, tableColumn2, xCoord, yCoord, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn3, tableColumn4, false);
             }
-            else if (mapBy.Field.Model == xCoord || mapBy.Field.Model == yCoord)
+            if (mapBy.Field.Model == xCoord || mapBy.Field.Model == yCoord)
             {
                 if (xCoord == null || yCoord == null)
-                    return (GeoField)null;
-                else
-                    return (GeoField)new LatLongField("GeoXY", true, tableColumn1, tableColumn2, xCoord, yCoord, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn3, tableColumn4, false);
+                    return null;
+                return new LatLongField("GeoXY", true, tableColumn1, tableColumn2, xCoord, yCoord, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn3, tableColumn4, false);
             }
-            else
-            {
-                if (mapBy.Field.Model == tableColumn3)
-                    return (GeoField)new GeoFullAddressField("GeoFullAddress", tableColumn3, (TableColumn)null, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, (TableColumn)null, tableColumn4, false);
-                if (mapBy.Field.Model == tableColumn4)
-                    return (GeoField)new GeoFullAddressField("GeoOtherLocationDescription", (TableColumn)null, tableColumn4, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, tableColumn3, (TableColumn)null, false);
-                else
-                    return (GeoField)new GeoEntityField("GeoEntity", GeoFieldMappingTypeUtil.GeoEntityLevel(mapBy.MappingType), addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, tableColumn3, tableColumn4, false);
-            }
+            if (mapBy.Field.Model == tableColumn3)
+                return new GeoFullAddressField("GeoFullAddress", tableColumn3, null, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, null, tableColumn4, false);
+            if (mapBy.Field.Model == tableColumn4)
+                return new GeoFullAddressField("GeoOtherLocationDescription", null, tableColumn4, addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, tableColumn3, null, false);
+            return new GeoEntityField("GeoEntity", mapBy.MappingType.GeoEntityLevel(), addressLine, locality, adminDistrict2, adminDistrict, postalCode, country, tableColumn1, tableColumn2, xCoord, yCoord, tableColumn3, tableColumn4, false);
         }
     }
 }
