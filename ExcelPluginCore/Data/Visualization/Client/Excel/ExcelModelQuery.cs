@@ -896,135 +896,131 @@ namespace Microsoft.Data.Visualization.Client.Excel
             evalQueryFetchTime = sanitizeTime = 0L;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            bool flag1 = false;
-            bool flag2 = false;
+            bool hasNoData = false;
+            bool isRecordCountSetted = false;
             if (resultSet.EOF)
             {
                 evalQueryFetchTime = 0L;
                 stopwatch.Reset();
-                flag1 = true;
+                hasNoData = true;
                 this.ResultsItemCount = 0;
-                flag2 = true;
+                isRecordCountSetted = true;
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Information, 0, "{0}: Query returned 0 items (EOF=true)", (object)this.Name);
             }
-            List<ModelQueryKeyColumn> list1 = this.keyOrderInQueryResults;
-            List<ModelQueryMeasureColumn> list2 = this.measures.Where(measure =>
-            {
-                if (measure.ModelQueryKeyAlias == null)
-                    return measure.AliasOf == null;
-                return false;
-            }).ToList();
-            ModelQueryTimeKeyColumn queryTimeKeyColumn1 = (ModelQueryTimeKeyColumn)list1.FirstOrDefault(key => key is ModelQueryTimeKeyColumn);
+            List<ModelQueryKeyColumn> keyColumns = this.keyOrderInQueryResults;
+            List<ModelQueryMeasureColumn> measureColumns =
+                (from measure in this.measures
+                 where measure.ModelQueryKeyAlias == null && measure.AliasOf == null
+                 select measure).ToList<ModelQueryMeasureColumn>();
+            ModelQueryTimeKeyColumn timeKeyColumn = (ModelQueryTimeKeyColumn)keyColumns.FirstOrDefault(key => key is ModelQueryTimeKeyColumn);
             int num1 = 0;
-            object[,] objArray = null;
-            if (queryTimeKeyColumn1 != null)
+            object[,] values = null;
+            if (timeKeyColumn != null)
             {
-                TimeChunkPeriod timeChunk = queryTimeKeyColumn1.TimeChunk;
-                int num2;
+                TimeChunkPeriod timeChunk = timeKeyColumn.TimeChunk;
+                int fieldIndex;
                 bool processAliases;
                 if (timeChunk != TimeChunkPeriod.None && !this.QueryUsesAggregation)
                 {
-                    num2 = resultSet.Fields.Count - 1;
+                    fieldIndex = resultSet.Fields.Count - 1;
                     num1 = 1;
                     processAliases = false;
                 }
                 else if (timeChunk == TimeChunkPeriod.None)
                 {
-                    num2 = list1.IndexOf(queryTimeKeyColumn1);
+                    fieldIndex = keyColumns.IndexOf(timeKeyColumn);
                     num1 = 1;
                     processAliases = true;
                 }
                 else
                 {
-                    num2 = list1.IndexOf(queryTimeKeyColumn1) + 1;
+                    fieldIndex = keyColumns.IndexOf(timeKeyColumn) + 1;
                     num1 = 2;
                     processAliases = false;
                 }
-                if (queryTimeKeyColumn1.FetchValues)
+                if (timeKeyColumn.FetchValues)
                 {
                     stopwatch.Restart();
-                    object[,] values1 = flag1 ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num2) as object[,];
+                    values = hasNoData ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, fieldIndex) as object[,];
                     evalQueryFetchTime += stopwatch.ElapsedMilliseconds;
                     ++numFetches;
                     cancellationToken.ThrowIfCancellationRequested();
-                    if (!flag2)
+                    if (!isRecordCountSetted)
                     {
-                        this.ResultsItemCount = values1.Length;
-                        flag2 = true;
+                        this.ResultsItemCount = values.Length;
+                        isRecordCountSetted = true;
                     }
                     stopwatch.Restart();
-                    this.SanitizeQueryResults(queryTimeKeyColumn1, values1, cancellationToken, processAliases);
-                    objArray = null;
+                    this.SanitizeQueryResults(timeKeyColumn, values, cancellationToken, processAliases);
+                    values = null;
                     sanitizeTime += stopwatch.ElapsedMilliseconds;
                     cancellationToken.ThrowIfCancellationRequested();
-                    ModelQueryTimeKeyColumn queryTimeKeyColumn2 = queryTimeKeyColumn1;
-                    DateTime[] dateTimeArray = (DateTime[])queryTimeKeyColumn1.Values;
-                    queryTimeKeyColumn2.EndTime = dateTimeArray;
+                    timeKeyColumn.EndTime = (DateTime[])timeKeyColumn.Values;
                     if (timeChunk != TimeChunkPeriod.None)
                     {
-                        int num3 = num2 - 1;
+                        int num3 = fieldIndex - 1;
                         stopwatch.Restart();
-                        object[,] values2 = flag1 ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num3) as object[,];
+                        values = hasNoData ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num3) as object[,];
                         evalQueryFetchTime += stopwatch.ElapsedMilliseconds;
                         ++numFetches;
                         cancellationToken.ThrowIfCancellationRequested();
                         stopwatch.Restart();
-                        DateTime max = queryTimeKeyColumn1.Max;
-                        this.SanitizeQueryResults(queryTimeKeyColumn1, values2, cancellationToken, true);
-                        objArray = null;
-                        queryTimeKeyColumn1.Max = max;
+                        DateTime max = timeKeyColumn.Max;
+                        this.SanitizeQueryResults(timeKeyColumn, values, cancellationToken, true);
+                        values = null;
+                        timeKeyColumn.Max = max;
                         sanitizeTime += stopwatch.ElapsedMilliseconds;
                         cancellationToken.ThrowIfCancellationRequested();
                     }
                 }
             }
             int num4 = 0;
-            for (int index = 0; index < list1.Count; ++index)
+            for (int i = 0; i < keyColumns.Count; ++i)
             {
-                if (object.ReferenceEquals(list1[index], queryTimeKeyColumn1))
+                if (object.ReferenceEquals(keyColumns[i], timeKeyColumn))
                 {
                     num4 += num1;
                 }
                 else
                 {
-                    if (list1[index].FetchValues)
+                    if (keyColumns[i].FetchValues)
                     {
                         stopwatch.Restart();
-                        object[,] values = flag1 ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num4) as object[,];
+                        values = hasNoData ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num4) as object[,];
                         evalQueryFetchTime += stopwatch.ElapsedMilliseconds;
                         ++numFetches;
                         cancellationToken.ThrowIfCancellationRequested();
-                        if (!flag2)
+                        if (!isRecordCountSetted)
                         {
                             this.ResultsItemCount = values.Length;
-                            flag2 = true;
+                            isRecordCountSetted = true;
                         }
                         stopwatch.Restart();
-                        this.SanitizeQueryResults(list1[index], values, cancellationToken, true);
-                        objArray = null;
+                        this.SanitizeQueryResults(keyColumns[i], values, cancellationToken, true);
+                        values = null;
                         sanitizeTime += stopwatch.ElapsedMilliseconds;
                         cancellationToken.ThrowIfCancellationRequested();
                     }
                     ++num4;
                 }
             }
-            for (int index = 0; index < list2.Count; ++index)
+            for (int i = 0; i < measureColumns.Count; ++i)
             {
-                if (list2[index].FetchValues)
+                if (measureColumns[i].FetchValues)
                 {
                     stopwatch.Restart();
-                    object[,] values = flag1 ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num4) as object[,];
+                    values = hasNoData ? new object[1, 0] : resultSet.GetRows(-1, BookmarkEnum.adBookmarkFirst, num4) as object[,];
                     evalQueryFetchTime += stopwatch.ElapsedMilliseconds;
                     ++numFetches;
                     cancellationToken.ThrowIfCancellationRequested();
-                    if (!flag2)
+                    if (!isRecordCountSetted)
                     {
                         this.ResultsItemCount = values.Length;
-                        flag2 = true;
+                        isRecordCountSetted = true;
                     }
                     stopwatch.Restart();
-                    this.SanitizeQueryResults(list2[index], values, cancellationToken, true);
-                    objArray = null;
+                    this.SanitizeQueryResults(measureColumns[i], values, cancellationToken, true);
+                    values = null;
                     sanitizeTime += stopwatch.ElapsedMilliseconds;
                     cancellationToken.ThrowIfCancellationRequested();
                 }
@@ -1037,24 +1033,29 @@ namespace Microsoft.Data.Visualization.Client.Excel
         {
             values.GetUpperBound(1);
             values.GetLowerBound(1);
-            ModelQueryKeyColumn modelQueryKey = modelQueryColumn as ModelQueryKeyColumn;
-            ModelQueryMeasureColumn modelQueryMeasure = modelQueryColumn as ModelQueryMeasureColumn;
+            ModelQueryKeyColumn keyColumn = modelQueryColumn as ModelQueryKeyColumn;
+            ModelQueryMeasureColumn mesureColumn = modelQueryColumn as ModelQueryMeasureColumn;
             object[] objArray = new object[5];
             bool[] convertToType = new bool[5];
             List<ModelQueryColumn> list = new List<ModelQueryColumn>();
             Array.Clear(convertToType, 0, convertToType.Length);
-            if (modelQueryMeasure != null)
-            {
-                if (processAliases)
-                    list = this.measures.Where(msr => object.ReferenceEquals(msr.AliasOf, modelQueryMeasure)).Select(msr => (ModelQueryColumn)msr).ToList();
-                list.Insert(0, modelQueryColumn);
-                convertToType[2] = true;
-            }
-            else if (modelQueryKey != null)
+            if (mesureColumn != null)
             {
                 if (processAliases)
                 {
-                    list = this.keys.Where(k => object.ReferenceEquals(k.AliasOf, modelQueryKey)).Select(k => (ModelQueryColumn)k).ToList();
+                    list =
+                        this.measures.Where(msr => object.ReferenceEquals(msr.AliasOf, mesureColumn))
+                            .Select(msr => (ModelQueryColumn)msr)
+                            .ToList();
+                }
+                list.Insert(0, modelQueryColumn);
+                convertToType[2] = true;
+            }
+            else if (keyColumn != null)
+            {
+                if (processAliases)
+                {
+                    list = this.keys.Where(k => object.ReferenceEquals(k.AliasOf, keyColumn)).Select(k => (ModelQueryColumn)k).ToList();
                     list.ForEach(alias => convertToType[(int)((ModelQueryKeyColumn)alias).Type] = true);
                 }
                 list.Insert(0, modelQueryColumn);
@@ -1062,7 +1063,7 @@ namespace Microsoft.Data.Visualization.Client.Excel
                     convertToType[0] = true;
                 else
                     convertToType[(int)((ModelQueryKeyColumn)list[0]).Type] = true;
-                ModelQueryMeasureColumn aliasedModelQueryMeasure = modelQueryKey.ModelQueryMeasureAlias;
+                ModelQueryMeasureColumn aliasedModelQueryMeasure = keyColumn.ModelQueryMeasureAlias;
                 if (aliasedModelQueryMeasure != null && processAliases)
                 {
                     list.Add(aliasedModelQueryMeasure);
@@ -1076,30 +1077,30 @@ namespace Microsoft.Data.Visualization.Client.Excel
             double min2 = double.MaxValue;
             double max2 = double.MinValue;
             string str = null;
-            for (int index = 0; index < 5; ++index)
+            for (int i = 0; i < 5; ++i)
             {
-                if (convertToType[index])
+                if (convertToType[i])
                 {
-                    switch (index)
+                    switch (i)
                     {
                         case 0:
-                            objArray[index] = values;
+                            objArray[i] = values;
                             break;
                         case 1:
-                            objArray[index] = this.Sanitize<string>(values, new Func<object, string>(Convert.ToString), null, null, ref str, ref str, false, false);
+                            objArray[i] = this.Sanitize<string>(values, new Func<object, string>(Convert.ToString), null, null, ref str, ref str, false, false);
                             break;
                         case 2:
-                            objArray[index] = this.Sanitize<double>(values, new Func<object, double>(Convert.ToDouble), value => Convert.ToDouble(value, this.ModelCulture), double.NaN, ref min2, ref max2, false, false);
-                            IEnumerable<double> source = ((double[])objArray[index]).Where(val => !double.IsNaN(val));
+                            objArray[i] = this.Sanitize<double>(values, new Func<object, double>(Convert.ToDouble), value => Convert.ToDouble(value, this.ModelCulture), double.NaN, ref min2, ref max2, false, false);
+                            IEnumerable<double> source = ((double[])objArray[i]).Where(val => !double.IsNaN(val));
                             bool flag = source.Any();
                             max2 = flag ? source.Max() : double.NaN;
                             min2 = flag ? source.Min() : double.NaN;
                             break;
                         case 3:
-                            objArray[index] = this.Sanitize<DateTime>(values, new Func<object, DateTime>(Convert.ToDateTime), value => Convert.ToDateTime(value, this.ModelCulture), ModelQuery.UnknownDateTime, ref min1, ref max1, true, true);
+                            objArray[i] = this.Sanitize<DateTime>(values, new Func<object, DateTime>(Convert.ToDateTime), value => Convert.ToDateTime(value, this.ModelCulture), ModelQuery.UnknownDateTime, ref min1, ref max1, true, true);
                             break;
                         case 4:
-                            objArray[index] = this.Sanitize<bool>(values, new Func<object, bool>(Convert.ToBoolean), new Func<object, bool>(Convert.ToBoolean), new bool?());
+                            objArray[i] = this.Sanitize<bool>(values, new Func<object, bool>(Convert.ToBoolean), new Func<object, bool>(Convert.ToBoolean), new bool?());
                             break;
                     }
                     cancellationToken.ThrowIfCancellationRequested();
@@ -1109,10 +1110,10 @@ namespace Microsoft.Data.Visualization.Client.Excel
                 min1 = max1 = ModelQuery.UnknownDateTime;
             if (min2 == double.MaxValue && max2 == double.MinValue)
                 min2 = max2 = double.NaN;
-            foreach (ModelQueryColumn modelQueryColumn1 in list)
+            foreach (ModelQueryColumn col in list)
             {
-                ModelQueryKeyColumn modelQueryKeyColumn = modelQueryColumn1 as ModelQueryKeyColumn;
-                ModelQueryMeasureColumn queryMeasureColumn = modelQueryColumn1 as ModelQueryMeasureColumn;
+                ModelQueryKeyColumn modelQueryKeyColumn = col as ModelQueryKeyColumn;
+                ModelQueryMeasureColumn queryMeasureColumn = col as ModelQueryMeasureColumn;
                 if (modelQueryKeyColumn != null)
                 {
                     KeyColumnDataType keyColumnDataType = modelQueryKeyColumn is ModelQueryIndexedKeyColumn ? KeyColumnDataType.Object : modelQueryKeyColumn.Type;
@@ -1152,191 +1153,176 @@ namespace Microsoft.Data.Visualization.Client.Excel
             }
         }
 
+        /// <summary>
+        /// 标准规整操作
+        /// </summary>
         private T[] Sanitize<T>(object[,] values, Func<object, T> converter, Func<object, T> converterFromString, T defaultValue, ref T min, ref T max, bool getMin, bool getMax) where T : IComparable<T>
         {
             int length = values.GetUpperBound(1) - values.GetLowerBound(1) + 1;
-            T[] objArray = new T[length];
-            for (int index = 0; index < length; ++index)
+            T[] result = new T[length];
+            for (int i = 0; i < length; ++i)
             {
-                if (values[0, index] is T)
+                if (values[0, i] is T)
                 {
-                    objArray[index] = (T)values[0, index];
+                    result[i] = (T)values[0, i];
                     if (getMin || getMax)
                     {
-                        T obj = (T)values[0, index];
+                        T obj = (T)values[0, i];
                         if (getMin && obj.CompareTo(min) < 0)
                             min = obj;
                         if (getMax && obj.CompareTo(max) > 0)
                             max = obj;
                     }
                 }
+                else if (values[0, i] == null || Convert.IsDBNull(values[0, i]))
+                {
+                    result[i] = defaultValue;
+                }
                 else
                 {
-                    if (values[0, index] != null)
+                    try
                     {
-                        if (!Convert.IsDBNull(values[0, index]))
+                        T obj = !(values[0, i] is string) ? converter(values[0, i]) : converterFromString(values[0, i]);
+                        result[i] = obj;
+                        if (getMin && obj.CompareTo(min) < 0)
+                            min = obj;
+                        if (getMax)
                         {
-                            try
+                            if (obj.CompareTo(max) > 0)
                             {
-                                T obj = !(values[0, index] is string) ? converter(values[0, index]) : converterFromString(values[0, index]);
-                                objArray[index] = obj;
-                                if (getMin && obj.CompareTo(min) < 0)
-                                    min = obj;
-                                if (getMax)
-                                {
-                                    if (obj.CompareTo(max) > 0)
-                                    {
-                                        max = obj;
-                                        continue;
-                                    }
-                                    continue;
-                                }
-                                continue;
-                            }
-                            catch (FormatException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: FormatException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (InvalidCastException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: InvalidCastException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (OverflowException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: OverflowException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
+                                max = obj;
                             }
                         }
                     }
-                    objArray[index] = defaultValue;
+                    catch (FormatException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: FormatException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: InvalidCastException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (OverflowException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: OverflowException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
                 }
             }
-            return objArray;
+            return result;
         }
 
         private T?[] Sanitize<T>(object[,] values, Func<object, T> converter, Func<object, T> converterFromString, T? defaultValue) where T : struct
         {
             int length = values.GetUpperBound(1) - values.GetLowerBound(1) + 1;
-            T?[] nullableArray = new T?[length];
-            for (int index = 0; index < length; ++index)
+            T?[] result = new T?[length];
+            for (int i = 0; i < length; ++i)
             {
-                if (values[0, index] is T)
+                if (values[0, i] is T)
                 {
-                    nullableArray[index] = new T?((T)values[0, index]);
+                    result[i] = (T)values[0, i];
+                }
+                else if (values[0, i] == null || Convert.IsDBNull(values[0, i]))
+                {
+                    result[i] = defaultValue;
                 }
                 else
                 {
-                    if (values[0, index] != null)
+                    try
                     {
-                        if (!Convert.IsDBNull(values[0, index]))
-                        {
-                            try
-                            {
-                                T obj = !(values[0, index] is string) ? converter(values[0, index]) : converterFromString(values[0, index]);
-                                nullableArray[index] = new T?(obj);
-                                continue;
-                            }
-                            catch (FormatException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: FormatException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                nullableArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (InvalidCastException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: InvalidCastException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                nullableArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (OverflowException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: OverflowException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null", (object)this.Name, (object)index, (object)0, values[0, index], (object)typeof(T));
-                                nullableArray[index] = defaultValue;
-                                continue;
-                            }
-                        }
+                        T obj = !(values[0, i] is string)
+                            ? converter(values[0, i])
+                            : converterFromString(values[0, i]);
+                        result[i] = obj;
                     }
-                    nullableArray[index] = defaultValue;
+                    catch (FormatException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
+                            "{0}: FormatException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null",
+                            (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
+                            "{0}: InvalidCastException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null",
+                            (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (OverflowException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0,
+                            "{0}: OverflowException converting query_result[row={1}, col={2}]='{3}' to {4}, setting value to null",
+                            (object)this.Name, (object)i, (object)0, values[0, i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
                 }
             }
-            return nullableArray;
+            return result;
         }
 
         private T[] Sanitize<T>(object[] values, Func<object, T> converter, Func<object, T> converterFromString, T defaultValue, ref T min, ref T max, bool getMin, bool getMax) where T : IComparable<T>
         {
             int length = values.GetUpperBound(0) - values.GetLowerBound(0) + 1;
-            T[] objArray = new T[length];
-            for (int index = 0; index < length; ++index)
+            T[] result = new T[length];
+            for (int i = 0; i < length; ++i)
             {
-                if (values[index] is T)
+                if (values[i] is T)
                 {
-                    objArray[index] = (T)values[index];
+                    result[i] = (T)values[i];
                     if (getMin || getMax)
                     {
-                        T obj = (T)values[index];
+                        T obj = (T)values[i];
                         if (getMin && obj.CompareTo(min) < 0)
                             min = obj;
                         if (getMax && obj.CompareTo(max) > 0)
                             max = obj;
                     }
                 }
+                else if (values[i] == null || Convert.IsDBNull(values[i]))
+                {
+                    result[i] = defaultValue;
+                }
                 else
                 {
-                    if (values[index] != null)
+                    try
                     {
-                        if (!Convert.IsDBNull(values[index]))
+                        T obj = !(values[i] is string) ? converter(values[i]) : converterFromString(values[i]);
+                        result[i] = obj;
+                        if (getMin && obj.CompareTo(min) < 0)
+                            min = obj;
+                        if (getMax)
                         {
-                            try
+                            if (obj.CompareTo(max) > 0)
                             {
-                                T obj = !(values[index] is string) ? converter(values[index]) : converterFromString(values[index]);
-                                objArray[index] = obj;
-                                if (getMin && obj.CompareTo(min) < 0)
-                                    min = obj;
-                                if (getMax)
-                                {
-                                    if (obj.CompareTo(max) > 0)
-                                    {
-                                        max = obj;
-                                        continue;
-                                    }
-                                    continue;
-                                }
-                                continue;
-                            }
-                            catch (FormatException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: FormatException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)index, values[index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (InvalidCastException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: InvalidCastException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)index, values[index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
-                            }
-                            catch (OverflowException ex)
-                            {
-                                VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: OverflowException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)index, values[index], (object)typeof(T));
-                                objArray[index] = defaultValue;
-                                continue;
+                                max = obj;
                             }
                         }
                     }
-                    objArray[index] = defaultValue;
+                    catch (FormatException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: FormatException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)i, values[i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: InvalidCastException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)i, values[i], (object)typeof(T));
+                        result[i] = defaultValue;
+                    }
+                    catch (OverflowException ex)
+                    {
+                        VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "{0}: OverflowException converting query_result[row={1}]='{2}' to {3}, setting value to null", (object)this.Name, (object)i, values[i], (object)typeof(T));
+                    }
                 }
             }
-            return objArray;
+            return result;
         }
 
         private void BuildIndexes(CancellationToken cancellationToken)
         {
-            foreach (ModelQueryIndexedKeyColumn key in this.keys.Where(key => key is ModelQueryIndexedKeyColumn).Select(key => key as ModelQueryIndexedKeyColumn))
+            foreach (ModelQueryIndexedKeyColumn key in this.keys.OfType<ModelQueryIndexedKeyColumn>())
             {
                 switch (key.Type)
                 {
@@ -1361,14 +1347,12 @@ namespace Microsoft.Data.Visualization.Client.Excel
         {
             IEqualityComparer equalityComparer = null;
             IComparer comparer = null;
-
             int num1 = 1;
-
             int length = (int)key.Values.GetUpperBound(1) - key.Values.GetLowerBound(1) + num1;
-            for (int index = 0; index < length; ++index)
+            for (int i = 0; i < length; ++i)
             {
 
-                object obj5 = key.Values[0, index];
+                object obj5 = key.Values[0, i];
                 if (obj5 != null)
                 {
                     Type type = obj5.GetType();
@@ -1419,15 +1403,14 @@ namespace Microsoft.Data.Visualization.Client.Excel
                     {
                         equalityComparer = EqualityComparer<Decimal>.Default;
                         comparer = Comparer<Decimal>.Default;
-                        break;
                     }
                     break;
                 }
             }
             Hashtable hashtable1 = new Hashtable(equalityComparer);
-            for (int index1 = 0; index1 < length; ++index1)
+            for (int i = 0; i < length; ++i)
             {
-                object index2 = key.Values[0, index1];
+                object index2 = key.Values[0, i];
                 hashtable1[index2] = 0;
             }
             cancellationToken.ThrowIfCancellationRequested();
@@ -1436,18 +1419,13 @@ namespace Microsoft.Data.Visualization.Client.Excel
             hashtable1.Keys.CopyTo(values, 0);
             Array.Sort(values, comparer);
             cancellationToken.ThrowIfCancellationRequested();
-            for (int index = 0; index < count1; ++index)
-                hashtable1[values[index]] = index;
+            for (int i = 0; i < count1; ++i)
+                hashtable1[values[i]] = i;
             cancellationToken.ThrowIfCancellationRequested();
             int[] numArray1 = new int[length];
-            for (int index1 = 0; index1 < length; ++index1)
+            for (int i = 0; i < length; ++i)
             {
-                int[] numArray2 = numArray1;
-                int index2 = index1;
-
-                Hashtable hashtable2 = hashtable1;
-
-                numArray2[index2] = (int)hashtable2[key.Values[0, index1]];
+                numArray1[i] = (int)hashtable1[key.Values[0, i]];
             }
             key.Values = numArray1;
             if (key.PreserveValues)
@@ -1456,28 +1434,28 @@ namespace Microsoft.Data.Visualization.Client.Excel
                 {
                     key.AllPreservedValues = new ArrayList(values);
                     key.PreservedValuesIndex = new int[count1];
-                    for (int index = 0; index < count1; ++index)
-                        key.PreservedValuesIndex[index] = index;
+                    for (int i = 0; i < count1; ++i)
+                        key.PreservedValuesIndex[i] = i;
                 }
                 else
                 {
                     int count2 = key.AllPreservedValues.Count;
                     key.PreservedValuesIndex = new int[count1];
-                    for (int index1 = 0; index1 < count1; ++index1)
+                    for (int i = 0; i < count1; ++i)
                     {
-                        object x = values[index1];
+                        object x = values[i];
                         int index2;
                         for (index2 = 0; index2 < count2; ++index2)
                         {
                             if (equalityComparer.Equals(x, key.AllPreservedValues[index2]))
                             {
-                                key.PreservedValuesIndex[index1] = index2;
+                                key.PreservedValuesIndex[i] = index2;
                                 break;
                             }
                         }
                         if (index2 == count2)
                         {
-                            key.PreservedValuesIndex[index1] = count2++;
+                            key.PreservedValuesIndex[i] = count2++;
                             key.AllPreservedValues.Add(x);
                         }
                     }
@@ -1519,57 +1497,57 @@ namespace Microsoft.Data.Visualization.Client.Excel
         {
             if (!this.keys[0].UseForBuckets)
                 return;
-            IEqualityComparer<string> equalityComparer1 = StringComparer.Create(this.ModelCulture, false);
-            IEnumerable<ModelQueryKeyColumn> enumerable = this.keys.Where(key => key.UseForBuckets);
+            IEqualityComparer<string> comparer = StringComparer.Create(this.ModelCulture, false);
+            IEnumerable<ModelQueryKeyColumn> keyColumns = this.keys.Where(key => key.UseForBuckets);
 
             int num1 = (int)this.keys[0].Values.Length;
-            foreach (ModelQueryKeyColumn modelQueryKeyColumn in enumerable)
+            foreach (ModelQueryKeyColumn key in keyColumns)
             {
 
-                int num2 = (int)modelQueryKeyColumn.Values.Length;
+                int num2 = (int)key.Values.Length;
 
                 int num3 = (int)this.keys[0].Values.Length;
             }
             int length = num1 == 0 ? 0 : 1;
             int num4 = 0;
-            for (int index = 0; index < num1; ++index)
+            for (int i = 0; i < num1; ++i)
             {
-                if (index % 1000 == 0)
+                if (i % 1000 == 0)
                     cancellationToken.ThrowIfCancellationRequested();
                 bool flag = false;
-                foreach (ModelQueryKeyColumn modelQueryKeyColumn in enumerable)
+                foreach (ModelQueryKeyColumn modelQueryKeyColumn in keyColumns)
                 {
                     if (modelQueryKeyColumn.Type == KeyColumnDataType.Double && !(modelQueryKeyColumn is ModelQueryIndexedKeyColumn))
                     {
                         if (double.IsNaN(modelQueryKeyColumn.Values[num4]))
                         {
-                            flag = (bool)!double.IsNaN(modelQueryKeyColumn.Values[index]);
+                            flag = (bool)!double.IsNaN(modelQueryKeyColumn.Values[i]);
                         }
                         else
                         {
-                            if (double.IsNaN(modelQueryKeyColumn.Values[index]))
+                            if (double.IsNaN(modelQueryKeyColumn.Values[i]))
                             {
                                 flag = true;
                             }
                             else
                             {
-                                flag = (bool)modelQueryKeyColumn.Values[num4] != modelQueryKeyColumn.Values[index];
+                                flag = (bool)modelQueryKeyColumn.Values[num4] != modelQueryKeyColumn.Values[i];
                             }
                         }
                     }
                     else if (modelQueryKeyColumn.Type == KeyColumnDataType.String)
                     {
-                        IEqualityComparer<string> equalityComparer2 = equalityComparer1;
-                        flag = !equalityComparer2.Equals(modelQueryKeyColumn.Values[num4], modelQueryKeyColumn.Values[index]);
+                        IEqualityComparer<string> equalityComparer2 = comparer;
+                        flag = !equalityComparer2.Equals(modelQueryKeyColumn.Values[num4], modelQueryKeyColumn.Values[i]);
                     }
                     else
                     {
-                        if (!object.Equals(modelQueryKeyColumn.Values[num4], modelQueryKeyColumn.Values[index]))
+                        if (!object.Equals(modelQueryKeyColumn.Values[num4], modelQueryKeyColumn.Values[i]))
                             flag = true;
                     }
                     if (flag)
                     {
-                        num4 = index;
+                        num4 = i;
                         ++length;
                         break;
                     }
@@ -1585,7 +1563,7 @@ namespace Microsoft.Data.Visualization.Client.Excel
                 if (index % 1000 == 0)
                     cancellationToken.ThrowIfCancellationRequested();
                 bool flag = false;
-                foreach (ModelQueryKeyColumn modelQueryKeyColumn in enumerable)
+                foreach (ModelQueryKeyColumn modelQueryKeyColumn in keyColumns)
                 {
                     if (modelQueryKeyColumn.Type == KeyColumnDataType.Double && !(modelQueryKeyColumn is ModelQueryIndexedKeyColumn))
                     {
@@ -1609,7 +1587,7 @@ namespace Microsoft.Data.Visualization.Client.Excel
                     else if (modelQueryKeyColumn.Type == KeyColumnDataType.String)
                     {
 
-                        IEqualityComparer<string> equalityComparer2 = equalityComparer1;
+                        IEqualityComparer<string> equalityComparer2 = comparer;
 
                         flag = !(bool)equalityComparer2.Equals(modelQueryKeyColumn.Values[num6], modelQueryKeyColumn.Values[index]);
                     }
@@ -1626,7 +1604,7 @@ namespace Microsoft.Data.Visualization.Client.Excel
                     }
                 }
             }
-            foreach (ModelQueryKeyColumn modelQueryKeyColumn in enumerable)
+            foreach (ModelQueryKeyColumn modelQueryKeyColumn in keyColumns)
                 modelQueryKeyColumn.Buckets = numArray;
         }
 
