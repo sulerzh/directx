@@ -79,6 +79,8 @@ namespace Microsoft.Data.Visualization.Engine
                 {
                     VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Error loading a tile image. " + ex.ToString());
                 }
+
+                // 纹理为空或者更新失败，则不显示
                 if (textureData == null || !texture.Update(textureData, true))
                     flag = false;
             }
