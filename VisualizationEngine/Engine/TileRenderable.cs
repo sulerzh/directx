@@ -79,7 +79,7 @@ namespace Microsoft.Data.Visualization.Engine
                 {
                     VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Error loading a tile image. " + ex.ToString());
                 }
-                if (textureData == null && !texture.Update(textureData, true))
+                if (textureData == null || !texture.Update(textureData, true))
                     flag = false;
             }
             if (!flag)
