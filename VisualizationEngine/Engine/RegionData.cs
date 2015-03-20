@@ -52,44 +52,43 @@ namespace Microsoft.Data.Visualization.Engine
         private static bool TryParseEncodedValue(string value, out List<Coordinates> parsedValue)
         {
             parsedValue = null;
-            var list = new List<Coordinates>();
-            var index = 0;
-            var xsum = 0;
-            var ysum = 0;
+            List<Coordinates> list = new List<Coordinates>();
+            int index = 0;
+            int xsum = 0;
+            int ysum = 0;
 
             while (index < value.Length)
             {
-                var n = 0;
-                var k = 0;
+                long n = 0L;
+                int k = 0;
 
-                while (true)
+                while(true)
                 {
                     if (index >= value.Length)
                     {
                         return false;
                     }
-                    var b = SafeCharacters.IndexOf(value[index++]);
+                    int b = SafeCharacters.IndexOf(value[index++]);
                     if (b == -1)
                     {
                         return false;
                     }
 
-                    n |= (b & 31) << k;
+                    n |= (b & 31L) << k;
                     k += 5;
                     if (b < 32) break;
-                }
-
-                var diagonal = (int) ((Math.Sqrt(8*n + 5) - 1)/2);
-                n -= diagonal*(diagonal + 1)/2;
-                var ny = (int) (n);
-                var nx = diagonal - ny;
+                } 
+                int diagonal = (int)((Math.Sqrt((8L * n) + 5L) - 1.0) / 2.0);
+                n -= (diagonal * (diagonal + 1L)) / 2L;
+                int ny = (int)n;
+                int nx = diagonal - ny;
                 nx = (nx >> 1) ^ -(nx & 1);
                 ny = (ny >> 1) ^ -(ny & 1);
                 xsum += nx;
                 ysum += ny;
-                var lat = ysum*0.00001;
-                var lon = xsum*0.00001;
-                list.Add(Coordinates.FromDegrees(lat, lon));
+                var lat = ysum * 0.00001;
+                var lon = xsum * 0.00001;
+                list.Add(Coordinates.FromDegrees(lon, lat));
             }
             parsedValue = list;
             return true;
