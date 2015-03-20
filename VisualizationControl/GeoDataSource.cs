@@ -2528,6 +2528,9 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                 get { return 0; }
             }
 
+            /// <summary>
+            /// 获取聚合值
+            /// </summary>
             public double RealNumberValue
             {
                 get
@@ -2535,8 +2538,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     if (this.qrMeasures == null || this.qrMeasures.Count == 0)
                         return double.NaN;
                     return this.qrMeasures[this.measureIndex].Values != null
-                        ? double.NaN
-                        : (double) this.qrMeasures[this.measureIndex].Values[this.rowIndex];
+                        ? (double) this.qrMeasures[this.measureIndex].Values[this.rowIndex]
+                        : double.NaN;
                 }
             }
 
