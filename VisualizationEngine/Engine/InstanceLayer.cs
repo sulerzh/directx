@@ -467,28 +467,28 @@ namespace Microsoft.Data.Visualization.Engine
             lock (this.syncLock)
             {
                 ++this.InstanceClusterCount;
-                int local_0 = parameters.First().ShiftValue;
+                int shift = parameters.First().ShiftValue;
                 int local_1 = 0;
                 bool local_2 = true;
                 int local_3 = 0;
-                foreach (IInstanceParameter item_0 in parameters)
+                foreach (IInstanceParameter param in parameters)
                 {
-                    if (item_0.ShiftValue != local_0)
+                    if (param.ShiftValue != shift)
                     {
-                        local_0 = item_0.ShiftValue;
+                        shift = param.ShiftValue;
                         ++local_1;
                     }
-                    float local_5 = this.GetLayerClampedValue(item_0.RealNumberValue);
+                    float local_5 = this.GetLayerClampedValue(param.RealNumberValue);
                     InstanceData local_6 = new InstanceData()
                     {
-                        Id = item_0.Id,
+                        Id = param.Id,
                         Location = this.CoordinatesFromLongLatDegrees(longitude, latitude),
-                        Color = (short)item_0.ColorValue,
+                        Color = (short)param.ColorValue,
                         Value = local_5,
                         Shift = (short)local_1,
-                        SourceShift = (short)item_0.ShiftValue,
-                        StartTime = item_0.StartTime,
-                        EndTime = item_0.EndTime,
+                        SourceShift = (short)param.ShiftValue,
+                        StartTime = param.StartTime,
+                        EndTime = param.EndTime,
                         FirstInstance = local_2
                     };
                     local_2 = false;

@@ -413,7 +413,8 @@ namespace Microsoft.Data.Visualization.Engine
                                 {
                                     float num3 = Math.Min(1f, (float)((this.lastUpdateTick - this.desaturationChangedTick) / 60.0 / 0.300000011920929));
                                     this.DesaturateFactor = this.DesaturationEnabled ? num3 : 1f - num3;
-                                    flag1 = ((flag1 ? 1 : 0) | ((double)num3 == 0.0 ? 0 : ((double)num3 != 1.0 ? 1 : 0))) != 0;
+                                    flag1 = flag1 || (num3 != 0 && num3 != 1);
+                                    // flag1 = ((flag1 ? 1 : 0) | ((double)num3 == 0.0 ? 0 : ((double)num3 != 1.0 ? 1 : 0))) != 0;
                                 }
                                 else
                                     this.DesaturateFactor = 0.0f;

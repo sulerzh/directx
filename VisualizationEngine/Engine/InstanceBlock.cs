@@ -240,6 +240,7 @@ namespace Microsoft.Data.Visualization.Engine
             int num2 = int.MinValue;
             foreach (InstanceData instanceData in instanceDataList)
             {
+                // 构建接收数据的缓冲区
                 CreateBuffersIfNeeded(instanceDataCount, instanceData.Value < 0.0, minTime.HasValue);
                 Vector3D pos = instanceData.Location.Position;
                 if (baseReferencePosition == Vector3D.Empty)

@@ -18,14 +18,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             if (geoDataSource == null)
-                return (GeoField)null;
+                return null;
             try
             {
                 return geoDataSource.GetGeoFieldUsedInQuery(sourceDataVersion);
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (GeoField)null;
+                return null;
             }
         }
 
@@ -34,14 +34,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             firstGeoCol = 0;
             if (geoDataSource == null)
-                return (Func<int, int, string>)null;
+                return null;
             try
             {
                 return geoDataSource.GetGeoValuesAccessor(sourceDataVersion, out firstGeoCol);
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (Func<int, int, string>)null;
+                return null;
             }
         }
 
@@ -49,14 +49,14 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             if (geoDataSource == null)
-                return (Func<int, int>)null;
+                return null;
             try
             {
                 return geoDataSource.GetGeoRowsAccessor(sourceDataVersion);
             }
             catch (DataSource.InvalidQueryResultsException ex)
             {
-                return (Func<int, int>)null;
+                return null;
             }
         }
 
@@ -139,9 +139,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             if (geoDataSource == null)
-                return (List<Tuple<AggregationFunction?, string, object>>)null;
-            else
-                return geoDataSource.TableColumnsWithValuesForId(id, showRelatedCategories, new DateTime?());
+                return null;
+            return geoDataSource.TableColumnsWithValuesForId(id, showRelatedCategories, new DateTime?());
         }
 
         public int GetMaxInstanceCount(int sourceDataVersion)
@@ -245,7 +244,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
 
         }
 
-        public bool GetRowData(int sourceDataVersion, int row, List<int> colorIndices, out double latitude, out double longitude, out IEnumerable<IInstanceParameter> enumerable, out int nextRow, out bool abort)
+        public bool GetRowData(int sourceDataVersion, int row, List<int> colorIndices, out double latitude, out double longitude, out IEnumerable<IInstanceParameter> result, out int nextRow, out bool abort)
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             abort = false;
@@ -257,24 +256,21 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                     {
                         if (geoDataSource.HasLatLong)
                         {
-                            double forQueryResultsRow1 = geoDataSource.GetLatitudeForQueryResultsRow(sourceDataVersion, row);
-                            double forQueryResultsRow2 = geoDataSource.GetLongitudeForQueryResultsRow(sourceDataVersion, row);
-                            if (double.IsNaN(forQueryResultsRow1) || double.IsNaN(forQueryResultsRow2))
+                            double lat = geoDataSource.GetLatitudeForQueryResultsRow(sourceDataVersion, row);
+                            double lon = geoDataSource.GetLongitudeForQueryResultsRow(sourceDataVersion, row);
+                            if (double.IsNaN(lat) || double.IsNaN(lon))
                             {
                                 nextRow = row + 1;
                                 latitude = longitude = double.NaN;
-                                enumerable = Enumerable.Empty<IInstanceParameter>();
+                                result = Enumerable.Empty<IInstanceParameter>();
                                 return false;
                             }
-                            else
-                            {
-                                latitude = forQueryResultsRow1;
-                                longitude = forQueryResultsRow2;
-                            }
+                            latitude = lat;
+                            longitude = lon;
                         }
                         else
                             latitude = longitude = double.NaN;
-                        geoDataSource.GetEnumerableForQueryResultsRow(sourceDataVersion, row, colorIndices, out enumerable, out nextRow);
+                        geoDataSource.GetEnumerableForQueryResultsRow(sourceDataVersion, row, colorIndices, out result, out nextRow);
                     }
                     catch (DataSource.InvalidQueryResultsException ex)
                     {
@@ -282,7 +278,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
                         VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Exception when fetching values for index {0}, returning abort={1}: {2}", (object)row, abort, (object)ex);
                         nextRow = row + 1;
                         latitude = longitude = double.NaN;
-                        enumerable = Enumerable.Empty<IInstanceParameter>();
+                        result = Enumerable.Empty<IInstanceParameter>();
                         return false;
                     }
                     return true;
@@ -291,7 +287,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             abort = true;
             nextRow = row + 1;
             latitude = longitude = double.NaN;
-            enumerable = Enumerable.Empty<IInstanceParameter>();
+            result = Enumerable.Empty<IInstanceParameter>();
             return false;
         }
 
@@ -331,7 +327,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             if (geoDataSource == null)
-                return (InstanceId?[])null;
+                return null;
             try
             {
                 return geoDataSource.GetCanonicalInstanceIdsForAllSeriesForModelDataId(sourceDataVersion, modelId, anyMeasure, anyCategoryValue);
@@ -339,7 +335,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             catch (DataSource.InvalidQueryResultsException ex)
             {
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Exception when fetching instance id of all series for model id {0}: {1}", (object)modelId, (object)ex);
-                return (InstanceId?[])null;
+                return null;
             }
         }
 
@@ -379,7 +375,7 @@ namespace Microsoft.Data.Visualization.VisualizationControls
         {
             GeoDataSource geoDataSource = this.Source as GeoDataSource;
             if (geoDataSource == null)
-                return (InstanceId?[])null;
+                return null;
             try
             {
                 return geoDataSource.GetCanonicalInstanceIdsForAllSeries(sourceDataVersion, new InstanceId?(id));
@@ -387,13 +383,8 @@ namespace Microsoft.Data.Visualization.VisualizationControls
             catch (DataSource.InvalidQueryResultsException ex)
             {
                 VisualizationTraceSource.Current.TraceEvent(TraceEventType.Warning, 0, "Exception when fetching canonical id for all series for instanceId {0}: {1}", (object)id, (object)ex);
-                return (InstanceId?[])null;
+                return null;
             }
-        }
-
-        internal override void Shutdown()
-        {
-            base.Shutdown();
         }
     }
 }
