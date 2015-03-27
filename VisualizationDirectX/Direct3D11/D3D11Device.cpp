@@ -418,13 +418,20 @@ D3DBuffer^ D3DDevice::CreateBuffer(BufferDescription description, ... array<Subr
 
 D3DBuffer^ D3DDevice::CreateBuffer(BufferDescription description)
 {
-    ID3D11Buffer* tempoutBuffer = NULL;
+    /*ID3D11Buffer* tempoutBuffer = NULL;
     pin_ptr<BufferDescription> ptr = &description;
-
     Validate::VerifyResult(CastInterface<ID3D11Device>()->CreateBuffer(
         (D3D11_BUFFER_DESC*)ptr, 
         NULL, 
-        &tempoutBuffer));
+        &tempoutBuffer));*/
+	// 2015-03-27 替换上面注释的实现方法
+	ID3D11Buffer* tempoutBuffer = NULL;
+	D3D11_BUFFER_DESC desc;
+	description.CopyTo(desc);
+	Validate::VerifyResult(CastInterface<ID3D11Device>()->CreateBuffer(
+		&desc,
+		NULL,
+		&tempoutBuffer));
 
     return tempoutBuffer == NULL ? nullptr : gcnew D3DBuffer(tempoutBuffer);
 }
