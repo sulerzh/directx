@@ -34,69 +34,78 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
         {
         }
 
+        /// <summary>
+        /// 根据VetexComponent列表初始化InputElementDescription数组
+        /// </summary>
+        /// <returns></returns>
         internal InputElementDescription[] GetFormat()
         {
             if (this.elements == null)
             {
                 this.elements = new InputElementDescription[this.Components.Count];
                 VertexSemantic[] vertexSemanticArray = (VertexSemantic[])Enum.GetValues(typeof(VertexSemantic));
-                Dictionary<VertexSemantic, uint> dictionary1 = new Dictionary<VertexSemantic, uint>();
-                for (int index = 0; index < vertexSemanticArray.Length; ++index)
-                    dictionary1.Add(vertexSemanticArray[index], 0U);
-                for (int index = 0; index < this.Components.Count; ++index)
+                Dictionary<VertexSemantic, uint> semanticType2IndexMap = new Dictionary<VertexSemantic, uint>();
+                // 初始化VertexSemantic枚举类型与索引的映射关系
+                for (int i = 0; i < vertexSemanticArray.Length; ++i)
+                    semanticType2IndexMap.Add(vertexSemanticArray[i], 0U);
+                // 由VetexComponent构建IA描述结构
+                for (int i = 0; i < this.Components.Count; ++i)
                 {
-                    InputElementDescription elementDescription = new InputElementDescription();
-                    switch (this.Components[index].Semantic)
+                    InputElementDescription desc = new InputElementDescription();
+                    switch (this.Components[i].Semantic)
                     {
                         case VertexSemantic.Position:
-                            elementDescription.SemanticName = "POSITION";
+                            desc.SemanticName = "POSITION";
                             break;
                         case VertexSemantic.PositionT:
-                            elementDescription.SemanticName = "POSITIONT";
+                            desc.SemanticName = "POSITIONT";
                             break;
                         case VertexSemantic.Normal:
-                            elementDescription.SemanticName = "NORMAL";
+                            desc.SemanticName = "NORMAL";
                             break;
                         case VertexSemantic.Binormal:
-                            elementDescription.SemanticName = "BINORMAL";
+                            desc.SemanticName = "BINORMAL";
                             break;
                         case VertexSemantic.Tangent:
-                            elementDescription.SemanticName = "TANGENT";
+                            desc.SemanticName = "TANGENT";
                             break;
                         case VertexSemantic.Color:
-                            elementDescription.SemanticName = "COLOR";
+                            desc.SemanticName = "COLOR";
                             break;
                         case VertexSemantic.TexCoord:
-                            elementDescription.SemanticName = "TEXCOORD";
+                            desc.SemanticName = "TEXCOORD";
                             break;
                         case VertexSemantic.BlendIndices:
-                            elementDescription.SemanticName = "BLENDINDICES";
+                            desc.SemanticName = "BLENDINDICES";
                             break;
                     }
-                    elementDescription.SemanticIndex = dictionary1[this.Components[index].Semantic];
-                    Dictionary<VertexSemantic, uint> dictionary2;
-                    VertexSemantic semantic;
-                    (dictionary2 = dictionary1)[semantic = this.Components[index].Semantic] = dictionary2[semantic] + 1U;
-                    elementDescription.Format = D3D11VertexFormat.GetD3DFormat(this.Components[index].DataType);
-                    elementDescription.AlignedByteOffset = uint.MaxValue;
-                    elementDescription.InputSlot = (uint)this.Components[index].Slot;
-                    switch (this.Components[index].Classification)
+                    desc.SemanticIndex = semanticType2IndexMap[this.Components[i].Semantic];
+                    semanticType2IndexMap[this.Components[i].Semantic] ++;
+                    desc.Format = D3D11VertexFormat.GetD3DFormat(this.Components[i].DataType);
+                    desc.AlignedByteOffset = uint.MaxValue;
+                    desc.InputSlot = (uint)this.Components[i].Slot;
+                    switch (this.Components[i].Classification)
                     {
                         case VertexComponentClassification.PerInstanceData:
-                            elementDescription.InputSlotClass = InputClassification.PerInstanceData;
-                            elementDescription.InstanceDataStepRate = 1U;
+                            desc.InputSlotClass = InputClassification.PerInstanceData;
+                            desc.InstanceDataStepRate = 1U;
                             break;
                         default:
-                            elementDescription.InputSlotClass = InputClassification.PerVertexData;
-                            elementDescription.InstanceDataStepRate = 0U;
+                            desc.InputSlotClass = InputClassification.PerVertexData;
+                            desc.InstanceDataStepRate = 0U;
                             break;
                     }
-                    this.elements[index] = elementDescription;
+                    this.elements[i] = desc;
                 }
             }
             return this.elements;
         }
 
+        /// <summary>
+        /// Graphics VertexComponentDataType 转 DirectX11 Format
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <returns></returns>
         internal static Format GetD3DFormat(VertexComponentDataType dataType)
         {
             switch (dataType)

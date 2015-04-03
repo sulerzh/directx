@@ -84,10 +84,6 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="visualizationdirectx, Version=1.1.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x64\visualizationdirectx.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -152,11 +148,7 @@
     <Compile Include="Graphics\TextureView.cs" />
     <Compile Include="Graphics\IVertex.cs" />
     <Compile Include="Graphics\Vertex.cs" />
-    <Compile Include="Graphics\VertexFormats.cs" />
     <Compile Include="Graphics\VertexBuffer.cs" />
-    <Compile Include="Graphics\VertexSemantic.cs" />
-    <Compile Include="Graphics\VertexComponentDataType.cs" />
-    <Compile Include="Graphics\VertexComponentClassification.cs" />
     <Compile Include="Graphics\VertexComponent.cs" />
     <Compile Include="Graphics\VertexFormat.cs" />
     <Compile Include="Graphics\D3D11BlendState.cs" />
@@ -209,6 +201,12 @@
     <Compile Include="MathExtensions\Hermite.cs" />
     <Compile Include="MathExtensions\MathEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
+      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
+      <Name>VisualizationDirectX</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

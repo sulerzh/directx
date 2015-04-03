@@ -2,6 +2,51 @@
 
 namespace Microsoft.Data.Visualization.Engine.Graphics
 {
+    /// <summary>
+    /// 需要转换成SemanticName
+    /// </summary>
+    public enum VertexSemantic
+    {
+        Position,
+        PositionT,
+        Normal,
+        Binormal,
+        Tangent,
+        Color,
+        TexCoord,
+        BlendIndices
+    }
+
+    /// <summary>
+    /// 对应DirectX库中的InputClassification
+    /// </summary>
+    public enum VertexComponentClassification
+    {
+        PerVertexData,
+        PerInstanceData,
+    }
+
+    /// <summary>
+    /// 对应DirectX库中的Format
+    /// </summary>
+    public enum VertexComponentDataType
+    {
+        Float,
+        Float2,
+        Float3,
+        Float4,
+        UInt,
+        UInt2,
+        UInt3,
+        UInt4,
+        Int,
+        Short2AsFloats,
+        Short4AsFloats,
+        Short2,
+        Short4,
+        UnsignedByte4AsFloats
+    }
+
     public class VertexComponent : IEquatable<VertexComponent>
     {
         public int Slot { get; private set; }
