@@ -17,7 +17,11 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return VertexFormat.Create(new VertexComponent(VertexSemantic.Position, VertexComponentDataType.Float3), new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2), new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2), new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float));
+                return VertexFormat.Create(
+                    new VertexComponent(VertexSemantic.Position, VertexComponentDataType.Float3), 
+                    new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2), 
+                    new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2), 
+                    new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float));
             }
         }
     }

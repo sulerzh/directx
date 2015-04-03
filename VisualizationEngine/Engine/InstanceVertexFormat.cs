@@ -2,6 +2,9 @@
 
 namespace Microsoft.Data.Visualization.Engine
 {
+    /// <summary>
+    /// instance顶点格式，包含定点和法线
+    /// </summary>
     internal class InstanceVertexFormat
     {
         private static VertexComponent[] components;

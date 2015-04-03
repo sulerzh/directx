@@ -82,10 +82,6 @@
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
-    <Reference Include="visualizationdirectx, Version=1.1.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Power Map Excel Add-in\Power Map Excel Add-in\x64\visualizationdirectx.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="System.Core" />
     <Reference Include="PresentationCore" />
@@ -451,6 +447,10 @@
     <ProjectReference Include="..\VisualizationCommon\VisualizationCommon.csproj">
       <Project>{6b90f178-fdd7-4c53-8051-bac67826abcd}</Project>
       <Name>VisualizationCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualizationDirectX\DirectX.vcxproj">
+      <Project>{446b1e21-65a1-4f56-aa2c-d2e24058b2b8}</Project>
+      <Name>VisualizationDirectX</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualizationGraphics\VisualizationGraphics.csproj">
       <Project>{e0825ee8-f343-469e-81c1-29fdcf6129d6}</Project>

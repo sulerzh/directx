@@ -11,7 +11,8 @@ namespace Microsoft.Data.Visualization.Engine
         {
             get
             {
-                return VertexFormat.Create(new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2));
+                return VertexFormat.Create(
+                    new VertexComponent(VertexSemantic.TexCoord, VertexComponentDataType.Float2));
             }
         }
     }
