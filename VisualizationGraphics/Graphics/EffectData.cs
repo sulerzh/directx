@@ -43,9 +43,9 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
                 this.SourceData = Marshal.AllocCoTaskMem(this.dataSize);
                 this.componentType = dataType;
                 IntPtr sourceData = this.SourceData;
-                for (int index = 0; index < data.Length; ++index)
+                for (int i = 0; i < data.Length; ++i)
                 {
-                    Marshal.StructureToPtr((object)data[index], sourceData, false);
+                    Marshal.StructureToPtr(data[i], sourceData, false);
                     sourceData += num;
                 }
             }

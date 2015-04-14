@@ -3,64 +3,64 @@ using System.IO;
 
 namespace Microsoft.Data.Visualization.Engine.Graphics
 {
-  internal class D3D11StreamEffect : D3D11Effect
-  {
-    private D3D11VertexFormat streamFormat;
-
-    public D3D11StreamEffect(EffectDefinition definition)
-      : base(definition)
+    internal class D3D11StreamEffect : D3D11Effect
     {
-      this.streamFormat = (D3D11VertexFormat) definition.StreamFormat;
-    }
+        private D3D11VertexFormat streamFormat;
 
-    private StreamOutputDeclarationEntry[] GetStreamFormat()
-    {
-      InputElementDescription[] format = this.streamFormat.GetFormat();
-      StreamOutputDeclarationEntry[] declarationEntryArray = new StreamOutputDeclarationEntry[format.Length];
-      for (int index = 0; index < format.Length; ++index)
-      {
-        declarationEntryArray[index].StreamIndex = 0U;
-        declarationEntryArray[index].SemanticName = format[index].SemanticName;
-        declarationEntryArray[index].SemanticIndex = format[index].SemanticIndex;
-        declarationEntryArray[index].OutputSlot = (byte) format[index].InputSlot;
-        declarationEntryArray[index].StartComponent = 0;
-        switch (this.streamFormat.Components[index].DataType)
+        public D3D11StreamEffect(EffectDefinition definition)
+            : base(definition)
         {
-          case VertexComponentDataType.Float:
-            declarationEntryArray[index].ComponentCount = 1;
-            break;
-          case VertexComponentDataType.Float2:
-          case VertexComponentDataType.Short2AsFloats:
-            declarationEntryArray[index].ComponentCount = 2;
-            break;
-          case VertexComponentDataType.Float3:
-            declarationEntryArray[index].ComponentCount = 3;
-            break;
-          case VertexComponentDataType.Float4:
-            declarationEntryArray[index].ComponentCount = 4;
-            break;
-          default:
-            declarationEntryArray[index].ComponentCount = 0;
-            break;
+            this.streamFormat = (D3D11VertexFormat)definition.StreamFormat;
         }
-      }
-      return declarationEntryArray;
-    }
 
-    protected override GeometryShader CreateGeometryShader(D3DDevice device, Stream data, Stream vsData)
-    {
-      Stream shaderStream = null;
-      if (data != null)
-        shaderStream = data;
-      else if (vsData != null)
-      {
-        vsData.Seek(0L, SeekOrigin.Begin);
-        shaderStream = vsData;
-      }
-      return device.CreateGeometryShaderWithStreamOutput(shaderStream, this.GetStreamFormat(), new uint[1]
-      {
-        (uint) this.streamFormat.GetVertexSizeInBytes()
-      }, 0U);
+        private StreamOutputDeclarationEntry[] GetStreamFormat()
+        {
+            InputElementDescription[] format = this.streamFormat.GetFormat();
+            StreamOutputDeclarationEntry[] declarationEntryArray = new StreamOutputDeclarationEntry[format.Length];
+            for (int i = 0; i < format.Length; ++i)
+            {
+                declarationEntryArray[i].StreamIndex = 0U;
+                declarationEntryArray[i].SemanticName = format[i].SemanticName;
+                declarationEntryArray[i].SemanticIndex = format[i].SemanticIndex;
+                declarationEntryArray[i].OutputSlot = (byte)format[i].InputSlot;
+                declarationEntryArray[i].StartComponent = 0;
+                switch (this.streamFormat.Components[i].DataType)
+                {
+                    case VertexComponentDataType.Float:
+                        declarationEntryArray[i].ComponentCount = 1;
+                        break;
+                    case VertexComponentDataType.Float2:
+                    case VertexComponentDataType.Short2AsFloats:
+                        declarationEntryArray[i].ComponentCount = 2;
+                        break;
+                    case VertexComponentDataType.Float3:
+                        declarationEntryArray[i].ComponentCount = 3;
+                        break;
+                    case VertexComponentDataType.Float4:
+                        declarationEntryArray[i].ComponentCount = 4;
+                        break;
+                    default:
+                        declarationEntryArray[i].ComponentCount = 0;
+                        break;
+                }
+            }
+            return declarationEntryArray;
+        }
+
+        protected override GeometryShader CreateGeometryShader(D3DDevice device, Stream data, Stream vsData)
+        {
+            Stream shaderStream = null;
+            if (data != null)
+                shaderStream = data;
+            else if (vsData != null)
+            {
+                vsData.Seek(0L, SeekOrigin.Begin);
+                shaderStream = vsData;
+            }
+            return device.CreateGeometryShaderWithStreamOutput(
+                shaderStream, this.GetStreamFormat(),
+                new uint[] { (uint)this.streamFormat.GetVertexSizeInBytes() },
+                0U);
+        }
     }
-  }
 }

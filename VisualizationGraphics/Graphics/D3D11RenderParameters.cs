@@ -4,18 +4,13 @@ using System.Runtime.InteropServices;
 
 namespace Microsoft.Data.Visualization.Engine.Graphics
 {
+    /// <summary>
+    /// 将参数列表转换为D3D11中shader接受常量缓冲区
+    /// </summary>
     internal class D3D11RenderParameters : RenderParameters
     {
         private IntPtr paramData = IntPtr.Zero;
         private D3DBuffer parametersBuffer;
-
-        internal override bool IsDirty
-        {
-            set
-            {
-                base.IsDirty = value;
-            }
-        }
 
         public D3D11RenderParameters(IRenderParameter[] parameters)
             : base(parameters)
@@ -24,41 +19,46 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
 
         public D3DBuffer GetParametersBuffer(D3DDevice device, DeviceContext context)
         {
+            // 以16为倍数对齐
             int cb = this.SizeInBytes + (this.SizeInBytes % 16 > 0 ? 16 - this.SizeInBytes % 16 : 0);
             if (this.paramData == IntPtr.Zero)
                 this.paramData = Marshal.AllocCoTaskMem(cb);
             if (this.IsDirty)
             {
                 IntPtr blob = this.paramData;
-                foreach (IRenderParameter renderParameter in this.allParameters)
+                foreach (IRenderParameter param in this.allParameters)
                 {
-                    int num = ((int)(blob.ToInt64() - this.paramData.ToInt64()) % 16 + renderParameter.SizeInBytes) % 32;
+                    int num = ((int)(blob.ToInt64() - this.paramData.ToInt64()) % 16 + param.SizeInBytes) % 32;
                     if (num > 16)
                         blob += 32 - num;
-                    renderParameter.CopyDataToBlob(blob);
-                    blob += renderParameter.SizeInBytes;
+                    param.CopyDataToBlob(blob);
+                    blob += param.SizeInBytes;
                 }
             }
             if (this.parametersBuffer == null)
             {
                 this.Register((Renderer)device.Tag);
-                this.parametersBuffer = device.CreateBuffer(new BufferDescription()
-                {
-                    Usage = Usage.Default,
-                    ByteWidth = (uint)cb,
-                    BindingOptions = BindingOptions.ConstantBuffer,
-                    CpuAccessOptions = CpuAccessOptions.None,
-                    MiscellaneousResourceOptions = MiscellaneousResourceOptions.None,
-                    StructureByteStride = 0U
-                }, new SubresourceData()
-                {
-                    SystemMemory = this.paramData,
-                    SystemMemoryPitch = 0U,
-                    SystemMemorySlicePitch = 0U
-                });
+                this.parametersBuffer = device.CreateBuffer(
+                    new BufferDescription()
+                    {
+                        Usage = Usage.Default,
+                        ByteWidth = (uint) cb,
+                        BindingOptions = BindingOptions.ConstantBuffer,
+                        CpuAccessOptions = CpuAccessOptions.None,
+                        MiscellaneousResourceOptions = MiscellaneousResourceOptions.None,
+                        StructureByteStride = 0U
+                    },
+                    new SubresourceData()
+                    {
+                        SystemMemory = this.paramData,
+                        SystemMemoryPitch = 0U,
+                        SystemMemorySlicePitch = 0U
+                    });
             }
             else if (this.IsDirty)
+            {
                 context.UpdateSubresource(this.parametersBuffer, 0U, this.paramData, 0U, 0U);
+            }
             this.IsDirty = false;
             return this.parametersBuffer;
         }
@@ -72,8 +72,7 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
         {
             if (this.parametersBuffer == null)
                 return 0;
-            else
-                return this.SizeInBytes;
+            return this.SizeInBytes;
         }
 
         protected override bool Reset()

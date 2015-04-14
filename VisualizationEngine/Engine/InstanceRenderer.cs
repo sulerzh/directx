@@ -156,8 +156,8 @@ namespace Microsoft.Data.Visualization.Engine
 
         public InstanceRenderer(InstanceLayer layer, int hitTestId, LayerScaling layerScaling, LayerTimeScaling layerTimeScaling)
         {
-            for (int index = 0; index < this.instanceViewProjDepthOffsetParameter.Length; ++index)
-                this.instanceViewProjDepthOffsetParameter[index] = new RenderParameterMatrix4x4F("InstanceViewProjDepthOffset");
+            for (int i = 0; i < this.instanceViewProjDepthOffsetParameter.Length; ++i)
+                this.instanceViewProjDepthOffsetParameter[i] = new RenderParameterMatrix4x4F("InstanceViewProjDepthOffset");
             this.hitTestLayerId = hitTestId;
             this.visualLayer = layer;
             this.InitializeTechniques();
@@ -319,7 +319,7 @@ namespace Microsoft.Data.Visualization.Engine
 
         private void InitializeTechniques()
         {
-            this.sharedParameters = RenderParameters.Create(new IRenderParameter[26]
+            this.sharedParameters = RenderParameters.Create(new IRenderParameter[]
             {
                 this.instanceViewParameter,
                 this.instanceViewProjParameter,

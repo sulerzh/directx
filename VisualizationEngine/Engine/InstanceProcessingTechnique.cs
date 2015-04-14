@@ -194,8 +194,7 @@ namespace Microsoft.Data.Visualization.Engine
             {
                 if (this.Mode != InstanceProcessingTechniqueMode.Pie)
                     return this.outputVertexFormat;
-                else
-                    return this.outputVertexFormatPie;
+                return this.outputVertexFormatPie;
             }
         }
 
@@ -236,7 +235,7 @@ namespace Microsoft.Data.Visualization.Engine
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceProcessing.gs"),
                 VertexFormat = this.vertexFormat,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[13]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.useGatherAccumulateParameter,
                     this.frameIdParameter,

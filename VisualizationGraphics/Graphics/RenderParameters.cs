@@ -2,6 +2,9 @@
 
 namespace Microsoft.Data.Visualization.Engine.Graphics
 {
+    /// <summary>
+    /// Shader参数类，提供静态方法封装D3D11RenderParameters
+    /// </summary>
     public abstract class RenderParameters : GraphicsResource
     {
         protected IRenderParameter[] allParameters;

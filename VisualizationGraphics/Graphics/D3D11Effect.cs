@@ -77,8 +77,8 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
             if (renderParametersArray == null)
                 return;
             DirectX.Direct3D11.D3DBuffer[] constantBuffers = new DirectX.Direct3D11.D3DBuffer[renderParametersArray.Length];
-            for (int index = 0; index < constantBuffers.Length; ++index)
-                constantBuffers[index] = ((D3D11RenderParameters)renderParametersArray[index]).GetParametersBuffer(device, context);
+            for (int i = 0; i < constantBuffers.Length; ++i)
+                constantBuffers[i] = ((D3D11RenderParameters)renderParametersArray[i]).GetParametersBuffer(device, context);
             context.VS.SetConstantBuffers((uint)contextBufferSlot, constantBuffers);
             if (this.pixelShader != null)
                 context.PS.SetConstantBuffers((uint)contextBufferSlot, constantBuffers);

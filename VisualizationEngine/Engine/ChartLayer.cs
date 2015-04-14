@@ -246,8 +246,10 @@ namespace Microsoft.Data.Visualization.Engine
             }
             int num = this.shapes == null || this.LayerType == LayerType.PieChart ? 0 : this.shapes.Length;
             this.visuals = new InstancedVisual[num + this.chart.PrivateVisualsCount];
-            for (short index = (short)0; (int)index < num; ++index)
-                this.visuals[(int)index] = InstancedVisual.Create(this.shapes[(int)index]);
+            for (short i = (short) 0; (int) i < num; ++i)
+            {
+                this.visuals[(int) i] = InstancedVisual.Create(this.shapes[(int) i]);
+            }
             this.chart.AddPrivateVisuals(this);
             this.visualsChanged = true;
             this.Scale = 1f;

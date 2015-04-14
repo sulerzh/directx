@@ -112,10 +112,10 @@ namespace Microsoft.Data.Visualization.Engine.Graphics
                 this.EffectParameters.Dispose();
             if (this.Samplers != null)
             {
-                for (int index = 0; index < this.Samplers.Length; ++index)
+                for (int i = 0; i < this.Samplers.Length; ++i)
                 {
-                    if (this.Samplers[index] != null)
-                        this.Samplers[index].Dispose();
+                    if (this.Samplers[i] != null)
+                        this.Samplers[i].Dispose();
                 }
             }
             if (this.Data != null)

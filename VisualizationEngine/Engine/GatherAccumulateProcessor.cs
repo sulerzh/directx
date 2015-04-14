@@ -171,12 +171,13 @@ namespace Microsoft.Data.Visualization.Engine
                 uint positiveIndex = pPositiveIndex[positiveOffset];
                 geoIndex = pVertex[positiveIndex].GeoIndex;
             }
-            if (block.NegativeSubset == null || block.NegativeSubset.Item2 <= 0U)
-                return;
-            uint negativeOffset = block.NegativeSubset.Item1 + block.NegativeSubset.Item2 - 1;
-            uint* pNegativeIndex = (uint*) block.NegativeIndices.GetData().ToPointer();
-            uint negativeIndex = pNegativeIndex[negativeOffset];
-            Math.Max(geoIndex, pVertex[negativeIndex].GeoIndex);
+            if (block.NegativeSubset != null && block.NegativeSubset.Item2 > 0U)
+            {
+                uint negativeOffset = block.NegativeSubset.Item1 + block.NegativeSubset.Item2 - 1;
+                uint* pNegativeIndex = (uint*) block.NegativeIndices.GetData().ToPointer();
+                uint negativeIndex = pNegativeIndex[negativeOffset];
+                geoIndex = Math.Max(geoIndex, pVertex[negativeIndex].GeoIndex);
+            }
         }
 
         private void EnsureGatherResources(Renderer renderer, int maxWidth, bool needsNegativeResources)
@@ -264,7 +265,7 @@ namespace Microsoft.Data.Visualization.Engine
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceGather.ps"),
                 VertexFormat = new InstanceBlockVertex().Format,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[8]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.geoIdOffsetParameter,
                     this.shiftOffsetParameter,
@@ -275,12 +276,12 @@ namespace Microsoft.Data.Visualization.Engine
                     this.noSustainTimeEnabledParameter,
                     this.useLogScaleParameter
                 }),
-                SharedParameters = new RenderParameters[1]
+                SharedParameters = new RenderParameters[]
                 {
                     this.sharedParameters
                 }
             });
-            VertexFormat vertexFormat1 = VertexFormat.Create(new VertexComponent[5]
+            VertexFormat hitTestFormat = VertexFormat.Create(new VertexComponent[]
             {
                 this.gatherEffect.VertexFormat.Components[0],
                 this.gatherEffect.VertexFormat.Components[1],
@@ -299,9 +300,9 @@ namespace Microsoft.Data.Visualization.Engine
                     this.GetType()
                         .Assembly.GetManifestResourceStream(
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceGatherHitTest.ps"),
-                VertexFormat = vertexFormat1,
+                VertexFormat = hitTestFormat,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[8]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.geoIdOffsetParameter,
                     this.shiftOffsetParameter,
@@ -317,7 +318,7 @@ namespace Microsoft.Data.Visualization.Engine
                     this.sharedParameters
                 }
             });
-            VertexFormat vertexFormat2 = VertexFormat.Create(new VertexComponent[5]
+            VertexFormat timeFormat = VertexFormat.Create(new VertexComponent[]
             {
                 this.gatherEffect.VertexFormat.Components[0],
                 this.gatherEffect.VertexFormat.Components[1],
@@ -336,9 +337,9 @@ namespace Microsoft.Data.Visualization.Engine
                     this.GetType()
                         .Assembly.GetManifestResourceStream(
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceGather.ps"),
-                VertexFormat = vertexFormat2,
+                VertexFormat = timeFormat,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[8]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.geoIdOffsetParameter,
                     this.shiftOffsetParameter,
@@ -349,20 +350,20 @@ namespace Microsoft.Data.Visualization.Engine
                     this.noSustainTimeEnabledParameter,
                     this.useLogScaleParameter
                 }),
-                SharedParameters = new RenderParameters[1]
+                SharedParameters = new RenderParameters[]
                 {
                     this.sharedParameters
                 }
             });
-            VertexComponent vertexComponent = new VertexComponent(VertexSemantic.Color, VertexComponentDataType.UnsignedByte4AsFloats, VertexComponentClassification.PerVertexData, 2);
-            VertexFormat vertexFormat3 = VertexFormat.Create(new VertexComponent[6]
+            VertexComponent hitTestComponent = new VertexComponent(VertexSemantic.Color, VertexComponentDataType.UnsignedByte4AsFloats, VertexComponentClassification.PerVertexData, 2);
+            VertexFormat hitTestTimeFormat = VertexFormat.Create(new VertexComponent[]
             {
-                vertexFormat2.Components[0],
-                vertexFormat2.Components[1],
-                vertexFormat2.Components[2],
-                vertexFormat2.Components[3],
-                vertexFormat2.Components[4],
-                vertexComponent
+                timeFormat.Components[0],
+                timeFormat.Components[1],
+                timeFormat.Components[2],
+                timeFormat.Components[3],
+                timeFormat.Components[4],
+                hitTestComponent
             });
             this.gatherHitTestEffectTime = Effect.Create(new EffectDefinition()
             {
@@ -374,9 +375,9 @@ namespace Microsoft.Data.Visualization.Engine
                     this.GetType()
                         .Assembly.GetManifestResourceStream(
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceGatherHitTest.ps"),
-                VertexFormat = vertexFormat3,
+                VertexFormat = hitTestTimeFormat,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[8]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.geoIdOffsetParameter,
                     this.shiftOffsetParameter,
@@ -460,7 +461,7 @@ namespace Microsoft.Data.Visualization.Engine
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceAccumulate.ps"),
                 VertexFormat = null,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[6]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.accumulateOffsetParameter,
                     this.accumulateEnabledParameter,
@@ -503,7 +504,7 @@ namespace Microsoft.Data.Visualization.Engine
                             "Microsoft.Data.Visualization.Engine.Shaders.Compiled.InstanceSelect.ps"),
                 VertexFormat = null,
                 Samplers = null,
-                Parameters = RenderParameters.Create(new IRenderParameter[4]
+                Parameters = RenderParameters.Create(new IRenderParameter[]
                 {
                     this.shiftOffsetParameter,
                     this.shiftCountParameter,
@@ -664,25 +665,29 @@ namespace Microsoft.Data.Visualization.Engine
             renderer.SetVertexSource((VertexBuffer)null);
             int num1 = 0;
             foreach (GatherAccumulateProcessBlock accumulateProcessBlock in processBlocks)
-                num1 = Math.Max(num1, (int)Math.Ceiling(Math.Log(accumulateProcessBlock.MaxShift + 1, 2.0)));
+            {
+                num1 = Math.Max(num1, (int) Math.Ceiling(Math.Log(accumulateProcessBlock.MaxShift + 1, 2.0)));
+            }
             if (useConstantMode)
+            {
                 num1 = Math.Max(1, num1);
+            }
             bool flag = false;
-            for (int index1 = 0; index1 < (needsNegativeValues ? 2 : 1); ++index1)
+            for (int i = 0; i < (needsNegativeValues ? 2 : 1); ++i)
             {
                 RenderTarget[] renderTargetArray1;
                 if (!flag)
-                    renderTargetArray1 = new RenderTarget[2]
-          {
-            this.accumulatePositiveTarget0,
-            this.accumulatePositiveTarget1
-          };
+                    renderTargetArray1 = new RenderTarget[]
+                    {
+                        this.accumulatePositiveTarget0,
+                        this.accumulatePositiveTarget1
+                    };
                 else
-                    renderTargetArray1 = new RenderTarget[2]
-          {
-            this.accumulateNegativeTarget0,
-            this.accumulateNegativeTarget1
-          };
+                    renderTargetArray1 = new RenderTarget[]
+                    {
+                        this.accumulateNegativeTarget0,
+                        this.accumulateNegativeTarget1
+                    };
                 RenderTarget[] renderTargetArray2 = renderTargetArray1;
                 renderer.SetTexture(0, flag ? this.gatherNegativeTexture : this.gatherPositiveTexture);
                 renderer.SetTexture(1, flag ? null : this.gatherNegativeTexture);
@@ -690,24 +695,24 @@ namespace Microsoft.Data.Visualization.Engine
                     this.AccumulateNegativeTexture = this.gatherNegativeTarget.RenderTargetTexture;
                 else
                     this.AccumulatePositiveTexture = this.gatherPositiveTarget.RenderTargetTexture;
-                for (int index2 = 0; index2 < num1; ++index2)
+                for (int j = 0; j < num1; ++j)
                 {
                     try
                     {
                         int num2 = 0;
-                        renderer.BeginRenderTargetFrame(renderTargetArray2[index2 % 2], new Color4F?());
+                        renderer.BeginRenderTargetFrame(renderTargetArray2[j % 2], new Color4F?());
                         foreach (GatherAccumulateProcessBlock block in processBlocks)
                         {
                             int val2 = (int)Math.Ceiling(Math.Log(block.MaxShift + 1, 2.0));
                             if (useConstantMode)
                                 val2 = Math.Max(1, val2);
-                            if (index2 <= val2)
+                            if (j <= val2)
                             {
                                 this.SetGeoIdCount(block);
-                                this.accumulateOffsetParameter.Value = (int)Math.Pow(2.0, index2);
+                                this.accumulateOffsetParameter.Value = (int)Math.Pow(2.0, j);
                                 this.shiftOffsetParameter.Value = num2;
                                 this.shiftCountParameter.Value = block.MaxShift + 1;
-                                this.accumulateEnabledParameter.Value = index2 < val2;
+                                this.accumulateEnabledParameter.Value = j < val2;
                                 this.constantModeNegativesEnabledParameter.Value = block.NegativeSubset != null;
                                 renderer.Draw(0, 4, PrimitiveTopology.TriangleStrip);
                             }
@@ -719,10 +724,10 @@ namespace Microsoft.Data.Visualization.Engine
                         renderer.EndRenderTargetFrame();
                     }
                     if (flag)
-                        this.AccumulateNegativeTexture = renderTargetArray2[index2 % 2].RenderTargetTexture;
+                        this.AccumulateNegativeTexture = renderTargetArray2[j % 2].RenderTargetTexture;
                     else
-                        this.AccumulatePositiveTexture = renderTargetArray2[index2 % 2].RenderTargetTexture;
-                    renderer.SetTexture(0, renderTargetArray2[index2 % 2].RenderTargetTexture);
+                        this.AccumulatePositiveTexture = renderTargetArray2[j % 2].RenderTargetTexture;
+                    renderer.SetTexture(0, renderTargetArray2[j % 2].RenderTargetTexture);
                     renderer.SetTexture(1, null);
                 }
                 flag = true;
@@ -771,41 +776,41 @@ namespace Microsoft.Data.Visualization.Engine
             base.Dispose(disposing);
             if (!disposing)
                 return;
-            DisposableResource[] disposableResourceArray = new DisposableResource[28]
-      {
-        this.gatherPositiveTexture,
-        this.hitIdPositiveTexture,
-        this.gatherPositiveTarget,
-        this.hitIdPositiveTarget,
-        this.accumulatePositiveTexture0,
-        this.accumulatePositiveTexture1,
-        this.gatherNegativeTexture,
-        this.hitIdNegativeTexture,
-        this.gatherNegativeTarget,
-        this.hitIdNegativeTarget,
-        this.accumulatePositiveTarget0,
-        this.accumulatePositiveTarget1,
-        this.accumulateNegativeTexture0,
-        this.accumulateNegativeTexture1,
-        this.accumulateNegativeTarget0,
-        this.accumulateNegativeTarget1,
-        this.gatherEffect,
-        this.gatherEffectTime,
-        this.accumulateEffect,
-        this.gatherState,
-        this.accumulateState,
-        this.rasterizerState,
-        this.blendState,
-        this.gatherHitTestEffect,
-        this.gatherHitTestEffectTime,
-        this.selectEffect,
-        this.selectPositiveTexture,
-        this.selectPositiveTarget
-      };
-            foreach (DisposableResource disposableResource in disposableResourceArray)
+            DisposableResource[] resArray = new DisposableResource[]
             {
-                if (disposableResource != null && !disposableResource.Disposed)
-                    disposableResource.Dispose();
+                this.gatherPositiveTexture,
+                this.hitIdPositiveTexture,
+                this.gatherPositiveTarget,
+                this.hitIdPositiveTarget,
+                this.accumulatePositiveTexture0,
+                this.accumulatePositiveTexture1,
+                this.gatherNegativeTexture,
+                this.hitIdNegativeTexture,
+                this.gatherNegativeTarget,
+                this.hitIdNegativeTarget,
+                this.accumulatePositiveTarget0,
+                this.accumulatePositiveTarget1,
+                this.accumulateNegativeTexture0,
+                this.accumulateNegativeTexture1,
+                this.accumulateNegativeTarget0,
+                this.accumulateNegativeTarget1,
+                this.gatherEffect,
+                this.gatherEffectTime,
+                this.accumulateEffect,
+                this.gatherState,
+                this.accumulateState,
+                this.rasterizerState,
+                this.blendState,
+                this.gatherHitTestEffect,
+                this.gatherHitTestEffectTime,
+                this.selectEffect,
+                this.selectPositiveTexture,
+                this.selectPositiveTarget
+            };
+            foreach (DisposableResource res in resArray)
+            {
+                if (res != null && !res.Disposed)
+                    res.Dispose();
             }
         }
     }
