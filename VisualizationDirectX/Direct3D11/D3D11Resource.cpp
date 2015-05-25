@@ -53,12 +53,24 @@ Surface1^ D3DResource::GraphicsSurface1::get(void)
 
 IntPtr D3DResource::SharedHandle::get(void)
 {
-	IDXGIResource* pSurface = NULL;
+	/*IDXGIResource* pSurface = NULL;
 	Validate::VerifyResult(CastInterface<ID3D11Resource>()->QueryInterface(
 		__uuidof(IDXGIResource),
 		(void**)&pSurface));
 	HANDLE sharedHandle;
 	Validate::VerifyResult(pSurface->GetSharedHandle(&sharedHandle));
 	pSurface->Release();
+	return (IntPtr)sharedHandle;*/
+
+	IDXGIResource* pSurface = NULL;
+	
+	Validate::VerifyResult(
+		((IUnknown*)NativeInterface.ToPointer())->QueryInterface(
+		__uuidof(IDXGIResource),
+		(void**)&pSurface));
+	HANDLE sharedHandle;
+	Validate::VerifyResult(pSurface->GetSharedHandle(&sharedHandle));
+	pSurface->Release();
 	return (IntPtr)sharedHandle;
+	
 }
